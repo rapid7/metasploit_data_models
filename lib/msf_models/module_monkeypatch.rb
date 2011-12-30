@@ -7,6 +7,9 @@
 # This is because MSF namespaces ActiveRecord model classes, but the 
 # commercial versions of Metasploit do not.
 
+# TODO: code's a bit wooly and could do with a refactoring
+
+
 class Module
 
   # Load file into module/class namespace.
