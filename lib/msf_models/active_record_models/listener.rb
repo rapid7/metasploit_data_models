@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Listener < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 
@@ -8,8 +5,5 @@ class Listener < ActiveRecord::Base
 	belongs_to :task
 
 	serialize :options, Msf::Base64Serializer.new
-end
-
-end
 end
 

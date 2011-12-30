@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Campaign < ActiveRecord::Base
 	has_one :email_template
 	has_one :web_template
@@ -8,7 +5,7 @@ class Campaign < ActiveRecord::Base
 	has_many :email_addresses
 	has_many :clients
 
-	extend SerializedPrefs
+	extend Msf::DBManager::SerializedPrefs
 
 	serialize :prefs, Msf::Base64Serializer.new
 
@@ -33,7 +30,3 @@ class Campaign < ActiveRecord::Base
 	serialized_prefs_attr_accessor :macro_name
 
 end
-
-end
-end
-

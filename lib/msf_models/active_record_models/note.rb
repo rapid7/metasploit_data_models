@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Note < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 
@@ -15,8 +12,5 @@ class Note < ActiveRecord::Base
 		end
 	end
 
-end
-
-end
 end
 

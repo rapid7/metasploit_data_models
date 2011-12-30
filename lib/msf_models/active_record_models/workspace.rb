@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Workspace < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 
@@ -113,8 +110,5 @@ class Workspace < ActiveRecord::Base
 		forms
 	end
 
-end
-
-end
 end
 

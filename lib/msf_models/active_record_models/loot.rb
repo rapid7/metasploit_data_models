@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Loot < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 
@@ -9,8 +6,5 @@ class Loot < ActiveRecord::Base
 	belongs_to :service
 
 	serialize :data, Msf::Base64Serializer.new
-end
-
-end
 end
 

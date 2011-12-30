@@ -6,12 +6,10 @@ Gem::Specification.new do |s|
   s.name        = "msf_models"
   s.version     = MsfModels::VERSION
   s.authors     = ["Trevor Rosen"]
-  s.email       = ["trevor@catapult-creative.com"]
+  s.email       = ["trevor_rosen@rapid7.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
-
-  s.rubyforge_project = "msf_models"
+  s.summary     = %q{Database code for MSF and Metasploit Pro}
+  s.description = %q{Implements minimal ActiveRecord models and database helper code used in both the Metasploit Framework (MSF) and Metasploit commercial editions.}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -21,4 +19,5 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
   s.add_runtime_dependency "activerecord"
+  s.add_runtime_dependency "pg"
 end

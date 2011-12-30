@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Session < ActiveRecord::Base
 	belongs_to :host
 
@@ -13,7 +10,4 @@ class Session < ActiveRecord::Base
 	scope :dead, :conditions => "closed_at IS NOT NULL"
 
 	serialize :datastore, Msf::Base64Serializer.new
-end
-
-end
 end

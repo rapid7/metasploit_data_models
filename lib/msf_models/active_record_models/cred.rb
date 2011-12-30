@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Cred < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 	belongs_to :service
@@ -19,7 +16,4 @@ class Cred < ActiveRecord::Base
 		my_key_id == other_key_id
 	end
 
-end
-
-end
 end

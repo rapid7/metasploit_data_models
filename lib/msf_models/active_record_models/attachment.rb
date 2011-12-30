@@ -1,6 +1,3 @@
-
-class Msf::DBManager
-
 class Attachment < ActiveRecord::Base
 	has_and_belongs_to_many :email_template
 	belongs_to :campaign
@@ -11,6 +8,3 @@ class Attachment < ActiveRecord::Base
 		@cid
 	end
 end
-
-end
-

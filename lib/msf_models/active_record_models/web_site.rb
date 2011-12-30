@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class WebSite < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 	belongs_to :service
@@ -33,8 +30,5 @@ class WebSite < ActiveRecord::Base
 		web_vulns.size
 	end	
 	
-end
-
-end
 end
 

@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Host < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 
@@ -979,8 +976,5 @@ protected
 		end
 	end
 
-end
-
-end
 end
 

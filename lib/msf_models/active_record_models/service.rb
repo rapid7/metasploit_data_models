@@ -1,6 +1,3 @@
-module Msf
-class DBManager
-
 class Service < ActiveRecord::Base
 	include Msf::DBManager::DBSave
 	has_many :vulns, :dependent => :destroy
@@ -22,8 +19,5 @@ class Service < ActiveRecord::Base
 		end
 	end
 
-end
-
-end
 end
 
