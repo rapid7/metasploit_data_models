@@ -13,42 +13,30 @@
 class Module
 
   # Load file into module/class namespace.
-  def module_load( path )
-    if path =~ /^[\/~.]/
-      file = File.expand_path(path)
-    else
-      $LOAD_PATH.each do |lp|
-        file = File.join(lp,path)
-        break if File.exist?(file)
-        file = nil
-      end
-    end
-
+  def module_load(module_path)
+    file = File.expand_path(path) if path =~ /^[\/~.]/  # absolute path
+    file ||= $LOAD_PATH.find { |lp| File.exist? File.join(lp, module_path) }
     module_eval(File.read(file))
   end
 
   # Require file into module/class namespace.
-  def module_require( path )
-    if path =~ /^[\/~.]/
-      file = File.expand_path(path)
-    else
-      $LOAD_PATH.each do |lp|
-        file = File.join(lp,path)
-        break if File.exist?(file)
-        file += '.rb'
-        break if File.exist?(file)
-        file = nil
-      end
-    end
+  def module_require(module_path)
+    file = File.expand_path(path) if path =~ /^[\/~.]/
+    # first check for module in the $LOAD_PATH
+    file ||= $LOAD_PATH.find { |lp|  File.exist? File.join(lp, module_path) }
+    # if not found check for module+'.rb' in the $LOAD_PATH
+    file ||= $LOAD_PATH.map { |lp| lp+'.rb' }.find { |lp| File.exist?(File.join(lp, module_path)+'.rb') }
 
+    # load only once, and return false if module is already loaded
     @loaded ||= {}
-    if @loaded.key?(file)
-      false
-    else
+    already_loaded = @loaded.key?(file)
+    
+    unless already_loaded
       @loaded[file] = true
-      module_eval(File.read(file))
-      true
+      module_eval(File.read(file)) 
     end
+    
+    !already_loaded
   end
 
 end
