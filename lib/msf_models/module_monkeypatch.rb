@@ -26,7 +26,7 @@ class Module
     # otherwise check for module in the $LOAD_PATH
     file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
     # if still not found check for module+'.rb' in the $LOAD_PATH
-    file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
+    file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path)+'.rb' }.find { |f| File.exist? f }
 
     # load only once, and return false if module is already loaded
     @loaded ||= {}
