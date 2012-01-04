@@ -7,14 +7,12 @@
 # This is because MSF namespaces ActiveRecord model classes, but the 
 # commercial versions of Metasploit do not.
 
-# TODO: code's a bit wooly and could do with a refactoring
-
 
 class Module
 
   # Load file into module/class namespace.
   def module_load(module_path)
-    file = File.expand_path(path) if path =~ /^[\/~.]/  # if absolute path
+    file = File.expand_path(module_path) if module_path =~ /^[\/~.]/  # if absolute path
     # otherwise check for module in load path
     file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
     module_eval(File.read(file))
@@ -22,7 +20,7 @@ class Module
 
   # Require file into module/class namespace.
   def module_require(module_path)
-    file = File.expand_path(path) if path =~ /^[\/~.]/  # if absolute path
+    file = File.expand_path(module_path) if module_path =~ /^[\/~.]/  # if absolute path
     # otherwise check for module in the $LOAD_PATH
     file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
     # if still not found check for module+'.rb' in the $LOAD_PATH
