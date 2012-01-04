@@ -7,48 +7,35 @@
 # This is because MSF namespaces ActiveRecord model classes, but the 
 # commercial versions of Metasploit do not.
 
-# TODO: code's a bit wooly and could do with a refactoring
-
 
 class Module
 
   # Load file into module/class namespace.
-  def module_load( path )
-    if path =~ /^[\/~.]/
-      file = File.expand_path(path)
-    else
-      $LOAD_PATH.each do |lp|
-        file = File.join(lp,path)
-        break if File.exist?(file)
-        file = nil
-      end
-    end
-
+  def module_load(module_path)
+    file = File.expand_path(module_path) if module_path =~ /^[\/~.]/  # if absolute path
+    # otherwise check for module in load path
+    file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
     module_eval(File.read(file))
   end
 
   # Require file into module/class namespace.
-  def module_require( path )
-    if path =~ /^[\/~.]/
-      file = File.expand_path(path)
-    else
-      $LOAD_PATH.each do |lp|
-        file = File.join(lp,path)
-        break if File.exist?(file)
-        file += '.rb'
-        break if File.exist?(file)
-        file = nil
-      end
+  def module_require(module_path)
+    file = File.expand_path(module_path) if module_path =~ /^[\/~.]/  # if absolute path
+    # otherwise check for module in the $LOAD_PATH
+    file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path) }.find { |f| File.exist? f }
+    # if still not found check for module+'.rb' in the $LOAD_PATH
+    file ||= $LOAD_PATH.map { |lp| File.join(lp, module_path)+'.rb' }.find { |f| File.exist? f }
+
+    # load only once, and return false if module is already loaded
+    @loaded ||= {}
+    already_loaded = @loaded.key?(file)
+    
+    unless already_loaded
+      @loaded[file] = true
+      module_eval(File.read(file)) 
     end
 
-    @loaded ||= {}
-    if @loaded.key?(file)
-      false
-    else
-      @loaded[file] = true
-      module_eval(File.read(file))
-      true
-    end
+    !already_loaded
   end
 
 end
