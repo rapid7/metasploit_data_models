@@ -3,8 +3,8 @@ class Task < ActiveRecord::Base
 
 	belongs_to :workspace
 
-	serialize :options, Msf::Base64Serializer.new
-	serialize :result, Msf::Base64Serializer.new
-	serialize :settings, Msf::Base64Serializer.new
+	serialize :options, MsfModels::Base64Serializer.new
+	serialize :result, MsfModels::Base64Serializer.new
+	serialize :settings, MsfModels::Base64Serializer.new
 end
 

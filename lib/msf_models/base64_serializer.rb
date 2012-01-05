@@ -1,16 +1,15 @@
 # 2011-12-07
-# Ported from pro/ui/lib/custom/base64_serializer.rb
 #
 # Provides ActiveRecord 3.1x-friendly serialization for descendants of
 # ActiveRecord::Base
 #
 # usage:
-# serialize :foo, Msf::Util::Base64Serializer.new
+# serialize :foo, MsfModels::Base64Serializer.new
 #
-module Msf
+module MsfModels
   class Base64Serializer
     def load(value)
-      return "" if value.blank?
+      return "" if value.nil? || value.empty?
       Marshal.load value.unpack('m').first
     end
 

@@ -5,9 +5,9 @@ class Campaign < ActiveRecord::Base
 	has_many :email_addresses
 	has_many :clients
 
-	extend Msf::DBManager::SerializedPrefs
+	extend MsfModels::SerializedPrefs
 
-	serialize :prefs, Msf::Base64Serializer.new
+	serialize :prefs, MsfModels::Base64Serializer.new
 
 	# General settings
 	serialized_prefs_attr_accessor :payload_lhost, :listener_lhost, :payload_type

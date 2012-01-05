@@ -9,5 +9,5 @@ class Session < ActiveRecord::Base
 	scope :alive, :conditions => "closed_at IS NULL"
 	scope :dead, :conditions => "closed_at IS NOT NULL"
 
-	serialize :datastore, Msf::Base64Serializer.new
+	serialize :datastore, MsfModels::Base64Serializer.new
 end

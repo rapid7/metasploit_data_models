@@ -5,6 +5,6 @@ class Loot < ActiveRecord::Base
 	belongs_to :host
 	belongs_to :service
 
-	serialize :data, Msf::Base64Serializer.new
+	serialize :data, MsfModels::Base64Serializer.new
 end
 

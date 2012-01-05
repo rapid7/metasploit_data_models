@@ -2,9 +2,9 @@ require "active_record"
 
 require "msf_models/version"
 require "msf_models/module_monkeypatch"
+require "msf_models/serialized_prefs"
+require "msf_models/base64_serializer"
 require "msf_models/db_manager/db_objects"
-require "msf_models/db_manager/serialized_prefs"
-require "msf_models/db_manager/base64_serializer"
 
 module MsfModels
   def self.included(base)

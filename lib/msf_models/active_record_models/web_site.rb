@@ -5,7 +5,7 @@ class WebSite < ActiveRecord::Base
 	has_many :web_forms, :dependent => :destroy
 	has_many :web_vulns, :dependent => :destroy
 			
-	serialize :options, Msf::Base64Serializer.new
+	serialize :options, MsfModels::Base64Serializer.new
 	
 	def to_url(ignore_vhost=false)
 		proto = self.service.name == "https" ? "https" : "http"

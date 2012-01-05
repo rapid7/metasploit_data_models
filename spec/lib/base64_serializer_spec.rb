@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module Custom
+module MsfModels
   describe Base64Serializer do
     subject{Base64Serializer.new}
 

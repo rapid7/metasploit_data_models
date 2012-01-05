@@ -4,6 +4,6 @@ class Listener < ActiveRecord::Base
 	belongs_to :workspace
 	belongs_to :task
 
-	serialize :options, Msf::Base64Serializer.new
+	serialize :options, MsfModels::Base64Serializer.new
 end
 

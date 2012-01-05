@@ -1,0 +1,22 @@
+module MsfModels
+  module SerializedPrefs
+    def serialized_prefs_attr_accessor(*args)
+      args.each do |method_name|
+
+        method_declarations = %Q^
+          def #{method_name}
+            return if not self.prefs
+            self.prefs[:#{method_name}]
+          end
+
+          def #{method_name}=(value)
+            temp = self.prefs || {}
+            temp[:#{method_name}] = value
+            self.prefs = temp
+          end
+  ^
+        class_eval method_declarations, __FILE__
+      end
+    end
+  end
+end
