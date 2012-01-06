@@ -9,7 +9,7 @@
 module MsfModels
   class Base64Serializer
     def load(value)
-      return "" if value.nil? || value.empty?
+      return "" if value.blank?
       Marshal.load value.unpack('m').first
     end
 

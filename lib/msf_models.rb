@@ -1,4 +1,6 @@
 require "active_record"
+require "active_support"
+require "active_support/all"
 
 require "msf_models/version"
 require "msf_models/module_monkeypatch"
@@ -11,7 +13,7 @@ module MsfModels
     if base == Msf::DBManager
       loadable_models.each{|file| base.module_require(file)}
     else
-      loadable_models.each{|file| require file}
+      loadable_models.each{|file| load file}
     end
   end
 
