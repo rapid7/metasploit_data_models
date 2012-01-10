@@ -7,7 +7,8 @@ require "msf_models/module_monkeypatch"
 require "msf_models/serialized_prefs"
 require "msf_models/base64_serializer"
 require "msf_models/db_manager/db_objects"
-require "msf_models/shared_validations"
+
+require "msf_models/validators/ip_format_validator"
 
 module MsfModels
 
