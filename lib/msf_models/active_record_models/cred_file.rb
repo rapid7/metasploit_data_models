@@ -1,5 +1,5 @@
 class CredFile < ActiveRecord::Base
-	include Msf::DBManager::DBSave
+  include Msf::DBManager::DBSave
 
-	belongs_to :workspace
+  belongs_to :workspace
 end

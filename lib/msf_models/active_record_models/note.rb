@@ -1,16 +1,16 @@
 class Note < ActiveRecord::Base
-	include Msf::DBManager::DBSave
+  include Msf::DBManager::DBSave
 
-	belongs_to :workspace
-	belongs_to :host
-	belongs_to :service
-	serialize :data, MsfModels::Base64Serializer.new
+  belongs_to :workspace
+  belongs_to :host
+  belongs_to :service
+  serialize :data, MsfModels::Base64Serializer.new
 
-	def after_save
-		if data_changed? and ntype =~ /fingerprint/
-			host.normalize_os
-		end
-	end
+  def after_save
+    if data_changed? and ntype =~ /fingerprint/
+      host.normalize_os
+    end
+  end
 
 end
 

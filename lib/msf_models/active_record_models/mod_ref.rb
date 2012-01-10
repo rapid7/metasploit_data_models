@@ -1,3 +1,3 @@
 class ModRef < ActiveRecord::Base
-	include Msf::DBManager::DBSave
+  include Msf::DBManager::DBSave
 end

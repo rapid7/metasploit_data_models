@@ -7,8 +7,10 @@ require "msf_models/module_monkeypatch"
 require "msf_models/serialized_prefs"
 require "msf_models/base64_serializer"
 require "msf_models/db_manager/db_objects"
+require "msf_models/shared_validations"
 
 module MsfModels
+
   def self.included(base)
     if base == Msf::DBManager
       loadable_models.each{|file| base.module_require(file)}

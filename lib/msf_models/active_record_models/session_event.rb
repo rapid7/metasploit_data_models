@@ -1,5 +1,5 @@
 class SessionEvent < ActiveRecord::Base
-	include Msf::DBManager::DBSave
+  include Msf::DBManager::DBSave
 
-	belongs_to :session
+  belongs_to :session
 end

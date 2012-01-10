@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-	include Msf::DBManager::DBSave
+  include Msf::DBManager::DBSave
 
-	serialize :prefs, MsfModels::Base64Serializer.new
+  serialize :prefs, MsfModels::Base64Serializer.new
 end
 

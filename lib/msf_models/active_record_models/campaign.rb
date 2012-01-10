@@ -1,32 +1,35 @@
 class Campaign < ActiveRecord::Base
-	has_one :email_template
-	has_one :web_template
-	has_one :attachment
-	has_many :email_addresses
-	has_many :clients
+  has_one :email_template
+  has_one :web_template
+  has_one :attachment
+  has_many :email_addresses
+  has_many :clients
 
-	extend MsfModels::SerializedPrefs
+  extend MsfModels::SerializedPrefs
 
-	serialize :prefs, MsfModels::Base64Serializer.new
+  serialize :prefs, MsfModels::Base64Serializer.new
 
-	# General settings
-	serialized_prefs_attr_accessor :payload_lhost, :listener_lhost, :payload_type
+  # General settings
+  serialized_prefs_attr_accessor :payload_lhost, :listener_lhost, :payload_type
 
-	# Email settings
-	serialized_prefs_attr_accessor :do_email
-	serialized_prefs_attr_accessor :smtp_server, :smtp_port, :smtp_ssl
-	serialized_prefs_attr_accessor :smtp_user, :smtp_pass
-	serialized_prefs_attr_accessor :mailfrom, :display_from
+  # Email settings
+  serialized_prefs_attr_accessor :do_email # bool
+  serialized_prefs_attr_accessor :smtp_server, :smtp_port, :smtp_ssl
+  serialized_prefs_attr_accessor :smtp_user, :smtp_pass
+  serialized_prefs_attr_accessor :mailfrom, :display_from
 
-	# Web settings
-	serialized_prefs_attr_accessor :do_web
-	serialized_prefs_attr_accessor :web_uripath, :web_urihost, :web_srvport, :web_srvhost
-	serialized_prefs_attr_accessor :web_ssl
+  # Web settings
+  serialized_prefs_attr_accessor :do_web # bool
+  serialized_prefs_attr_accessor :web_uripath, :web_urihost, :web_srvport, :web_srvhost
+  serialized_prefs_attr_accessor :web_ssl # bool
 
-	# Executable settings
-	serialized_prefs_attr_accessor :do_exe_gen
-	serialized_prefs_attr_accessor :exe_lport
-	serialized_prefs_attr_accessor :exe_name
-	serialized_prefs_attr_accessor :macro_name
+  # Executable settings
+  serialized_prefs_attr_accessor :do_exe_gen # bool
+  serialized_prefs_attr_accessor :exe_lport
+  serialized_prefs_attr_accessor :exe_name
+  serialized_prefs_attr_accessor :macro_name
+
+  # State
+  serialized_prefs_attr_accessor :error
 
 end
