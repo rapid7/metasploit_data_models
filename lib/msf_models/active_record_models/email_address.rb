@@ -1,3 +1,7 @@
-class EmailAddress < ActiveRecord::Base
-	belongs_to :campaign
+module MsfModels::ActiveRecordModels::EmailAddress
+  def self.included(base)
+    base.class_eval{
+      belongs_to :campaign
+    }
+  end
 end

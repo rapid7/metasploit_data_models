@@ -1,5 +1,7 @@
-# WMAP Target object definition
-class WmapTarget < ::ActiveRecord::Base
-  include Msf::DBManager::DBSave
-  # Magic.
+module MsfModels::ActiveRecordModels::WmapTarget
+  def self.included(base)
+    base.class_eval{
+      include Msf::DBManager::DBSave
+    }
+  end
 end

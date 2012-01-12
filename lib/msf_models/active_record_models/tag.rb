@@ -1,8 +1,12 @@
-class Tag < ActiveRecord::Base
-	include Msf::DBManager::DBSave
-	has_and_belongs_to_many :hosts, :join_table => :hosts_tags
+module MsfModels::ActiveRecordModels::Tag
+  def self.included(base)
+    base.class_eval{
+      include Msf::DBManager::DBSave
+      has_and_belongs_to_many :hosts, :join_table => :hosts_tags
 
-	def to_s
-		name
-	end
+      def to_s
+        name
+      end
+    }
+  end
 end
