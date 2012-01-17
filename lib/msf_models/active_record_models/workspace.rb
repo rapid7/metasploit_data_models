@@ -40,7 +40,7 @@ module MsfModels::ActiveRecordModels::Workspace
             services.host_id = hosts.id AND
             web_sites.service_id = services.id
           EOQ
-          WebSite.find_by_sql(query)
+        WebSite.find_by_sql(query)
       end
 
       def web_pages
