@@ -1,11 +1,13 @@
+# NOTE: this AR model is called "Project" on the Pro side
+
 module MsfModels::ActiveRecordModels::Workspace
   def self.included(base)
     base.class_eval{
       include Msf::DBManager::DBSave
 
       # Usage of the evil eval avoids dynamic constant assignment
-      # exception
-      eval('DEFAULT = "default"')
+      # exception when this module is included
+      eval('DEFAULT = "default"') unless defined? DEFAULT
 
       has_many :hosts, :dependent => :destroy
       has_many :services, :through => :hosts
@@ -24,47 +26,70 @@ module MsfModels::ActiveRecordModels::Workspace
       has_many :cred_files, :dependent => :destroy
       has_many :listeners, :dependent => :destroy
 
-      has_many :web_sites, :finder_sql =>
-      'SELECT DISTINCT web_sites.* '           +
-        'FROM hosts, services, web_sites '       +
-        'WHERE hosts.workspace_id = #{id} AND '  +
-      'services.host_id = hosts.id AND '   +
-        'web_sites.service_id = services.id'
+      before_save :normalize
 
-      has_many :web_pages, :finder_sql =>
-      'SELECT DISTINCT web_pages.* '                +
-        'FROM hosts, services, web_sites, web_pages ' +
-        'WHERE hosts.workspace_id = #{id} AND '       +
-      'services.host_id = hosts.id AND '        +
-        'web_sites.service_id = services.id AND ' +
-        'web_pages.web_site_id = web_sites.id'
+      validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 255}
+      validates :description, :length => {:maximum => 4096}
+      validate :boundary_must_be_ip_range
 
-      has_many :web_forms, :finder_sql =>
-      'SELECT DISTINCT web_forms.* '                +
-        'FROM hosts, services, web_sites, web_forms ' +
-        'WHERE hosts.workspace_id = #{id} AND '       +
-      'services.host_id = hosts.id AND '        +
-        'web_sites.service_id = services.id AND ' +
-        'web_forms.web_site_id = web_sites.id'
+      def web_sites
+        query = <<-EOQ
+          SELECT DISTINCT web_sites.*
+            FROM hosts, services, web_sites
+            WHERE hosts.workspace_id = #{id} AND
+            services.host_id = hosts.id AND
+            web_sites.service_id = services.id
+          EOQ
+          WebSite.find_by_sql(query)
+      end
 
-      has_many :unique_web_forms, :class_name => 'Msf::DBManager::WebForm', :finder_sql =>
-      'SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query ' +
-        'FROM hosts, services, web_sites, web_forms ' +
-        'WHERE hosts.workspace_id = #{id} AND '       +
-      'services.host_id = hosts.id AND '        +
-        'web_sites.service_id = services.id AND ' +
-        'web_forms.web_site_id = web_sites.id'
+      def web_pages
+        query = <<-EOQ
+          SELECT DISTINCT web_pages.*
+            FROM hosts, services, web_sites, web_pages
+            WHERE hosts.workspace_id = #{id} AND
+            services.host_id = hosts.id AND
+            web_sites.service_id = services.id AND
+            web_pages.web_site_id = web_sites.id
+        EOQ
+        WebPage.find_by_sql(query)
+      end
 
-      has_many :web_vulns, :finder_sql =>
-      'SELECT DISTINCT web_vulns.* '                +
-        'FROM hosts, services, web_sites, web_vulns ' +
-        'WHERE hosts.workspace_id = #{id} AND '       +
-      'services.host_id = hosts.id AND '        +
-        'web_sites.service_id = services.id AND ' +
-        'web_vulns.web_site_id = web_sites.id'
+      def web_forms
+        query = <<-EOQ
+          SELECT DISTINCT web_forms.*
+          FROM hosts, services, web_sites, web_forms  
+          WHERE hosts.workspace_id = #{id} AND   
+            services.host_id = hosts.id AND   
+            web_sites.service_id = services.id AND  
+            web_forms.web_site_id = web_sites.id
+        EOQ
+        WebForm.find_by_sql(query)
+      end
 
-      validates_uniqueness_of :name
-      validates_presence_of :name
+      def unique_web_forms
+        query = <<-EOQ
+          SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query  
+            FROM hosts, services, web_sites, web_forms  
+            WHERE hosts.workspace_id = #{id} AND        
+            services.host_id = hosts.id AND         
+            web_sites.service_id = services.id AND  
+            web_forms.web_site_id = web_sites.id
+        EOQ
+        WebForm.find_by_sql(query)
+      end
+
+      def web_vulns
+        query = <<-EOQ
+          SELECT DISTINCT web_vulns.*  
+          FROM hosts, services, web_sites, web_vulns  
+            WHERE hosts.workspace_id = #{id} AND  
+            services.host_id = hosts.id AND  
+            web_sites.service_id = services.id AND  
+            web_vulns.web_site_id = web_sites.id
+        EOQ
+        WebVuln.find_by_sql(query)
+      end
 
       def self.default
         find_or_create_by_name(DEFAULT)
@@ -75,15 +100,15 @@ module MsfModels::ActiveRecordModels::Workspace
       end
 
       def creds
-        Cred.find(
+        Msm::Cred.find(
           :all,
-          :include => {:service => :host}, # That's some magic right there.
+          :include => {:service => :host},
           :conditions => ["hosts.workspace_id = ?", self.id]
         )
       end
 
       def host_tags
-        Tag.find(
+        Msm::Tag.find(
           :all,
           :include => :hosts,
           :conditions => ["hosts.workspace_id = ?", self.id]
@@ -113,6 +138,24 @@ module MsfModels::ActiveRecordModels::Workspace
         end
         forms
       end
+
+      def boundary_must_be_ip_range
+        errors.add(:boundary, "must be a valid IP range") unless valid_ip_or_range?(boundary)
+      end
+
+    private
+      def valid_ip_or_range?(string)
+        begin
+          Rex::Socket::RangeWalker.new(string)
+        rescue
+          return false
+        end
+      end
+
+      def normalize
+        boundary.strip! if boundary
+      end
+
     } # end class_eval block
   end
 end

@@ -28,12 +28,15 @@ require "msf_models/validators/ip_format_validator"
 #
 #
 
+# Declare the common namespace we'll use in both MSF and Pro
+module Msm; end
+
 module MsfModels
   module ActiveRecordModels; end
 
   def self.included(base)
     ar_mixins.each{|file| load file}
-    create_and_load_ar_classes(base) if base == Msf::DBManager
+    create_and_load_ar_classes if base == Msf::DBManager
   end
 
   # The code in each of these represents the basic structure of a correspondingly named
@@ -47,14 +50,14 @@ module MsfModels
 
   # (MSF-only) Dynamically create ActiveRecord descendant classes
   # and load them into the namespace provided by base
-  def self.create_and_load_ar_classes(base)
+  def self.create_and_load_ar_classes
     constant_names_from_files.each do |cname|
       class_str =<<-RUBY
-        class #{cname} < ActiveRecord::Base
+        class Msm::#{cname} < ActiveRecord::Base
           include MsfModels::ActiveRecordModels::#{cname}
         end
       RUBY
-      base.module_eval(class_str)
+      eval(class_str)
     end
   end
 

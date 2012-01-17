@@ -1,15 +1,19 @@
 module MsfModels::ActiveRecordModels::Campaign
   def self.included(base)
     base.class_eval{
-      has_one :email_template
-      has_one :web_template
-      has_one :attachment
-      has_many :email_addresses
-      has_many :clients
+      has_one :email_template, :dependent => :delete
+      has_one :web_template, :dependent => :delete
+      has_one :attachment, :dependent => :delete
+      has_many :email_addresses, :dependent => :delete_all
+      has_many :clients, :dependent => :delete_all
 
       extend ::MsfModels::SerializedPrefs
 
       serialize :prefs, ::MsfModels::Base64Serializer.new
+    
+      scope :with_emails_by_id, lambda{ |the_id|
+        where(:id => the_id).includes(:email_addresses)
+      }
 
       # General settings
       serialized_prefs_attr_accessor :payload_lhost, :listener_lhost, :payload_type
