@@ -1,7 +1,7 @@
 module MsfModels::ActiveRecordModels::WebTemplate
   def self.included(base)
     base.class_eval{
-      belongs_to :campaign
+      belongs_to :campaign, :class_name => "Msm::Campaign"
       extend ::MsfModels::SerializedPrefs
       serialize :prefs, ::MsfModels::Base64Serializer.new
 

@@ -4,18 +4,18 @@ module MsfModels::ActiveRecordModels::Host
       include Msf::DBManager::DBSave
 
       belongs_to :workspace
-      has_and_belongs_to_many :tags, :join_table => :hosts_tags
-      has_many :services, :dependent => :destroy
-      has_many :clients,  :dependent => :destroy
-      has_many :vulns,    :dependent => :destroy
-      has_many :notes,    :dependent => :destroy
-      has_many :loots,    :dependent => :destroy, :order => "loots.created_at desc"
-      has_many :sessions, :dependent => :destroy, :order => "sessions.opened_at"
+      has_and_belongs_to_many :tags, :join_table => :hosts_tags, :class_name => "Msm::Tag"
+      has_many :services, :dependent => :destroy, :class_name => "Msm::Service"
+      has_many :clients,  :dependent => :destroy, :class_name => "Msm::Client"
+      has_many :vulns,    :dependent => :destroy, :class_name => "Msm::Vuln"
+      has_many :notes,    :dependent => :destroy, :class_name => "Msm::Note"
+      has_many :loots,    :dependent => :destroy, :class_name => "Msm::Loot", :order => "loots.created_at desc"
+      has_many :sessions, :dependent => :destroy, :class_name => "Msm::Session", :order => "sessions.opened_at"
 
       has_many :service_notes, :through => :services
       has_many :web_sites, :through => :services
       has_many :creds,    :through   => :services
-      has_many :exploited_hosts, :dependent => :destroy
+      has_many :exploited_hosts, :dependent => :destroy, :class_name => "Msm::ExploitedHost"
 
       validates_exclusion_of :address, :in => ['127.0.0.1']
       validates_uniqueness_of :address, :scope => :workspace_id

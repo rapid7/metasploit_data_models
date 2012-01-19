@@ -2,7 +2,7 @@ module MsfModels::ActiveRecordModels::Cred
   def self.included(base)
     base.class_eval{
       include Msf::DBManager::DBSave
-      belongs_to :service
+      belongs_to :service, :class_name => "Msm::Service"
 
       def ssh_key_matches?(other)
         return false unless other.kind_of? self.class

@@ -3,9 +3,9 @@ module MsfModels::ActiveRecordModels::WebSite
     base.class_eval{
       include Msf::DBManager::DBSave
       belongs_to :service
-      has_many :web_pages, :dependent => :destroy
-      has_many :web_forms, :dependent => :destroy
-      has_many :web_vulns, :dependent => :destroy
+      has_many :web_pages, :dependent => :destroy, :class_name => "Msm::WebPage"
+      has_many :web_forms, :dependent => :destroy, :class_name => "Msm::WebForm"
+      has_many :web_vulns, :dependent => :destroy, :class_name => "Msm::WebVuln"
 
       serialize :options, ::MsfModels::Base64Serializer.new
 

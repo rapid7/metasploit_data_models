@@ -3,7 +3,7 @@ module MsfModels::ActiveRecordModels::ReportTemplate
     base.class_eval{
       include Msf::DBManager::DBSave
 
-      belongs_to :workspace
+      belongs_to :workspace, :class_name => "Msm::Workspace"
     }
   end
 end

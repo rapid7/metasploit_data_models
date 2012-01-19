@@ -1,8 +1,8 @@
 module MsfModels::ActiveRecordModels::EmailTemplate
   def self.included(base)
     base.class_eval{
-      belongs_to :campaign
-      has_and_belongs_to_many :attachments
+      belongs_to :campaign, :class_name => "Msm::Campaign"
+      has_and_belongs_to_many :attachments, :class_name => "Msm::Attachment"
 
       extend MsfModels::SerializedPrefs
 

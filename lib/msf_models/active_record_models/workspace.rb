@@ -9,22 +9,22 @@ module MsfModels::ActiveRecordModels::Workspace
       # exception when this module is included
       eval('DEFAULT = "default"') unless defined? DEFAULT
 
-      has_many :hosts, :dependent => :destroy
-      has_many :services, :through => :hosts
-      has_many :notes, :dependent => :destroy
-      has_many :loots, :dependent => :destroy
-      has_many :events,:dependent => :destroy
-      has_many :reports, :dependent => :destroy
-      has_many :report_templates, :dependent => :destroy
-      has_many :tasks,   :dependent => :destroy
-      has_many :clients,  :through => :hosts
-      has_many :vulns,    :through => :hosts
-      has_many :creds,    :dependent => :destroy
-      has_many :imported_creds,  :dependent => :destroy
-      has_many :exploited_hosts, :through => :hosts
-      has_many :sessions, :through => :hosts
-      has_many :cred_files, :dependent => :destroy
-      has_many :listeners, :dependent => :destroy
+      has_many :hosts, :dependent => :destroy, :class_name => "Msm::Host"
+      has_many :services, :through => :hosts, :class_name => "Msm::Service"
+      has_many :notes, :dependent => :destroy, :class_name => "Msm::Note"
+      has_many :loots, :dependent => :destroy, :class_name => "Msm::Loot"
+      has_many :events,:dependent => :destroy, :class_name => "Msm::Event"
+      has_many :reports, :dependent => :destroy, :class_name => "Msm::Report"
+      has_many :report_templates, :dependent => :destroy, :class_name => "Msm::ReportTemplate"
+      has_many :tasks,   :dependent => :destroy, :class_name => "Msm::Task"
+      has_many :clients,  :through => :hosts, :class_name => "Msm::Client"
+      has_many :vulns,    :through => :hosts, :class_name => "Msm::Vuln"
+      has_many :creds,    :dependent => :destroy, :class_name => "Msm::Cred"
+      has_many :imported_creds,  :dependent => :destroy, :class_name => "Msm::ImportedCred"
+      has_many :exploited_hosts, :through => :hosts, :class_name => "Msm::ExploitedHost"
+      has_many :sessions, :through => :hosts, :class_name => "Msm::Session"
+      has_many :cred_files, :dependent => :destroy, :class_name => "Msm::CredFile"
+      has_many :listeners, :dependent => :destroy, :class_name => "Msm::Listener"
 
       before_save :normalize
 

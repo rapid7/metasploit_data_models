@@ -1,11 +1,11 @@
 module MsfModels::ActiveRecordModels::Campaign
   def self.included(base)
     base.class_eval{
-      has_one :email_template, :dependent => :delete
-      has_one :web_template, :dependent => :delete
-      has_one :attachment, :dependent => :delete
-      has_many :email_addresses, :dependent => :delete_all
-      has_many :clients, :dependent => :delete_all
+      has_one :email_template, :dependent => :delete, :class_name => "Msm::EmailTemplate"
+      has_one :web_template, :dependent => :delete, :class_name => "Msm::WebTemplate"
+      has_one :attachment, :dependent => :delete, :class_name => "Msm::Attachment"
+      has_many :email_addresses, :dependent => :delete_all, :class_name => "Msm::EmailAddress"
+      has_many :clients, :dependent => :delete_all, :class_name => "Msm::Client"
 
       extend ::MsfModels::SerializedPrefs
 

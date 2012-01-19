@@ -3,7 +3,7 @@ module MsfModels::ActiveRecordModels::SessionEvent
     base.class_eval{
       include Msf::DBManager::DBSave
 
-      belongs_to :session
+      belongs_to :session, :class_name => "Msm::Session"
     }
   end
 end
