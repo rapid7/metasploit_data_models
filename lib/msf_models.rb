@@ -10,24 +10,6 @@ require "msf_models/db_manager/db_objects"
 require "msf_models/validators/ip_format_validator"
 
 
-#
-#
-# ---- USAGE ----
-#
-# When MsfModels is included by a Rails application, it simply makes
-# mixins available to ActiveRecord models that provide high-level
-# behavior for those models.
-#
-# When MsfModels is included by MSF, the gem dynamically creates
-# ActiveRecord model classes.
-#
-# Both of these behaviors are based on the assumption that the files in
-# lib/msf_models/active_record_models (though implemented here as
-# mixins) actually represent the ActiveRecord models that both MSF and
-# Pro use.
-#
-#
-
 # Declare the common namespace we'll use in both MSF and Pro
 module Msm; end
 
