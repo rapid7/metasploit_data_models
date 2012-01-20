@@ -4,6 +4,29 @@ module MsfModels::ActiveRecordModels::Cred
       include Msf::DBManager::DBSave
       belongs_to :service, :class_name => "Msm::Service"
 
+      unless defined? PTYPES
+        const_def =<<-CONST_DEF 
+          PTYPES = {
+            "read/write password" => "password_rw",
+            "read-only password" => "password_ro",
+            "SMB hash" => "smb_hash",
+            "SSH private key" => "ssh_key",
+            "SSH public key" => "ssh_pubkey"
+          }
+        CONST_DEF
+        eval(const_def)
+      end
+
+      eval("KEY_ID_REGEX = /([0-9a-fA-F:]{47})/") unless defined?(KEY_ID_REGEX) # Could be more strict
+
+
+      def ptype_human
+        humanized = PTYPES.select do |k, v|
+          v == ptype
+        end.keys[0]
+        humanized ? humanized : ptype
+      end
+
       def ssh_key_matches?(other)
         return false unless other.kind_of? self.class
         return false unless self.ptype == "ssh_key"

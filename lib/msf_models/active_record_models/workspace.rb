@@ -27,6 +27,7 @@ module MsfModels::ActiveRecordModels::Workspace
       has_many :listeners, :dependent => :destroy, :class_name => "Msm::Listener"
 
       before_save :normalize
+      belongs_to :owner, :class_name => "Msm::User", :foreign_key => "owner_id"
 
       validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 255}
       validates :description, :length => {:maximum => 4096}
@@ -40,7 +41,7 @@ module MsfModels::ActiveRecordModels::Workspace
             services.host_id = hosts.id AND
             web_sites.service_id = services.id
           EOQ
-        WebSite.find_by_sql(query)
+        Msm::WebSite.find_by_sql(query)
       end
 
       def web_pages
@@ -52,7 +53,7 @@ module MsfModels::ActiveRecordModels::Workspace
             web_sites.service_id = services.id AND
             web_pages.web_site_id = web_sites.id
         EOQ
-        WebPage.find_by_sql(query)
+        Msm::WebPage.find_by_sql(query)
       end
 
       def web_forms
@@ -64,7 +65,7 @@ module MsfModels::ActiveRecordModels::Workspace
             web_sites.service_id = services.id AND  
             web_forms.web_site_id = web_sites.id
         EOQ
-        WebForm.find_by_sql(query)
+        Msm::WebForm.find_by_sql(query)
       end
 
       def unique_web_forms
@@ -76,7 +77,7 @@ module MsfModels::ActiveRecordModels::Workspace
             web_sites.service_id = services.id AND  
             web_forms.web_site_id = web_sites.id
         EOQ
-        WebForm.find_by_sql(query)
+        Msm::WebForm.find_by_sql(query)
       end
 
       def web_vulns
@@ -88,7 +89,7 @@ module MsfModels::ActiveRecordModels::Workspace
             web_sites.service_id = services.id AND  
             web_vulns.web_site_id = web_sites.id
         EOQ
-        WebVuln.find_by_sql(query)
+        Msm::WebVuln.find_by_sql(query)
       end
 
       def self.default
