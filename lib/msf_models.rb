@@ -16,6 +16,8 @@ module Msm; end
 module MsfModels
   module ActiveRecordModels; end
 
+  # Dynamically create AR classes if being included from Msf::DBManager
+  # otherwise, just make the modules available for arbitrary inclusion.
   def self.included(base)
     ar_mixins.each{|file| load file}
     create_and_load_ar_classes if base == Msf::DBManager
@@ -33,7 +35,7 @@ module MsfModels
   # (MSF-only) Dynamically create ActiveRecord descendant classes
   # and load them into the namespace provided by base
   def self.create_and_load_ar_classes
-    constant_names_from_files.each do |cname|
+    ar_module_names.each do |cname|
       class_str =<<-RUBY
         class Msm::#{cname} < ActiveRecord::Base
           include MsfModels::ActiveRecordModels::#{cname}
@@ -45,7 +47,7 @@ module MsfModels
 
   # Derive "constant" strings from the names of the files in
   # lib/msf_models/active_record_models
-  def self.constant_names_from_files
+  def self.ar_module_names
     ar_mixins.inject([]) do |array, path|
       filename = File.basename(path).split(".").first
       c_name = filename.classify
