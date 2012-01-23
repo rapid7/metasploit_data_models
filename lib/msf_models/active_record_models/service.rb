@@ -1,7 +1,7 @@
 module MsfModels::ActiveRecordModels::Service
   def self.included(base)
     base.class_eval{
-	    eval("STATES = ['open', 'closed', 'filtered', 'unknown']") unless defined? STATES
+      eval("STATES = ['open', 'closed', 'filtered', 'unknown']") unless defined? STATES
       include Msf::DBManager::DBSave
       has_many :vulns, :dependent => :destroy, :class_name => "Msm::Vuln"
       has_many :notes, :dependent => :destroy, :class_name => "Msm::Note"
@@ -19,7 +19,7 @@ module MsfModels::ActiveRecordModels::Service
       has_many :web_vulns, :through => :web_sites
 
       serialize :info, ::MsfModels::Base64Serializer.new
-      scope :inactive, where("state <> ?", "open")
+      scope :inactive, where("services.state IS NOT 'open'")
       scope :with_state, lambda { |a_state|  where("services.state = ?", a_state)}
       scope :search, lambda { |*args|
         where([
