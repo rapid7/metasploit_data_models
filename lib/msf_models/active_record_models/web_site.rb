@@ -13,6 +13,11 @@ module MsfModels::ActiveRecordModels::WebSite
         proto = self.service.name == "https" ? "https" : "http"
         host  = ignore_vhost ? self.service.host.address : self.vhost
         port  = self.service.port
+
+        if Rex::Socket.is_ipv6?(host)
+          host = "[#{host}]"
+        end
+
         url   = "#{proto}://#{host}"
         if not ((proto == "http" and port == 80) or (proto == "https" and port == 443))
           url += ":#{port}"

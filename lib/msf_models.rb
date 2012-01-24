@@ -1,6 +1,7 @@
 require "active_record"
 require "active_support"
 require "active_support/all"
+require "shellwords"
 
 require "msf_models/version"
 require "msf_models/serialized_prefs"
