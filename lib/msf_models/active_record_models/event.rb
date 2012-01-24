@@ -7,7 +7,7 @@ module MsfModels::ActiveRecordModels::Event
 
       serialize :info, ::MsfModels::Base64Serializer.new
 
-      scope :flagged, :conditions => {:critical => true, :seen => false}
+      scope :flagged, where(:critical => true, :seen => false)
       scope :module_run, where(:name => 'module_run')
 
       validates_presence_of :name
