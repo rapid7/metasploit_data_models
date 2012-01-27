@@ -1,8 +1,11 @@
 module MsfModels::ActiveRecordModels::Attachment
   def self.included(base)
-    base.class_eval{
+    base.class_eval {
       has_and_belongs_to_many :email_template, :class_name => "Msm::EmailTemplate"
       belongs_to :campaign, :class_name => "Msm::Campaign"
+
+      validates_presence_of :data
+      validates_format_of :data, :with =>/.{10}/
 
       # Generate a unique Content-ID
       def cid
