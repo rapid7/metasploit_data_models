@@ -11,7 +11,11 @@ module MsfModels::ActiveRecordModels::Note
       scope :flagged, where('critical = true AND seen = false')
       scope :visible, where(['ntype NOT IN (?)', ['web.form', 'web.url', 'web.vuln']])
 
-      def after_save
+      after_save :normalize
+
+      private
+
+      def normalize
         if data_changed? and ntype =~ /fingerprint/
           host.normalize_os
         end
