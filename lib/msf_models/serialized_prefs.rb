@@ -16,7 +16,7 @@ module MsfModels
           end
         RUBY
 
-        class_eval method_declarations, __FILE__
+        class_eval method_declarations, __FILE__, __LINE__
       end
     end
   end
