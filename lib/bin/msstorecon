@@ -1,0 +1,11 @@
+#! /usr/bin/env ruby
+
+require 'pry'
+
+begin
+  IRB = Pry
+  Pry.new(binding)
+  
+rescue LoadError
+end
+

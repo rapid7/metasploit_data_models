@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+
+require 'pry'
+
+begin
+  binding.pry 
+rescue LoadError
+end
+
