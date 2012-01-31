@@ -2,6 +2,7 @@ module MsfModels::ActiveRecordModels::Note
   def self.included(base)
     base.class_eval{
       include Msf::DBManager::DBSave
+      notes = base.arel_table      
 
       belongs_to :workspace, :class_name => "Msm::Workspace"
       belongs_to :host, :class_name => "Msm::Host"
@@ -9,7 +10,8 @@ module MsfModels::ActiveRecordModels::Note
       serialize :data, ::MsfModels::Base64Serializer.new
 
       scope :flagged, where('critical = true AND seen = false')
-      scope :visible, where(['ntype NOT IN (?)', ['web.form', 'web.url', 'web.vuln']])
+      scope :visible, where(notes[:ntype].not_in(['web.form', 'web.url', 'web.vuln']))
+
 
       after_save :normalize
 
