@@ -1,9 +1,12 @@
 #! /usr/bin/env ruby
 
-require 'pry'
-
 begin
-  binding.pry 
+  require 'pry'
+  require "msf_models"
+
+  Pry.start
+  exit
 rescue LoadError
+  warn "Unable to load Pry"
 end
 
