@@ -8,6 +8,9 @@ module MsfModels::ActiveRecordModels::Note
       belongs_to :service, :class_name => "Msm::Service"
       serialize :data, ::MsfModels::Base64Serializer.new
 
+      scope :flagged, where('critical = true AND seen = false')
+      scope :visible, where(['ntype NOT IN (?)', ['web.form', 'web.url', 'web.vuln']])
+
       def after_save
         if data_changed? and ntype =~ /fingerprint/
           host.normalize_os
