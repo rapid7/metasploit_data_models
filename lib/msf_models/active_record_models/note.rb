@@ -1,5 +1,5 @@
 module MsfModels::ActiveRecordModels::Note
-  def self.include(base)
+  def self.included(base)
     base.class_eval{
       include Msf::DBManager::DBSave
 
