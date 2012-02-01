@@ -1,32 +1,32 @@
-#MsfModels
+#MetasploitDataModels
 
 The database layer for Metasploit
 
 
 ## Purpose
-__MsfModels__ exists to do several key things:
+__MetasploitDataModels__ exists to do several key things:
 
 1. Allow code sharing between Metasploit Framework (MSF) and the commercial versions of Metasploit (Community, Express, Pro -- usually referred to collectively as "Pro")
 
 2. Create an easy-to-use mechanism to guide the future development of __both__ commercial and FOSS features.
 
-3. (__FUTURE__) Give FOSS developers a lightweight entry point to MSF's backend for use in developing lightweight tools that gather data intended for later use with MSF (e.g. specialized scanners).
+3. Give FOSS developers a lightweight entry point to MSF's backend for use in developing lightweight tools that gather data intended for later use with MSF (e.g. specialized scanners).
 
 ## Usage
 
 ### Rails
 
-When MsfModels is included by a Rails application, it simply makes
+When MetasploitDataModels is included by a Rails application, it simply makes
 mixins available to ActiveRecord models that provide high-level
-behavior for those models.  After performing the top-level include in an initializer, we mixins in an appropriate module from msf_models for each model that is shared.
+behavior for those models.  After performing the top-level include in an initializer, we mixins in an appropriate module from metasploit_data_models for each model that is shared.
 
 
 ### MSF
-When MsfModels is included by MSF, the gem dynamically creates
+When MetasploitDataModels is included by MSF, the gem dynamically creates
 ActiveRecord model classes.
 
 Both of these behaviors are based on the assumption that the files in
-__lib/msf_models/active_record_models__, though implemented here as
+__lib/metasploit_data_models/active_record_models__, though implemented here as
 mixins, actually represent the ActiveRecord models that both MSF and
 Pro use.
 
@@ -51,6 +51,9 @@ the connection adapter (e.g. the use of an RDBMS-specific function in
 a named scope's "WHERE" clause), it will check to see if the adapter
 supports it and then throw an exception when the connection object
 (which provides the adapter) is nil.
+
+This means that, for all but the most trivial cases, you need to use Arel 
+versions of queries instead of ones utilizing straight SQL.
 
 You'll encounter this sometimes as you add things to this gem.  A good
 rule of thumb: anything that goes into the class_eval block must be able

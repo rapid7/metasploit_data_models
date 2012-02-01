@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module MsfModels
+module MetasploitDataModels
   describe Base64Serializer do
     subject{Base64Serializer.new}
 
