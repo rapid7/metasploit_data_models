@@ -33,6 +33,16 @@ Pro use.
 
 ## Developer Info
 
+### Console
+The gem includes a console based on [Pry](https://github.com/pry/pry/)
+
+Give it a path to a working MSF database.yml file for full
+ActiveRecord-based access to your data.
+
+__Note:__ only "development" mode is supported now.  I.e. your YAML file
+needs to have a "development" portion just like a Rails database.yml
+would.
+
 ### ActiveRecord::ConnectionError issues
 Because the gem is defining mixins, there can be no knowledge of the
 specifics of any "current" ActiveRecord connection.  But if ActiveRecord
