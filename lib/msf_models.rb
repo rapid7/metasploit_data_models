@@ -34,7 +34,6 @@ module MsfModels
   end
 
   # (MSF-only) Dynamically create ActiveRecord descendant classes
-  # and load them into the namespace provided by base
   def self.create_and_load_ar_classes
     ar_module_names.each do |cname|
       class_str =<<-RUBY
@@ -42,7 +41,7 @@ module MsfModels
           include MsfModels::ActiveRecordModels::#{cname}
         end
       RUBY
-      eval class_str, binding, __FILE__, __LINE__
+      eval class_str, binding, __FILE__, __LINE__ # *slightly* more obvious stack trace
     end
   end
 
@@ -52,7 +51,7 @@ module MsfModels
     ar_mixins.inject([]) do |array, path|
       filename = File.basename(path).split(".").first
       c_name = filename.classify
-      c_name << "s" if filename =~ /^[\w]+s$/
+      c_name << "s" if filename =~ /^[\w]+s$/ # classify can't do plurals
       array << c_name
       array
     end
