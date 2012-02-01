@@ -1,10 +1,9 @@
 #! /usr/bin/env ruby
 
-begin
-  require 'pry'
-  require "msf_models"
-
-  banner = <<-BANNER
+def metastore_banner
+  banner = {}
+  banner[:color] = "\e[34m"
+  banner[:text] = <<-BANNER
                            mm                      mm                           
                            MM                      MM                           
 `7MMpMMMb.pMMMb.  .gP"Ya mmMMmm  ,6"Yb.  ,pP"Ybd mmMMmm ,pW"Wq.`7Mb,od8 .gP"Ya  
@@ -13,8 +12,30 @@ begin
   MM    MM    MM YM.    ,  MM   8M   MM  L.   I8   MM  YA.   ,A9 MM    YM.    , 
 .JMML  JMML  JMML.`Mbmmd'  `Mbmo`Moo9^Yo.M9mmmP'   `Mbmo`Ybmd9'.JMML.   `Mbmmd' 
 BANNER
+  banner
+end
 
-  puts "\e[34m#{banner}\e[0m"
+begin
+  require 'pry'
+  require "msf_models"
+
+  # Set up a DB connection, preferring one from Pro if it's in the normal place
+  # Otherwise get from ARGV[0]
+  relative_dev_path = File.expand_path(File.dirname(__FILE__) + "/../../pro/ui/config/database.yml")
+  db_info_path      = ARGV[0].blank? ? relative_dev_path : ARGV[0]
+
+  if File.readable?(db_info_path)
+    connection_info = YAML.load_file(db_info_path)
+    ActiveRecord::Base.establish_connection(connection_info['development'])
+  else
+    warn "Can't access DB -- check file path  Exiting."
+  end
+
+  include MsfModels
+  MsfModels.create_and_load_ar_classes
+
+
+  puts "\n\n\n#{metastore_banner[:color]}#{metastore_banner[:text]}\e[0m\n\n\n"
 
   Pry.config.prompt = proc { |obj, nest_level, _| "msstore:#{nest_level}> " }
 
