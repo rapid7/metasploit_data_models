@@ -29,3 +29,19 @@ Both of these behaviors are based on the assumption that the files in
 __lib/msf_models/active_record_models__, though implemented here as
 mixins, actually represent the ActiveRecord models that both MSF and
 Pro use.
+
+
+## Developer Info
+
+### ActiveRecord::ConnectionError issues
+Because the gem is defining mixins, there can be no knowledge of the
+specifics of any "current" ActiveRecord connection.  But if ActiveRecord
+encounters something in a child class that would require knowledge of
+the connection adapter (e.g. the use of an RDBMS-specific function in
+a named scope's "WHERE" clause), it will check to see if the adapter
+supports it and then throw an exception when the connection object
+(which provides the adapter) is nil.
+
+You'll encounter this sometimes as you add things to this gem.  A good
+rule of thumb: anything that goes into the class_eval block must be able
+to work without knowledge of the AR connection type.

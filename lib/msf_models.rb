@@ -42,7 +42,7 @@ module MsfModels
           include MsfModels::ActiveRecordModels::#{cname}
         end
       RUBY
-      eval(class_str)
+      eval class_str, binding, __FILE__, __LINE__
     end
   end
 
