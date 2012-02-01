@@ -20,7 +20,7 @@ module MsfModels
   # Dynamically create AR classes if being included from Msf::DBManager
   # otherwise, just make the modules available for arbitrary inclusion.
   def self.included(base)
-    ar_mixins.each{|file| load file}
+    ar_mixins.each{|file| require file}
     create_and_load_ar_classes if base == Msf::DBManager
   end
 
