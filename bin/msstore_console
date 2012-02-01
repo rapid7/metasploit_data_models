@@ -15,17 +15,29 @@ BANNER
   banner
 end
 
+def db_info_file
+  hidden_file = "#{Dir.home}/.msf_models.yml"
+  if File.readable?(hidden_file)
+    pro_path = YAML.load_file(hidden_file)['pro_path']
+    return "#{pro_path}/ui/config/database.yml"
+  elsif !ARGV[0].blank?
+    return ARGV[0]
+  else
+    warn "No YAML file of DB info available"
+    exit
+  end
+end
+
 begin
   require 'pry'
   require "msf_models"
 
+
   # Set up a DB connection, preferring one from Pro if it's in the normal place
   # Otherwise get from ARGV[0]
-  relative_dev_path = File.expand_path(File.dirname(__FILE__) + "/../../pro/ui/config/database.yml")
-  db_info_path      = ARGV[0].blank? ? relative_dev_path : ARGV[0]
 
-  if File.readable?(db_info_path)
-    connection_info = YAML.load_file(db_info_path)
+  if File.readable?(db_info_file)
+    connection_info = YAML.load_file(db_info_file)
     ActiveRecord::Base.establish_connection(connection_info['development'])
   else
     warn "Can't access DB -- check file path."
