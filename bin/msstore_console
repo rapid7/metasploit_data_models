@@ -4,13 +4,14 @@ def metastore_banner
   banner = {}
   banner[:color] = "\e[34m"
   banner[:text] = <<-BANNER
-                           mm                      mm                           
-                           MM                      MM                           
-`7MMpMMMb.pMMMb.  .gP"Ya mmMMmm  ,6"Yb.  ,pP"Ybd mmMMmm ,pW"Wq.`7Mb,od8 .gP"Ya  
-  MM    MM    MM ,M'   Yb  MM   8)   MM  8I   `"   MM  6W'   `Wb MM' "',M'   Yb 
-  MM    MM    MM 8M""""""  MM    ,pm9MM  `YMMMa.   MM  8M     M8 MM    8M"""""" 
-  MM    MM    MM YM.    ,  MM   8M   MM  L.   I8   MM  YA.   ,A9 MM    YM.    , 
-.JMML  JMML  JMML.`Mbmmd'  `Mbmo`Moo9^Yo.M9mmmP'   `Mbmo`Ybmd9'.JMML.   `Mbmmd' 
+ _______ _______ _______ _______ ______  _______ _       _______ 
+(       )  ____ \\       )  ___  )  __  \\(  ____ \\ \\     (  ____ \\
+| () () | (    \\/ () () | (   ) | (  \\  ) (    \\/ (     | (    \\/
+| || || | (__   | || || | |   | | |   ) | (__   | |     | (_____ 
+| |(_)| |  __)  | |(_)| | |   | | |   | |  __)  | |     (_____  )
+| |   | | (     | |   | | |   | | |   ) | (     | |           ) |
+| )   ( | )     | )   ( | (___) | (__/  ) (____/\\ (____/Y\\____) |
+|/     \\|/      |/     \\|_______)______/(_______/_______|_______)
 BANNER
   banner
 end
@@ -31,7 +32,6 @@ end
 begin
   require 'pry'
   require "msf_models"
-
 
   # Set up a DB connection, preferring one from Pro if it's in the normal place
   # Otherwise get from ARGV[0]
