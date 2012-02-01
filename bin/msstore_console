@@ -28,7 +28,8 @@ begin
     connection_info = YAML.load_file(db_info_path)
     ActiveRecord::Base.establish_connection(connection_info['development'])
   else
-    warn "Can't access DB -- check file path  Exiting."
+    warn "Can't access DB -- check file path."
+    exit
   end
 
   include MsfModels
