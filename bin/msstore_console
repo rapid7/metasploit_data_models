@@ -16,6 +16,8 @@ BANNER
 
   puts "\e[34m#{banner}\e[0m"
 
+  Pry.config.prompt = proc { |obj, nest_level, _| "msstore:#{nest_level}> " }
+
   Pry.start
   exit
 rescue LoadError
