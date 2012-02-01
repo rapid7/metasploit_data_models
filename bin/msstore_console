@@ -4,6 +4,18 @@ begin
   require 'pry'
   require "msf_models"
 
+  banner = <<-BANNER
+                           mm                      mm                           
+                           MM                      MM                           
+`7MMpMMMb.pMMMb.  .gP"Ya mmMMmm  ,6"Yb.  ,pP"Ybd mmMMmm ,pW"Wq.`7Mb,od8 .gP"Ya  
+  MM    MM    MM ,M'   Yb  MM   8)   MM  8I   `"   MM  6W'   `Wb MM' "',M'   Yb 
+  MM    MM    MM 8M""""""  MM    ,pm9MM  `YMMMa.   MM  8M     M8 MM    8M"""""" 
+  MM    MM    MM YM.    ,  MM   8M   MM  L.   I8   MM  YA.   ,A9 MM    YM.    , 
+.JMML  JMML  JMML.`Mbmmd'  `Mbmo`Moo9^Yo.M9mmmP'   `Mbmo`Ybmd9'.JMML.   `Mbmmd' 
+BANNER
+
+  puts "\e[34m#{banner}\e[0m"
+
   Pry.start
   exit
 rescue LoadError
