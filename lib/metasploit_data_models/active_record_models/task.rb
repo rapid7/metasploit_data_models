@@ -8,6 +8,17 @@ module MetasploitDataModels::ActiveRecordModels::Task
       serialize :options, ::MetasploitDataModels::Base64Serializer.new
       serialize :result, ::MetasploitDataModels::Base64Serializer.new
       serialize :settings, ::MetasploitDataModels::Base64Serializer.new
+
+      scope :running, order( "created_at DESC" ).where("completed_at IS NULL")
+
+      before_destroy :delete_file
+
+      private
+
+      def delete_file
+        c = Pro::Client.get
+        c.task_delete_log(self[:id])
+      end
     }
   end
 end
