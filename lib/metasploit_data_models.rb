@@ -9,6 +9,7 @@ require "metasploit_data_models/base64_serializer"
 require "metasploit_data_models/db_manager/db_objects"
 
 require "metasploit_data_models/validators/ip_format_validator"
+require "metasploit_data_models/validators/password_is_strong_validator"
 
 
 # Declare the common namespace we'll use in both MSF and Pro
