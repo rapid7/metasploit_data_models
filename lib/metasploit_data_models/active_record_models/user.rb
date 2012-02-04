@@ -27,16 +27,9 @@ module MetasploitDataModels::ActiveRecordModels::User
       end
 
       def license_count_exceeded?
-        user_count >= licenses_used
+        self.class.count >= License.get.users
       end
 
-      def user_count
-        Mdm::User.count
-      end
-
-      def licenses_used
-        License.get.users
-      end
     }
   end
 end
