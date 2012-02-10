@@ -6,6 +6,8 @@ class PasswordIsStrongValidator < ActiveModel::EachValidator
 		}
 
   def validate_each(record, attribute, value)
+    return if value.blank?
+
     if is_simple?(value)
       record.errors[attribute] << "must contain letters, numbers, and at least one special character"
     end
