@@ -3,26 +3,46 @@ module MetasploitDataModels::ActiveRecordModels::Host
     base.class_eval{
       include Msf::DBManager::DBSave
 
-      belongs_to :workspace
+      belongs_to :workspace, :class_name => "Mdm::Workspace"
       has_and_belongs_to_many :tags, :join_table => :hosts_tags, :class_name => "Mdm::Tag"
-      has_many :services, :dependent => :destroy, :class_name => "Mdm::Service"
-      has_many :clients,  :dependent => :destroy, :class_name => "Mdm::Client"
-      has_many :vulns,    :dependent => :destroy, :class_name => "Mdm::Vuln"
-      has_many :notes,    :dependent => :destroy, :class_name => "Mdm::Note"
-      has_many :loots,    :dependent => :destroy, :class_name => "Mdm::Loot", :order => "loots.created_at desc"
+      has_many :services, :dependent => :destroy, :class_name => "Mdm::Service", :order => "services.port, services.proto"
+      has_many :clients, :dependent => :delete_all, :class_name => "Mdm::Client"
+      has_many :vulns, :dependent => :delete_all, :class_name => "Mdm::Vuln"
+      has_many :notes, :dependent => :delete_all, :class_name => "Mdm::Note", :order => "notes.created_at"
+      has_many :loots, :dependent => :destroy, :class_name => "Mdm::Loot", :order => "loots.created_at desc"
       has_many :sessions, :dependent => :destroy, :class_name => "Mdm::Session", :order => "sessions.opened_at"
 
       has_many :service_notes, :through => :services
-      has_many :web_sites, :through => :services
-      has_many :creds,    :through   => :services
+      has_many :web_sites, :through => :services, :class_name => "Mdm::WebSite"
+      has_many :creds, :through => :services, :class_name => "Mdm::Cred"
       has_many :exploited_hosts, :dependent => :destroy, :class_name => "Mdm::ExploitedHost"
 
+      validates :address, :presence => true, :ip_format => true
       validates_exclusion_of :address, :in => ['127.0.0.1']
       validates_uniqueness_of :address, :scope => :workspace_id
+      validates_presence_of :workspace
+
+      scope :alive, where({'hosts.state' => 'alive'})
+      scope :search,
+            lambda { |*args| where(
+                [%w{address hosts.name os_name os_flavor os_sp mac purpose comments}.map { |c| "#{c} ILIKE ?" }.join(" OR ")] + ["%#{args[0]}%"] * 8)
+            }
+      scope :tag_search,
+            lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
+
+      scope :flagged, where('notes.critical = true AND notes.seen = false').includes(:notes)
 
       def attribute_locked?(attr)
         n = notes.find_by_ntype("host.updated.#{attr}")
         n && n.data[:locked]
+      end
+
+      accepts_nested_attributes_for :services, :reject_if => lambda { |s| s[:port].blank? }, :allow_destroy => true
+
+      def before_destroy
+        tags.each do |tag|
+          tag.destroy if tag.hosts == [self]
+        end
       end
 
       # Determine if the fingerprint data is readable. If not, it nearly always
