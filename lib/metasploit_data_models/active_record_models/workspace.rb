@@ -10,24 +10,27 @@ module MetasploitDataModels::ActiveRecordModels::Workspace
       eval('DEFAULT = "default"') unless defined? DEFAULT
 
       has_many :hosts, :dependent => :destroy, :class_name => "Mdm::Host"
-      has_many :services, :through => :hosts, :class_name => "Mdm::Service"
-      has_many :notes, :dependent => :destroy, :class_name => "Mdm::Note"
-      has_many :loots, :dependent => :destroy, :class_name => "Mdm::Loot"
-      has_many :events,:dependent => :destroy, :class_name => "Mdm::Event"
+      has_many :services, :through => :hosts, :class_name => "Mdm::Service", :foreign_key => "service_id"
+      has_many :notes, :dependent => :delete_all, :class_name => "Mdm::Note"
+      has_many :loots, :through => :hosts, :dependent => :destroy, :class_name => "Mdm::Loot"
+      has_many :events, :dependent => :delete_all, :class_name => "Mdm::Event"
       has_many :reports, :dependent => :destroy, :class_name => "Mdm::Report"
       has_many :report_templates, :dependent => :destroy, :class_name => "Mdm::ReportTemplate"
-      has_many :tasks,   :dependent => :destroy, :class_name => "Mdm::Task"
-      has_many :clients,  :through => :hosts, :class_name => "Mdm::Client"
-      has_many :vulns,    :through => :hosts, :class_name => "Mdm::Vuln"
-      has_many :creds,    :dependent => :destroy, :class_name => "Mdm::Cred"
-      has_many :imported_creds,  :dependent => :destroy, :class_name => "Mdm::ImportedCred"
+      has_many :tasks, :dependent => :destroy, :class_name => "Mdm::Task", :order => "created_at DESC"
+      has_many :clients, :through => :hosts, :class_name => "Mdm::Client"
+      has_many :vulns, :through => :hosts, :class_name => "Mdm::Vuln"
+      has_many :creds, :through => :services, :dependent => :destroy, :class_name => "Mdm::Cred"
+      has_many :imported_creds, :dependent => :destroy, :class_name => "Mdm::ImportedCred"
       has_many :exploited_hosts, :through => :hosts, :class_name => "Mdm::ExploitedHost"
       has_many :sessions, :through => :hosts, :class_name => "Mdm::Session"
       has_many :cred_files, :dependent => :destroy, :class_name => "Mdm::CredFile"
       has_many :listeners, :dependent => :destroy, :class_name => "Mdm::Listener"
+      has_many :campaigns, :dependent => :destroy, :class_name => "Mdm::Campaign"
+      has_many :web_templates, :through => :campaigns, :class_name => "Mdm::WebTemplate"
+      belongs_to :owner, :class_name => "Mdm::User", :foreign_key => "owner_id"
+      has_and_belongs_to_many :users, :join_table => "project_members", :uniq => true, :class_name => "Mdm::User"
 
       before_save :normalize
-      belongs_to :owner, :class_name => "Mdm::User", :foreign_key => "owner_id"
 
       validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 255}
       validates :description, :length => {:maximum => 4096}
