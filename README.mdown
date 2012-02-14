@@ -18,7 +18,7 @@ __MetasploitDataModels__ exists to do several key things:
 
 When MetasploitDataModels is included by a Rails application, it simply makes
 mixins available to ActiveRecord models that provide high-level
-behavior for those models.  After performing the top-level include in an initializer, we mixins in an appropriate module from metasploit_data_models for each model that is shared.
+behavior for those models.  After performing the top-level include in an initializer, we mixin in an appropriate module from metasploit_data_models for each model that is shared.
 
 
 ### MSF
