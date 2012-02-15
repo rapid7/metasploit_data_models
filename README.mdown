@@ -17,10 +17,7 @@ __MetasploitDataModels__ exists to do several key things:
 
 ### Rails
 
-When MetasploitDataModels is included by a Rails application, it simply makes
-mixins available to ActiveRecord models that provide high-level
-behavior for those models.
-
+In a Rails application we simply include the ActiveRecord mixins directly, usually inside models with similar names.
 
 ### MSF
 When MetasploitDataModels is included by MSF, the gem dynamically creates
@@ -32,7 +29,7 @@ mixins, actually represent the basic ActiveRecord model structure that both Meta
 
 ### Elsewhere
 
-__NOTE: This isn't in RubyGems yet.  Gemfile pointing to this repo ([Bundler](http://gembundler.com)) is the suggested option for now__
+__NOTE: This isn't in RubyGems yet.  Using a Gemfile entry pointing to this repo (i.e., using [Bundler](http://gembundler.com)) is the suggested option for now.__
 
 
 Usage outside of Rapid7 is still alpha, and we're not making many promises.  That being said, usage is easy:
@@ -46,9 +43,9 @@ MetasploitDataModels.create_and_load_ar_classes
 
 Basically you need to do the following things:
 
-1. Establish an ActiveRecord connection
-2. Include the MetasploitDataModels module
-3. Call the class method that builds the AR models into the Mdm namespace( __MetasploitDataModels.create_and_load_ar_classes__ )
+1. Establish an ActiveRecord connection.  A Rails __config/database.yml__ is ideal for this.
+2. Include the MetasploitDataModels module.
+3. Call the class method that builds the AR models into the Mdm namespace( __MetasploitDataModels.create_and_load_ar_classes__ ).
 
 
 ## Developer Info
@@ -59,9 +56,7 @@ The gem includes a console based on [Pry](https://github.com/pry/pry/)
 Give it a path to a working MSF database.yml file for full
 ActiveRecord-based access to your data.
 
-__Note:__ only "development" mode is supported now.  I.e. your YAML file
-needs to have a "development" portion just like a Rails database.yml
-would.
+__Note:__ "development" mode is hardcoded into the console currently.
 
 ### ActiveRecord::ConnectionError issues
 Because the gem is defining mixins, there can be no knowledge of the
@@ -75,6 +70,6 @@ supports it and then throw an exception when the connection object
 This means that, for all but the most trivial cases, you need to use Arel 
 versions of queries instead of ones utilizing straight SQL.
 
-You'll encounter this sometimes as you add things to this gem.  A good
+You'll encounter this sometimes if you do dev work on this gem.  A good
 rule of thumb: anything that goes into the class_eval block must be able
-to work without knowledge of the AR connection type.
+to work without knowledge of the AR connection adapter type.
