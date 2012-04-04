@@ -25,7 +25,7 @@ module MetasploitDataModels::ActiveRecordModels::Workspace
       has_many :sessions, :through => :hosts, :class_name => "Mdm::Session"
       has_many :cred_files, :dependent => :destroy, :class_name => "Mdm::CredFile"
       has_many :listeners, :dependent => :destroy, :class_name => "Mdm::Listener"
-      has_many :campaigns, :dependent => :destroy, :class_name => "Mdm::Campaign"
+      has_many :campaigns, :dependent => :destroy, :class_name => "Campaign"
       has_many :web_templates, :through => :campaigns, :class_name => "Mdm::WebTemplate"
       belongs_to :owner, :class_name => "Mdm::User", :foreign_key => "owner_id"
       has_and_belongs_to_many :users, :join_table => "project_members", :uniq => true, :class_name => "Mdm::User"

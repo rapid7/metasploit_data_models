@@ -3,7 +3,7 @@ module MetasploitDataModels::ActiveRecordModels::Client
     base.class_eval {
       include Msf::DBManager::DBSave
       belongs_to :host, :class_name => "Mdm::Host"
-      belongs_to :campaign, :class_name => "Mdm::Campaign"
+      belongs_to :campaign, :class_name => "Campaign"
     }
   end
 end

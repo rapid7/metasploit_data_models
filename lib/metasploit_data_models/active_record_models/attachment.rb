@@ -2,7 +2,7 @@ module MetasploitDataModels::ActiveRecordModels::Attachment
   def self.included(base)
     base.class_eval {
       has_and_belongs_to_many :email_template, :class_name => "Mdm::EmailTemplate"
-      belongs_to :campaign, :class_name => "Mdm::Campaign"
+      belongs_to :campaign, :class_name => "Campaign"
 
       validates_presence_of :data
       validates_format_of :data, :with =>/.{10}/

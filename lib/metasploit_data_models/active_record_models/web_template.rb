@@ -1,7 +1,7 @@
 module MetasploitDataModels::ActiveRecordModels::WebTemplate
   def self.included(base)
     base.class_eval{
-      belongs_to :campaign, :class_name => "Mdm::Campaign"
+      belongs_to :campaign, :class_name => "Campaign"
       extend ::MetasploitDataModels::SerializedPrefs
       serialize :prefs, ::MetasploitDataModels::Base64Serializer.new
 
