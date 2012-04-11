@@ -26,7 +26,7 @@ module MetasploitDataModels::ActiveRecordModels::Workspace
       has_many :cred_files, :dependent => :destroy, :class_name => "Mdm::CredFile"
       has_many :listeners, :dependent => :destroy, :class_name => "Mdm::Listener"
       belongs_to :owner, :class_name => "Mdm::User", :foreign_key => "owner_id"
-      has_and_belongs_to_many :users, :join_table => "project_members", :uniq => true, :class_name => "Mdm::User"
+      has_and_belongs_to_many :users, :join_table => "workspace_members", :uniq => true, :class_name => "Mdm::User"
 
       before_save :normalize
 
