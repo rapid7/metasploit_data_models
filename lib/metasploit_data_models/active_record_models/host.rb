@@ -24,7 +24,7 @@ module MetasploitDataModels::ActiveRecordModels::Host
 
       scope :alive, where({'hosts.state' => 'alive'})
       scope :search, lambda { |*args| {:conditions =>
-              		[ %w{address::text hosts.name os_name os_flavor os_sp mac purpose comments}.map{|c| "#{c} ILIKE ?"}.join(" OR ") ] + [ "%#{args[0]}%" ] * 7 }
+              		[ %w{address::text hosts.name os_name os_flavor os_sp mac purpose comments}.map{|c| "#{c} ILIKE ?"}.join(" OR ") ] + [ "%#{args[0]}%" ] * 8 }
               	}
       scope :address_search, lambda { |*args| {:conditions =>
               		[ "address=?",args[0]]}}
