@@ -23,10 +23,11 @@ module MetasploitDataModels::ActiveRecordModels::Host
       validates_presence_of :workspace
 
       scope :alive, where({'hosts.state' => 'alive'})
-      scope :search,
-            lambda { |*args| where(
-                [%w{address hosts.name os_name os_flavor os_sp mac purpose comments}.map { |c| "#{c} ILIKE ?" }.join(" OR ")] + ["%#{args[0]}%"] * 8)
-            }
+      scope :search, lambda { |*args| {:conditions =>
+              		[ %w{hosts.name os_name os_flavor os_sp mac purpose comments}.map{|c| "#{c} ILIKE ?"}.join(" OR ") ] + [ "%#{args[0]}%" ] * 7 }
+              	}
+      scope :address_search, lambda { |*args| {:conditions =>
+              		[ "address=?",args[0]]}}
       scope :tag_search,
             lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
 
