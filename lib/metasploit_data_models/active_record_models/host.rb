@@ -19,7 +19,19 @@ module MetasploitDataModels::ActiveRecordModels::Host
 
       validates :address, :presence => true, :ip_format => true
       validates_exclusion_of :address, :in => ['127.0.0.1']
-      validates_uniqueness_of :address, :scope => :workspace_id
+      validates_uniqueness_of :address, :scope => :workspace_id, :unless => Proc.new { |host| host.ip_address_invalid? }
+
+      # This is replicated by the IpAddressValidator class. Had to put it here as well to avoid
+      # SQL errors when checking address uniqueness.
+      def ip_address_invalid?
+        begin
+          potential_ip = IPAddr.new(address)
+          return true unless potential_ip.ipv4? || potential_ip.ipv6?
+        rescue ArgumentError
+          return true
+        end
+      end
+
       validates_presence_of :workspace
 
       scope :alive, where({'hosts.state' => 'alive'})
