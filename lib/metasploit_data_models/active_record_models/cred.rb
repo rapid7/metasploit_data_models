@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::Cred
   def self.included(base)
     base.class_eval{
-      include Msf::DBManager::DBSave
       belongs_to :service, :class_name => "Mdm::Service"
 
       unless defined? PTYPES

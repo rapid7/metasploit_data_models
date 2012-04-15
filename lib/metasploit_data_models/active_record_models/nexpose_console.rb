@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::NexposeConsole
   def self.included(base)
     base.class_eval{
-      include Msf::DBManager::DBSave
       serialize :cached_sites, ::MetasploitDataModels::Base64Serializer.new
 
       validates :name, :presence => true

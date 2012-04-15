@@ -6,7 +6,6 @@ require "shellwords"
 require "metasploit_data_models/version"
 require "metasploit_data_models/serialized_prefs"
 require "metasploit_data_models/base64_serializer"
-require "metasploit_data_models/db_manager/db_objects"
 
 require "metasploit_data_models/validators/ip_format_validator"
 require "metasploit_data_models/validators/password_is_strong_validator"

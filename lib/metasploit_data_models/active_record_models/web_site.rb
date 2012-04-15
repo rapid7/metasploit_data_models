@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::WebSite
   def self.included(base)
     base.class_eval {
-      include Msf::DBManager::DBSave
       belongs_to :service, :class_name => "Mdm::Service", :foreign_key => "service_id"
       has_many :web_pages, :dependent => :destroy, :class_name => "Mdm::WebPage"
       has_many :web_forms, :dependent => :destroy, :class_name => "Mdm::WebForm"

@@ -3,7 +3,6 @@
 module MetasploitDataModels::ActiveRecordModels::Workspace
   def self.included(base)
     base.class_eval{
-      include Msf::DBManager::DBSave
 
       # Usage of the evil eval avoids dynamic constant assignment
       # exception when this module is included

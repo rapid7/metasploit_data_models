@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::User
   def self.included(base)
     base.class_eval {
-      include Msf::DBManager::DBSave
       extend MetasploitDataModels::SerializedPrefs
       serialize :prefs, ::MetasploitDataModels::Base64Serializer.new
 

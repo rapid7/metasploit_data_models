@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::Note
   def self.included(base)
     base.class_eval{
-      include Msf::DBManager::DBSave
       notes = base.arel_table      
 
       belongs_to :workspace, :class_name => "Mdm::Workspace"

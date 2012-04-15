@@ -2,7 +2,6 @@ module MetasploitDataModels::ActiveRecordModels::Service
   def self.included(base)
     base.class_eval{
       eval("STATES = ['open', 'closed', 'filtered', 'unknown']") unless defined? STATES
-      include Msf::DBManager::DBSave
       has_many :vulns, :dependent => :destroy, :class_name => "Mdm::Vuln"
       has_many :notes, :dependent => :destroy, :class_name => "Mdm::Note"
       has_many :creds, :dependent => :destroy, :class_name => "Mdm::Cred"

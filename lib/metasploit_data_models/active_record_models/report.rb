@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::Report
   def self.included(base)
     base.class_eval {
-      include Msf::DBManager::DBSave
 
       belongs_to :workspace, :class_name => "Mdm::Workspace"
       serialize :options, ::MetasploitDataModels::Base64Serializer.new

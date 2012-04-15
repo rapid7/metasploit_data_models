@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::ApiKey
   def self.included(base)
     base.class_eval {
-      include Msf::DBManager::DBSave
 
       validate do |key|
         lic = License.get

@@ -1,7 +1,6 @@
 module MetasploitDataModels::ActiveRecordModels::Session
   def self.included(base)
     base.class_eval {
-      include Msf::DBManager::DBSave
       belongs_to :host, :class_name => "Mdm::Host"
 
       has_one :workspace, :through => :host, :class_name => "Mdm::Workspace"
