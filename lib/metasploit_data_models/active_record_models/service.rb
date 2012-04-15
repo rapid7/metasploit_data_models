@@ -18,7 +18,6 @@ module MetasploitDataModels::ActiveRecordModels::Service
       has_many :web_forms, :through => :web_sites
       has_many :web_vulns, :through => :web_sites
 
-      serialize :info, ::MetasploitDataModels::Base64Serializer.new
       scope :inactive, where("services.state != 'open'")
       scope :with_state, lambda { |a_state|  where("services.state = ?", a_state)}
       scope :search, lambda { |*args|
