@@ -21,7 +21,7 @@ module MetasploitDataModels
   # otherwise, just make the modules available for arbitrary inclusion.
   def self.included(base)
     ar_mixins.each{|file| require file}
-    create_and_load_ar_classes if base == Msf::DBManager
+    create_and_load_ar_classes if base.to_s == 'Msf::DBManager'
   end
 
   # The code in each of these represents the basic structure of a correspondingly named
