@@ -10,11 +10,17 @@ module MetasploitDataModels::ActiveRecordModels::Session
 
       scope :alive, where("closed_at IS NULL")
       scope :dead, where("closed_at IS NOT NULL")
-      scope :upgradeable, where("closed_at IS NULL AND stype = ? and platform ILIKE ?", "shell", "%win%")
+      scope :upgradeable, where("closed_at IS NULL AND stype = 'shell' and platform ILIKE '%win%'")
 
       serialize :datastore, ::MetasploitDataModels::Base64Serializer.new
 
       before_destroy :stop
+      
+      def upgradeable?
+         return true if (self.stype == 'shell' and self.platform =~ /win/)
+         else return false
+       end
+      
 
       private
 
