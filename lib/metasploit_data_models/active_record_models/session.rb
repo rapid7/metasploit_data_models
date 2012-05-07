@@ -17,9 +17,8 @@ module MetasploitDataModels::ActiveRecordModels::Session
       before_destroy :stop
       
       def upgradeable?
-         return true if (self.stype == 'shell' and self.platform =~ /win/)
-         else return false
-       end
+        (self.platform =~ /win/ and self.stype == 'shell')
+      end
       
 
       private
