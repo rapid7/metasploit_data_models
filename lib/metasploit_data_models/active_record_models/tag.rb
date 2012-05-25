@@ -4,7 +4,6 @@ module MetasploitDataModels::ActiveRecordModels::Tag
       has_many :hosts_tags, :class_name => "Mdm::HostTag"
       has_many :hosts, :through => :hosts_tags, :class_name => "Mdm::Host"
 
-      belongs_to :host, :class_name => "Mdm::Host", :counter_cache => true
       belongs_to :user, :class_name => "Mdm::User"
 
       validates :name, :presence => true, :format => {
