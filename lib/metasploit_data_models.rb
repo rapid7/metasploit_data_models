@@ -9,6 +9,7 @@ require 'shellwords'
 require 'active_record'
 require 'active_support'
 require 'active_support/all'
+require 'active_support/dependencies'
 
 #
 # Project
