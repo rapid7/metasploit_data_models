@@ -29,17 +29,6 @@ if defined? Rails
 end
 
 module MetasploitDataModels
-  def self.included(base)
-    ActiveSupport::Deprecation.warn(
-        "'include MetasploitDataModels' is deprecated and will be removed in metasploit_data_models version 2.0.0.  " \
-        "Use MetasploitDataModels.require_models or use the Rails Engine functionality now supported by " \
-        "metasploit_data_models.",
-        caller
-    )
-
-    require_models
-  end
-
   def self.models_pathname
     root.join('app', 'models')
   end
