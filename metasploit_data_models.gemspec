@@ -18,9 +18,13 @@ Gem::Specification.new do |s|
 
   # ---- Dependencies ----
   s.add_development_dependency 'rake'
-
+  if RUBY_PLATFORM !~ /java/
+  	s.add_runtime_dependency 'pg'
+  else
+      s.add_runtime_dependency 'jdbc-postgres'
+      s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
+  end
   s.add_runtime_dependency 'activerecord', '>= 3.2.10'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'pg'
   s.add_runtime_dependency 'pry'
 end
