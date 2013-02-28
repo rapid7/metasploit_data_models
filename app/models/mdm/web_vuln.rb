@@ -1,6 +1,6 @@
 class Mdm::WebVuln < ActiveRecord::Base
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :web_site, :class_name => 'Mdm::WebSite'
