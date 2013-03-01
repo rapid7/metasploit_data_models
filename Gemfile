@@ -3,8 +3,20 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-group :test do
-  # rails is only used for testing with a dummy application in spec/dummy
+# used by dummy application
+group :development, :test do
+  # supplies factories for producing model instance for specs
+  gem 'factory_girl_rails'
+  # rails is only used for the dummy application in spec/dummy
   gem 'rails'
+end
+
+group :test do
+  # In a full rails project, factory_girl_rails would be in both the :development, and :test group, but since we only
+  # want rails in :test, factory_girl_rails must also only be in :test.
+  # add matchers from shoulda, such as validates_presence_of, which are useful for testing validations
+  gem 'shoulda-matchers'
+  # code coverage of tests
+  gem 'simplecov', :require => false
   gem 'rspec-rails'
 end
