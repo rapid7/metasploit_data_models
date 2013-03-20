@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   # documentation
   s.add_development_dependency 'yard'
 
-  s.add_runtime_dependency 'activerecord', '>= 3.2.10'
+  s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
   s.add_runtime_dependency 'pg'
   s.add_runtime_dependency 'pry'
