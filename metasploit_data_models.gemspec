@@ -22,9 +22,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'redcarpet'
   # documentation
   s.add_development_dependency 'yard'
+  # debugging
+  s.add_development_dependency 'pry'
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
   s.add_runtime_dependency 'pg'
-  s.add_runtime_dependency 'pry'
 end
