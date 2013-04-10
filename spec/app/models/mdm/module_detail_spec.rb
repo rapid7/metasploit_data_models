@@ -55,231 +55,237 @@ describe Mdm::ModuleDetail do
     it { should validate_presence_of(:refname) }
   end
 
-  context '#add_action' do
-    def add_action
-      module_detail.add_action(name)
+  context 'with saved' do
+    before(:each) do
+      module_detail.save!
     end
 
-    let(:name) do
-      FactoryGirl.generate :mdm_module_action_name
-    end
-
-    it 'should add an Mdm::ModuleAction under the Mdm::ModuleDetail' do
-      expect {
-        add_action
-      }.to change(module_detail.actions, :length).by(1)
-    end
-
-    context 'new Mdm::ModuleAction' do
-      subject(:module_action) do
-        add_action
-
-        module_detail.actions.last
+    context '#add_action' do
+      def add_action
+        module_detail.add_action(name)
       end
 
-      it { should be_valid }
-
-      its(:name) { should == name }
-    end
-  end
-
-  context '#add_arch' do
-    def add_arch
-      module_detail.add_arch(name)
-    end
-
-    let(:name) do
-      FactoryGirl.generate :mdm_module_arch_name
-    end
-
-    it 'should add an Mdm::ModuleArch under the Mdm::ModuleDetail' do
-      expect {
-        add_arch
-      }.to change(module_detail.archs, :length).by(1)
-    end
-
-    context 'new Mdm::ModuleArch' do
-      subject(:module_arch) do
-        add_arch
-
-        module_detail.archs.last
+      let(:name) do
+        FactoryGirl.generate :mdm_module_action_name
       end
 
-      it { should be_valid }
-
-      its(:name) { should == name }
-    end
-  end
-
-  context '#add_author' do
-    let(:name) do
-      FactoryGirl.generate :mdm_module_author_name
-    end
-
-    context 'with email' do
-      def add_author
-        module_detail.add_author(name, email)
-      end
-
-      let(:email) do
-        FactoryGirl.generate :mdm_module_author_email
-      end
-
-      it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
+      it 'should add an Mdm::ModuleAction under the Mdm::ModuleDetail' do
         expect {
-          add_author
-        }.to change(module_detail.authors, :length).by(1)
+          add_action
+        }.to change(module_detail.actions, :length).by(1)
       end
 
-      context 'new Mdm::ModuleAuthor' do
-        subject(:module_author) do
-          add_author
+      context 'new Mdm::ModuleAction' do
+        subject(:module_action) do
+          add_action
 
-          module_detail.authors.last
+          module_detail.actions.last
         end
 
         it { should be_valid }
 
-        its(:email) { should == email }
         its(:name) { should == name }
       end
     end
 
-    context 'without email' do
-      def add_author
-        module_detail.add_author(name)
+    context '#add_arch' do
+      def add_arch
+        module_detail.add_arch(name)
       end
 
-      it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
+      let(:name) do
+        FactoryGirl.generate :mdm_module_arch_name
+      end
+
+      it 'should add an Mdm::ModuleArch under the Mdm::ModuleDetail' do
         expect {
-          add_author
-        }.to change(module_detail.authors, :length).by(1)
+          add_arch
+        }.to change(module_detail.archs, :length).by(1)
       end
 
-      context 'new Mdm::ModuleAuthor' do
-        subject(:module_author) do
-          add_author
+      context 'new Mdm::ModuleArch' do
+        subject(:module_arch) do
+          add_arch
 
-          module_detail.authors.last
+          module_detail.archs.last
         end
 
         it { should be_valid }
 
-        its(:email) { should be_nil }
         its(:name) { should == name }
       end
     end
-  end
 
-  context '#add_mixin' do
-    def add_mixin
-      module_detail.add_mixin(name)
-    end
-
-    let(:name) do
-      FactoryGirl.generate :mdm_module_mixin_name
-    end
-
-    it 'should add an Mdm::ModuleMixin under the Mdm::ModuleDetail' do
-      expect {
-        add_mixin
-      }.to change(module_detail.mixins, :length).by(1)
-    end
-
-    context 'new Mdm::ModuleMixin' do
-      subject do
-        add_mixin
-
-        module_detail.mixins.last
+    context '#add_author' do
+      let(:name) do
+        FactoryGirl.generate :mdm_module_author_name
       end
 
-      it { should be_valid }
-      its(:name) { should == name }
-    end
-  end
+      context 'with email' do
+        def add_author
+          module_detail.add_author(name, email)
+        end
 
-  context '#add_platform' do
-    def add_platform
-      module_detail.add_platform(name)
-    end
+        let(:email) do
+          FactoryGirl.generate :mdm_module_author_email
+        end
 
-    let(:name) do
-      FactoryGirl.generate :mdm_module_platform_name
-    end
+        it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
+          expect {
+            add_author
+          }.to change(module_detail.authors, :length).by(1)
+        end
 
-    it 'should add an Mdm::ModulePlatform under the Mdm::ModuleDetail' do
-      expect {
-        add_platform
-      }.to change(module_detail.platforms, :length).by(1)
-    end
+        context 'new Mdm::ModuleAuthor' do
+          subject(:module_author) do
+            add_author
 
-    context 'new Mdm::ModulePlatform' do
-      subject(:module_platform) do
-        add_platform
+            module_detail.authors.last
+          end
 
-        module_detail.platforms.last
+          it { should be_valid }
+
+          its(:email) { should == email }
+          its(:name) { should == name }
+        end
       end
 
-      it { should be_valid }
-      its(:name) { should == name }
+      context 'without email' do
+        def add_author
+          module_detail.add_author(name)
+        end
+
+        it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
+          expect {
+            add_author
+          }.to change(module_detail.authors, :length).by(1)
+        end
+
+        context 'new Mdm::ModuleAuthor' do
+          subject(:module_author) do
+            add_author
+
+            module_detail.authors.last
+          end
+
+          it { should be_valid }
+
+          its(:email) { should be_nil }
+          its(:name) { should == name }
+        end
+      end
     end
-  end
 
-  context '#add_ref' do
-    def add_ref
-      module_detail.add_ref(name)
-    end
-
-    let(:name) do
-      FactoryGirl.generate :mdm_module_ref_name
-    end
-
-    it 'should add an Mdm::ModuleRef under the Mdm::ModuleDetail' do
-      expect {
-        add_ref
-      }.to change(module_detail.refs, :length).by(1)
-    end
-
-    context 'new Mdm::ModuleRef' do
-      subject(:module_ref) do
-        add_ref
-
-        module_detail.refs.last
+    context '#add_mixin' do
+      def add_mixin
+        module_detail.add_mixin(name)
       end
 
-      it { should be_valid }
-      its(:name) { should == name }
-    end
-  end
-
-  context '#add_target' do
-    def add_target
-      module_detail.add_target(index, name)
-    end
-
-    let(:index) do
-      FactoryGirl.generate :mdm_module_target_index
-    end
-
-    let(:name) do
-      FactoryGirl.generate :mdm_module_target_name
-    end
-
-    it 'should add an Mdm::ModuleTarget under the Mdm::ModuleDetail' do
-      expect {
-        add_target
-      }.to change(module_detail.targets, :length).by(1)
-    end
-
-    context 'new Mdm::ModuleTarget' do
-      subject(:module_target) do
-        add_target
-
-        module_detail.targets.last
+      let(:name) do
+        FactoryGirl.generate :mdm_module_mixin_name
       end
 
-      it { should be_valid }
-      its(:name) { should == name }
+      it 'should add an Mdm::ModuleMixin under the Mdm::ModuleDetail' do
+        expect {
+          add_mixin
+        }.to change(module_detail.mixins, :length).by(1)
+      end
+
+      context 'new Mdm::ModuleMixin' do
+        subject do
+          add_mixin
+
+          module_detail.mixins.last
+        end
+
+        it { should be_valid }
+        its(:name) { should == name }
+      end
+    end
+
+    context '#add_platform' do
+      def add_platform
+        module_detail.add_platform(name)
+      end
+
+      let(:name) do
+        FactoryGirl.generate :mdm_module_platform_name
+      end
+
+      it 'should add an Mdm::ModulePlatform under the Mdm::ModuleDetail' do
+        expect {
+          add_platform
+        }.to change(module_detail.platforms, :length).by(1)
+      end
+
+      context 'new Mdm::ModulePlatform' do
+        subject(:module_platform) do
+          add_platform
+
+          module_detail.platforms.last
+        end
+
+        it { should be_valid }
+        its(:name) { should == name }
+      end
+    end
+
+    context '#add_ref' do
+      def add_ref
+        module_detail.add_ref(name)
+      end
+
+      let(:name) do
+        FactoryGirl.generate :mdm_module_ref_name
+      end
+
+      it 'should add an Mdm::ModuleRef under the Mdm::ModuleDetail' do
+        expect {
+          add_ref
+        }.to change(module_detail.refs, :length).by(1)
+      end
+
+      context 'new Mdm::ModuleRef' do
+        subject(:module_ref) do
+          add_ref
+
+          module_detail.refs.last
+        end
+
+        it { should be_valid }
+        its(:name) { should == name }
+      end
+    end
+
+    context '#add_target' do
+      def add_target
+        module_detail.add_target(index, name)
+      end
+
+      let(:index) do
+        FactoryGirl.generate :mdm_module_target_index
+      end
+
+      let(:name) do
+        FactoryGirl.generate :mdm_module_target_name
+      end
+
+      it 'should add an Mdm::ModuleTarget under the Mdm::ModuleDetail' do
+        expect {
+          add_target
+        }.to change(module_detail.targets, :length).by(1)
+      end
+
+      context 'new Mdm::ModuleTarget' do
+        subject(:module_target) do
+          add_target
+
+          module_detail.targets.last
+        end
+
+        it { should be_valid }
+        its(:name) { should == name }
+      end
     end
   end
 end
