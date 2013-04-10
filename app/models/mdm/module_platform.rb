@@ -2,10 +2,16 @@ class Mdm::ModulePlatform < ActiveRecord::Base
   self.table_name = 'module_platforms'
 
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :module_detail
+
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name
 
   #
   # Validations

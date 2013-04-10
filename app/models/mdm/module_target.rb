@@ -2,10 +2,17 @@ class Mdm::ModuleTarget < ActiveRecord::Base
   self.table_name = 'module_targets'
 
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :module_detail
+
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :index
+  attr_accessible :name
 
   #
   # Validators

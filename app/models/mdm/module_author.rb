@@ -2,10 +2,17 @@ class Mdm::ModuleAuthor < ActiveRecord::Base
   self.table_name = 'module_authors'
 
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :module_detail
+
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :email
+  attr_accessible :name
 
   #
   # Validations

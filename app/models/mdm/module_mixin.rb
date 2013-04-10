@@ -2,10 +2,16 @@ class Mdm::ModuleMixin < ActiveRecord::Base
   self.table_name = 'module_mixins'
 
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :module_detail, :class_name => 'Mdm::ModuleDetail'
+
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name
 
   #
   # Validation

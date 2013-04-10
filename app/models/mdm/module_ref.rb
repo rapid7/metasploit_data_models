@@ -2,10 +2,16 @@ class Mdm::ModuleRef < ActiveRecord::Base
   self.table_name = 'module_refs'
 
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :module_detail, :class_name => 'Mdm::ModuleDetail'
+
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name
 
   #
   # Validations
