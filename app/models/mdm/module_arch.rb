@@ -17,7 +17,8 @@ class Mdm::ModuleArch < ActiveRecord::Base
   # Validations
   #
 
-  validate :name, :presence => true
+  validates :module_detail, :presence => true
+  validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_arch, self)
 end
