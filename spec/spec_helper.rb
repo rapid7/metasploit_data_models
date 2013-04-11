@@ -1,19 +1,20 @@
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default, :test)
+
+# Require simplecov before loading ..dummy/config/environment.rb because it will cause metasploit_data_models/lib to
+# be loaded, which would result in Coverage not recording hits for any of the files.
+require 'simplecov'
+
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
-require 'rubygems'
-require 'bundler'
-Bundler.setup(:default, :test)
-Bundler.require(:default, :test)
-
 # full backtrace in logs so its easier to trace errors
 Rails.backtrace_cleaner.remove_silencers!
-
-require 'simplecov'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
