@@ -17,7 +17,8 @@ class Mdm::ModuleMixin < ActiveRecord::Base
   # Validation
   #
 
-  validate :name, :presence => true
+  validates :module_detail, :presence => true
+  validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_mixin, self)
 end
