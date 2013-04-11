@@ -27,6 +27,7 @@ describe Mdm::ModuleAction do
   end
 
   context 'mass assignment security' do
+    it { should_not allow_mass_assignment_of(:module_detail_id) }
     it { should allow_mass_assignment_of(:name) }
   end
 
