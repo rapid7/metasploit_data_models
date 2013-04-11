@@ -2,7 +2,7 @@ class Mdm::ModuleDetail < ActiveRecord::Base
   self.table_name = 'module_details'
 
   #
-  # Relations
+  # Associations
   #
 
   has_many :actions,   :class_name => 'Mdm::ModuleAction',   :dependent => :destroy, :source => :module_action
@@ -17,7 +17,7 @@ class Mdm::ModuleDetail < ActiveRecord::Base
   # Validations
   #
 
-  validate :refname,   :presence => true
+  validates :refname,   :presence => true
 
   validates_associated :actions
   validates_associated :archs
@@ -27,46 +27,32 @@ class Mdm::ModuleDetail < ActiveRecord::Base
   validates_associated :refs
   validates_associated :targets
 
-  def add_author(name, email=nil)
-    if email
-      r = self.authors.build(:name => name, :email => email).save
-    else
-      self.authors.build(:name => name).save
-    end
-  end
-
-  def add_mixin(name)
-    self.mixins.build(:name => name).save
-  end
-
-  def add_target(idx, name)
-    self.targets.build(:index => idx, :name => name).save
-  end
-
   def add_action(name)
     self.actions.build(:name => name).save
-  end
-
-  def add_ref(name)
-    self.refs.build(:name => name).save
   end
 
   def add_arch(name)
     self.archs.build(:name => name).save
   end
 
+  def add_author(name, email=nil)
+    self.authors.build(:name => name, :email => email).save
+  end
+
+  def add_mixin(name)
+    self.mixins.build(:name => name).save
+  end
+
   def add_platform(name)
     self.platforms.build(:name => name).save
   end
 
-  def before_destroy
-    Mdm::ModuleAuthor.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModuleMixin.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModuleTarget.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModuleAction.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModuleRef.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModuleArch.delete_all('module_detail_id = ?', self.id)
-    Mdm::ModulePlatform.delete_all('module_detail_id = ?', self.id)
+  def add_ref(name)
+    self.refs.build(:name => name).save
+  end
+
+  def add_target(index, name)
+    self.targets.build(:index => index, :name => name).save
   end
 
   ActiveSupport.run_load_hooks(:mdm_module_detail, self)

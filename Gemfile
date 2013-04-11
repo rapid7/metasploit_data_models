@@ -21,5 +21,7 @@ group :test do
   gem 'shoulda-matchers'
   # code coverage of tests
   gem 'simplecov', :require => false
-  gem 'rspec-rails'
+  # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
+  # named subject from the outer context without causing a stack overflow.
+  gem 'rspec-rails', '>= 2.12.0'
 end
