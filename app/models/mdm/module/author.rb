@@ -1,11 +1,11 @@
-class Mdm::ModuleAuthor < ActiveRecord::Base
+class Mdm::Module::Author < ActiveRecord::Base
   self.table_name = 'module_authors'
 
   #
   # Associations
   #
 
-  belongs_to :module_detail, :class_name => 'Mdm::ModuleDetail'
+  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
 
   #
   # Mass Assignment Security
@@ -18,7 +18,7 @@ class Mdm::ModuleAuthor < ActiveRecord::Base
   # Validations
   #
 
-  validates :module_detail, :presence => true
+  validates :detail, :presence => true
   validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_author, self)

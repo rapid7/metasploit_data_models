@@ -1,17 +1,17 @@
-class Mdm::ModuleDetail < ActiveRecord::Base
+class Mdm::Module::Detail < ActiveRecord::Base
   self.table_name = 'module_details'
 
   #
   # Associations
   #
 
-  has_many :actions,   :class_name => 'Mdm::ModuleAction',   :dependent => :destroy, :source => :module_action
-  has_many :archs,     :class_name => 'Mdm::ModuleArch',     :dependent => :destroy, :source => :module_arch
-  has_many :authors,   :class_name => 'Mdm::ModuleAuthor',   :dependent => :destroy, :source => :module_author
-  has_many :mixins,    :class_name => 'Mdm::ModuleMixin',    :dependent => :destroy, :source => :module_mixin
-  has_many :platforms, :class_name => 'Mdm::ModulePlatform', :dependent => :destroy, :source => :module_platform
-  has_many :refs,      :class_name => 'Mdm::ModuleRef',      :dependent => :destroy, :source => :module_ref
-  has_many :targets,   :class_name => 'Mdm::ModuleTarget',   :dependent => :destroy, :source => :module_target
+  has_many :actions,   :class_name => 'Mdm::Module::Action',   :dependent => :destroy
+  has_many :archs,     :class_name => 'Mdm::Module::Arch',     :dependent => :destroy
+  has_many :authors,   :class_name => 'Mdm::Module::Author',   :dependent => :destroy
+  has_many :mixins,    :class_name => 'Mdm::Module::Mixin',    :dependent => :destroy
+  has_many :platforms, :class_name => 'Mdm::Module::Platform', :dependent => :destroy
+  has_many :refs,      :class_name => 'Mdm::Module::Ref',      :dependent => :destroy
+  has_many :targets,   :class_name => 'Mdm::Module::Target',   :dependent => :destroy
 
   #
   # Validations

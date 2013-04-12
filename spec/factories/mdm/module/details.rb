@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :mdm_module_detail, :class => Mdm::ModuleDetail do
+  factory :mdm_module_detail, :class => Mdm::Module::Detail do
     refname { generate :mdm_module_detail_refname }
   end
 

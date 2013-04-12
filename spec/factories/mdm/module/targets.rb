@@ -1,12 +1,12 @@
 FactoryGirl.define do
-  factory :mdm_module_target, :class => Mdm::ModuleTarget do
+  factory :mdm_module_target, :class => Mdm::Module::Target do
     index { generate :mdm_module_target_index }
     name { generate :mdm_module_target_name }
 
     #
     # Associations
     #
-    association :module_detail, :factory => :mdm_module_detail
+    association :detail, :factory => :mdm_module_detail
   end
 
   sequence :mdm_module_target_index do |n|
@@ -14,6 +14,6 @@ FactoryGirl.define do
   end
 
   sequence :mdm_module_target_name do |n|
-    "Mdm::ModuleTarget#name #{n}"
+    "Mdm::Module::Target#name #{n}"
   end
 end

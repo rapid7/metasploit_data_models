@@ -1,11 +1,11 @@
-class Mdm::ModuleTarget < ActiveRecord::Base
+class Mdm::Module::Target < ActiveRecord::Base
   self.table_name = 'module_targets'
 
   #
   # Associations
   #
 
-  belongs_to :module_detail, :class_name => 'Mdm::ModuleDetail'
+  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
 
   #
   # Mass Assignment Security
@@ -18,8 +18,8 @@ class Mdm::ModuleTarget < ActiveRecord::Base
   # Validators
   #
 
+  validates :detail, :presence => true
   validates :index, :presence => true
-  validates :module_detail, :presence => true
   validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_target, self)

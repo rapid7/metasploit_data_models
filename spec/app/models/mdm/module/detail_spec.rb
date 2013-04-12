@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe Mdm::ModuleDetail do
+describe Mdm::Module::Detail do
   subject(:module_detail) do
     FactoryGirl.build(:mdm_module_detail)
   end
 
   context 'associations' do
-    it { should have_many(:actions).class_name('Mdm::ModuleAction').dependent(:destroy) }
-    it { should have_many(:archs).class_name('Mdm::ModuleArch').dependent(:destroy) }
-    it { should have_many(:authors).class_name('Mdm::ModuleAuthor').dependent(:destroy) }
-    it { should have_many(:mixins).class_name('Mdm::ModuleMixin').dependent(:destroy) }
-    it { should have_many(:platforms).class_name('Mdm::ModulePlatform').dependent(:destroy) }
-    it { should have_many(:refs).class_name('Mdm::ModuleRef').dependent(:destroy) }
-    it { should have_many(:targets).class_name('Mdm::ModuleTarget').dependent(:destroy) }
+    it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
+    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
+    it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
+    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
+    it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
+    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
+    it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
   end
 
   context 'database' do
@@ -69,13 +69,13 @@ describe Mdm::ModuleDetail do
         FactoryGirl.generate :mdm_module_action_name
       end
 
-      it 'should add an Mdm::ModuleAction under the Mdm::ModuleDetail' do
+      it 'should add an Mdm::Action under the Mdm::ModuleDetail' do
         expect {
           add_action
         }.to change(module_detail.actions, :length).by(1)
       end
 
-      context 'new Mdm::ModuleAction' do
+      context 'new Mdm::Action' do
         subject(:module_action) do
           add_action
 

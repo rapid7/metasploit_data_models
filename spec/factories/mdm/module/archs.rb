@@ -1,14 +1,14 @@
 FactoryGirl.define do
-  factory :mdm_module_arch, :class => Mdm::ModuleArch do
+  factory :mdm_module_arch, :class => Mdm::Module::Arch do
     name { generate :mdm_module_arch_name }
 
     #
     # Associations
     #
-    association :module_detail, :factory => :mdm_module_detail
+    association :detail, :factory => :mdm_module_detail
   end
 
   sequence :mdm_module_arch_name do |n|
-    "Mdm::ModuleArch#name #{n}"
+    "Mdm::Module::Arch#name #{n}"
   end
 end
