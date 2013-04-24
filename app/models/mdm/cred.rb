@@ -82,6 +82,7 @@ class Mdm::Cred < ActiveRecord::Base
   ActiveSupport.run_load_hooks(:mdm_cred, self)
 
   private
+
   def decrement_host_counter_cache
     Mdm::Host.decrement_counter("cred_count", self.service.host_id)
   end
