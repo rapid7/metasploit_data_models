@@ -16,6 +16,9 @@ class Mdm::Cred < ActiveRecord::Base
   #
   belongs_to :service, :class_name => "Mdm::Service"
 
+  after_create :increment_host_counter_cache
+  after_destroy :decrement_host_counter_cache
+
   def ptype_human
     humanized = PTYPES.select do |k, v|
       v == ptype
@@ -77,4 +80,14 @@ class Mdm::Cred < ActiveRecord::Base
   end
 
   ActiveSupport.run_load_hooks(:mdm_cred, self)
+
+  private
+
+  def decrement_host_counter_cache
+    Mdm::Host.decrement_counter("cred_count", self.service.host_id)
+  end
+
+  def increment_host_counter_cache
+    Mdm::Host.increment_counter("cred_count", self.service.host_id)
+  end
 end
