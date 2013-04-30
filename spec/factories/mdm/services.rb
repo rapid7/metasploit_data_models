@@ -11,12 +11,12 @@ FactoryGirl.define do
     port 4567
     proto 'snmp'
     state 'open'
+  end
 
-    factory :web_service do
-      proto 'tcp'
-      name { FactoryGirl.generate(:web_service_name) }
-      port { FactoryGirl.generate(:port) }
-    end
+  factory :web_service, :parent => :mdm_service do
+    proto 'tcp'
+    name { FactoryGirl.generate(:web_service_name) }
+    port { FactoryGirl.generate(:port) }
   end
 
   port_bits = 16
@@ -26,10 +26,6 @@ FactoryGirl.define do
     n % port_limit
   end
 
-  web_service_names = ['http', 'https']
-  web_service_name_count = web_service_names.length
-
-  sequence :web_service_name do |n|
-    web_service_names[n % web_service_name_count]
-  end
+  sequence :web_service_name, ['http', 'https'].cycle
+  
 end
