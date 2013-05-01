@@ -287,5 +287,5 @@ describe Mdm::Module::Detail do
         its(:name) { should == name }
       end
     end
-  end
+	end
 end
