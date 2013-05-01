@@ -7,7 +7,12 @@ class AddCredsCounterCache < ActiveRecord::Migration
     Mdm::Cred.all.each {|c| cred_service_ids << c.service_id}
     cred_service_ids.each do |service_id|
       #Mdm::Host.reset_counters(Mdm::Service.find(service_id).host.id, :creds)
-      host = Mdm::Service.find(service_id).host
+      begin
+        host = Mdm::Service.find(service_id).host
+      rescue
+        next
+      end
+      next if host.nil? # This can happen with orphan creds/services
       host.cred_count = host.creds.count
       host.save
     end
