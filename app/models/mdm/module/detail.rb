@@ -4,6 +4,45 @@ class Mdm::Module::Detail < ActiveRecord::Base
   self.table_name = 'module_details'
 
   #
+  # CONSTANTS
+  #
+
+  # The directory for a given {#mtype} is a not always the pluralization of {#mtype}, so this maps the {#mtype} to the
+  # type directory that is used to generate the {#file} from the {#mtype} and {#refname}.
+  DIRECTORY_BY_TYPE = {
+      'auxiliary' => 'auxiliary',
+      'encoder' => 'encoders',
+      'exploit' => 'exploits',
+      'nop' => 'nops',
+      'payload' => 'payloads',
+      'post' => 'post'
+  }
+
+  # {#privileged} is Boolean so, valid values are just `true` and `false`, but since both the validation and
+  # factory need an array of valid values, this constant exists.
+  PRIVILEGES = [
+      false,
+      true
+  ]
+
+  # Converts {#rank}, which is an Integer, to the name used for that rank.
+  RANK_BY_NAME = {
+      'Manual' => 0,
+      'Low' => 100,
+      'Average' => 200,
+      'Normal' => 300,
+      'Good' => 400,
+      'Great' => 500,
+      'Excellent' => 600
+  }
+
+  # Valid values for {#stance}.
+  STANCES = [
+      'aggressive',
+      'passive'
+  ]
+
+  #
   # Associations
   #
 
@@ -54,7 +93,7 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # Attributes
   #
 
-  # @!attribte [rw] default_action
+  # @!attribute [rw] default_action
   #   Name of the default action in {#actions}.
   #
   #   @return [String] {Mdm::Module::Action#name}.
@@ -97,7 +136,7 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # @!attribute [rw] mtype
   #   The type of the module.
   #
-  #   @return [String]
+  #   @return [String] key in {DIRECTORY_BY_TYPE}
 
   # @!attribute [rw] name
   #   The human readable name of the module.  It is unrelated to {#fullname} or {#refname} and is better thought of
@@ -136,7 +175,26 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # Validations
   #
 
-  validates :refname,   :presence => true
+  validates :mtype,
+            :inclusion => {
+                :in => DIRECTORY_BY_TYPE.keys
+            }
+  validates :privileged,
+            :inclusion => {
+                :in => PRIVILEGES
+            }
+  validates :rank,
+            :inclusion => {
+                :in => RANK_BY_NAME.values
+            },
+            :numericality => {
+                :only_integer => true
+            }
+  validates :refname, :presence => true
+  validates :stance,
+            :inclusion => {
+                :in => STANCES
+            }
 
   validates_associated :actions
   validates_associated :archs

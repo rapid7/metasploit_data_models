@@ -61,7 +61,7 @@ class Mdm::Vuln < ActiveRecord::Base
   #
 
   # @!attribute [r] module_details
-  #   {Mdm::Module::Details Modules} that share the same external references as this vuln.
+  #   {Mdm::Module::Detail Modules} that share the same external references as this vuln.
   #
   #   @return [Array<Mdm::Module::Detail>]
   has_many :module_details,

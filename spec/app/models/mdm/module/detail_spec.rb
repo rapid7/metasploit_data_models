@@ -5,6 +5,36 @@ describe Mdm::Module::Detail do
     FactoryGirl.build(:mdm_module_detail)
   end
 
+  let(:ranks) do
+    [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600
+    ]
+  end
+
+  let(:stances) do
+    [
+        'aggressive',
+        'passive'
+    ]
+  end
+
+  let(:types) do
+    [
+        'auxiliary',
+        'encoder',
+        'exploit',
+        'nop',
+        'payload',
+        'post'
+    ]
+  end
+
   context 'associations' do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
     it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
@@ -13,6 +43,55 @@ describe Mdm::Module::Detail do
     it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
     it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
+  end
+
+  context 'CONSTANTS' do
+    context 'DIRECTORY_BY_TYPE' do
+      subject(:directory_by_type) do
+        described_class::DIRECTORY_BY_TYPE
+      end
+
+      its(['auxiliary']) { should == 'auxiliary' }
+      its(['encoder']) { should == 'encoders' }
+      its(['exploit']) { should == 'exploits' }
+      its(['nop']) { should == 'nops' }
+      its(['payload']) { should == 'payloads' }
+      its(['post']) { should == 'post' }
+    end
+
+    context 'PRIVILEGES' do
+      subject(:privileges) do
+        described_class::PRIVILEGES
+      end
+
+      it 'should contain both Boolean values' do
+        privileges.should include(false)
+        privileges.should include(true)
+      end
+    end
+
+    context 'RANK_BY_NAME' do
+      subject(:rank_by_name) do
+        described_class::RANK_BY_NAME
+      end
+
+      its(['Manual']) { should == 0 }
+      its(['Low']) { should == 100 }
+      its(['Average']) { should == 200 }
+      its(['Normal']) { should == 300 }
+      its(['Good']) { should == 400 }
+      its(['Great']) { should == 500 }
+      its(['Excellent']) { should == 600 }
+    end
+
+    context 'STANCES' do
+      subject(:stances) do
+        described_class::STANCES
+      end
+
+      it { should include('aggressive') }
+      it { should include('passive') }
+    end
   end
 
   context 'database' do
@@ -52,7 +131,18 @@ describe Mdm::Module::Detail do
   end
 
   context 'validations' do
+    it { should ensure_inclusion_of(:mtype).in_array(types) }
+
+    # Because the boolean field will cast most strings to false,
+    # ensure_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
+
+    context 'rank' do
+      it { should validate_numericality_of(:rank).only_integer }
+      it { should ensure_inclusion_of(:rank).in_array(ranks) }
+    end
+
     it { should validate_presence_of(:refname) }
+    it { should ensure_inclusion_of(:stance).in_array(stances) }
   end
 
   context 'with saved' do
