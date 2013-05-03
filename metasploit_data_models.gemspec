@@ -6,10 +6,12 @@ Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
   s.version     = MetasploitDataModels::VERSION
   s.authors     = [
+    'Samuel Huckins',
 	  'Luke Imhoff',
 	  'Trevor Rosen'
   ]
   s.email       = [
+      'shuckins@rapid7.com',
       'luke_imhoff@rapid7.com',
       'trevor_rosen@rapid7.com'
   ]
