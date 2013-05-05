@@ -1,4 +1,4 @@
-#MetasploitDataModels
+#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)
 
 The database layer for Metasploit
 
