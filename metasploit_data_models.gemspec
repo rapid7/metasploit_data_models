@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
   s.version     = MetasploitDataModels::VERSION
   s.authors     = [
-    'Samuel Huckins',
-	  'Luke Imhoff',
-	  'Trevor Rosen'
+      'Samuel Huckins',
+      'Luke Imhoff',
+      'Trevor Rosen'
   ]
   s.email       = [
       'shuckins@rapid7.com',
@@ -26,8 +26,7 @@ Gem::Specification.new do |s|
 
   # ---- Dependencies ----
   s.add_development_dependency 'rake'
-  # markdown formatting for yard
-  s.add_development_dependency 'redcarpet'
+
   # documentation
   s.add_development_dependency 'yard'
   # debugging
@@ -35,5 +34,21 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'pg'
+  
+  if RUBY_PLATFORM =~ /java/
+    # markdown formatting for yard
+    s.add_development_dependency 'kramdown'
+
+    s.add_runtime_dependency 'jdbc-postgres'
+    s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
+    
+    s.platform = Gem::Platform::JAVA
+  else
+    # markdown formatting for yard
+    s.add_development_dependency 'redcarpet'
+
+    s.add_runtime_dependency 'pg'
+    
+    s.platform = Gem::Platform::RUBY
+  end
 end
