@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20130430162145) do
     t.integer  "service_count",                          :default => 0
     t.integer  "host_detail_count",                      :default => 0
     t.integer  "exploit_attempt_count",                  :default => 0
+    t.integer  "cred_count",                             :default => 0
   end
 
   add_index "hosts", ["name"], :name => "index_hosts_on_name"

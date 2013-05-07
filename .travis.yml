@@ -1,0 +1,6 @@
+before_script:
+  - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
+  - rake db:setup
+language: ruby
+rvm:
+  - '1.9.3'
