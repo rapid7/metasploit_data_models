@@ -8,6 +8,9 @@
 .idea
 # logs
 *.log
+# Don't check in new rvm version and gemset files
+.ruby-gemset
+.ruby-version
 # Don't check in rvmrc since this is a gem
 .rvmrc
 # YARD database
