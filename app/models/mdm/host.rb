@@ -297,6 +297,7 @@ class Mdm::Host < ActiveRecord::Base
   #   Interface identifier for link-local IPv6
   #
   #   @return [String]
+  #   @see http://en.wikipedia.org/wiki/IPv6_address#Link-local_addresses_and_zone_indices
 
   # @!attribute [rw] state
   #   Whether the host is alive, down, or in an unknown state.
@@ -330,11 +331,6 @@ class Mdm::Host < ActiveRecord::Base
   # Validations
   #
 
-  validates :arch,
-            :allow_nil => true,
-            :inclusion => {
-                :in => ARCHITECTURES
-            }
   validates :address,
             :exclusion => {
                 :in => ['127.0.0.1']
@@ -344,6 +340,16 @@ class Mdm::Host < ActiveRecord::Base
             :uniqueness => {
                 :scope => :workspace_id,
                 :unless => :ip_address_invalid?
+            }
+  validates :arch,
+            :allow_nil => true,
+            :inclusion => {
+                :in => ARCHITECTURES
+            }
+  validates :os_name,
+            :allow_nil => true,
+            :inclusion => {
+                :in => OPERATING_SYSTEM_NAMES
             }
   validates :state,
             :allow_nil => true,

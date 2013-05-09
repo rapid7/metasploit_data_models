@@ -365,8 +365,47 @@ describe Mdm::Host do
     end
   end
 
+  context 'factories' do
+    context 'full_mdm_host' do
+      subject(:full_mdm_host) do
+        FactoryGirl.build(:full_mdm_host)
+      end
+
+      it { should be_valid }
+    end
+
+    context 'mdm_host' do
+      subject(:mdm_host) do
+        FactoryGirl.build(:mdm_host)
+      end
+
+      it { should be_valid }
+    end
+  end
+
   context 'validations' do
+    context 'address' do
+      it { should ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
+      it { should validate_presence_of(:address) }
+
+      # can't use validate_uniqueness_of(:address).scoped_to(:workspace_id) because it will attempt to set workspace_id
+      # to `nil`, which will make the `:null => false` constraint on hosts.workspace_id to fail.
+      it 'should validate uniqueness of address scoped to workspace_id' do
+        address = '192.168.0.1'
+
+        workspace = FactoryGirl.create(:mdm_workspace)
+        FactoryGirl.create(:mdm_host, :address => address, :workspace => workspace)
+
+        duplicate_host = FactoryGirl.build(:mdm_host, :address => address, :workspace => workspace)
+
+        duplicate_host.should_not be_valid
+        duplicate_host.errors[:address].should include('has already been taken')
+      end
+    end
+
     it { should ensure_inclusion_of(:arch).in_array(architectures).allow_nil }
+    it { should ensure_inclusion_of(:os_name).in_array(operating_system_names).allow_nil }
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
+    it { should validate_presence_of(:workspace) }
   end
 end
