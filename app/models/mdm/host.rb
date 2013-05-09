@@ -286,7 +286,7 @@ class Mdm::Host < ActiveRecord::Base
   #     host.os_flavor = 'XP'
   #     host.os_sp = 'SP2'
   #
-  #  @return [String]
+  #   @return [String]
 
   # @!attribute [rw] purpose
   #   The purpose of the host on the network, such as 'client' or 'firewall'.
