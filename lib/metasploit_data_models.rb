@@ -15,6 +15,7 @@ require 'active_support/dependencies'
 # Project
 #
 require 'mdm'
+require 'mdm/module'
 require 'metasploit_data_models/version'
 require 'metasploit_data_models/serialized_prefs'
 require 'metasploit_data_models/base64_serializer'
