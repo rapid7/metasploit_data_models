@@ -193,10 +193,10 @@ class Mdm::Host < ActiveRecord::Base
 	# Through refs
 	#
 
-  # @!attribute [r] refs
+  # @!attribute [r] module_refs
   #   {Mdm::Module::Ref References for modules} for {Mdm::Ref references for vulnerabilities}.
   #
-  #   @return [Array<Mdm::ModuleRef]
+  #   @return [Array<Mdm::Module::Ref>]
 	has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
 
 	#
@@ -229,6 +229,7 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [String] an element of {ARCHITECTURES}
 
   # @!attribute [rw] comm
+  #   @todo https://www.pivotaltracker.com/story/show/49722411
   #
   #   @return [String]
 
@@ -241,6 +242,21 @@ class Mdm::Host < ActiveRecord::Base
   #   When this host was created in the database.
   #
   #   @return [DateTime]
+
+  # @!attribute [rw] cred_count
+  #   Counter cache for {#creds}.
+  #
+  #   @return [Integer]
+
+  # @!attribute [rw] exploit_attempt_count
+  #   Counter cache for {#exploit_attempts}.
+  #
+  #   @return [Integer]
+
+  # @!attribute [rw] host_detail_count
+  #   Counter cache for {#host_details}.
+  #
+  #   @return [Integer]
 
   # @!attribute [rw] info
   #   Information about this host gathered from the host.
@@ -257,6 +273,11 @@ class Mdm::Host < ActiveRecord::Base
   #   The name of the host.  If the host name is not available, then it will just be the IP address.
   #
   #   @return [String]
+
+  # @!attribute [rw] note_count
+  #   Counter cache for {#notes}.
+  #
+  #   @return [Integer]
 
   # @!attribute [rw] os_flavor
   #   The flavor of {#os_name}.
@@ -299,6 +320,11 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [String]
   #   @see http://en.wikipedia.org/wiki/IPv6_address#Link-local_addresses_and_zone_indices
 
+  # @!attribute [rw] service_count
+  #   Counter cache for {#services}.
+  #
+  #   @return [Integer]
+
   # @!attribute [rw] state
   #   Whether the host is alive, down, or in an unknown state.
   #
@@ -313,6 +339,11 @@ class Mdm::Host < ActiveRecord::Base
   #   The name of the virtual machine host software, such as 'VMWare', 'QEMU', 'XEN', etc.
   #
   #   @return [String]
+
+  # @!attribute [rw] vuln_count
+  #   Counter cache for {#vulns}.
+  #
+  #   @return [Integer]
 
   #
   # Callbacks
