@@ -28,19 +28,6 @@ describe Mdm::Host do
     ]
   end
 
-  let(:operating_system_names) do
-    [
-        'FreeBSD',
-        'Linux',
-        'Mac OS X',
-        'Microsoft Windows',
-        'NetBSD',
-        'OpenBSD',
-        'Unknown',
-        'VMWare'
-    ]
-  end
-
   let(:states) do
     [
         'alive',
@@ -287,10 +274,6 @@ describe Mdm::Host do
       end
     end
 
-    it 'should define OPERATING_SYSTEM_NAMES in any order' do
-      described_class::OPERATING_SYSTEM_NAMES.should =~ operating_system_names
-    end
-
 		context 'SEARCH_FIELDS' do
 			subject(:search_fields) do
 				described_class::SEARCH_FIELDS
@@ -404,7 +387,6 @@ describe Mdm::Host do
     end
 
     it { should ensure_inclusion_of(:arch).in_array(architectures).allow_nil }
-    it { should ensure_inclusion_of(:os_name).in_array(operating_system_names).allow_nil }
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
