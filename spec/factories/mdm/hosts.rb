@@ -62,7 +62,9 @@ FactoryGirl.define do
     "Mdm::Host#os_lang #{n}"
   end
 
-  sequence :mdm_host_os_name, Mdm::Host::OPERATING_SYSTEM_NAMES.cycle
+  sequence :mdm_host_os_name do |n|
+    "Mdm::Host#os_name #{n}"
+  end
 
   sequence :mdm_host_os_sp do |n|
     "Mdm::Host#os_sp #{n}"

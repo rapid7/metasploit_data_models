@@ -30,18 +30,6 @@ class Mdm::Host < ActiveRecord::Base
       'x86_64'
   ]
 
-  # Valid values for {#os_name}.
-  OPERATING_SYSTEM_NAMES = [
-      'FreeBSD',
-      'Linux',
-      'Mac OS X',
-      'Microsoft Windows',
-      'NetBSD',
-      'OpenBSD',
-      'Unknown',
-      'VMWare'
-  ]
-
   # Fields searched for the search scope
   SEARCH_FIELDS = [
       'address::text',
@@ -297,7 +285,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] os_name
   #  The name of the operating system.
   #
-  #  @return [String] an element of {OPERATING_SYSTEM_NAMES}.
+  #  @return [String]
 
   # @!attribute [rw] os_sp
   #   The service pack of the {#os_flavor} of the {#os_name}.
@@ -376,11 +364,6 @@ class Mdm::Host < ActiveRecord::Base
             :allow_nil => true,
             :inclusion => {
                 :in => ARCHITECTURES
-            }
-  validates :os_name,
-            :allow_nil => true,
-            :inclusion => {
-                :in => OPERATING_SYSTEM_NAMES
             }
   validates :state,
             :allow_nil => true,
