@@ -8,11 +8,13 @@ Gem::Specification.new do |s|
   s.authors     = [
       'Samuel Huckins',
       'Luke Imhoff',
+      "David 'thelightcosine' Maloney",
       'Trevor Rosen'
   ]
   s.email       = [
       'shuckins@rapid7.com',
       'luke_imhoff@rapid7.com',
+      'dmaloney@rapid7.com',
       'trevor_rosen@rapid7.com'
   ]
   s.homepage    = ""
