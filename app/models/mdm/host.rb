@@ -361,7 +361,7 @@ class Mdm::Host < ActiveRecord::Base
                 :unless => :ip_address_invalid?
             }
   validates :arch,
-            :allow_nil => true,
+            :allow_blank => true,
             :inclusion => {
                 :in => ARCHITECTURES
             }
