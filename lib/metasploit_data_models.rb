@@ -16,12 +16,10 @@ require 'active_support/dependencies'
 #
 require 'mdm'
 require 'mdm/module'
+require 'metasploit_data_models/base64_serializer'
+require 'metasploit_data_models/models'
 require 'metasploit_data_models/version'
 require 'metasploit_data_models/serialized_prefs'
-require 'metasploit_data_models/base64_serializer'
-
-require 'metasploit_data_models/validators/ip_format_validator'
-require 'metasploit_data_models/validators/password_is_strong_validator'
 
 # Only include the Rails engine when using Rails.  This allows the non-Rails projects, like metasploit-framework to use
 # the models by calling MetasploitDataModels.require_models.
@@ -30,16 +28,10 @@ if defined? Rails
 end
 
 module MetasploitDataModels
-  def self.models_pathname
-    root.join('app', 'models')
-  end
+  extend MetasploitDataModels::Models
 
-  def self.require_models
-    models_globs = models_pathname.join('**', '*.rb')
-
-    Dir.glob(models_globs) do |model_path|
-      require model_path
-    end
+  def self.app_pathname
+    root.join('app')
   end
 
   def self.root

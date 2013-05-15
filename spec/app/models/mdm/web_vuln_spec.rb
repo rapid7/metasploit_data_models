@@ -102,8 +102,168 @@ describe Mdm::WebVuln do
     it { should validate_presence_of :name }
     it { should validate_presence_of :path }
 
-    it 'should not validate presence of params because it default to [] and can never be nil' do
-      web_vuln.should_not validate_presence_of(:params)
+    context 'params' do
+      it 'should not validate presence of params because it default to [] and can never be nil' do
+        web_vuln.should_not validate_presence_of(:params)
+      end
+
+      context 'validates parameters' do
+        let(:type_signature_sentence) do
+          "Valid parameters are an Array<Array(String, String)>."
+        end
+
+        it 'should validate params is an Array' do
+          web_vuln.params = ''
+
+          web_vuln.params.should_not be_an Array
+          web_vuln.should_not be_valid
+          web_vuln.errors[:params].should include(
+                                              "is not an Array.  #{type_signature_sentence}"
+                                          )
+        end
+
+        it 'should allow empty Array' do
+          web_vuln.params = []
+          web_vuln.valid?
+
+          web_vuln.errors[:params].should be_empty
+        end
+
+        context 'with bad element' do
+          let(:index) do
+            web_vuln.params.index(element)
+          end
+
+          before(:each) do
+            web_vuln.params = [element]
+          end
+
+          context 'without Array' do
+            let(:element) do
+              {}
+            end
+
+            it 'should not be an Array' do
+              web_vuln.params.first.should_not be_an Array
+            end
+
+            it 'should validate elements of params are Arrays' do
+              web_vuln.should_not be_valid
+              web_vuln.errors[:params].should include(
+                                                  "has non-Array at index #{index} (#{element.inspect}).  " \
+                                                  "#{type_signature_sentence}"
+                                              )
+            end
+          end
+
+          context 'with element length < 2' do
+            let(:element) do
+              ['']
+            end
+
+            it 'should have length < 2' do
+              web_vuln.params.first.length.should < 2
+            end
+
+            it 'should validate elements of params are not too short' do
+              web_vuln.should_not be_valid
+              web_vuln.errors[:params].should include(
+                                                  "has too few elements at index #{index} (#{element.inspect}).  " \
+                                                  "#{type_signature_sentence}"
+                                              )
+            end
+          end
+
+          context 'with element length > 2' do
+            let(:element) do
+              ['', '', '']
+            end
+
+            it 'should have length > 2' do
+              web_vuln.params.first.length.should > 2
+            end
+
+            it 'should validate elements of params are not too long' do
+              web_vuln.should_not be_valid
+              web_vuln.errors[:params].should include(
+                                                  "has too many elements at index #{index} (#{element.inspect}).  " \
+                                                  "#{type_signature_sentence}"
+                                              )
+            end
+          end
+
+          context 'parameter name' do
+            let(:element) do
+              [parameter_name, 'parameter_value']
+            end
+
+            context 'with String' do
+              context 'with blank' do
+                let(:parameter_name) do
+                  ''
+                end
+
+                it 'should have blank parameter name' do
+                  web_vuln.params.first.first.should be_empty
+                end
+
+                it 'should validate that parameter name is not empty' do
+                  web_vuln.should_not be_valid
+                  web_vuln.errors[:params].should include(
+                                                      "has blank parameter name at index #{index} " \
+                                                      "(#{element.inspect}).  " \
+                                                      "#{type_signature_sentence}"
+                                                  )
+                end
+              end
+            end
+
+            context 'without String' do
+              let(:parameter_name) do
+                :parameter_name
+              end
+
+              it 'should not have String for parameter name' do
+                web_vuln.params.first.first.should_not be_a String
+              end
+
+              it 'should validate that parameter name is a String' do
+                web_vuln.should_not be_valid
+                web_vuln.errors[:params].should include(
+                                                    "has non-String parameter name (#{parameter_name.inspect}) " \
+                                                    "at index #{index} (#{element.inspect}).  " \
+                                                    "#{type_signature_sentence}"
+                                                )
+              end
+            end
+          end
+
+          context 'parameter value' do
+            let(:element) do
+              ['parameter_name', parameter_value]
+            end
+
+            context 'without String' do
+              let(:parameter_value) do
+                0
+              end
+
+              it 'should not have String for parameter name' do
+                web_vuln.params.first.second.should_not be_a String
+              end
+
+              it 'should validate that parameter value is a String' do
+                web_vuln.should_not be_valid
+                web_vuln.errors[:params].should include(
+                                                    "has non-String parameter value (#{parameter_value}) " \
+                                                    "at index #{index} (#{element.inspect}).  " \
+                                                    "#{type_signature_sentence}"
+                                                )
+              end
+            end
+          end
+        end
+      end
     end
 
     it { should validate_presence_of :pname }
