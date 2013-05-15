@@ -48,7 +48,7 @@ describe Mdm::WebVuln do
     context 'columns' do
       it { should have_db_column(:blame).of_type(:text) }
       it { should have_db_column(:category).of_type(:text).with_options(:null => false) }
-      it { should have_db_column(:confidence).of_type(:text).with_options(:null => false) }
+      it { should have_db_column(:confidence).of_type(:integer).with_options(:null => false) }
       it { should have_db_column(:description).of_type(:text) }
       it { should have_db_column(:method).of_type(:string).with_options(:limit => 1024, :null => false) }
       it { should have_db_column(:name).of_type(:string).with_options(:limit => 1024, :null => false) }
@@ -73,6 +73,25 @@ describe Mdm::WebVuln do
       it { should have_db_index(:method) }
       it { should have_db_index(:name) }
       it { should have_db_index(:path) }
+    end
+  end
+
+  context 'factories' do
+    context 'mdm_web_vuln' do
+      subject(:mdm_web_vuln) do
+        FactoryGirl.build(:mdm_web_vuln)
+      end
+
+      it { should be_valid }
+
+      context 'after reloading' do
+        before(:each) do
+          mdm_web_vuln.save!
+          mdm_web_vuln.reload
+        end
+
+        it { should be_valid }
+      end
     end
   end
 
