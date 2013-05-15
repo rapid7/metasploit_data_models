@@ -27,9 +27,7 @@ class Mdm::Host < ActiveRecord::Base
       # To be used for compatability with 'X86_64'
       'x64',
       'x86',
-      'x86_64',
-      # For shell sessions where we don't know the Arch
-      ''
+      'x86_64'
   ]
 
   # Fields searched for the search scope
@@ -363,7 +361,7 @@ class Mdm::Host < ActiveRecord::Base
                 :unless => :ip_address_invalid?
             }
   validates :arch,
-            :allow_nil => true,
+            :allow_blank => true,
             :inclusion => {
                 :in => ARCHITECTURES
             }

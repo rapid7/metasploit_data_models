@@ -24,7 +24,8 @@ describe Mdm::Host do
         'tty',
         'x64',
         'x86',
-        'x86_64'
+        'x86_64',
+        ''
     ]
   end
 
@@ -386,7 +387,7 @@ describe Mdm::Host do
       end
     end
 
-    it { should ensure_inclusion_of(:arch).in_array(architectures).allow_nil }
+    it { should ensure_inclusion_of(:arch).in_array(architectures).allow_blank }
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
