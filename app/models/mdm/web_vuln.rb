@@ -121,6 +121,7 @@ class Mdm::WebVuln < ActiveRecord::Base
                 :in => METHODS
             }
   validates :name, :presence => true
+  validates :params, :parameters => true
   validates :path, :presence => true
   validates :pname, :presence => true
   validates :proof, :presence => true
@@ -137,7 +138,7 @@ class Mdm::WebVuln < ActiveRecord::Base
   # @!attribute [rw] params
   #   Parameters sent as part of request
   #
-  #   @return [Array<Array<(String, String)>>] Array of parameter key value pairs
+  #   @return [Array<Array(String, String)>] Array of parameter key value pairs
   serialize :params, MetasploitDataModels::Base64Serializer.new(:default => DEFAULT_PARAMS)
 
   #
