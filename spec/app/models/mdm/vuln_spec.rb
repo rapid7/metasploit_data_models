@@ -38,7 +38,13 @@ describe Mdm::Vuln do
               FactoryGirl.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
             }
           end
-
+          
+          it 'should be deletable' do
+            expect {
+              vuln.destroy
+            }.not_to raise_error
+          end
+          
           context 'with Mdm::Module::Detail' do
             let!(:module_detail) do
               FactoryGirl.create(
