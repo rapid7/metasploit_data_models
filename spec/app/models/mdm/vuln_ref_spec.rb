@@ -10,4 +10,13 @@ describe Mdm::VulnRef do
       it { should be_valid }
     end
   end
+
+  context 'database' do
+    context 'columns' do
+      it { should have_db_column(:id).of_type(:integer) }
+      it { should have_db_column(:ref_id).of_type(:integer) }
+      it { should have_db_column(:vuln_id).of_type(:integer) }
+    end
+  end
+  
 end
