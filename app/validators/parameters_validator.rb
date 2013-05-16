@@ -15,7 +15,7 @@ class ParametersValidator < ActiveModel::EachValidator
               extreme = :many
             end
 
-            length_error = self.length_error_at(
+            length_error = length_error_at(
                 :extreme => extreme,
                 :element => element,
                 :index => index
@@ -27,7 +27,7 @@ class ParametersValidator < ActiveModel::EachValidator
 
             if parameter_name.is_a? String
               unless parameter_name.present?
-                error = self.error_at(
+                error = error_at(
                     :element => element,
                     :index => index,
                     :prefix => "has blank parameter name"
@@ -35,7 +35,7 @@ class ParametersValidator < ActiveModel::EachValidator
                 record.errors[attribute] << error
               end
             else
-              error = self.error_at(
+              error = error_at(
                   :element => element,
                   :index => index,
                   :prefix => "has non-String parameter name (#{parameter_name.inspect})"
@@ -46,7 +46,7 @@ class ParametersValidator < ActiveModel::EachValidator
             parameter_value = element.second
 
             unless parameter_value.is_a? String
-              error = self.error_at(
+              error = error_at(
                   :element => element,
                   :index => index,
                   :prefix => "has non-String parameter value (#{parameter_value.inspect})"
@@ -55,7 +55,7 @@ class ParametersValidator < ActiveModel::EachValidator
             end
           end
         else
-          error = self.error_at(
+          error = error_at(
               :element => element,
               :index => index,
               :prefix => 'has non-Array'
@@ -68,7 +68,7 @@ class ParametersValidator < ActiveModel::EachValidator
     end
   end
 
-  protected
+  private
 
   def error_at(options={})
     options.assert_valid_keys(:element, :index, :prefix)
@@ -95,7 +95,7 @@ class ParametersValidator < ActiveModel::EachValidator
     extreme = options.fetch(:extreme)
 
     prefix = "has too #{extreme} elements"
-    error = self.error_at(
+    error = error_at(
         :element => options[:element],
         :index => options[:index],
         :prefix => prefix
