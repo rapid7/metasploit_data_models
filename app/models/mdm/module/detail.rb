@@ -167,9 +167,10 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   @return [String]
 
   # @!attribute [rw] stance
-  #   Whether the module is active or passive.
+  #   Whether the module is active or passive.  `nil` if the {#mtype module type} does not
+  #   {#supports_stance? support stances}.
   #
-  #   @return ['active', 'passive']
+  #   @return ['active', 'passive', nil]
 
   #
   # Validations
@@ -193,6 +194,7 @@ class Mdm::Module::Detail < ActiveRecord::Base
   validates :refname, :presence => true
   validates :stance,
             :inclusion => {
+                :if => :supports_stance?,
                 :in => STANCES
             }
 
@@ -274,6 +276,23 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # @return [false] if save was unsuccessful.
   def add_target(index, name)
     self.targets.build(:index => index, :name => name).save
+  end
+
+  # Returns whether this module supports a {#stance}.  Only modules with {#mtype} `'auxiliary'` and `'exploit'` support
+  # a non-nil {#stance}.
+  #
+  # @return [true] if {#mtype} is `'auxiliary'` or `'exploit'`
+  # @return [false] otherwise
+  # @see https://github.com/rapid7/metasploit-framework/blob/a6070f8584ad9e48918b18c7e765d85f549cb7fd/lib/msf/core/db_manager.rb#L423
+  # @see https://github.com/rapid7/metasploit-framework/blob/a6070f8584ad9e48918b18c7e765d85f549cb7fd/lib/msf/core/db_manager.rb#L436
+  def supports_stance?
+    supports_stance = false
+
+    if ['auxiliary', 'exploit'].include? mtype
+      supports_stance = true
+    end
+
+    supports_stance
   end
 
   ActiveSupport.run_load_hooks(:mdm_module_detail, self)

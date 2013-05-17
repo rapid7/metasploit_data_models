@@ -17,7 +17,14 @@ FactoryGirl.define do
     rank { generate :mdm_module_detail_rank }
     refname { generate :mdm_module_detail_refname }
     fullname { "#{mtype}/#{refname}" }
-    stance { generate :mdm_module_detail_stance }
+
+    stance {
+      if supports_stance?
+        generate :mdm_module_detail_stance
+      else
+        nil
+      end
+    }
 
     file {
       type_directory = Mdm::Module::Detail::DIRECTORY_BY_TYPE[mtype]

@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe Mdm::Module::Detail do
-  subject(:module_detail) do
-    FactoryGirl.build(:mdm_module_detail)
+  subject(:detail) do
+    FactoryGirl.build(
+        :mdm_module_detail,
+        :mtype => mtype,
+        :stance => stance
+    )
+  end
+
+  let(:mtype) do
+    FactoryGirl.generate :mdm_module_detail_mtype
   end
 
   let(:ranks) do
@@ -15,6 +23,10 @@ describe Mdm::Module::Detail do
         500,
         600
     ]
+  end
+
+  let(:stance) do
+    FactoryGirl.generate :mdm_module_detail_stance
   end
 
   let(:stances) do
@@ -109,7 +121,7 @@ describe Mdm::Module::Detail do
       it { should have_db_column(:rank).of_type(:integer) }
       it { should have_db_column(:ready).of_type(:boolean) }
       it { should have_db_column(:refname).of_type(:text) }
-      it { should have_db_column(:stance).of_type(:string) }
+      it { should have_db_column(:stance).of_type(:string).with_options(:null => true) }
     end
 
     context 'indices' do
@@ -127,6 +139,34 @@ describe Mdm::Module::Detail do
       end
 
       it { should be_valid }
+
+      context 'stance' do
+        subject(:mdm_module_detail) do
+          FactoryGirl.build(:mdm_module_detail, :mtype => mtype)
+        end
+
+        context 'with supports_stance?' do
+          let(:mtype) do
+            'exploit'
+          end
+
+          it { should be_valid }
+
+          its(:stance) { should_not be_nil }
+          its(:supports_stance?) { should be_true }
+        end
+
+        context 'without supports_stance?' do
+          let(:mtype) do
+            'post'
+          end
+
+          it { should be_valid }
+
+          its(:stance) { should be_nil }
+          its(:supports_stance?) { should be_false }
+        end
+      end
     end
   end
 
@@ -142,17 +182,28 @@ describe Mdm::Module::Detail do
     end
 
     it { should validate_presence_of(:refname) }
-    it { should ensure_inclusion_of(:stance).in_array(stances) }
+
+    context 'stance' do
+      context 'mtype' do
+        it_should_behave_like 'Mdm::Module::Detail supports stance with mtype', 'auxiliary'
+        it_should_behave_like 'Mdm::Module::Detail supports stance with mtype', 'exploit'
+
+        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'encoder'
+        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'nop'
+        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'payload'
+        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'post'
+      end
+    end
   end
 
   context 'with saved' do
     before(:each) do
-      module_detail.save!
+      detail.save!
     end
 
     context '#add_action' do
       def add_action
-        module_detail.add_action(name)
+        detail.add_action(name)
       end
 
       let(:name) do
@@ -162,14 +213,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::Action under the Mdm::ModuleDetail' do
         expect {
           add_action
-        }.to change(module_detail.actions, :length).by(1)
+        }.to change(detail.actions, :length).by(1)
       end
 
       context 'new Mdm::Action' do
         subject(:module_action) do
           add_action
 
-          module_detail.actions.last
+          detail.actions.last
         end
 
         it { should be_valid }
@@ -180,7 +231,7 @@ describe Mdm::Module::Detail do
 
     context '#add_arch' do
       def add_arch
-        module_detail.add_arch(name)
+        detail.add_arch(name)
       end
 
       let(:name) do
@@ -190,14 +241,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::ModuleArch under the Mdm::ModuleDetail' do
         expect {
           add_arch
-        }.to change(module_detail.archs, :length).by(1)
+        }.to change(detail.archs, :length).by(1)
       end
 
       context 'new Mdm::ModuleArch' do
         subject(:module_arch) do
           add_arch
 
-          module_detail.archs.last
+          detail.archs.last
         end
 
         it { should be_valid }
@@ -213,7 +264,7 @@ describe Mdm::Module::Detail do
 
       context 'with email' do
         def add_author
-          module_detail.add_author(name, email)
+          detail.add_author(name, email)
         end
 
         let(:email) do
@@ -223,14 +274,14 @@ describe Mdm::Module::Detail do
         it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
           expect {
             add_author
-          }.to change(module_detail.authors, :length).by(1)
+          }.to change(detail.authors, :length).by(1)
         end
 
         context 'new Mdm::ModuleAuthor' do
           subject(:module_author) do
             add_author
 
-            module_detail.authors.last
+            detail.authors.last
           end
 
           it { should be_valid }
@@ -242,20 +293,20 @@ describe Mdm::Module::Detail do
 
       context 'without email' do
         def add_author
-          module_detail.add_author(name)
+          detail.add_author(name)
         end
 
         it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
           expect {
             add_author
-          }.to change(module_detail.authors, :length).by(1)
+          }.to change(detail.authors, :length).by(1)
         end
 
         context 'new Mdm::ModuleAuthor' do
           subject(:module_author) do
             add_author
 
-            module_detail.authors.last
+            detail.authors.last
           end
 
           it { should be_valid }
@@ -268,7 +319,7 @@ describe Mdm::Module::Detail do
 
     context '#add_mixin' do
       def add_mixin
-        module_detail.add_mixin(name)
+        detail.add_mixin(name)
       end
 
       let(:name) do
@@ -278,14 +329,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::ModuleMixin under the Mdm::ModuleDetail' do
         expect {
           add_mixin
-        }.to change(module_detail.mixins, :length).by(1)
+        }.to change(detail.mixins, :length).by(1)
       end
 
       context 'new Mdm::ModuleMixin' do
         subject do
           add_mixin
 
-          module_detail.mixins.last
+          detail.mixins.last
         end
 
         it { should be_valid }
@@ -295,7 +346,7 @@ describe Mdm::Module::Detail do
 
     context '#add_platform' do
       def add_platform
-        module_detail.add_platform(name)
+        detail.add_platform(name)
       end
 
       let(:name) do
@@ -305,14 +356,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::ModulePlatform under the Mdm::ModuleDetail' do
         expect {
           add_platform
-        }.to change(module_detail.platforms, :length).by(1)
+        }.to change(detail.platforms, :length).by(1)
       end
 
       context 'new Mdm::ModulePlatform' do
         subject(:module_platform) do
           add_platform
 
-          module_detail.platforms.last
+          detail.platforms.last
         end
 
         it { should be_valid }
@@ -322,7 +373,7 @@ describe Mdm::Module::Detail do
 
     context '#add_ref' do
       def add_ref
-        module_detail.add_ref(name)
+        detail.add_ref(name)
       end
 
       let(:name) do
@@ -332,14 +383,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::ModuleRef under the Mdm::ModuleDetail' do
         expect {
           add_ref
-        }.to change(module_detail.refs, :length).by(1)
+        }.to change(detail.refs, :length).by(1)
       end
 
       context 'new Mdm::ModuleRef' do
         subject(:module_ref) do
           add_ref
 
-          module_detail.refs.last
+          detail.refs.last
         end
 
         it { should be_valid }
@@ -349,7 +400,7 @@ describe Mdm::Module::Detail do
 
     context '#add_target' do
       def add_target
-        module_detail.add_target(index, name)
+        detail.add_target(index, name)
       end
 
       let(:index) do
@@ -363,14 +414,14 @@ describe Mdm::Module::Detail do
       it 'should add an Mdm::ModuleTarget under the Mdm::ModuleDetail' do
         expect {
           add_target
-        }.to change(module_detail.targets, :length).by(1)
+        }.to change(detail.targets, :length).by(1)
       end
 
       context 'new Mdm::ModuleTarget' do
         subject(:module_target) do
           add_target
 
-          module_detail.targets.last
+          detail.targets.last
         end
 
         it { should be_valid }
