@@ -382,7 +382,7 @@ class Mdm::Host < ActiveRecord::Base
         lambda { |*args|
           # @todo replace with AREL
           terms = SEARCH_FIELDS.collect { |field|
-            "#{field} ILIKE ?"
+            "#{self.table_name}.#{field} ILIKE ?"
           }
           disjunction = terms.join(' OR ')
           formatted_parameter = "%#{args[0]}%"
