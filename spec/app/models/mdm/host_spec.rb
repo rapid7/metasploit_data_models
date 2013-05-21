@@ -391,4 +391,26 @@ describe Mdm::Host do
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
+
+  context 'search scope' do
+    subject(:full_mdm_host) do
+      FactoryGirl.create(:full_mdm_host)
+    end
+
+    def search_for(str)
+      Mdm::Host.search(str)
+    end
+
+    context 'searching for an empty string' do
+      it 'should return any hosts in the database' do
+        search_for('').should include(subject)
+      end
+    end
+
+    context 'searching for an existing Host\'s name' do
+      it 'should return the host' do
+        search_for(subject.name).should include(subject)
+      end
+    end
+  end
 end
