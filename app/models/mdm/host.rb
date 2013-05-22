@@ -53,6 +53,9 @@ class Mdm::Host < ActiveRecord::Base
   # Associations
   #
 
+  has_many :task_hosts, :class_name => 'Mdm::TaskHost'
+  has_many :tasks, :through => :task_hosts, :class_name => 'Mdm::Task'
+
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
   #

@@ -14,6 +14,9 @@ class Mdm::Task < ActiveRecord::Base
   has_many :task_creds, :class_name => 'Mdm::TaskCred'
   has_many :creds, :through => :task_creds, :class_name => 'Mdm::Cred'
 
+  has_many :task_hosts, :class_name => 'Mdm::TaskHost'
+  has_many :hosts, :through => :task_hosts, :class_name => 'Mdm::Host'
+
   #
   # Scopes
   #
