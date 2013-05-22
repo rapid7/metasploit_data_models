@@ -11,7 +11,16 @@ class Mdm::Service < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] task_services
+  #   Details about what Tasks touched this service
+  #
+  #   @return [Array<Mdm::TaskService>]
   has_many :task_services, :class_name => 'Mdm::TaskService'
+
+  # @!attribute [rw] tasks
+  #   Tasks that touched this service
+  #
+  #   @return [Array<Mdm::Task>]
   has_many :tasks, :through => :task_services, :class_name => 'Mdm::Task'
 
   # @!attribute [rw] creds
