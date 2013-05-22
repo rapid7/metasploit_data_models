@@ -8,6 +8,8 @@ describe Mdm::Task do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:task_creds) }
     it { should have_many(:task_hosts).class_name('Mdm::TaskHost') }
     it { should have_many(:hosts).class_name('Mdm::Host').through(:task_hosts) }
+    it { should have_many(:task_services).class_name('Mdm::TaskService') }
+    it { should have_many(:services).class_name('Mdm::Service').through(:task_services) }
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 

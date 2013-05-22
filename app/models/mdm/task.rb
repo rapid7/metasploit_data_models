@@ -17,6 +17,9 @@ class Mdm::Task < ActiveRecord::Base
   has_many :task_hosts, :class_name => 'Mdm::TaskHost'
   has_many :hosts, :through => :task_hosts, :class_name => 'Mdm::Host'
 
+  has_many :task_services, :class_name => 'Mdm::TaskService'
+  has_many :services, :through => :task_services, :class_name => 'Mdm::Service'
+
   #
   # Scopes
   #

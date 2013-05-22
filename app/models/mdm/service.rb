@@ -11,6 +11,9 @@ class Mdm::Service < ActiveRecord::Base
   # Associations
   #
 
+  has_many :task_services, :class_name => 'Mdm::TaskService'
+  has_many :tasks, :through => :task_services, :class_name => 'Mdm::Task'
+
   # @!attribute [rw] creds
   #   Credentials gathered from this service.
   #
