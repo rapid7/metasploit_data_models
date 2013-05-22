@@ -15,6 +15,8 @@ class Mdm::Cred < ActiveRecord::Base
   # Relations
   #
   belongs_to :service, :class_name => "Mdm::Service"
+  has_many :task_creds, :class_name => "Mdm::TaskCred"
+  has_many :tasks, :through => :task_creds
 
   after_create :increment_host_counter_cache
   after_destroy :decrement_host_counter_cache

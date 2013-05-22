@@ -11,6 +11,9 @@ class Mdm::Task < ActiveRecord::Base
 
   belongs_to :workspace, :class_name => "Mdm::Workspace"
 
+  has_many :task_creds, :class_name => 'Mdm::TaskCred'
+  has_many :creds, :through => :task_creds, :class_name => 'Mdm::Cred'
+
   #
   # Scopes
   #
