@@ -2,6 +2,5 @@
 
 FactoryGirl.define do
   factory :mdm_task_cred, :class => 'Mdm::TaskCred' do
-
   end
 end
