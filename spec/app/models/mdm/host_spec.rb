@@ -44,6 +44,8 @@ describe Mdm::Host do
     it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
     it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
     it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
+    it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
+    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
 
     context 'module_details' do
       it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
