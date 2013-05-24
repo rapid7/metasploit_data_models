@@ -25,7 +25,7 @@ class Mdm::Cred < ActiveRecord::Base
   #   Details about what Tasks touched this cred
   #
   #   @return [Array<Mdm::TaskCred>]
-  has_many :task_creds, :class_name => "Mdm::TaskCred"
+  has_many :task_creds, :dependent => :destroy, :class_name => "Mdm::TaskCred"
 
   # @!attribute [rw] tasks
   #   Tasks that touched this service

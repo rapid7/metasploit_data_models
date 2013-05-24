@@ -13,13 +13,13 @@ class Mdm::Task < ActiveRecord::Base
   #   The Workspace the Task belongs to
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => "Mdm::Workspace"
+  belongs_to :workspace,  :class_name => "Mdm::Workspace"
 
   # @!attribute [rw] task_creds
   #   Details about creds this task touched
   #
   #   @return [Array<Mdm::TaskCred>]
-  has_many :task_creds, :class_name => 'Mdm::TaskCred'
+  has_many :task_creds, :dependent => :destroy, :class_name => 'Mdm::TaskCred'
 
   # @!attribute [rw] creds
   #   Creds this task touched
@@ -31,7 +31,7 @@ class Mdm::Task < ActiveRecord::Base
   #   Details about hosts this task touched
   #
   #   @return [Array<Mdm::TaskHost>]
-  has_many :task_hosts, :class_name => 'Mdm::TaskHost'
+  has_many :task_hosts, :dependent => :destroy, :class_name => 'Mdm::TaskHost'
 
   # @!attribute [rw] hosts
   #   Hosts this task touched
@@ -43,7 +43,7 @@ class Mdm::Task < ActiveRecord::Base
   #   Details about services this task touched
   #
   #   @return [Array<Mdm::TaskService>]
-  has_many :task_services, :class_name => 'Mdm::TaskService'
+  has_many :task_services, :dependent => :destroy, :class_name => 'Mdm::TaskService'
 
   # @!attribute [rw] services
   #   Services this task touched

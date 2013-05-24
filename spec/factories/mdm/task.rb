@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :mdm_task, :class => 'Mdm::Task' do
+  factory :mdm_task, :aliases => [:task], :class => 'Mdm::Task' do
     #
     # Associations
     #

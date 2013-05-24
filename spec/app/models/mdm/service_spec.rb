@@ -4,7 +4,7 @@ describe Mdm::Service do
 
   context "Associations" do
 
-    it { should have_many(:task_services).class_name('Mdm::TaskService') }
+    it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
     it { should have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
     it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
