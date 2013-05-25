@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522041110) do
+ActiveRecord::Schema.define(:version => 20130525015035) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -46,11 +46,10 @@ ActiveRecord::Schema.define(:version => 20130522041110) do
   create_table "clients", :force => true do |t|
     t.integer  "host_id"
     t.datetime "created_at"
-    t.string   "ua_string",   :limit => 1024, :null => false
-    t.string   "ua_name",     :limit => 64
-    t.string   "ua_ver",      :limit => 32
+    t.string   "ua_string",  :limit => 1024, :null => false
+    t.string   "ua_name",    :limit => 64
+    t.string   "ua_ver",     :limit => 32
     t.datetime "updated_at"
-    t.integer  "campaign_id"
   end
 
   create_table "creds", :force => true do |t|
