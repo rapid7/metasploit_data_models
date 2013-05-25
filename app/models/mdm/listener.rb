@@ -19,6 +19,7 @@ class Mdm::Listener < ActiveRecord::Base
   validates :address, :ip_format => true, :presence => true
   validates :port, :presence => true
 
+
   ActiveSupport.run_load_hooks(:mdm_listener, self)
 end
 
