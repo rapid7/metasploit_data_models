@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130525015035) do
+ActiveRecord::Schema.define(:version => 20130525212420) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -169,13 +169,6 @@ ActiveRecord::Schema.define(:version => 20130525015035) do
   create_table "hosts_tags", :id => false, :force => true do |t|
     t.integer "host_id"
     t.integer "tag_id"
-  end
-
-  create_table "imported_creds", :force => true do |t|
-    t.integer "workspace_id",                :default => 1,          :null => false
-    t.string  "user",         :limit => 512
-    t.string  "pass",         :limit => 512
-    t.string  "ptype",        :limit => 16,  :default => "password"
   end
 
   create_table "listeners", :force => true do |t|
