@@ -39,7 +39,7 @@ describe Mdm::Event do
 
   context 'validations' do
     it 'should require name' do
-      unnamed_event = FactoryGirl.build(:mdm_event)
+      unnamed_event = FactoryGirl.build(:mdm_event, :name => nil)
       unnamed_event.should_not be_valid
       unnamed_event.errors[:name].should include("can't be blank")
     end
