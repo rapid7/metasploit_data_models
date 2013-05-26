@@ -52,4 +52,14 @@ describe Mdm::Report do
     end
   end
 
+  context 'callbacks' do
+    context 'before_destroy' do
+      it 'should call #delete_file' do
+        myreport =  FactoryGirl.create(:mdm_report)
+        myreport.should_receive(:delete_file)
+        myreport.destroy
+      end
+    end
+  end
+
 end

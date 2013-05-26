@@ -25,4 +25,14 @@ describe Mdm::Loot do
        end
      end
    end
+
+   context 'callbacks' do
+     context 'before_destroy' do
+       it 'should call #delete_file' do
+         myloot =  FactoryGirl.create(:mdm_loot)
+         myloot.should_receive(:delete_file)
+         myloot.destroy
+       end
+     end
+   end
 end
