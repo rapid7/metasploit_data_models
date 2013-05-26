@@ -18,5 +18,10 @@ describe Mdm::VulnRef do
       it { should have_db_column(:vuln_id).of_type(:integer) }
     end
   end
+
+  context 'associations' do
+    it { should belong_to(:vuln).class_name('Mdm::Vuln') }
+    it { should belong_to(:ref).class_name('Mdm::Ref') }
+  end
   
 end
