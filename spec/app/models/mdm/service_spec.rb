@@ -17,27 +17,39 @@ describe Mdm::Service do
     it { should belong_to(:host).class_name('Mdm::Host') }
   end
 
-  context "inactive" do
-    it "should exclude open services" do
-      open_service = FactoryGirl.create(:mdm_service, :state => 'open')
-      Mdm::Service.inactive.should_not include(open_service)
+  context 'scopes' do
+    context "inactive" do
+      it "should exclude open services" do
+        open_service = FactoryGirl.create(:mdm_service, :state => 'open')
+        Mdm::Service.inactive.should_not include(open_service)
+      end
+    end
+
+    context "with_state open" do
+      it "should exclude closed services" do
+        closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
+        Mdm::Service.with_state('open').should_not include(closed_service)
+      end
+    end
+
+    context "search for 'snmp'" do
+      it "should find only services that match" do
+        snmp_service   = FactoryGirl.create(:mdm_service)
+        ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
+        search_results = Mdm::Service.search('snmp')
+        search_results.should     include(snmp_service)
+        search_results.should_not include(ftp_service)
+      end
     end
   end
 
-  context "with_state open" do
-    it "should exclude closed services" do
-      closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
-      Mdm::Service.with_state('open').should_not include(closed_service)
-    end
-  end
-
-  context "search for 'snmp'" do
-    it "should find only services that match" do
-      snmp_service   = FactoryGirl.create(:mdm_service)
-      ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
-      search_results = Mdm::Service.search('snmp')
-      search_results.should     include(snmp_service)
-      search_results.should_not include(ftp_service)
+  context 'callbacks' do
+    context 'after_save' do
+      it 'should call #normalize_host_os' do
+        svc = FactoryGirl.create(:mdm_service)
+        svc.should_receive(:normalize_host_os)
+        svc.run_callbacks(:save)
+      end
     end
   end
 
