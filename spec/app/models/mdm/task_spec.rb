@@ -13,12 +13,24 @@ describe Mdm::Task do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
-  context "running" do
-    it "should exclude completed tasks" do
-      task = FactoryGirl.create(:mdm_task, :completed_at => Time.now)
-      Mdm::Task.running.should_not include(task)
+  context 'scopes' do
+    context "running" do
+      it "should exclude completed tasks" do
+        task = FactoryGirl.create(:mdm_task, :completed_at => Time.now)
+        Mdm::Task.running.should_not include(task)
+      end
     end
-
   end
+
+  context 'callbacks' do
+    context 'before_destroy' do
+      it 'should call #delete_file' do
+        task = FactoryGirl.create(:mdm_task)
+        task.should_receive(:delete_file)
+        task.destroy
+      end
+    end
+  end
+
 
 end
