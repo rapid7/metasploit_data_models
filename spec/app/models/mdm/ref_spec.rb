@@ -28,6 +28,7 @@ describe Mdm::Ref do
 
     # @todo https://www.pivotaltracker.com/story/show/48915453
     it { should have_many(:vulns_refs).class_name('Mdm::VulnRef') }
+    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:vulns_refs) }
   end
 
   context 'database' do
