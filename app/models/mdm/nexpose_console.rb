@@ -9,10 +9,10 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   # Validations
   #
 
-  validates :address, :presence => true
+  validates :address, :ip_format => true, :presence => true
   validates :name, :presence => true
   validates :password, :presence => true
-  validates :port, :inclusion => {:in => 1..65535}
+  validates :port, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
   validates :username, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_nexpose_console, self)
