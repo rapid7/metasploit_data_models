@@ -129,6 +129,12 @@ describe Mdm::Cred do
         pubkey2.ssh_key_matches?(@pubkey).should == true
         pubkey2.ssh_key_matches?(pubkey3).should == false
       end
+
+      it 'should always return false for non ssh key creds' do
+        cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
+        cred3 = FactoryGirl.create(:mdm_cred, :service => @svc2, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
+        cred2.ssh_key_matches?(cred3).should == false
+      end
     end
 
     context '#ssh_keys' do
