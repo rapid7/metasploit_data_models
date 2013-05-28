@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe Mdm::WebSite do
 
+  context 'factory' do
+    it 'should be valid' do
+      web_site = FactoryGirl.build(:mdm_web_site)
+      web_site.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      web_site = FactoryGirl.create(:mdm_web_site)
+      expect {
+        web_site.destroy
+      }.to_not raise_error
+      expect {
+        web_site.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+  
   context 'associations' do
     it { should belong_to(:service).class_name('Mdm::Service') }
     it { should have_many(:web_forms).class_name('Mdm::WebForm').dependent(:destroy) }

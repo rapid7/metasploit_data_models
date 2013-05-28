@@ -1,6 +1,26 @@
 require 'spec_helper'
 
 describe Mdm::TaskService do
+
+  context 'factory' do
+    it 'should be valid' do
+      task_service = FactoryGirl.build(:mdm_task_service)
+      task_service.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      task_service = FactoryGirl.create(:mdm_task_service)
+      expect {
+        task_service.destroy
+      }.to_not raise_error
+      expect {
+        task_service.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context "Associations" do
     it { should belong_to(:task).class_name('Mdm::Task') }
     it { should belong_to(:service).class_name('Mdm::Service') }

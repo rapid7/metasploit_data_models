@@ -53,4 +53,23 @@ describe Mdm::Service do
     end
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      service = FactoryGirl.build(:mdm_service)
+      service.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      service = FactoryGirl.create(:mdm_service)
+      expect {
+        service.destroy
+      }.to_not raise_error
+      expect {
+        service.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 end

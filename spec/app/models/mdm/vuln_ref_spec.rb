@@ -23,5 +23,24 @@ describe Mdm::VulnRef do
     it { should belong_to(:vuln).class_name('Mdm::Vuln') }
     it { should belong_to(:ref).class_name('Mdm::Ref') }
   end
+
+  context 'factory' do
+    it 'should be valid' do
+      vuln_ref = FactoryGirl.build(:mdm_vuln_ref)
+      vuln_ref.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      vuln_ref = FactoryGirl.create(:mdm_vuln_ref)
+      expect {
+        vuln_ref.destroy
+      }.to_not raise_error
+      expect {
+        vuln_ref.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
   
 end

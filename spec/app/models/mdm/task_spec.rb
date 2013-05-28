@@ -2,8 +2,26 @@ require 'spec_helper'
 
 describe Mdm::Task do
 
-  context "Associations" do
+  context 'factory' do
+    it 'should be valid' do
+      task = FactoryGirl.build(:mdm_task)
+      task.should be_valid
+    end
+  end
 
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      task = FactoryGirl.create(:mdm_task)
+      expect {
+        task.destroy
+      }.to_not raise_error
+      expect {
+        task.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  context "Associations" do
     it { should have_many(:task_creds).class_name('Mdm::TaskCred').dependent(:destroy) }
     it { should have_many(:creds).class_name('Mdm::Cred').through(:task_creds) }
     it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }

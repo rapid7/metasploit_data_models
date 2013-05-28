@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe Mdm::Session do
 
+  context 'factory' do
+    it 'should be valid' do
+      session = FactoryGirl.build(:mdm_session)
+      session.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      session = FactoryGirl.create(:mdm_session)
+      expect {
+        session.destroy
+      }.to_not raise_error
+      expect {
+        session.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'asscoiations' do
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }

@@ -14,4 +14,23 @@ describe Mdm::VulnDetail do
     end
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      vuln_detail = FactoryGirl.build(:mdm_vuln_detail)
+      vuln_detail.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      vuln_detail = FactoryGirl.create(:mdm_vuln_detail)
+      expect {
+        vuln_detail.destroy
+      }.to_not raise_error
+      expect {
+        vuln_detail.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 end

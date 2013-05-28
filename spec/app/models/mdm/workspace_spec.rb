@@ -9,6 +9,42 @@ describe Mdm::Workspace do
     'default'
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      workspace = FactoryGirl.build(:mdm_workspace)
+      workspace.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object and dependent objects' do
+      workspace = FactoryGirl.create(:mdm_workspace)
+      listener = FactoryGirl.create(:mdm_listener, :workspace => workspace)
+      report_template = FactoryGirl.create(:mdm_report_template, :workspace => workspace)
+      report = FactoryGirl.create(:mdm_report, :workspace => workspace)
+      task = FactoryGirl.create(:mdm_task, :workspace => workspace)
+
+      expect {
+        workspace.destroy
+      }.to_not raise_error
+      expect {
+        workspace.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        listener.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        report_template.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        report.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        task.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'associations' do
     it { should have_many(:clients).class_name('Mdm::Client').through(:hosts) }
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }

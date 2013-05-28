@@ -84,4 +84,17 @@ describe Mdm::Tag do
       it { should be_valid }
     end
   end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      tag = FactoryGirl.create(:mdm_tag)
+      expect {
+        tag.destroy
+      }.to_not raise_error
+      expect {
+        tag.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 end
