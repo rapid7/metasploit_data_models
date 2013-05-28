@@ -8,6 +8,22 @@ describe Mdm::Cred do
     it { should belong_to(:service).class_name('Mdm::Service') }
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object and all dependent objects' do
+      cred = FactoryGirl.create(:mdm_cred)
+      task_cred = FactoryGirl.create(:mdm_task_cred, :cred => cred)
+      expect {
+        cred.destroy
+      }.to_not raise_error
+      expect {
+        cred.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        task_cred.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'callbacks' do
     context 'after_create' do
       it 'should increment cred_count on the host' do
