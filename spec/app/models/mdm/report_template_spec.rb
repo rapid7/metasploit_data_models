@@ -15,4 +15,23 @@ describe Mdm::ReportTemplate do
       end
     end
   end
+
+  context 'factory' do
+    it 'should be valid' do
+      report_template = FactoryGirl.build(:mdm_report_template)
+      report_template.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      report_template = FactoryGirl.create(:mdm_report_template)
+      expect {
+        report_template.destroy
+      }.to_not raise_error
+      expect {
+        report_template.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end

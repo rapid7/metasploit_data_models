@@ -9,6 +9,18 @@ describe Mdm::Note do
     end
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      note = FactoryGirl.create(:mdm_note)
+      expect {
+        note.destroy
+      }.to_not raise_error
+      expect {
+        note.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'associations' do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
     it { should belong_to(:host).class_name('Mdm::Host') }

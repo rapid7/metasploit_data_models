@@ -57,6 +57,18 @@ describe Mdm::Ref do
     end
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      mdm_ref = FactoryGirl.create(:mdm_ref)
+      expect {
+        mdm_ref.destroy
+      }.to_not raise_error
+      expect {
+        mdm_ref.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'mass assignment security' do
     it { should allow_mass_assignment_of(:name) }
   end

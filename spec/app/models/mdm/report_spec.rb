@@ -62,4 +62,23 @@ describe Mdm::Report do
     end
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      report = FactoryGirl.build(:mdm_report)
+      report.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      report = FactoryGirl.create(:mdm_report)
+      expect {
+        report.destroy
+      }.to_not raise_error
+      expect {
+        report.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 end

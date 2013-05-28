@@ -9,6 +9,18 @@ describe Mdm::NexposeConsole do
     end
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      nexpose_console = FactoryGirl.create(:mdm_nexpose_console)
+      expect {
+        nexpose_console.destroy
+      }.to_not raise_error
+      expect {
+        nexpose_console.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'validations' do
     context 'address' do
       it 'should require an address' do
