@@ -53,6 +53,18 @@ class Mdm::Host < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] task_hosts
+  #   Details about what Tasks touched this host
+  #
+  #   @return [Array<Mdm::TaskHost>]
+  has_many :task_hosts, :dependent => :destroy, :class_name => 'Mdm::TaskHost'
+
+  # @!attribute [rw] tasks
+  #   Tasks that touched this service
+  #
+  #   @return [Array<Mdm::Task>]
+  has_many :tasks, :through => :task_hosts, :class_name => 'Mdm::Task'
+
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
   #
