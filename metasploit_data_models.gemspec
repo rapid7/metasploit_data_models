@@ -36,7 +36,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
-  
+  s.add_runtime_dependency 'nilify_blanks'
+
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
     s.add_development_dependency 'kramdown'

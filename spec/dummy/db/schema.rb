@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130516204810) do
+ActiveRecord::Schema.define(:version => 20130528183122) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -247,7 +247,6 @@ ActiveRecord::Schema.define(:version => 20130516204810) do
 
   create_table "module_details", :force => true do |t|
     t.datetime "mtime"
-    t.text     "file"
     t.string   "mtype"
     t.text     "refname"
     t.text     "fullname"
@@ -261,6 +260,7 @@ ActiveRecord::Schema.define(:version => 20130516204810) do
     t.text     "default_action"
     t.string   "stance"
     t.boolean  "ready"
+    t.integer  "parent_path_id",  :null => false
   end
 
   add_index "module_details", ["description"], :name => "index_module_details_on_description"
@@ -274,6 +274,15 @@ ActiveRecord::Schema.define(:version => 20130516204810) do
   end
 
   add_index "module_mixins", ["detail_id"], :name => "index_module_mixins_on_module_detail_id"
+
+  create_table "module_paths", :force => true do |t|
+    t.string "gem"
+    t.string "name"
+    t.text   "real_path", :null => false
+  end
+
+  add_index "module_paths", ["gem", "name"], :name => "index_module_paths_on_gem_and_name", :unique => true
+  add_index "module_paths", ["real_path"], :name => "index_module_paths_on_real_path", :unique => true
 
   create_table "module_platforms", :force => true do |t|
     t.integer "detail_id"

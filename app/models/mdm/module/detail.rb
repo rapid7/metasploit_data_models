@@ -71,6 +71,12 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Mixin>]
   has_many :mixins,    :class_name => 'Mdm::Module::Mixin',    :dependent => :destroy
 
+  # @!attribute [rw] parent_path
+  #   Path under which this modules's type directory and reference name paths exist.
+  #
+  #   @return [Mdm::Module::Path]
+  belongs_to :parent_path, :class_name => 'Mdm::Module::Path'
+
   # @!attribute [rw] platforms
   #   Platforms supported by this module.
   #

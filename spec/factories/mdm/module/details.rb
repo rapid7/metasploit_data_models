@@ -1,11 +1,14 @@
 FactoryGirl.define do
   factory :mdm_module_detail, :class => Mdm::Module::Detail do
-    ignore do
-      root {
-        MetasploitDataModels.root
-      }
-      modules_pathname { root.join('modules') }
-    end
+    #
+    # Associations
+    #
+
+    association :parent_path, :factory => :mdm_module_path
+
+    #
+    # Attributes
+    #
 
     description { generate :mdm_module_detail_description }
     disclosure_date { generate :mdm_module_detail_disclosure_date }
@@ -24,15 +27,6 @@ FactoryGirl.define do
       else
         nil
       end
-    }
-
-    file {
-      type_directory = Mdm::Module::Detail::DIRECTORY_BY_TYPE[mtype]
-
-      modules_pathname.join(
-          type_directory,
-          "#{refname}.rb"
-      ).to_path
     }
   end
 

@@ -52,6 +52,7 @@ describe Mdm::Module::Detail do
     it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
     it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
     it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
+    it { should belong_to(:parent_path).class_name('Mdm::Module::Path') }
     it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
     it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
@@ -111,12 +112,13 @@ describe Mdm::Module::Detail do
       it { should have_db_column(:default_target).of_type(:integer) }
       it { should have_db_column(:description).of_type(:text) }
       it { should have_db_column(:disclosure_date).of_type(:datetime)}
-      it { should have_db_column(:file).of_type(:text) }
+      it { should_not have_db_column(:file).of_type(:text) }
       it { should have_db_column(:fullname).of_type(:text) }
       it { should have_db_column(:license).of_type(:string) }
       it { should have_db_column(:mtime).of_type(:datetime) }
       it { should have_db_column(:mtype).of_type(:string) }
       it { should have_db_column(:name).of_type(:text) }
+      it { should have_db_column(:parent_path_id).of_type(:integer).with_options(:null => false) }
       it { should have_db_column(:privileged).of_type(:boolean) }
       it { should have_db_column(:rank).of_type(:integer) }
       it { should have_db_column(:ready).of_type(:boolean) }
