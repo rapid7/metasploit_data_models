@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Mdm::Note do
 
+  context 'factory' do
+    it 'should be valid' do
+      note = FactoryGirl.build(:mdm_note)
+      note.should be_valid
+    end
+  end
+
   context 'associations' do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
     it { should belong_to(:host).class_name('Mdm::Host') }

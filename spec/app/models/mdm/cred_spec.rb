@@ -196,4 +196,11 @@ describe Mdm::Cred do
 
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      cred = FactoryGirl.build(:mdm_cred)
+      cred.should be_valid
+    end
+  end
+
 end

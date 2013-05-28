@@ -7,6 +7,25 @@ describe Mdm::Loot do
      it { should belong_to(:host).class_name('Mdm::Host') }
    end
 
+   context 'factory' do
+     it 'should be valid' do
+       loot = FactoryGirl.build(:mdm_loot)
+       loot.should be_valid
+     end
+   end
+
+   context '#destroy' do
+     it 'should successfully destroy the object' do
+       loot = FactoryGirl.create(:mdm_loot)
+       expect {
+         loot.destroy
+       }.to_not raise_error
+       expect {
+         loot.reload
+       }.to raise_error(ActiveRecord::RecordNotFound)
+     end
+   end
+
    context 'scopes' do
      context 'search' do
        it 'should match on ltype' do

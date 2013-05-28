@@ -18,4 +18,11 @@ describe Mdm::Client do
     end
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      client = FactoryGirl.build(:mdm_client)
+      client.should be_valid
+    end
+  end
+
 end

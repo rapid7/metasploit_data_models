@@ -7,6 +7,19 @@ describe Mdm::Event do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object and all dependent objects' do
+      event = FactoryGirl.create(:mdm_event)
+      expect {
+        event.destroy
+      }.to_not raise_error
+      expect {
+        event.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+
+    end
+  end
+
   context 'scopes' do
     context 'flagged' do
       it 'should exclude non-critical events' do
@@ -42,6 +55,13 @@ describe Mdm::Event do
       unnamed_event = FactoryGirl.build(:mdm_event, :name => nil)
       unnamed_event.should_not be_valid
       unnamed_event.errors[:name].should include("can't be blank")
+    end
+  end
+
+  context 'factory' do
+    it 'should be valid' do
+      event = FactoryGirl.build(:mdm_event)
+      event.should be_valid
     end
   end
 

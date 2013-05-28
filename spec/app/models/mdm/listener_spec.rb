@@ -7,6 +7,25 @@ describe Mdm::Listener do
     it { should belong_to(:task).class_name('Mdm::Task') }
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      listener = FactoryGirl.build(:mdm_listener)
+      listener.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      listener = FactoryGirl.create(:mdm_listener)
+      expect {
+        listener.destroy
+      }.to_not raise_error
+      expect {
+        listener.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'validations' do
     context 'port' do
       it 'should require a port' do

@@ -16,4 +16,17 @@ describe Mdm::HostTag do
       it { should be_valid }
     end
   end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      host_tag = FactoryGirl.create(:mdm_host_tag)
+      expect {
+        host_tag.destroy
+      }.to_not raise_error
+      expect {
+        host_tag.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 end

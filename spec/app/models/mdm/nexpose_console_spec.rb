@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe Mdm::NexposeConsole do
+
+  context 'factory' do
+    it 'should be valid' do
+      nexpose_console = FactoryGirl.build(:mdm_nexpose_console)
+      nexpose_console.should be_valid
+    end
+  end
+
   context 'validations' do
     context 'address' do
       it 'should require an address' do

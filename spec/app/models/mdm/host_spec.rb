@@ -37,6 +37,63 @@ describe Mdm::Host do
     ]
   end
 
+  context 'factory' do
+    it 'should be valid' do
+      host = FactoryGirl.build(:mdm_host)
+      host.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object and the dependent objects' do
+      host = FactoryGirl.create(:mdm_host)
+      exploit_attempt = FactoryGirl.create(:mdm_exploit_attempt, :host => host)
+      exploited_host = FactoryGirl.create(:mdm_exploited_host, :host => host)
+      host_detail = FactoryGirl.create(:mdm_host_detail, :host => host)
+      loot = FactoryGirl.create(:mdm_loot, :host => host)
+      task_host = FactoryGirl.create(:mdm_task_host, :host => host)
+      note = FactoryGirl.create(:mdm_note, :host => host)
+      svc = FactoryGirl.create(:mdm_service, :host => host)
+      session = FactoryGirl.create(:mdm_session, :host => host)
+      vuln = FactoryGirl.create(:mdm_vuln, :host => host)
+
+
+      expect {
+        host.destroy
+      }.to_not raise_error
+      expect {
+        host.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        exploit_attempt.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        exploited_host.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        host_detail.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        loot.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        task_host.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        note.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        svc.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        session.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        vuln.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
 	context 'associations' do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
 		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
