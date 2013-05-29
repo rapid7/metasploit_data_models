@@ -1,11 +1,7 @@
-require 'nilify_blanks'
-
 # Stores the load paths used by Msf::ModuleManager#add_module_path (with symbolic {#name names}) so that the module path
 # directories can be moved, but the cached metadata in {Mdm::Module::Detail} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
 class Mdm::Module::Path < ActiveRecord::Base
-  include NilifyBlanks
-
   self.table_name = 'module_paths'
 
   #
@@ -50,12 +46,8 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Callbacks - in calling order
   #
 
-  # needs to be before validation so that uniqueness validation scoped to gem works correctly and does not give an
-  # error when name is '' and should be treated as nil for the uniqueness database query.
-  nilify_blanks :before => :validation
-
+  before_validation :nilify_blanks
   before_validation :normalize_real_path
-
 
   #
   # Validations
@@ -86,6 +78,19 @@ class Mdm::Module::Path < ActiveRecord::Base
 
     if gem.present? and name.blank?
       errors[:name] << "can't be blank if gem is present"
+    end
+  end
+
+  # Converts blank {#gem} and/or {#name} to `nil`.
+  #
+  # @return [void]
+  def nilify_blanks
+    [:gem, :name].each do |attribute|
+      value = send(attribute)
+
+      if value.blank?
+        send("#{attribute}=", nil)
+      end
     end
   end
 
