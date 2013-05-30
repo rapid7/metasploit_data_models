@@ -186,6 +186,8 @@ class Mdm::Module::Detail < ActiveRecord::Base
             :inclusion => {
                 :in => DIRECTORY_BY_TYPE.keys
             }
+  validates :parent_path,
+            :presence => true
   validates :privileged,
             :inclusion => {
                 :in => PRIVILEGES
