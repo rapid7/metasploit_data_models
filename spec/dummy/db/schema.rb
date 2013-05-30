@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130528183122) do
+ActiveRecord::Schema.define(:version => 20130530222124) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -224,8 +224,8 @@ ActiveRecord::Schema.define(:version => 20130528183122) do
   end
 
   create_table "module_actions", :force => true do |t|
-    t.integer "detail_id"
-    t.text    "name"
+    t.integer "detail_id", :null => false
+    t.text    "name",      :null => false
   end
 
   add_index "module_actions", ["detail_id"], :name => "index_module_actions_on_module_detail_id"
