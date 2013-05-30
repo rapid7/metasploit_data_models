@@ -96,7 +96,7 @@ class Mdm::Module::Path < ActiveRecord::Base
 
   def normalize_real_path
     if real_path and File.exist?(real_path)
-      self.real_path = File.realpath(real_path)
+      self.real_path = MetasploitDataModels::File.realpath(real_path)
     end
   end
 end

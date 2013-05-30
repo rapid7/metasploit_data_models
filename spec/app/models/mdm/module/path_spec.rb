@@ -53,7 +53,7 @@ describe Mdm::Module::Path do
         end
 
         it 'should convert real_path to a real path using File#real_path' do
-          expected_real_path = File.realpath(path.real_path)
+          expected_real_path = MetasploitDataModels::File.realpath(path.real_path)
 
           path.real_path.should_not == expected_real_path
 
