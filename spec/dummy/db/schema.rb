@@ -436,6 +436,27 @@ ActiveRecord::Schema.define(:version => 20130528183122) do
     t.datetime "updated_at",                                        :null => false
   end
 
+  create_table "task_creds", :force => true do |t|
+    t.integer  "task_id",    :null => false
+    t.integer  "cred_id",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "task_hosts", :force => true do |t|
+    t.integer  "task_id",    :null => false
+    t.integer  "host_id",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "task_services", :force => true do |t|
+    t.integer  "task_id",    :null => false
+    t.integer  "service_id", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "tasks", :force => true do |t|
     t.integer  "workspace_id",                 :default => 1, :null => false
     t.string   "created_by"

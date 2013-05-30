@@ -14,7 +14,24 @@ class Mdm::Cred < ActiveRecord::Base
   #
   # Relations
   #
+
+  # @!attribute [rw] servce
+  #   The service this cred is for
+  #
+  #   @return [Mdm::Service]
   belongs_to :service, :class_name => "Mdm::Service"
+
+  # @!attribute [rw] task_creds
+  #   Details about what Tasks touched this cred
+  #
+  #   @return [Array<Mdm::TaskCred>]
+  has_many :task_creds, :dependent => :destroy, :class_name => "Mdm::TaskCred"
+
+  # @!attribute [rw] tasks
+  #   Tasks that touched this service
+  #
+  #   @return [Array<Mdm::Task>]
+  has_many :tasks, :through => :task_creds
 
   after_create :increment_host_counter_cache
   after_destroy :decrement_host_counter_cache
