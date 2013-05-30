@@ -7,8 +7,8 @@ describe Mdm::Module::Action do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:detail_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:text) }
+      it { should have_db_column(:detail_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:name).of_type(:text).with_options(:null => false) }
     end
 
     context 'indices' do
