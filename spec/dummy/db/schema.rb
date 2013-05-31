@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130531175202) do
+ActiveRecord::Schema.define(:version => 20130531185216) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(:version => 20130531175202) do
     t.text    "email"
   end
 
-  add_index "module_authors", ["detail_id"], :name => "index_module_authors_on_module_detail_id"
+  add_index "module_authors", ["detail_id", "name"], :name => "index_module_authors_on_detail_id_and_name", :unique => true
 
   create_table "module_details", :force => true do |t|
     t.datetime "mtime"

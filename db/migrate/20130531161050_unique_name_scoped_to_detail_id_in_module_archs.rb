@@ -5,7 +5,7 @@ class UniqueNameScopedToDetailIdInModuleArchs < ActiveRecord::Migration
   # CONSTANTS
   #
 
-  # Table whose indices th change.
+  # Table whose indices to change.
   TABLE_NAME = :module_archs
 
   # Removes unique index on (detail_id, name) and restores the index on detail_id.
