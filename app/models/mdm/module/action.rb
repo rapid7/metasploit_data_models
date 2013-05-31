@@ -33,7 +33,11 @@ class Mdm::Module::Action < ActiveRecord::Base
   #
 
   validates :detail, :presence => true
-  validates :name, :presence => true
+  validates :name,
+            :presence => true,
+            :uniqueness => {
+                :scope => :detail_id
+            }
 
   ActiveSupport.run_load_hooks(:mdm_module_action, self)
 end
