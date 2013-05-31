@@ -5,7 +5,7 @@ class UniqueNameScopedtoDetailIdInModuleActions < ActiveRecord::Migration
   # CONSTANTS
   #
 
-  # Table whose indicies to change.
+  # Table whose indices to change.
   TABLE_NAME = :module_actions
 
   #
