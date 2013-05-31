@@ -6,6 +6,19 @@ describe Mdm::HostDetail do
     it { should belong_to(:host).class_name('Mdm::Host') }
   end
 
+  context 'database' do
+    it { should have_db_column(:host_id).of_type(:integer) }
+    it { should have_db_column(:nx_console_id).of_type(:integer) }
+    it { should have_db_column(:nx_device_id).of_type(:integer) }
+    it { should have_db_column(:src).of_type(:string) }
+    it { should have_db_column(:nx_site_name).of_type(:string) }
+    it { should have_db_column(:nx_site_importance).of_type(:string) }
+    it { should have_db_column(:src).of_type(:string) }
+    it { should have_db_column(:nx_site_name).of_type(:string) }
+    it { should have_db_column(:nx_scan_template).of_type(:string) }
+    it { should have_db_column(:nx_risk_score).of_type(:float) }
+  end
+
   context 'validations' do
     it 'should only be valid with a host_id' do
       orphan_detail = FactoryGirl.build(:mdm_host_detail, :host => nil)

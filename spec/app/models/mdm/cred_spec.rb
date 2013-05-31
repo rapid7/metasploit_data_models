@@ -8,6 +8,24 @@ describe Mdm::Cred do
     it { should belong_to(:service).class_name('Mdm::Service') }
   end
 
+  context 'database' do
+    context 'timestamps' do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+      it { should have_db_column(:updated_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:service_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:user).of_type(:string) }
+      it { should have_db_column(:pass).of_type(:string) }
+      it { should have_db_column(:active).of_type(:boolean).with_options(:default => true) }
+      it { should have_db_column(:proof).of_type(:string) }
+      it { should have_db_column(:ptype).of_type(:string) }
+      it { should have_db_column(:source_id).of_type(:integer) }
+      it { should have_db_column(:source_type).of_type(:string) }
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object and all dependent objects' do
       cred = FactoryGirl.create(:mdm_cred)

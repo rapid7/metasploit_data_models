@@ -7,6 +7,23 @@ describe Mdm::Event do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
+  context 'database' do
+    context 'timestamps' do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+      it { should have_db_column(:updated_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:workspace_id).of_type(:integer) }
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:name).of_type(:string) }
+      it { should have_db_column(:critical).of_type(:boolean) }
+      it { should have_db_column(:seen).of_type(:boolean) }
+      it { should have_db_column(:username).of_type(:string) }
+      it { should have_db_column(:info).of_type(:text) }
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object and all dependent objects' do
       event = FactoryGirl.create(:mdm_event)
