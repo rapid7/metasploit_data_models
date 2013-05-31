@@ -1,4 +1,6 @@
 class Mdm::Module::Author < ActiveRecord::Base
+  include MetasploitDataModels::NilifyBlanks
+
   self.table_name = 'module_authors'
 
   #
@@ -6,6 +8,12 @@ class Mdm::Module::Author < ActiveRecord::Base
   #
 
   belongs_to :detail, :class_name => 'Mdm::Module::Detail'
+
+  #
+  # Callbacks
+  #
+
+  nilify_blank :email
 
   #
   # Mass Assignment Security

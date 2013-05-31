@@ -2,6 +2,8 @@
 # directories can be moved, but the cached metadata in {Mdm::Module::Detail} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
 class Mdm::Module::Path < ActiveRecord::Base
+  include MetasploitDataModels::NilifyBlanks
+
   self.table_name = 'module_paths'
 
   #
@@ -46,7 +48,8 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Callbacks - in calling order
   #
 
-  before_validation :nilify_blanks
+  nilify_blank :gem,
+               :name
   before_validation :normalize_real_path
 
   #
