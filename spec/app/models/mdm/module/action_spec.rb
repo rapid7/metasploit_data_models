@@ -12,7 +12,7 @@ describe Mdm::Module::Action do
     end
 
     context 'indices' do
-      it { should have_db_index(:detail_id) }
+      it { should have_db_index([:detail_id, :name]).unique(true) }
     end
   end
 
@@ -33,6 +33,70 @@ describe Mdm::Module::Action do
 
   context 'validations' do
     it { should validate_presence_of(:detail) }
-    it { should validate_presence_of(:name) }
+
+    context 'name' do
+      it { should validate_presence_of(:name) }
+
+      context 'validate uniqueness of name scoped to detail_id' do
+        let(:error_message) do
+          'has already been taken'
+        end
+
+        let!(:existing_action) do
+          FactoryGirl.create(:mdm_module_action)
+        end
+
+        context 'with same detail_id' do
+          let(:new_action) do
+            FactoryGirl.build(:mdm_module_action, :detail => existing_action.detail)
+          end
+
+          it 'should not allow same name' do
+            new_action.name = existing_action.name
+
+            new_action.name.should == existing_action.name
+            new_action.should_not be_valid
+            new_action.errors[:name].should include(error_message)
+          end
+
+          it 'should allow different name' do
+            new_action.name = FactoryGirl.generate :mdm_module_action_name
+
+            new_action.name.should_not == existing_action.name
+            new_action.should be_valid
+            new_action.errors[:name].should_not include(error_message)
+          end
+        end
+
+        context 'without same detail_id' do
+          let(:new_action) do
+            FactoryGirl.build(:mdm_module_action, :detail => new_detail)
+          end
+
+          let(:new_detail) do
+            FactoryGirl.create(
+                :mdm_module_detail,
+                :parent_path => existing_action.detail.parent_path
+            )
+          end
+
+          it 'should allow same name' do
+            new_action.name = existing_action.name
+
+            new_action.detail_id.should_not == existing_action.detail_id
+            new_action.should be_valid
+            new_action.errors[:name].should_not include(error_message)
+          end
+
+          it 'should allow different name' do
+            new_action.name = FactoryGirl.generate :mdm_module_action_name
+
+            new_action.name.should_not == existing_action.name
+            new_action.should be_valid
+            new_action.errors[:name].should_not include(error_message)
+          end
+        end
+      end
+    end
   end
 end
