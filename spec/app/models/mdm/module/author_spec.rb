@@ -31,7 +31,7 @@ describe Mdm::Module::Author do
     end
 
     context 'indices' do
-      it { should have_db_index(:detail_id) }
+      it { should have_db_index([:detail_id, :name]).unique(true) }
     end
   end
 
@@ -63,6 +63,14 @@ describe Mdm::Module::Author do
   context 'validations' do
     it { should validate_presence_of(:detail) }
     it { should_not validate_presence_of(:email) }
-    it { should validate_presence_of(:name) }
+
+    context 'name' do
+      it { should validate_presence_of(:name) }
+
+      it_should_behave_like 'validates uniqueness scoped to detail_id',
+                            :of => :name,
+                            :factory => :mdm_module_author,
+                            :sequence => :mdm_module_author_name
+    end
   end
 end
