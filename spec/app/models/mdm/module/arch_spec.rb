@@ -12,7 +12,7 @@ describe Mdm::Module::Arch do
     end
 
     context 'indices' do
-      it { should have_db_index(:detail_id) }
+      it { should have_db_index([:detail_id, :name]).unique(true) }
     end
   end
 
@@ -33,6 +33,14 @@ describe Mdm::Module::Arch do
 
   context 'validations' do
     it { should validate_presence_of(:detail) }
-    it { should validate_presence_of(:name) }
+
+    context 'name' do
+      it { should validate_presence_of(:name) }
+
+      it_should_behave_like 'validates uniqueness scoped to detail_id',
+                            :of => :name,
+                            :factory => :mdm_module_arch,
+                            :sequence => :mdm_module_arch_name
+    end
   end
 end
