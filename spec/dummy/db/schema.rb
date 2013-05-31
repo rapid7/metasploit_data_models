@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130525212420) do
+ActiveRecord::Schema.define(:version => 20130531144949) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(:version => 20130525212420) do
   add_index "hosts", ["state"], :name => "index_hosts_on_state"
   add_index "hosts", ["workspace_id", "address"], :name => "index_hosts_on_workspace_id_and_address", :unique => true
 
-  create_table "hosts_tags", :id => false, :force => true do |t|
+  create_table "hosts_tags", :force => true do |t|
     t.integer "host_id"
     t.integer "tag_id"
   end
