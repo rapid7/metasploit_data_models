@@ -1,15 +1,33 @@
 require 'spec_helper'
 
 describe Mdm::Module::Author do
+  subject(:author) do
+    FactoryGirl.build(:mdm_module_author)
+  end
+
   context 'associations' do
     it { should belong_to(:detail).class_name('Mdm::Module::Detail') }
   end
 
+  context 'callbacks' do
+    context 'before validation' do
+      it 'should convert blank email to nil' do
+        author.email = ''
+
+        author.email.should be_blank
+
+        author.valid?
+
+        author.email.should be_nil
+      end
+    end
+  end
+
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:detail_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:text) }
-      it { should have_db_column(:email).of_type(:text) }
+      it { should have_db_column(:detail_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:name).of_type(:text).with_options(:null => false) }
+      it { should have_db_column(:email).of_type(:text).with_options(:null => true) }
     end
 
     context 'indices' do
