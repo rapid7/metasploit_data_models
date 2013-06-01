@@ -9,6 +9,27 @@ describe Mdm::WebSite do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:service_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:vhost).of_type(:string) }
+      it { should have_db_column(:comments).of_type(:text) }
+      it { should have_db_column(:options).of_type(:text) }
+    end
+
+    context 'indices' do
+      it { should have_db_index(:comments) }
+      it { should have_db_index(:options) }
+      it { should have_db_index(:vhost) }
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object' do
       web_site = FactoryGirl.create(:mdm_web_site)

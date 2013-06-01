@@ -6,6 +6,24 @@ describe Mdm::VulnAttempt do
     it { should belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:attempted_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:vuln_id).of_type(:integer) }
+      it { should have_db_column(:exploited).of_type(:boolean) }
+      it { should have_db_column(:fail_reason).of_type(:string) }
+      it { should have_db_column(:username).of_type(:string) }
+      it { should have_db_column(:module).of_type(:text) }
+      it { should have_db_column(:session_id).of_type(:integer) }
+      it { should have_db_column(:loot_id).of_type(:integer) }
+      it { should have_db_column(:fail_detail).of_type(:text) }
+    end
+  end
+
   context 'validations' do
     it 'should require a vuln_id' do
       orphan_detail = FactoryGirl.build(:mdm_vuln_detail, :vuln => nil)
