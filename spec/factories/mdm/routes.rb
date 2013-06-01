@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :mdm_route, :class => Mdm::Route do
+  factory :mdm_route, :aliases => [:route], :class => Mdm::Route do
     #
     # Associations
     #
