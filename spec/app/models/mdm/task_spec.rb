@@ -9,6 +9,30 @@ describe Mdm::Task do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:completed_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+      it { should have_db_column(:created_by).of_type(:string) }
+      it { should have_db_column(:module).of_type(:string) }
+      it { should have_db_column(:path).of_type(:string) }
+      it { should have_db_column(:info).of_type(:string) }
+      it { should have_db_column(:description).of_type(:string) }
+      it { should have_db_column(:progress).of_type(:integer) }
+      it { should have_db_column(:options).of_type(:text) }
+      it { should have_db_column(:error).of_type(:text) }
+      it { should have_db_column(:result).of_type(:text) }
+      it { should have_db_column(:module_uuid).of_type(:string) }
+      it { should have_db_column(:settings).of_type(:binary) }
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object' do
       task = FactoryGirl.create(:mdm_task)
