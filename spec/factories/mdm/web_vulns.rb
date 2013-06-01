@@ -18,6 +18,16 @@ FactoryGirl.define do
     pname { params.first.first }
     proof { generate :mdm_web_vuln_proof }
     risk { generate :mdm_web_vuln_risk }
+    blame { generate :mdm_web_vuln_blame }
+    description { generate :mdm_web_vuln_description }
+  end
+
+  sequence :mdm_web_vuln_blame do |n|
+    "Blame employee ##{n}"
+  end
+
+  sequence :mdm_web_vuln_description do |n|
+    "Mdm::WebVuln#description #{n}"
   end
 
   sequence :mdm_web_vuln_category do |n|

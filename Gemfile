@@ -24,4 +24,6 @@ group :test do
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
   # named subject from the outer context without causing a stack overflow.
   gem 'rspec-rails', '>= 2.12.0'
+  # used for building markup for webpage factories
+  gem 'builder'
 end
