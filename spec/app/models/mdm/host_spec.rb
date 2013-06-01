@@ -707,5 +707,78 @@ describe Mdm::Host do
         end
       end
     end
+
+    context '#validate_fingerprint_data' do
+      before(:each) do
+        host.stub(:dlog)
+      end
+
+      it 'should return false for an empty hash' do
+        fingerprint= FactoryGirl.build(:mdm_note, :data => {})
+        host.validate_fingerprint_data(fingerprint).should == false
+      end
+
+      it 'should return false for postgressql fingerprints' do
+        fingerprint= FactoryGirl.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
+        host.validate_fingerprint_data(fingerprint).should == false
+      end
+
+      it 'should return false if the fingerprint does not contain a hash' do
+        fingerprint= FactoryGirl.build(:mdm_note, :data => 'this is not a fingerprint')
+        host.validate_fingerprint_data(fingerprint).should == false
+      end
+    end
+
+    context '#normalize_scanner_fp' do
+      context 'for session_fingerprint' do
+        it 'should return all the correct data for Windows XP SP3 x86' do
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Microsoft Windows'
+          result[:os_flavor].should == 'XP'
+          result[:os_sp].should == 'SP3'
+          result[:arch].should == 'x86'
+          result[:type].should == 'client'
+          result[:name].should == nil
+          result[:certainty].should == 0.8
+        end
+
+        it 'should return all the correct data for Windows 2008 SP1 x64' do
+          fp_data = { :os => 'Microsoft Windows 2008 SP1', :arch => 'x64'}
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Microsoft Windows'
+          result[:os_flavor].should == '2008'
+          result[:os_sp].should == 'SP1'
+          result[:arch].should == 'x64'
+          result[:type].should == 'server'
+          result[:name].should == nil
+          result[:certainty].should == 0.8
+        end
+
+        it 'should fingerprint Metasploitable correctly' do
+          # Taken from an actual session_fingerprint of Metasploitable 2
+          fp_data = { :os => 'Linux 2.6.24-16-server (i386)', :name => 'metasploitable'}
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Linux'
+          result[:name].should == 'metasploitable'
+          result[:os_sp].should == '2.6.24-16-server'
+          result[:arch].should == 'x86'
+          result[:certainty].should == 0.8
+        end
+
+        it 'should just populate os_name if it is unsure' do
+          fp_data = { :os => 'Darwin 12.3.0 x86_64 i386'}
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Darwin 12.3.0 x86_64 i386'
+          result[:os_sp].should == nil
+          result[:arch].should == nil
+          result[:certainty].should == 0.8
+        end
+      end
+    end
+
   end
 end
