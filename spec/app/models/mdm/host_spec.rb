@@ -472,4 +472,240 @@ describe Mdm::Host do
       end
     end
   end
+
+  context 'os normalization' do
+    context '#get_arch_from_string' do
+      context "should return 'x64'" do
+        it "when the string contains 'x64'" do
+          host.send(:get_arch_from_string, 'blahx64blah').should == 'x64'
+        end
+
+        it "when the string contains 'X64'" do
+          host.send(:get_arch_from_string, 'blahX64blah').should == 'x64'
+        end
+
+        it "when the string contains 'x86_64'" do
+          host.send(:get_arch_from_string, 'blahx86_64blah').should == 'x64'
+        end
+
+        it "when the string contains 'X86_64'" do
+          host.send(:get_arch_from_string, 'blahX86_64blah').should == 'x64'
+        end
+
+        it "when the string contains 'amd64'" do
+          host.send(:get_arch_from_string, 'blahamd64blah').should == 'x64'
+        end
+
+        it "when the string contains 'AMD64'" do
+          host.send(:get_arch_from_string, 'blahAMD64blah').should == 'x64'
+        end
+
+        it "when the string contains 'aMd64'" do
+          host.send(:get_arch_from_string, 'blahamd64blah').should == 'x64'
+        end
+      end
+
+      context "should return 'x86'" do
+        it "when the string contains 'x86'" do
+          host.send(:get_arch_from_string, 'blahx86blah').should == 'x86'
+        end
+
+        it "when the string contains 'X86'" do
+          host.send(:get_arch_from_string, 'blahX86blah').should == 'x86'
+        end
+
+        it "when the string contains 'i386'" do
+          host.send(:get_arch_from_string, 'blahi386blah').should == 'x86'
+        end
+
+        it "when the string contains 'I386'" do
+          host.send(:get_arch_from_string, 'blahI386blah').should == 'x86'
+        end
+
+        it "when the string contains 'i486'" do
+          host.send(:get_arch_from_string, 'blahi486blah').should == 'x86'
+        end
+
+        it "when the string contains 'i586'" do
+          host.send(:get_arch_from_string, 'blahi586blah').should == 'x86'
+        end
+
+        it "when the string contains 'i686'" do
+          host.send(:get_arch_from_string, 'blahi386blah').should == 'x86'
+        end
+      end
+
+      context "should return 'ppc'" do
+        it "when the string contains 'PowerPC'" do
+          host.send(:get_arch_from_string, 'blahPowerPCblah').should == 'ppc'
+        end
+
+        it "when the string contains 'PPC'" do
+          host.send(:get_arch_from_string, 'blahPPCblah').should == 'ppc'
+        end
+
+        it "when the string contains 'POWER'" do
+          host.send(:get_arch_from_string, 'blahPOWERblah').should == 'ppc'
+        end
+
+        it "when the string contains 'ppc'" do
+          host.send(:get_arch_from_string, 'blahppcblah').should == 'ppc'
+        end
+      end
+
+      context 'should return nil' do
+        it 'when PowerPC is cased incorrectly' do
+          host.send(:get_arch_from_string, 'powerPC').should == nil
+          host.send(:get_arch_from_string, 'Powerpc').should == nil
+        end
+
+        it 'when no recognized arch string is present' do
+          host.send(:get_arch_from_string, 'blahblah').should == nil
+        end
+      end
+
+      it "should return 'sparc' if the string contains SPARC, regardless of case" do
+        host.send(:get_arch_from_string, 'blahSPARCblah').should == 'sparc'
+        host.send(:get_arch_from_string, 'blahSPaRCblah').should == 'sparc'
+        host.send(:get_arch_from_string, 'blahsparcblah').should == 'sparc'
+      end
+
+      it "should return 'arm' if the string contains 'ARM', regardless of case" do
+        host.send(:get_arch_from_string, 'blahARMblah').should == 'arm'
+        host.send(:get_arch_from_string, 'blahArMblah').should == 'arm'
+        host.send(:get_arch_from_string, 'blaharmblah').should == 'arm'
+      end
+
+      it "should return 'mips' if the string contains 'MIPS', regardless of case" do
+        host.send(:get_arch_from_string, 'blahMIPSblah').should == 'mips'
+        host.send(:get_arch_from_string, 'blahMiPslah').should == 'mips'
+        host.send(:get_arch_from_string, 'blahmipsblah').should == 'mips'
+      end
+    end
+
+    context '#parse_windows_os_str' do
+      it 'should always return the os_name as Microsoft Windows' do
+        result = host.send(:parse_windows_os_str, '')
+        result[:os_name].should == 'Microsoft Windows'
+      end
+
+      context 'arch' do
+        it 'should return a value for arch if there is one' do
+          result = host.send(:parse_windows_os_str, 'Windows x64')
+          result[:arch].should == 'x64'
+        end
+
+        it "should not have an arch key if we don't know the arch" do
+          result = host.send(:parse_windows_os_str, 'Windows')
+          result.has_key?(:arch).should == false
+        end
+      end
+
+      context 'Service Pack' do
+        it 'should be returned if we see Service Pack X' do
+          result = host.send(:parse_windows_os_str, 'Windows XP Service Pack 1')
+          result[:os_sp].should == 'SP1'
+        end
+
+        it 'should be returned if we see SPX' do
+          result = host.send(:parse_windows_os_str, 'Windows XP SP3')
+          result[:os_sp].should == 'SP3'
+        end
+      end
+
+      context 'os flavor' do
+        it "should appear as 2003 for '.NET Server'" do
+          result = host.send(:parse_windows_os_str, 'Windows .NET Server')
+          result[:os_flavor].should == '2003'
+        end
+
+        it 'should be recognized for XP' do
+          result = host.send(:parse_windows_os_str, 'Windows XP')
+          result[:os_flavor].should == 'XP'
+        end
+
+        it 'should be recognized for 2000' do
+          result = host.send(:parse_windows_os_str, 'Windows 2000')
+          result[:os_flavor].should == '2000'
+        end
+
+        it 'should be recognized for 2003' do
+          result = host.send(:parse_windows_os_str, 'Windows 2003')
+          result[:os_flavor].should == '2003'
+        end
+
+        it 'should be recognized for 2008' do
+          result = host.send(:parse_windows_os_str, 'Windows 2008')
+          result[:os_flavor].should == '2008'
+        end
+
+        it 'should be recognized for Vista' do
+          result = host.send(:parse_windows_os_str, 'Windows Vista')
+          result[:os_flavor].should == 'Vista'
+        end
+
+        it 'should be recognized for SBS' do
+          result = host.send(:parse_windows_os_str, 'Windows SBS')
+          result[:os_flavor].should == 'SBS'
+        end
+
+        it 'should be recognized for 2000 Advanced Server' do
+          result = host.send(:parse_windows_os_str, 'Windows 2000 Advanced Server')
+          result[:os_flavor].should == '2000 Advanced Server'
+        end
+
+        it 'should be recognized for 7' do
+          result = host.send(:parse_windows_os_str, 'Windows 7')
+          result[:os_flavor].should == '7'
+        end
+
+        it 'should be recognized for 7 X Edition' do
+          result = host.send(:parse_windows_os_str, 'Windows 7 Ultimate Edition')
+          result[:os_flavor].should == '7 Ultimate Edition'
+        end
+
+        it 'should be recognized for 8' do
+          result = host.send(:parse_windows_os_str, 'Windows 8')
+          result[:os_flavor].should == '8'
+        end
+
+        it 'should be guessed at if all else fails' do
+            result = host.send(:parse_windows_os_str, 'Windows Foobar Service Pack 3')
+            result[:os_flavor].should == 'Foobar'
+        end
+      end
+
+      context 'os type' do
+        it 'should be server for Windows NT' do
+          result = host.send(:parse_windows_os_str, 'Windows NT 4')
+          result[:type].should == 'server'
+        end
+
+        it 'should be server for Windows 2003' do
+          result = host.send(:parse_windows_os_str, 'Windows 2003')
+          result[:type].should == 'server'
+        end
+
+        it 'should be server for Windows 2008' do
+          result = host.send(:parse_windows_os_str, 'Windows 2008')
+          result[:type].should == 'server'
+        end
+
+        it 'should be server for Windows SBS' do
+          result = host.send(:parse_windows_os_str, 'Windows SBS')
+          result[:type].should == 'server'
+        end
+
+        it 'should be server for anything with Server in the string' do
+          result = host.send(:parse_windows_os_str, 'Windows Foobar Server')
+          result[:type].should == 'server'
+        end
+
+        it 'should be client for anything else' do
+          result = host.send(:parse_windows_os_str, 'Windows XP')
+          result[:type].should == 'client'
+        end
+      end
+    end
+  end
 end
