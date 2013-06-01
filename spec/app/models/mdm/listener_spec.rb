@@ -7,6 +7,26 @@ describe Mdm::Listener do
     it { should belong_to(:task).class_name('Mdm::Task') }
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+      it { should have_db_column(:task_id).of_type(:integer) }
+      it { should have_db_column(:enabled).of_type(:boolean).with_options(:default => true) }
+      it { should have_db_column(:owner).of_type(:text) }
+      it { should have_db_column(:payload).of_type(:text) }
+      it { should have_db_column(:address).of_type(:text) }
+      it { should have_db_column(:port).of_type(:integer) }
+      it { should have_db_column(:options).of_type(:binary) }
+      it { should have_db_column(:macro).of_type(:text) }
+    end
+  end
+
   context 'factory' do
     it 'should be valid' do
       listener = FactoryGirl.build(:mdm_listener)

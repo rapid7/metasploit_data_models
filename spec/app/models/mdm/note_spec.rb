@@ -9,6 +9,24 @@ describe Mdm::Note do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+      it { should have_db_column(:updated_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:service_id).of_type(:integer) }
+      it { should have_db_column(:ntype).of_type(:string) }
+      it { should have_db_column(:critical).of_type(:boolean) }
+      it { should have_db_column(:seen).of_type(:boolean) }
+      it { should have_db_column(:data).of_type(:text) }
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object' do
       note = FactoryGirl.create(:mdm_note)

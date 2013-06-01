@@ -81,4 +81,23 @@ describe Mdm::Report do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:downloaded_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+      it { should have_db_column(:created_by).of_type(:string) }
+      it { should have_db_column(:rtype).of_type(:string) }
+      it { should have_db_column(:path).of_type(:string) }
+      it { should have_db_column(:options).of_type(:text) }
+      it { should have_db_column(:name).of_type(:string) }
+
+    end
+  end
+
 end

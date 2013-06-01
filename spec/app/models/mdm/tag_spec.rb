@@ -9,6 +9,23 @@ describe Mdm::Tag do
     it { should belong_to(:user).class_name('Mdm::User') }
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:user_id).of_type(:integer) }
+      it { should have_db_column(:name).of_type(:string) }
+      it { should have_db_column(:desc).of_type(:text) }
+      it { should have_db_column(:report_summary).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { should have_db_column(:report_detail).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { should have_db_column(:critical).of_type(:boolean).with_options(:null => false, :default =>false) }
+    end
+  end
+
   context 'validations' do
     context 'desc'  do
       it 'should not ba valid for a length over 8k' do

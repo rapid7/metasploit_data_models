@@ -72,4 +72,28 @@ describe Mdm::Service do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+      it { should have_db_column(:updated_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:port).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:proto).of_type(:string).with_options(:null => false) }
+      it { should have_db_column(:state).of_type(:string) }
+      it { should have_db_column(:name).of_type(:string) }
+      it { should have_db_column(:info).of_type(:text) }
+    end
+
+    context 'indices' do
+      it { should have_db_index(:name) }
+      it { should have_db_index(:port) }
+      it { should have_db_index(:proto) }
+      it { should have_db_index(:state) }
+    end
+  end
+
 end

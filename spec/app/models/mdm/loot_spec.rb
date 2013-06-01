@@ -7,6 +7,26 @@ describe Mdm::Loot do
      it { should belong_to(:host).class_name('Mdm::Host') }
    end
 
+   context 'database' do
+
+     context 'timestamps'do
+       it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+       it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+     end
+
+     context 'columns' do
+       it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+       it { should have_db_column(:host_id).of_type(:integer) }
+       it { should have_db_column(:service_id).of_type(:integer) }
+       it { should have_db_column(:ltype).of_type(:string) }
+       it { should have_db_column(:path).of_type(:string) }
+       it { should have_db_column(:data).of_type(:text) }
+       it { should have_db_column(:content_type).of_type(:string) }
+       it { should have_db_column(:name).of_type(:text) }
+       it { should have_db_column(:info).of_type(:text) }
+     end
+   end
+
    context 'factory' do
      it 'should be valid' do
        loot = FactoryGirl.build(:mdm_loot)

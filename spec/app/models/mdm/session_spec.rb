@@ -21,6 +21,27 @@ describe Mdm::Session do
     end
   end
 
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:opened_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:closed_at).of_type(:datetime) }
+      it { should have_db_column(:last_seen).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:stype).of_type(:string) }
+      it { should have_db_column(:via_exploit).of_type(:string) }
+      it { should have_db_column(:via_payload).of_type(:string) }
+      it { should have_db_column(:desc).of_type(:string) }
+      it { should have_db_column(:port).of_type(:integer) }
+      it { should have_db_column(:platform).of_type(:string) }
+      it { should have_db_column(:datastore).of_type(:text) }
+      it { should have_db_column(:local_id).of_type(:integer) }
+    end
+  end
+
   context 'asscoiations' do
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }

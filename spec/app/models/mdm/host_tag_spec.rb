@@ -7,6 +7,13 @@ describe Mdm::HostTag do
     it { should belong_to(:tag).class_name('Mdm::Tag') }
   end
 
+  context 'database' do
+    context 'columns' do
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:tag_id).of_type(:integer) }
+    end
+  end
+
   context 'factories' do
     context 'mdm_host_tag' do
       subject(:mdm_host_tag) do

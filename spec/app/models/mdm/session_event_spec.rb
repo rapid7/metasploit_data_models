@@ -24,4 +24,19 @@ describe Mdm::SessionEvent do
     end
   end
 
+  context 'database' do
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:session_id).of_type(:integer) }
+      it { should have_db_column(:etype).of_type(:string) }
+      it { should have_db_column(:command).of_type(:binary) }
+      it { should have_db_column(:output).of_type(:binary) }
+      it { should have_db_column(:remote_path).of_type(:string) }
+      it { should have_db_column(:local_path).of_type(:string) }
+    end
+  end
+
 end
