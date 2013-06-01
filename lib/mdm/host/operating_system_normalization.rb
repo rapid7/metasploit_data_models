@@ -742,11 +742,11 @@ module Mdm::Host::OperatingSystemNormalization
         case data[:os]
           when /Windows/
             ret.update(parse_windows_os_str(data[:os]))
-          when /Linux ([^[:space:]]*) ([^[:space:]]*) .* (\(.*\))/
+          when /Linux (\d+\.\d+\.\d+\S*)\s* \((\w*)\)/
             ret[:os_name] = "Linux"
-            ret[:name]    = $1
-            ret[:os_sp]   = $2
-            ret[:arch]    = get_arch_from_string($3)
+            ret[:name]    = data[:name]
+            ret[:os_sp]   = $1
+            ret[:arch]    = get_arch_from_string($2)
           else
             ret[:os_name] = data[:os]
         end
