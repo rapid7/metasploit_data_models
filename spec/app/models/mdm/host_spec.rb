@@ -778,6 +778,87 @@ describe Mdm::Host do
           result[:certainty].should == 0.8
         end
       end
+
+      context 'for nmap_fingerprint' do
+        it 'should return OS name and flavor for a Windows XP fingerprint' do
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Microsoft Windows'
+          result[:os_flavor].should == 'XP'
+          result[:certainty].should == 1
+        end
+
+        it 'should return OS name and flavor for a Metasploitable fingerprint' do
+          fp_data = {:os_vendor=>"Linux", :os_family=>"Linux", :os_version=>"2.6.X", :os_accuracy=>100}
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Linux'
+          result[:os_flavor].should == '2.6.X'
+          result[:certainty].should == 1
+        end
+
+        it 'should return OS name and flavor fo an OSX fingerprint' do
+          fp_data = {:os_vendor=>"Apple", :os_family=>"Mac OS X", :os_version=>"10.8.X", :os_accuracy=>100}
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Apple Mac OS X'
+          result[:os_flavor].should == '10.8.X'
+          result[:certainty].should == 1
+        end
+      end
+
+      context 'for nexpose_fingerprint' do
+        context 'of a Windows system' do
+          it 'should return a generic Windows fingerprint with no product info' do
+            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host)
+            result = host.send(:normalize_scanner_fp, fingerprint)
+            result[:os_name].should == 'Microsoft Windows'
+            result[:arch].should == 'x86'
+            result[:certainty].should == 0.67
+          end
+
+          it 'should recognize a Windows 7 fingerprint' do
+            fp_data = {:family=>"Windows", :certainty=>"0.67", :vendor=>"Microsoft", :arch=>"x86", :product => 'Windows 7', :version => 'SP1'}
+            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+            result = host.send(:normalize_scanner_fp, fingerprint)
+            result[:os_name].should == 'Microsoft Windows'
+            result[:os_flavor].should == '7'
+            result[:os_sp].should == 'SP1'
+            result[:arch].should == 'x86'
+            result[:certainty].should == 0.67
+          end
+        end
+
+        it 'should recognize an OSX fingerprint' do
+          fp_data = {:family=>"Mac OS X", :certainty=>"0.80", :vendor=>"Apple"}
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Apple Mac OS X'
+        end
+
+        it 'should recognize a Cisco fingerprint' do
+          fp_data = {:family=>"IOS", :certainty=>"1.00", :vendor=>"Cisco", :version=>"11.2(8)SA2"}
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Cisco IOS'
+        end
+
+        it 'should recognize an embeeded fingerprint' do
+          fp_data = {:family=>"embedded", :certainty=>"1.00", :vendor=>"Footek"}
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Footek'
+        end
+
+        it 'should handle an unknown fingerprint' do
+          fp_data = {:certainty=>"1.00", :vendor=>"Footek"}
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should == 'Footek'
+        end
+
+
+      end
     end
 
   end
