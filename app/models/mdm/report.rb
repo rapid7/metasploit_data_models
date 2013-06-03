@@ -10,7 +10,7 @@ class Mdm::Report < ActiveRecord::Base
   #
 
   belongs_to :workspace, :class_name => 'Mdm::Workspace'
-
+  belongs_to :task, :class_name => 'Mdm::Task'
   #
   # Scopes
   #
