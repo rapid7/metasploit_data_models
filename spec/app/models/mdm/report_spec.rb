@@ -4,6 +4,7 @@ describe Mdm::Report do
 
   context 'associations' do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { should belong_to(:task).class_name('Mdm::Task') }
   end
 
   context 'validations' do
