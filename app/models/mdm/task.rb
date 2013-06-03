@@ -51,6 +51,8 @@ class Mdm::Task < ActiveRecord::Base
   #   @return [Array<Mdm::TaskHost>
   has_many :services, :through => :task_services, :class_name => 'Mdm::Service'
 
+  has_many :reports, :class_name => 'Mdm::Report'
+
   #
   # Scopes
   #
