@@ -859,6 +859,27 @@ describe Mdm::Host do
 
 
       end
+
+      context 'for retina_fingerprint' do
+        it 'should recognize a Windows fingerprint' do
+          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should ==  'Microsoft Windows'
+          result[:os_flavor].should == '2003'
+          result[:arch].should == 'x64'
+          result[:os_sp].should == 'SP2'
+          result[:type].should == 'server'
+          result[:certainty].should == 0.8
+        end
+
+        it 'should otherwise jsut copy the fingerprint to os_name' do
+          fp_data = { :os => 'Linux 2.6.X (i386)'}
+          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
+          result = host.send(:normalize_scanner_fp, fingerprint)
+          result[:os_name].should ==  'Linux 2.6.X (i386)'
+          result[:certainty].should == 0.8
+        end
+      end
     end
 
   end
