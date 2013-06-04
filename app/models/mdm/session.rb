@@ -43,7 +43,7 @@ class Mdm::Session < ActiveRecord::Base
   #   Session this task touched
   #
   #   @return [Mdm::Session]
-  has_one :task, :through => :task_sessions, :class_name => 'Mdm::Task'
+  has_many :tasks, :through => :task_sessions, :class_name => 'Mdm::Task'
 
   #
   # Attributes
