@@ -61,7 +61,7 @@ class Mdm::Task < ActiveRecord::Base
   #   Session this task touched
   #
   #   @return [Array<Mdm::Session>
-  has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Sessions'
+  has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
 
 
   has_many :reports, :class_name => 'Mdm::Report'

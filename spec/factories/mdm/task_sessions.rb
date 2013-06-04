@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :task_session, :class => 'Mdm::TaskSession' do
+  factory :mdm_task_session, :class => 'Mdm::TaskSession' do
     association :task, :factory => :mdm_task
     association :session, :factory => :mdm_session
   end
