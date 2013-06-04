@@ -33,6 +33,18 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [Mdm::Workspace]
   has_one :workspace, :through => :host, :class_name => 'Mdm::Workspace'
 
+  # @!attribute [rw] task_sessions
+  #   Details about sessions this task touched
+  #
+  #   @return [Array<Mdm::TaskSession>]
+  has_many :task_sessions, :dependent => :destroy, :class_name => 'Mdm::TaskSession'
+
+  # @!attribute [rw] task
+  #   Session this task touched
+  #
+  #   @return [Mdm::Session]
+  has_one :task, :through => :task_sessions, :class_name => 'Mdm::Task'
+
   #
   # Attributes
   #
