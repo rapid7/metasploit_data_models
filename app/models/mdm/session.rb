@@ -123,7 +123,11 @@ class Mdm::Session < ActiveRecord::Base
   # @return [true] if {#platform} is some version of Windows and {#stype} is `'shell'`.
   # @return [false] otherwise.
   def upgradeable?
-    (self.platform =~ /win/ and self.stype == 'shell')
+    if (self.platform =~ /win/i and self.stype == 'shell')
+      return true
+    else
+      return false
+    end
   end
 
   private
