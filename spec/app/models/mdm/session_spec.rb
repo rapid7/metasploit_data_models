@@ -44,7 +44,7 @@ describe Mdm::Session do
 
   context 'associations' do
     it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should have_many(:evengsts).class_name('Mdm::SessionEvent').dependent(:delete_all) }
+    it { should have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }
     it { should have_many(:routes).class_name('Mdm::Route').dependent(:delete_all) }
     it { should have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
     it { should have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy)}
