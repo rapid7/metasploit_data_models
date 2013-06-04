@@ -24,7 +24,7 @@ class Mdm::Task < ActiveRecord::Base
   # @!attribute [rw] creds
   #   Creds this task touched
   #
-  #   @return [Array<Mdm::TaskCred>]
+  #   @return [Array<Mdm::Cred>]
   has_many :creds, :through => :task_creds, :class_name => 'Mdm::Cred'
 
   # @!attribute [rw] task_hosts
@@ -36,7 +36,7 @@ class Mdm::Task < ActiveRecord::Base
   # @!attribute [rw] hosts
   #   Hosts this task touched
   #
-  #   @return [Array<Mdm::TaskHost>
+  #   @return [Array<Mdm::Host>
   has_many :hosts, :through => :task_hosts, :class_name => 'Mdm::Host'
 
   # @!attribute [rw] task_services
@@ -48,8 +48,21 @@ class Mdm::Task < ActiveRecord::Base
   # @!attribute [rw] services
   #   Services this task touched
   #
-  #   @return [Array<Mdm::TaskHost>
+  #   @return [Array<Mdm::Service>
   has_many :services, :through => :task_services, :class_name => 'Mdm::Service'
+
+  # @!attribute [rw] task_sessions
+  #   Details about sessions this task touched
+  #
+  #   @return [Array<Mdm::TaskSession>]
+  has_many :task_sessions, :dependent => :destroy, :class_name => 'Mdm::TaskSession'
+
+  # @!attribute [rw] sessions
+  #   Session this task touched
+  #
+  #   @return [Array<Mdm::Session>
+  has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
+
 
   has_many :reports, :class_name => 'Mdm::Report'
 
