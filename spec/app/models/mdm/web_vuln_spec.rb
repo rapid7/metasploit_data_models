@@ -44,6 +44,18 @@ describe Mdm::WebVuln do
     end
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      web_vuln = FactoryGirl.create(:mdm_web_vuln)
+      expect {
+        web_vuln.destroy
+      }.to_not raise_error
+      expect {
+        web_vuln.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   context 'database' do
     context 'columns' do
       it { should have_db_column(:blame).of_type(:text) }

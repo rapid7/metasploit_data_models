@@ -28,6 +28,7 @@ describe Mdm::Ref do
 
     # @todo https://www.pivotaltracker.com/story/show/48915453
     it { should have_many(:vulns_refs).class_name('Mdm::VulnRef') }
+    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:vulns_refs) }
   end
 
   context 'database' do
@@ -53,6 +54,18 @@ describe Mdm::Ref do
       end
 
       it { should be_valid }
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      mdm_ref = FactoryGirl.create(:mdm_ref)
+      expect {
+        mdm_ref.destroy
+      }.to_not raise_error
+      expect {
+        mdm_ref.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

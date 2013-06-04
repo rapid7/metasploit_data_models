@@ -4,4 +4,9 @@ FactoryGirl.define do
 
     "192.168.#{(n / max).to_i}.#{n % max}"
   end
+
+  sequence :mdm_tcp_port do |n|
+    max = 65535
+    n % max
+  end
 end
