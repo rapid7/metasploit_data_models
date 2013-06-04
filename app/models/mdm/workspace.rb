@@ -18,7 +18,6 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
   has_many :events, :class_name => 'Mdm::Event'
   has_many :hosts, :dependent => :destroy, :class_name => 'Mdm::Host'
-  has_many :imported_creds, :dependent => :destroy, :class_name => 'Mdm::ImportedCred'
   has_many :listeners, :dependent => :destroy, :class_name => 'Mdm::Listener'
   has_many :notes, :class_name => 'Mdm::Note'
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'

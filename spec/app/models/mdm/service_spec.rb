@@ -17,27 +17,82 @@ describe Mdm::Service do
     it { should belong_to(:host).class_name('Mdm::Host') }
   end
 
-  context "inactive" do
-    it "should exclude open services" do
-      open_service = FactoryGirl.create(:mdm_service, :state => 'open')
-      Mdm::Service.inactive.should_not include(open_service)
+  context 'scopes' do
+    context "inactive" do
+      it "should exclude open services" do
+        open_service = FactoryGirl.create(:mdm_service, :state => 'open')
+        Mdm::Service.inactive.should_not include(open_service)
+      end
+    end
+
+    context "with_state open" do
+      it "should exclude closed services" do
+        closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
+        Mdm::Service.with_state('open').should_not include(closed_service)
+      end
+    end
+
+    context "search for 'snmp'" do
+      it "should find only services that match" do
+        snmp_service   = FactoryGirl.create(:mdm_service)
+        ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
+        search_results = Mdm::Service.search('snmp')
+        search_results.should     include(snmp_service)
+        search_results.should_not include(ftp_service)
+      end
     end
   end
 
-  context "with_state open" do
-    it "should exclude closed services" do
-      closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
-      Mdm::Service.with_state('open').should_not include(closed_service)
+  context 'callbacks' do
+    context 'after_save' do
+      it 'should call #normalize_host_os' do
+        svc = FactoryGirl.create(:mdm_service)
+        svc.should_receive(:normalize_host_os)
+        svc.run_callbacks(:save)
+      end
     end
   end
 
-  context "search for 'snmp'" do
-    it "should find only services that match" do
-      snmp_service   = FactoryGirl.create(:mdm_service)
-      ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
-      search_results = Mdm::Service.search('snmp')
-      search_results.should     include(snmp_service)
-      search_results.should_not include(ftp_service)
+  context 'factory' do
+    it 'should be valid' do
+      service = FactoryGirl.build(:mdm_service)
+      service.should be_valid
+    end
+  end
+
+  context '#destroy' do
+    it 'should successfully destroy the object' do
+      service = FactoryGirl.create(:mdm_service)
+      expect {
+        service.destroy
+      }.to_not raise_error
+      expect {
+        service.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime) }
+      it { should have_db_column(:updated_at).of_type(:datetime) }
+    end
+
+    context 'columns' do
+      it { should have_db_column(:host_id).of_type(:integer) }
+      it { should have_db_column(:port).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:proto).of_type(:string).with_options(:null => false) }
+      it { should have_db_column(:state).of_type(:string) }
+      it { should have_db_column(:name).of_type(:string) }
+      it { should have_db_column(:info).of_type(:text) }
+    end
+
+    context 'indices' do
+      it { should have_db_index(:name) }
+      it { should have_db_index(:port) }
+      it { should have_db_index(:proto) }
+      it { should have_db_index(:state) }
     end
   end
 

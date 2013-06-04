@@ -60,7 +60,7 @@ class Mdm::Cred < ActiveRecord::Base
       when "ssh_pubkey"
         matches = self.ssh_public_keys
       else
-        false
+        return false
     end
     matches.include?(self) and matches.include?(other_cred)
   end
