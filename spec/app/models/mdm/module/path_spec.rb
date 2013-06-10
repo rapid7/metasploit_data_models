@@ -1,19 +1,15 @@
 require 'spec_helper'
 
 describe Mdm::Module::Path do
-  subject(:path) do
-    FactoryGirl.build(:mdm_module_path)
-  end
-
   context 'associations' do
-    it { should have_many(:details).class_name('Mdm::Module::Detail').dependent(:destroy).with_foreign_key(:parent_path_id) }
+    it { should have_many(:module_ancestors).class_name('Mdm::Module::Ancestor').dependent(:destroy).with_foreign_key(:parent_path_id) }
   end
 
   context 'callbacks' do
     context 'before validation' do
       context '#normalize_real_path' do
-        let(:modules_pathname) do
-          MetasploitDataModels.root.join('spec', 'dummy', 'modules')
+        let(:parent_pathname) do
+          MetasploitDataModels::Spec.temporary_pathname.join('mdm', 'module', 'path')
         end
 
         let(:path) do
@@ -28,7 +24,7 @@ describe Mdm::Module::Path do
         end
 
         let(:real_pathname) do
-          modules_pathname.join(real_basename)
+          parent_pathname.join(real_basename)
         end
 
         let(:symlink_basename) do
@@ -36,20 +32,19 @@ describe Mdm::Module::Path do
         end
 
         let(:symlink_pathname) do
-          modules_pathname.join(symlink_basename)
+          parent_pathname.join(symlink_basename)
         end
 
         before(:each) do
           real_pathname.mkpath
 
-          Dir.chdir(modules_pathname.to_path) do
+          Dir.chdir(parent_pathname.to_path) do
             File.symlink(real_basename, 'symlink')
           end
         end
 
         after(:each) do
-          real_pathname.rmtree
-          symlink_pathname.rmtree
+          MetasploitDataModels::Spec.temporary_pathname.rmtree
         end
 
         it 'should convert real_path to a real path using File#real_path' do
@@ -68,7 +63,9 @@ describe Mdm::Module::Path do
           FactoryGirl.build(
               :mdm_module_path,
               :gem => '',
-              :name => ''
+              :name => '',
+              # don't care about real_path validation or path validity, so real_path can be nil.
+              :real_path => nil
           )
         end
 
@@ -123,6 +120,7 @@ describe Mdm::Module::Path do
 
       it { should be_valid }
 
+      its(:gem) { should_not be_nil }
       its(:name) { should_not be_nil }
     end
   end
@@ -138,7 +136,13 @@ describe Mdm::Module::Path do
       end
 
       subject(:path) do
-        FactoryGirl.build(:named_mdm_module_path, :gem => gem, :name => name)
+        FactoryGirl.build(
+            :named_mdm_module_path,
+            :gem => gem,
+            :name => name,
+            # don't care about real_path validation or path validity, so real_path can be nil.
+            :real_path => nil
+        )
       end
 
       before(:each) do
@@ -214,18 +218,38 @@ describe Mdm::Module::Path do
       end
     end
 
-    it 'should validate uniqueness of name scoped to gem' do
-      original = FactoryGirl.create(:named_mdm_module_path)
-      duplicate = FactoryGirl.build(:named_mdm_module_path, :gem => original.gem, :name => original.name)
+    context 'validate unique of name scoped to gem' do
+      context 'with different real_paths' do
+        let(:duplicate) do
+          FactoryGirl.build(
+              :named_mdm_module_path,
+              :gem => original.gem,
+              :name => original.name
+          )
+        end
 
-      duplicate.should_not be_valid
-      duplicate.errors[:name].should include()
+        # let! so it exists in database for duplicate to validate against
+        let!(:original) do
+          FactoryGirl.create(
+              :named_mdm_module_path
+          )
+        end
+
+        it 'should validate uniqueness of name scoped to gem' do
+          duplicate.should_not be_valid
+          duplicate.errors[:name].should include('has already been taken')
+        end
+      end
     end
 
     context 'real_path' do
+      let(:real_path) do
+        FactoryGirl.generate :mdm_module_path_real_path
+      end
+
       it 'should validate uniqueness of real path' do
-        original = FactoryGirl.create(:mdm_module_path)
-        duplicate = FactoryGirl.build(:mdm_module_path, :real_path => original.real_path)
+        original = FactoryGirl.create(:mdm_module_path, :real_path => real_path)
+        duplicate = FactoryGirl.build(:mdm_module_path, :real_path => real_path)
 
         duplicate.should_not be_valid
         duplicate.errors[:real_path].should include('has already been taken')

@@ -5,7 +5,7 @@ class Mdm::Module::Arch < ActiveRecord::Base
   # Associations
   #
 
-  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
+  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
 
   #
   # Mass Assignment Security
@@ -17,7 +17,7 @@ class Mdm::Module::Arch < ActiveRecord::Base
   # Validations
   #
 
-  validates :detail, :presence => true
+  validates :instance, :presence => true
   validates :name,
             :presence => true,
             :uniqueness => {

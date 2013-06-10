@@ -48,7 +48,7 @@ describe Mdm::Host do
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
 
     context 'module_details' do
-      it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
+      it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_refs) }
 
       context 'with Mdm::Vulns' do
         let!(:vulns) do
@@ -75,10 +75,10 @@ describe Mdm::Host do
               }
             end
 
-            context 'with Mdm::Module::Detail' do
-              let!(:module_detail) do
+            context 'with Mdm::Module::Instance' do
+              let!(:module_instance) do
                 FactoryGirl.create(
-                    :mdm_module_detail
+                    :mdm_module_instance
                 )
               end
 
@@ -86,16 +86,16 @@ describe Mdm::Host do
                 let!(:module_ref) do
                   FactoryGirl.create(
                       :mdm_module_ref,
-                      :detail => module_detail,
+                      :module_instance => module_instance,
                       :name => name
                   )
                 end
 
-                it 'should list unique Mdm::Module::Detail' do
-                  host.module_details.should =~ [module_detail]
+                it 'should list unique Mdm::Module::Instance' do
+                  host.module_instances.should =~ [module_instance]
                 end
 
-                it 'should have duplicate Mdm::Module::Details if collected through chain' do
+                it 'should have duplicate Mdm::Module::Instances if collected through chain' do
                   vuln_refs = []
 
                   host.vulns.each do |vuln|
@@ -115,14 +115,14 @@ describe Mdm::Host do
                     module_refs += ref.module_refs
                   end
 
-                  module_details = []
+                  module_instances = []
 
                   module_refs.each do |module_ref|
-                    module_details << module_ref.detail
+                    module_instances << module_ref.module_instance
                   end
 
-                  host.module_details.count.should < module_details.length
-                  module_details.uniq.count.should == host.module_details.count
+                  host.module_instances.count.should < module_instances.length
+                  module_instances.uniq.count.should == host.module_instances.count
                 end
               end
             end

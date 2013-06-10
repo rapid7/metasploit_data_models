@@ -7,7 +7,7 @@ class Mdm::Module::Author < ActiveRecord::Base
   # Associations
   #
 
-  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
+  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
 
   #
   # Callbacks
@@ -26,7 +26,7 @@ class Mdm::Module::Author < ActiveRecord::Base
   # Validations
   #
 
-  validates :detail, :presence => true
+  validates :module_instance, :presence => true
   validates :name,
             :presence => true,
             :uniqueness => {

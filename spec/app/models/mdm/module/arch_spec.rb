@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mdm::Module::Arch do
   context 'associations' do
-    it { should belong_to(:detail).class_name('Mdm::Module::Detail') }
+    it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
   end
 
   context 'database' do
@@ -37,7 +37,7 @@ describe Mdm::Module::Arch do
     context 'name' do
       it { should validate_presence_of(:name) }
 
-      it_should_behave_like 'validates uniqueness scoped to detail_id',
+      it_should_behave_like 'validates uniqueness scoped to module_instance_id',
                             :of => :name,
                             :factory => :mdm_module_arch,
                             :sequence => :mdm_module_arch_name

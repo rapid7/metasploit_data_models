@@ -6,7 +6,7 @@ FactoryGirl.define do
     #
     # Associations
     #
-    association :detail, :factory => :mdm_module_detail
+    association :module_instance, :factory => :mdm_module_instance
   end
 
   sequence :mdm_module_target_index do |n|

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130531185216) do
+ActiveRecord::Schema.define(:version => 20130602230424) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -230,6 +230,24 @@ ActiveRecord::Schema.define(:version => 20130531185216) do
 
   add_index "module_actions", ["detail_id", "name"], :name => "index_module_actions_on_detail_id_and_name", :unique => true
 
+  create_table "module_ancestors", :force => true do |t|
+    t.text     "full_name",                               :null => false
+    t.string   "handler_type"
+    t.string   "module_type",                             :null => false
+    t.string   "payload_type"
+    t.text     "reference_name",                          :null => false
+    t.text     "real_path",                               :null => false
+    t.datetime "real_path_modified_at",                   :null => false
+    t.string   "real_path_sha1_hex_digest", :limit => 40, :null => false
+    t.integer  "parent_path_id",                          :null => false
+  end
+
+  add_index "module_ancestors", ["full_name"], :name => "index_module_ancestors_on_full_name", :unique => true
+  add_index "module_ancestors", ["module_type", "reference_name"], :name => "index_module_ancestors_on_module_type_and_reference_name", :unique => true
+  add_index "module_ancestors", ["parent_path_id"], :name => "index_module_ancestors_on_parent_path_id"
+  add_index "module_ancestors", ["real_path"], :name => "index_module_ancestors_on_real_path", :unique => true
+  add_index "module_ancestors", ["real_path_sha1_hex_digest"], :name => "index_module_ancestors_on_real_path_sha1_hex_digest", :unique => true
+
   create_table "module_archs", :force => true do |t|
     t.integer "detail_id", :null => false
     t.text    "name",      :null => false
@@ -244,6 +262,18 @@ ActiveRecord::Schema.define(:version => 20130531185216) do
   end
 
   add_index "module_authors", ["detail_id", "name"], :name => "index_module_authors_on_detail_id_and_name", :unique => true
+
+  create_table "module_classes", :force => true do |t|
+    t.text    "full_name",      :null => false
+    t.string  "module_type",    :null => false
+    t.string  "payload_type"
+    t.text    "reference_name", :null => false
+    t.integer "rank_id",        :null => false
+  end
+
+  add_index "module_classes", ["full_name"], :name => "index_module_classes_on_full_name", :unique => true
+  add_index "module_classes", ["module_type", "reference_name"], :name => "index_module_classes_on_module_type_and_reference_name", :unique => true
+  add_index "module_classes", ["rank_id"], :name => "index_module_classes_on_rank_id"
 
   create_table "module_details", :force => true do |t|
     t.datetime "mtime"
@@ -268,6 +298,22 @@ ActiveRecord::Schema.define(:version => 20130531185216) do
   add_index "module_details", ["name"], :name => "index_module_details_on_name"
   add_index "module_details", ["refname"], :name => "index_module_details_on_refname"
 
+  create_table "module_instances", :force => true do |t|
+    t.text    "description",       :null => false
+    t.date    "disclosed_on"
+    t.string  "license",           :null => false
+    t.text    "name",              :null => false
+    t.boolean "privileged",        :null => false
+    t.string  "stance",            :null => false
+    t.integer "default_action_id"
+    t.integer "default_target_id"
+    t.integer "module_class_id",   :null => false
+  end
+
+  add_index "module_instances", ["default_action_id"], :name => "index_module_instances_on_default_action_id", :unique => true
+  add_index "module_instances", ["default_target_id"], :name => "index_module_instances_on_default_target_id", :unique => true
+  add_index "module_instances", ["module_class_id"], :name => "index_module_instances_on_module_class_id", :unique => true
+
   create_table "module_mixins", :force => true do |t|
     t.integer "detail_id"
     t.text    "name"
@@ -291,6 +337,14 @@ ActiveRecord::Schema.define(:version => 20130531185216) do
 
   add_index "module_platforms", ["detail_id"], :name => "index_module_platforms_on_module_detail_id"
 
+  create_table "module_ranks", :force => true do |t|
+    t.string  "name",   :null => false
+    t.integer "number", :null => false
+  end
+
+  add_index "module_ranks", ["name"], :name => "index_module_ranks_on_name", :unique => true
+  add_index "module_ranks", ["number"], :name => "index_module_ranks_on_number", :unique => true
+
   create_table "module_refs", :force => true do |t|
     t.integer "detail_id"
     t.text    "name"
@@ -298,6 +352,13 @@ ActiveRecord::Schema.define(:version => 20130531185216) do
 
   add_index "module_refs", ["detail_id"], :name => "index_module_refs_on_module_detail_id"
   add_index "module_refs", ["name"], :name => "index_module_refs_on_name"
+
+  create_table "module_relationships", :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+  end
+
+  add_index "module_relationships", ["descendant_id", "ancestor_id"], :name => "index_module_relationships_on_descendant_id_and_ancestor_id", :unique => true
 
   create_table "module_targets", :force => true do |t|
     t.integer "detail_id"

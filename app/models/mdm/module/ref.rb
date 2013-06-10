@@ -6,11 +6,11 @@ class Mdm::Module::Ref < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] detail
+  # @!attribute [rw] module_instance
   #   The root of the module metadata tree.
   #
-  #   @return [Mdm::Module::Detail]
-  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
+  #   @return [Mdm::Module::Instance]
+  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
 
   # @!attribute [r] refs
   #   References with the same name attached to {Mdm::Vuln Mdm::Vulns}.
@@ -41,7 +41,7 @@ class Mdm::Module::Ref < ActiveRecord::Base
   # Validations
   #
 
-  validates :detail, :presence => true
+  validates :module_instance, :presence => true
   validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_ref, self)

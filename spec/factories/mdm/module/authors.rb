@@ -5,7 +5,7 @@ FactoryGirl.define do
     #
     # Associations
     #
-    association :detail, :factory => :mdm_module_detail
+    association :module_instance, :factory => :mdm_module_instance
 
     factory :full_mdm_module_author do
       email { generate :mdm_module_author_name }

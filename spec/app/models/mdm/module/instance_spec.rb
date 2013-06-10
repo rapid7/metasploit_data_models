@@ -1,32 +1,15 @@
 require 'spec_helper'
 
-describe Mdm::Module::Detail do
-  subject(:detail) do
+describe Mdm::Module::Instance do
+  subject(:module_instance) do
     FactoryGirl.build(
-        :mdm_module_detail,
-        :mtype => mtype,
+        :mdm_module_instance,
         :stance => stance
     )
   end
 
-  let(:mtype) do
-    FactoryGirl.generate :mdm_module_detail_mtype
-  end
-
-  let(:ranks) do
-    [
-        0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600
-    ]
-  end
-
   let(:stance) do
-    FactoryGirl.generate :mdm_module_detail_stance
+    FactoryGirl.generate :mdm_module_instance_stance
   end
 
   let(:stances) do
@@ -36,42 +19,18 @@ describe Mdm::Module::Detail do
     ]
   end
 
-  let(:types) do
-    [
-        'auxiliary',
-        'encoder',
-        'exploit',
-        'nop',
-        'payload',
-        'post'
-    ]
-  end
-
   context 'associations' do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
     it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
     it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
     it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
-    it { should belong_to(:parent_path).class_name('Mdm::Module::Path') }
+    it { should belong_to(:module_class).class_name('Mdm::Module::Class') }
     it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
     it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
   end
 
   context 'CONSTANTS' do
-    context 'DIRECTORY_BY_TYPE' do
-      subject(:directory_by_type) do
-        described_class::DIRECTORY_BY_TYPE
-      end
-
-      its(['auxiliary']) { should == 'auxiliary' }
-      its(['encoder']) { should == 'encoders' }
-      its(['exploit']) { should == 'exploits' }
-      its(['nop']) { should == 'nops' }
-      its(['payload']) { should == 'payloads' }
-      its(['post']) { should == 'post' }
-    end
-
     context 'PRIVILEGES' do
       subject(:privileges) do
         described_class::PRIVILEGES
@@ -109,15 +68,16 @@ describe Mdm::Module::Detail do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:default_target).of_type(:integer) }
+      it { should_not have_db_column(:default_target).of_type(:integer) }
+      it { should_not have_db_column(:default_target_id).of_type(:integer).with_options(:null => true) }
       it { should have_db_column(:description).of_type(:text) }
       it { should have_db_column(:disclosure_date).of_type(:datetime)}
       it { should_not have_db_column(:file).of_type(:text) }
-      it { should have_db_column(:fullname).of_type(:text) }
+      it { should have_db_column(:fullname).of_type(:text).with_options(:null => false) }
       it { should have_db_column(:license).of_type(:string) }
-      it { should have_db_column(:mtime).of_type(:datetime) }
-      it { should have_db_column(:mtype).of_type(:string) }
-      it { should have_db_column(:name).of_type(:text) }
+      it { should have_db_column(:mtime).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:mtype).of_type(:string).with_options(:null => false) }
+      it { should have_db_column(:name).of_type(:text).with_iptions(:null => false) }
       it { should have_db_column(:parent_path_id).of_type(:integer).with_options(:null => false) }
       it { should have_db_column(:privileged).of_type(:boolean) }
       it { should have_db_column(:rank).of_type(:integer) }

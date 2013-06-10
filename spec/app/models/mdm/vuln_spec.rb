@@ -17,7 +17,7 @@ describe Mdm::Vuln do
     it { should have_many(:vulns_refs).class_name('Mdm::VulnRef').dependent(:destroy) }
 
     context 'module_details' do
-      it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
+      it { should have_many(:module_instance).class_name('Mdm::Module::Instance').through(:module_refs) }
 
       context 'with Mdm::Refs' do
         let(:names) do
@@ -45,10 +45,10 @@ describe Mdm::Vuln do
             }.not_to raise_error
           end
           
-          context 'with Mdm::Module::Detail' do
-            let!(:module_detail) do
+          context 'with Mdm::Module::Instance' do
+            let!(:module_instance) do
               FactoryGirl.create(
-                  :mdm_module_detail
+                  :mdm_module_instance
               )
             end
 
@@ -57,14 +57,14 @@ describe Mdm::Vuln do
                 names.each do |name|
                   FactoryGirl.create(
                       :mdm_module_ref,
-                      :detail => module_detail,
+                      :module_instance => module_instance,
                       :name => name
                   )
                 end
               end
 
-              it 'should list unique Mdm::Module::Detail' do
-                vuln.module_details.should =~ [module_detail]
+              it 'should list unique Mdm::Module::Instance' do
+                vuln.module_instances.should =~ [module_instance]
               end
 
               it 'should have duplicate Mdm::Module::Details if collected through chain' do
@@ -81,10 +81,10 @@ describe Mdm::Vuln do
                   module_refs += ref.module_refs
                 end
 
-                module_details = []
+                module_instances = []
 
                 module_refs.each do |module_ref|
-                  module_details << module_ref.detail
+                  module_instances << module_ref.detail
                 end
 
                 vuln.module_details.count.should < module_details.length

@@ -7,11 +7,11 @@ class Mdm::Module::Action < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] detail
+  # @!attribute [rw] module_instance
   #   Module that has this action.
   #
-  #   @return [Mdm::Module::Detail]
-  belongs_to :detail, :class_name => 'Mdm::Module::Detail'
+  #   @return [Mdm::Module::Instance]
+  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
 
   #
   # Attributes
@@ -32,7 +32,7 @@ class Mdm::Module::Action < ActiveRecord::Base
   # Validations
   #
 
-  validates :detail, :presence => true
+  validates :module_instance, :presence => true
   validates :name,
             :presence => true,
             :uniqueness => {

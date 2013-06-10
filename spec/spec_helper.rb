@@ -25,9 +25,26 @@ Dir.glob(support_glob) do |path|
 end
 
 RSpec.configure do |config|
+  config.before(:suite) do
+    # clean database of any records left-over from a previously aborted suite.
+    DatabaseCleaner.clean_with(:truncation)
+
+    # Run seeds, but not using rake db:seeds so seeds will populate test database when using `rake spec` _OR_ `rspec` to
+    # run a subset of specs.
+    load MetasploitDataModels.root.join('db', 'seeds.rb')
+
+    MetasploitDataModels::Spec.temporary_pathname = MetasploitDataModels.root.join('spec', 'tmp')
+    # Clean up any left over files from a previously aborted suite
+    MetasploitDataModels::Spec.remove_temporary_pathname
+  end
+
   config.before(:each) do
     # Rex is only available when testing with metasploit-framework or pro, so stub out the methods that require it
     Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
+  end
+
+  config.after(:each) do
+    MetasploitDataModels::Spec.remove_temporary_pathname
   end
 
   config.mock_with :rspec

@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe Mdm::Module::Author do
-  subject(:author) do
-    FactoryGirl.build(:mdm_module_author)
-  end
-
   context 'associations' do
     it { should belong_to(:detail).class_name('Mdm::Module::Detail') }
   end
@@ -67,7 +63,7 @@ describe Mdm::Module::Author do
     context 'name' do
       it { should validate_presence_of(:name) }
 
-      it_should_behave_like 'validates uniqueness scoped to detail_id',
+      it_should_behave_like 'validates uniqueness scoped to module_instance_id',
                             :of => :name,
                             :factory => :mdm_module_author,
                             :sequence => :mdm_module_author_name

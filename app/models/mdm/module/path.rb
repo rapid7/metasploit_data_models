@@ -1,5 +1,5 @@
 # Stores the load paths used by Msf::ModuleManager#add_module_path (with symbolic {#name names}) so that the module path
-# directories can be moved, but the cached metadata in {Mdm::Module::Detail} and its associations can remain valid by
+# directories can be moved, but the cached metadata in {Mdm::Module::Ancestor} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
 class Mdm::Module::Path < ActiveRecord::Base
   include MetasploitDataModels::NilifyBlanks
@@ -10,11 +10,14 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] details
-  #   The modules that use this as a {Mdm::Module::Detail#parent_path}.
+  # @!attribute [rw] module_ancestors
+  #   The modules ancestors that use this as a {Mdm::Module::Ancestor#parent_path}.
   #
   #   @return [Array<Mdm::Module::Detail>]
-  has_many :details, :class_name => 'Mdm::Module::Detail', :dependent => :destroy, :foreign_key => :parent_path_id
+  has_many :module_ancestors,
+           :class_name => 'Mdm::Module::Ancestor',
+           :dependent => :destroy,
+           :foreign_key => :parent_path_id
 
   #
   # Attributes
@@ -81,19 +84,6 @@ class Mdm::Module::Path < ActiveRecord::Base
 
     if gem.present? and name.blank?
       errors[:name] << "can't be blank if gem is present"
-    end
-  end
-
-  # Converts blank {#gem} and/or {#name} to `nil`.
-  #
-  # @return [void]
-  def nilify_blanks
-    [:gem, :name].each do |attribute|
-      value = send(attribute)
-
-      if value.blank?
-        send("#{attribute}=", nil)
-      end
     end
   end
 

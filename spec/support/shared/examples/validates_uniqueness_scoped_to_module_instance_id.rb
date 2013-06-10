@@ -1,4 +1,4 @@
-shared_examples_for 'validates uniqueness scoped to detail_id' do |options={}|
+shared_examples_for 'validates uniqueness scoped to module_instance_id' do |options={}|
   options.assert_valid_keys(:factory, :of, :sequence)
   attribute = options.fetch(:of)
   factory = options.fetch(:factory)
@@ -8,21 +8,21 @@ shared_examples_for 'validates uniqueness scoped to detail_id' do |options={}|
     'has already been taken'
   end
 
-  let(:existing_detail) do
-    FactoryGirl.create(:mdm_module_detail, :parent_path => existing_parent_path)
+  let(:existing_module_instance) do
+    FactoryGirl.create(:mdm_module_module_instance, :parent_path => existing_parent_path)
   end
 
   let!(:existing_instance) do
-    FactoryGirl.create(factory, :detail => existing_detail)
+    FactoryGirl.create(factory, :module_instance => existing_module_instance)
   end
 
   let(:existing_parent_path) do
     FactoryGirl.create(:mdm_module_path)
   end
 
-  context 'with same detail_id' do
+  context 'with same module_instance_id' do
     let(:new_instance) do
-      FactoryGirl.build(factory, :detail => existing_detail)
+      FactoryGirl.build(factory, :module_instance => existing_module_instance)
     end
 
     it "should not allow same #{attribute}" do
@@ -44,21 +44,21 @@ shared_examples_for 'validates uniqueness scoped to detail_id' do |options={}|
     end
   end
 
-  context 'without same detail_id' do
-    let(:new_detail) do
+  context 'without same module_instance_id' do
+    let(:new_module_instance) do
       # Reuse the same parent_path so that a new directory under dummy doesn't need to be created and removed
-      FactoryGirl.create(:mdm_module_detail, :parent_path => existing_parent_path)
+      FactoryGirl.create(:mdm_module_module_instance, :parent_path => existing_parent_path)
     end
 
     let(:new_instance) do
-      FactoryGirl.build(factory, :detail => new_detail)
+      FactoryGirl.build(factory, :module_instance => new_module_instance)
     end
 
     it "should allow same #{attribute}" do
       existing_value = existing_instance.send(attribute)
       new_instance.send("#{attribute}=", existing_value)
 
-      new_instance.send(:detail_id).should_not == existing_instance.send(:detail_id)
+      new_instance.send(:module_instance_id).should_not == existing_instance.send(:module_instance_id)
       new_instance.should be_valid
       new_instance.errors[attribute].should_not include(error_message)
     end
