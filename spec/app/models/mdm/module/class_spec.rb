@@ -323,6 +323,8 @@ describe Mdm::Module::Class do
 
           it { should be_valid }
 
+          its(:derived_module_type) { should == module_type }
+
           context 'destroying' do
             before(:each) do
               mdm_module_class.save!

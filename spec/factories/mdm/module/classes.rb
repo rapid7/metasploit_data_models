@@ -44,7 +44,7 @@ FactoryGirl.define do
                     "for Mdm::Module::Class#payload_type (#{payload_type})"
           end
         else
-          ancestors << FactoryGirl.create(:non_payload_mdm_module_ancestor)
+          ancestors << FactoryGirl.create(:mdm_module_ancestor, :module_type => module_type)
       end
 
       ancestors
