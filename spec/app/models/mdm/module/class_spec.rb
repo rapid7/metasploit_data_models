@@ -1125,4 +1125,50 @@ describe Mdm::Module::Class do
       it { should validate_presence_of(:reference_name) }
     end
   end
+
+  context '#derived_module_type' do
+    subject(:derived_module_type) do
+      module_class.derived_module_type
+    end
+
+    context 'ancestors' do
+      before(:each) do
+        module_class.ancestors = ancestors
+      end
+
+      context 'empty' do
+        let(:ancestors) do
+          []
+        end
+
+        it { should be_nil }
+      end
+
+      context 'non-empty' do
+        context 'with same Mdm::Module::Ancestor#module_type' do
+          let(:ancestors) do
+            FactoryGirl.create_list(:mdm_module_ancestor, 2, :module_type => module_type)
+          end
+
+          let(:module_type) do
+            FactoryGirl.generate :mdm_module_ancestor_module_type
+          end
+
+          it 'should return shared module_type' do
+            derived_module_type.should == module_type
+          end
+        end
+
+        context 'with different Mdm::Module;:Ancestor#module_type' do
+          let(:ancestors) do
+            FactoryGirl.create_list(:mdm_module_ancestor, 2)
+          end
+
+          it 'should return nil because there is no consensus' do
+            derived_module_type.should be_nil
+          end
+        end
+      end
+    end
+  end
 end
