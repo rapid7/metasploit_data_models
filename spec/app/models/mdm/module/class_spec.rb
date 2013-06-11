@@ -1561,4 +1561,87 @@ describe Mdm::Module::Class do
       it { should be_false }
     end
   end
+
+  context '#staged_payload_type_count' do
+    subject(:staged_payload_type_count) do
+      module_class.send(
+          :staged_payload_type_count,
+          ancestors_by_payload_type,
+          ancestor_payload_type
+      )
+    end
+
+    let(:ancestor_payload_type) do
+      FactoryGirl.generate :mdm_module_ancestor_payload_type
+    end
+
+    before(:each) do
+      staged_payload_type_count
+    end
+
+    context 'with ancestors with payload_type' do
+      context 'with 1' do
+        let(:ancestors_by_payload_type) do
+          {
+              ancestor_payload_type => FactoryGirl.create_list(
+                  :payload_mdm_module_ancestor,
+                  1,
+                  :payload_type => ancestor_payload_type
+              )
+          }
+        end
+
+        it 'should not record error on ancestors' do
+          module_class.errors[:ancestors].should be_empty
+        end
+      end
+
+      context 'without 1' do
+        let(:ancestors_by_payload_type) do
+          {
+              ancestor_payload_type => payload_type_ancestors
+          }
+        end
+
+        let(:full_name_sentence) do
+          payload_type_ancestors.map(&:full_name).sort.to_sentence
+        end
+
+        let(:payload_type_ancestors) do
+          FactoryGirl.create_list(
+              :payload_mdm_module_ancestor,
+              payload_type_ancestor_count,
+              :payload_type => ancestor_payload_type
+          )
+        end
+
+        let(:payload_type_ancestor_count) do
+          2
+        end
+
+        let(:error) do
+          "needs exactly one ancestor with payload_type (#{ancestor_payload_type}), " \
+          "but there are #{payload_type_ancestor_count} (#{full_name_sentence})"
+        end
+
+        it 'should record error on ancestors' do
+          module_class.errors[:ancestors].should include(error)
+        end
+      end
+    end
+
+    context 'without ancestors with payload_type' do
+      let(:ancestors_by_payload_type) do
+        {}
+      end
+
+      let(:error) do
+        "needs exactly one ancestor with payload_type (#{ancestor_payload_type}), but there are none."
+      end
+
+      it 'should record error on ancestors' do
+        module_class.errors[:ancestors].should include(error)
+      end
+    end
+  end
 end

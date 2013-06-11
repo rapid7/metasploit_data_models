@@ -399,7 +399,7 @@ class Mdm::Module::Class < ActiveRecord::Base
       errors[:ancestors] << "needs exactly one ancestor with payload_type (#{ancestor_payload_type}), " \
                             "but there are none."
     elsif payload_type_ancestor_count > 1
-      full_names = payload_type_ancestors.map(&:full_name)
+      full_names = payload_type_ancestors.map(&:full_name).sort
       full_name_sentence = full_names.to_sentence
       errors[:ancestors] << "needs exactly one ancestor with payload_type (#{ancestor_payload_type}), " \
                             "but there are #{payload_type_ancestor_count} (#{full_name_sentence})"
