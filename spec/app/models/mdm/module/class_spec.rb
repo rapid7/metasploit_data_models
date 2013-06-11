@@ -1252,4 +1252,313 @@ describe Mdm::Module::Class do
       end
     end
   end
+
+  context '#derived_reference_name' do
+    subject(:derived_reference_name) do
+      module_class.derived_reference_name
+    end
+
+    before(:each) do
+      module_class.module_type = module_type
+    end
+
+    context 'with payload' do
+      let(:module_type) do
+        'payload'
+      end
+
+      before(:each) do
+        module_class.payload_type = payload_type
+      end
+
+      context 'with single' do
+        let(:payload_type) do
+          'single'
+        end
+
+        it 'should call #derived_single_payload_reference_name' do
+          module_class.should_receive(:derived_single_payload_reference_name)
+
+          derived_reference_name
+        end
+      end
+
+      context 'with staged' do
+        let(:payload_type) do
+          'staged'
+        end
+
+        it 'should call #derived_staged_payload_reference_name' do
+          module_class.should_receive(:derived_staged_payload_reference_name)
+
+          derived_reference_name
+        end
+      end
+
+      context 'without single or staged' do
+        let(:payload_type) do
+          'invalid_payload_type'
+        end
+
+        it { should be_nil }
+      end
+    end
+
+    context 'without payload' do
+      let(:module_type) do
+        FactoryGirl.generate :mdm_module_class_non_payload_module_type
+      end
+
+      before(:each) do
+        module_class.ancestors = ancestors
+      end
+
+      context 'with 1 ancestor' do
+        let(:ancestor) do
+          FactoryGirl.create(:non_payload_mdm_module_ancestor)
+        end
+
+        let(:ancestors) do
+          [
+              ancestor
+          ]
+        end
+
+        it 'should return reference_name of ancestor' do
+          derived_reference_name.should == ancestor.reference_name
+        end
+      end
+
+      context 'without 1 ancestor' do
+        let(:ancestors) do
+          FactoryGirl.create_list(:mdm_module_ancestor, 2)
+        end
+
+        it { should be_nil }
+      end
+    end
+  end
+
+  context '#derived_single_payload_reference_name' do
+    subject(:derived_single_payload_reference_name) do
+      module_class.send(:derived_single_payload_reference_name)
+    end
+
+    before(:each) do
+      module_class.ancestors = ancestors
+    end
+
+    context 'with 1 ancestor' do
+      let(:ancestor) do
+        FactoryGirl.create(
+            :payload_mdm_module_ancestor,
+            :payload_type => payload_type
+        )
+      end
+
+      let(:ancestors) do
+        [
+            ancestor
+        ]
+      end
+
+      context 'with single' do
+        let(:payload_type) do
+          'single'
+        end
+
+        before(:each) do
+          ancestor.reference_name = reference_name
+        end
+
+        context 'with reference_name' do
+          let(:reference_name) do
+            "payload/singles/reference/name"
+          end
+
+          before(:each) do
+            ancestor.handler_type = handler_type
+          end
+
+          context 'with handler_type' do
+            let(:handler_type) do
+              FactoryGirl.generate :mdm_module_ancestor_handler_type
+            end
+
+            it 'should return <reference_name>/<handler_type>' do
+              derived_single_payload_reference_name.should == "#{reference_name}/#{handler_type}"
+            end
+          end
+
+          context 'without handler_type' do
+            let(:handler_type) do
+              nil
+            end
+
+            it { should be_nil }
+          end
+        end
+
+        context 'without reference_name' do
+          let(:reference_name) do
+            nil
+          end
+        end
+
+      end
+
+      context 'without single' do
+        let(:payload_type) do
+          'stage'
+        end
+
+        it { should be_nil }
+      end
+    end
+
+    context 'without 1 ancestor' do
+      let(:ancestors) do
+        []
+      end
+
+      it { should be_nil }
+    end
+  end
+
+  context '#derived_staged_payload_reference_name' do
+    subject(:derived_staged_payload_reference_name) do
+      module_class.send(:derived_staged_payload_reference_name)
+    end
+
+    before(:each) do
+      module_class.ancestors = ancestors
+    end
+
+    context 'with 2 ancestors' do
+      context 'with 1 stage' do
+        let(:stage_ancestor) do
+          FactoryGirl.create(:stage_payload_mdm_module_ancestor)
+        end
+
+        before(:each) do
+          stage_ancestor.reference_name = stage_reference_name
+        end
+
+        context 'with reference_name' do
+          let(:stage_reference_name) do
+            "payload/stages/reference/name"
+          end
+
+          context 'with 1 stager' do
+            let(:ancestors) do
+              [
+                  stager_ancestor,
+                  stage_ancestor
+              ]
+            end
+
+            let(:stager_ancestor) do
+              FactoryGirl.create(:stager_payload_mdm_module_ancestor)
+            end
+
+            before(:each) do
+              stager_ancestor.handler_type = stager_handler_type
+            end
+
+            context 'with handler_type' do
+              let(:stager_handler_type) do
+                FactoryGirl.generate :mdm_module_ancestor_handler_type
+              end
+
+              it 'should be <stage.reference_name>/<stager.handler_type>' do
+                derived_staged_payload_reference_name.should == "#{stage_reference_name}/#{stager_handler_type}"
+              end
+            end
+
+            context 'without handler_type' do
+              let(:stager_handler_type) do
+                nil
+              end
+
+              it { should be_nil }
+            end
+          end
+
+          context 'without 1 stager' do
+            let(:ancestors) do
+              [
+                  stage_ancestor,
+                  FactoryGirl.create(:single_payload_mdm_module_ancestor)
+              ]
+            end
+
+            it { should be_nil }
+          end
+        end
+
+        context 'without reference_name' do
+          let(:ancestors) do
+            [
+                FactoryGirl.create(:stager_payload_mdm_module_ancestor),
+                stage_ancestor
+            ]
+          end
+
+          let(:stage_reference_name) do
+            nil
+          end
+
+          it { should be_nil }
+        end
+      end
+
+      context 'without 1 stage' do
+        let(:ancestors) do
+          FactoryGirl.create_list(:stager_payload_mdm_module_ancestor, 2)
+        end
+
+        it { should be_nil }
+      end
+    end
+
+    context 'without 2 ancestors' do
+      let(:ancestors) do
+        FactoryGirl.create_list(:mdm_module_ancestor, 3)
+      end
+
+      it { should be_nil }
+    end
+  end
+
+  context '#payload?' do
+    subject(:payload?) do
+      module_class.payload?
+    end
+
+    # use new instead of factory so that payload? won't be called in the background to show this context supplies
+    # coverage
+    let(:module_class) do
+      described_class.new
+    end
+
+    before(:each) do
+      module_class.module_type = module_type
+    end
+
+    context 'with payload' do
+      let(:module_type) do
+        'payload'
+      end
+
+      it { should be_true }
+    end
+
+    context 'without payload' do
+      let(:module_type) do
+        FactoryGirl.generate :mdm_module_ancestor_non_payload_module_type
+      end
+
+      it { should be_false }
+    end
+  end
 end
