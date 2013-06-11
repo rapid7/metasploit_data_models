@@ -13,7 +13,7 @@ describe Mdm::Module::Relationship do
     end
 
     context 'indices' do
-      it { should have_db_index([:ancestor_id, :descendant_id]).unique(true) }
+      it { should have_db_index([:descendant_id, :ancestor_id]).unique(true) }
     end
   end
 
