@@ -228,19 +228,6 @@ class Mdm::Module::Class < ActiveRecord::Base
     end
   end
 
-  # Returns whether this represents a staged payload.  Staged payloads are the only {Mdm::Module::Class} that should
-  # have two {#ancestors}: a stage and stager.
-  #
-  # @return [true] if {#payload_type} == 'staged'
-  # @return [false] if {#payload_type} != 'staged'
-  def staged?
-    if payload? and payload_type == 'staged'
-      true
-    else
-      false
-    end
-  end
-
   private
 
   # Validates that number of {#ancestors} is correct for the {#module_type}.
