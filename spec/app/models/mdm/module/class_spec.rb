@@ -1171,4 +1171,85 @@ describe Mdm::Module::Class do
       end
     end
   end
+
+  context '#derived_payload_type' do
+    subject(:derived_payload_type) do
+      module_class.derived_payload_type
+    end
+
+    before(:each) do
+      module_class.module_type = module_type
+    end
+
+    context 'with payload' do
+      let(:module_type) do
+        'payload'
+      end
+
+      before(:each) do
+        module_class.ancestors = ancestors
+      end
+
+      context 'with 1 ancestor' do
+        let(:ancestors) do
+          [
+              FactoryGirl.create(
+                  :mdm_module_ancestor,
+                  :module_type => 'payload',
+                  :payload_type => payload_type
+              )
+          ]
+        end
+
+        context 'with single' do
+          let(:payload_type) do
+            'single'
+          end
+
+          it { should == 'single' }
+        end
+
+        context 'without single' do
+          let(:payload_type) do
+            'stage'
+          end
+
+          it { should be_nil }
+        end
+      end
+
+      context 'with 2 ancestors' do
+        context 'with stager and stage' do
+          let(:ancestors) do
+            ['stager', 'stage'].collect { |payload_type|
+                FactoryGirl.create(
+                    :payload_mdm_module_ancestor,
+                    :payload_type => payload_type
+                )
+            }
+          end
+
+          it { should == 'staged' }
+        end
+
+        context 'without stager and stage' do
+          let(:ancestors) do
+            FactoryGirl.create_list(
+                :payload_mdm_module_ancestor,
+                2,
+                :payload_type => 'stage'
+            )
+          end
+
+          it { should be_nil }
+        end
+      end
+    end
+
+    context 'without payload' do
+      let(:module_type) do
+        FactoryGirl.generate :mdm_module_class_non_payload_module_type
+      end
+    end
+  end
 end
