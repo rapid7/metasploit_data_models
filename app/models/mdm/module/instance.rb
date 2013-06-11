@@ -14,7 +14,6 @@ class Mdm::Module::Instance < ActiveRecord::Base
       true
   ]
 
-
   # Valid values for {#stance}.
   STANCES = [
       'aggressive',
@@ -112,7 +111,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [String]
 
   # @!attribute [rw] privileged
-  #   Whether this module requires priveleged access to run.
+  #   Whether this module requires privileged access to run.
   #
   #   @return [Boolean]
 
@@ -148,7 +147,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   def supports_stance?
     supports_stance = false
 
-    if ['auxiliary', 'exploit'].include? module_class.module_type
+    if module_class and ['auxiliary', 'exploit'].include?(module_class.module_type)
       supports_stance = true
     end
 

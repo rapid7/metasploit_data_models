@@ -2,14 +2,7 @@ require 'spec_helper'
 
 describe Mdm::Module::Instance do
   subject(:module_instance) do
-    FactoryGirl.build(
-        :mdm_module_instance,
-        :stance => stance
-    )
-  end
-
-  let(:stance) do
-    FactoryGirl.generate :mdm_module_instance_stance
+    FactoryGirl.build(:mdm_module_instance)
   end
 
   let(:stances) do
@@ -20,14 +13,16 @@ describe Mdm::Module::Instance do
   end
 
   context 'associations' do
-    it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
-    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
-    it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
-    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
+    it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should belong_to(:default_action).class_name('Mdm::Module::Action') }
+    it { should belong_to(:default_target).class_name('Mdm::Module::Target') }
+    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should belong_to(:module_class).class_name('Mdm::Module::Class') }
-    it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
-    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
-    it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
+    it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy).with_foreign_key(:module_instance_id) }
   end
 
   context 'CONSTANTS' do
@@ -42,20 +37,6 @@ describe Mdm::Module::Instance do
       end
     end
 
-    context 'RANK_BY_NAME' do
-      subject(:rank_by_name) do
-        described_class::RANK_BY_NAME
-      end
-
-      its(['Manual']) { should == 0 }
-      its(['Low']) { should == 100 }
-      its(['Average']) { should == 200 }
-      its(['Normal']) { should == 300 }
-      its(['Good']) { should == 400 }
-      its(['Great']) { should == 500 }
-      its(['Excellent']) { should == 600 }
-    end
-
     context 'STANCES' do
       subject(:stances) do
         described_class::STANCES
@@ -68,47 +49,49 @@ describe Mdm::Module::Instance do
 
   context 'database' do
     context 'columns' do
-      it { should_not have_db_column(:default_target).of_type(:integer) }
-      it { should_not have_db_column(:default_target_id).of_type(:integer).with_options(:null => true) }
-      it { should have_db_column(:description).of_type(:text) }
-      it { should have_db_column(:disclosure_date).of_type(:datetime)}
-      it { should_not have_db_column(:file).of_type(:text) }
-      it { should have_db_column(:fullname).of_type(:text).with_options(:null => false) }
-      it { should have_db_column(:license).of_type(:string) }
-      it { should have_db_column(:mtime).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:mtype).of_type(:string).with_options(:null => false) }
-      it { should have_db_column(:name).of_type(:text).with_iptions(:null => false) }
-      it { should have_db_column(:parent_path_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:privileged).of_type(:boolean) }
-      it { should have_db_column(:rank).of_type(:integer) }
-      it { should have_db_column(:ready).of_type(:boolean) }
-      it { should have_db_column(:refname).of_type(:text) }
+      it { should have_db_column(:default_action_id).of_type(:integer).with_options(:null => true) }
+      it { should have_db_column(:default_target_id).of_type(:integer).with_options(:null => true) }
+      it { should have_db_column(:description).of_type(:text).with_options(:null => false) }
+      it { should have_db_column(:disclosed_on).of_type(:date).with_options(:null => true) }
+      it { should have_db_column(:license).of_type(:string).with_options(:null => false) }
+      it { should have_db_column(:module_class_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:name).of_type(:text).with_options(:null => false) }
+      it { should have_db_column(:privileged).of_type(:boolean).with_options(:null => false) }
       it { should have_db_column(:stance).of_type(:string).with_options(:null => true) }
     end
 
     context 'indices' do
-      it { should have_db_index(:description) }
-      it { should have_db_index(:mtype) }
-      it { should have_db_index(:name) }
-      it { should have_db_index(:refname) }
+      it { should have_db_index(:default_action_id).unique(true) }
+      it { should have_db_index(:default_target_id).unique(true) }
+      it { should have_db_index(:module_class_id).unique(true) }
     end
   end
 
   context 'factories' do
-    context 'mdm_module_detail' do
-      subject(:mdm_module_detail) do
-        FactoryGirl.build(:mdm_module_detail)
+    context 'mdm_module_instance' do
+      subject(:mdm_module_instance) do
+        FactoryGirl.build(:mdm_module_instance)
       end
 
       it { should be_valid }
 
       context 'stance' do
-        subject(:mdm_module_detail) do
-          FactoryGirl.build(:mdm_module_detail, :mtype => mtype)
+        subject(:mdm_module_instance) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              :module_class => module_class
+          )
+        end
+
+        let(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              :module_type => module_type
+          )
         end
 
         context 'with supports_stance?' do
-          let(:mtype) do
+          let(:module_type) do
             'exploit'
           end
 
@@ -119,7 +102,7 @@ describe Mdm::Module::Instance do
         end
 
         context 'without supports_stance?' do
-          let(:mtype) do
+          let(:module_type) do
             'post'
           end
 
@@ -133,28 +116,80 @@ describe Mdm::Module::Instance do
   end
 
   context 'validations' do
-    it { should ensure_inclusion_of(:mtype).in_array(types) }
-    it { should validate_presence_of(:parent_path) }
+    it { should validate_presence_of :module_class }
 
-    # Because the boolean field will cast most strings to false,
-    # ensure_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
+    context 'ensure inclusion of privileged is boolean' do
+      let(:error) do
+        'is not included in the list'
+      end
 
-    context 'rank' do
-      it { should validate_numericality_of(:rank).only_integer }
-      it { should ensure_inclusion_of(:rank).in_array(ranks) }
+      before(:each) do
+        module_instance.privileged = privileged
+
+        module_instance.valid?
+      end
+
+      context 'with nil' do
+        let(:privileged) do
+          nil
+        end
+
+        it 'should record error' do
+          module_instance.errors[:privileged].should include(error)
+        end
+      end
+
+      context 'with false' do
+        let(:privileged) do
+          false
+        end
+
+        it 'should not record error' do
+          module_instance.errors[:privileged].should be_empty
+        end
+      end
+
+      context 'with true' do
+        let(:privileged) do
+          true
+        end
+
+        it 'should not record error' do
+          module_instance.errors[:privileged].should be_empty
+        end
+      end
     end
 
-    it { should validate_presence_of(:refname) }
-
     context 'stance' do
-      context 'mtype' do
-        it_should_behave_like 'Mdm::Module::Detail supports stance with mtype', 'auxiliary'
-        it_should_behave_like 'Mdm::Module::Detail supports stance with mtype', 'exploit'
+      context 'module_type' do
+        subject(:module_instance) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              :module_class => module_class,
+              # set by shared examples
+              :stance => stance
+          )
+        end
 
-        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'encoder'
-        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'nop'
-        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'payload'
-        it_should_behave_like 'Mdm::Module::Detail does not support stance with mtype', 'post'
+        let(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              # set by shared examples
+              :module_type => module_type
+          )
+        end
+
+        let(:stance) do
+          nil
+        end
+
+        it_should_behave_like 'Mdm::Module::Instance supports stance with module_type', 'auxiliary'
+        it_should_behave_like 'Mdm::Module::Instance supports stance with module_type', 'exploit'
+
+        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'encoder'
+        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'nop'
+        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'payload'
+        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'post'
       end
     end
   end

@@ -28,7 +28,7 @@ class CreateModuleInstances < ActiveRecord::Migration
       t.string :license, :null => false
       t.text :name, :null => false
       t.boolean :privileged, :null => false
-      t.string :stance, :null => false
+      t.string :stance, :null => true
 
       #
       # References

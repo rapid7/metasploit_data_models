@@ -1,12 +1,16 @@
-shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
-  context "with #{mtype.inspect}" do
+shared_examples_for 'Mdm::Module::Instance supports stance with module_type' do |context_module_type|
+  context "with #{context_module_type.inspect}" do
     # define as a let so that lets from outer context can access option to set detail.
-    let(:mtype) do
-      mtype
+    let(:module_type) do
+      context_module_type
+    end
+
+    it "should have #{context_module_type.inspect} for module_class.module_type" do
+      module_instance.module_class.module_type.should == module_type
     end
 
     it 'should return true for supports_stance?' do
-      detail.supports_stance?.should be_true
+      module_instance.supports_stance?.should be_true
     end
 
     context 'with nil stance' do
