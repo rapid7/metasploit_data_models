@@ -28,7 +28,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Auxiliary actions to perform when this running this module.
   #
   #   @return [Array<Mdm::Module::Action>]
-  has_many :actions, :class_name => 'Mdm::Module::Action', :dependent => :destroy
+  has_many :actions, :class_name => 'Mdm::Module::Action', :dependent => :destroy, :foreign_key => :module_instance_id
 
   # @!attribute [rw] archs
   #   Architectures supported by this module.

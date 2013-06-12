@@ -9,15 +9,11 @@ shared_examples_for 'validates uniqueness scoped to module_instance_id' do |opti
   end
 
   let(:existing_module_instance) do
-    FactoryGirl.create(:mdm_module_module_instance, :parent_path => existing_parent_path)
+    FactoryGirl.create(:mdm_module_instance)
   end
 
   let!(:existing_instance) do
     FactoryGirl.create(factory, :module_instance => existing_module_instance)
-  end
-
-  let(:existing_parent_path) do
-    FactoryGirl.create(:mdm_module_path)
   end
 
   context 'with same module_instance_id' do
@@ -46,8 +42,7 @@ shared_examples_for 'validates uniqueness scoped to module_instance_id' do |opti
 
   context 'without same module_instance_id' do
     let(:new_module_instance) do
-      # Reuse the same parent_path so that a new directory under dummy doesn't need to be created and removed
-      FactoryGirl.create(:mdm_module_module_instance, :parent_path => existing_parent_path)
+      FactoryGirl.create(:mdm_module_instance)
     end
 
     let(:new_instance) do

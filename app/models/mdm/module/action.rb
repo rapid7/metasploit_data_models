@@ -1,5 +1,7 @@
 # Actions that auxiliary modules can perform.  Actions are used to select subcommand-like behavior implemented by the
-# same auxiliary module.
+# same auxiliary module.  The semantics of a given action are specific to a given {Mdm::Module::Instance module}: if two
+# {Mdm::Module::Instance modules} have {Mdm::Module::Action actions} with the same {Mdm::Module::Action name}, no
+# similarity should be assumed between those two {Mdm::Module::Action actions} or {Mdm::Module::Instance modules}.
 class Mdm::Module::Action < ActiveRecord::Base
   self.table_name = 'module_actions'
 
@@ -36,7 +38,7 @@ class Mdm::Module::Action < ActiveRecord::Base
   validates :name,
             :presence => true,
             :uniqueness => {
-                :scope => :detail_id
+                :scope => :module_instance_id
             }
 
   ActiveSupport.run_load_hooks(:mdm_module_action, self)
