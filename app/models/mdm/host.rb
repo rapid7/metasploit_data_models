@@ -6,30 +6,6 @@ class Mdm::Host < ActiveRecord::Base
   # CONSTANTS
   #
 
-  # Either the CPU architecture for native code or the programming language name for exploits that run code in the
-  # programming language's  virtual machine.
-  ARCHITECTURES = [
-      'armbe',
-      'armle',
-      'cbea',
-      'cbea64',
-      'cmd',
-      'java',
-      'mips',
-      'mipsbe',
-      'mipsle',
-      'php',
-      'ppc',
-      'ppc64',
-      'ruby',
-      'sparc',
-      'tty',
-      # To be used for compatability with 'X86_64'
-      'x64',
-      'x86',
-      'x86_64'
-  ]
-
   # Fields searched for the search scope
   SEARCH_FIELDS = [
       'address::text',
@@ -52,6 +28,13 @@ class Mdm::Host < ActiveRecord::Base
   #
   # Associations
   #
+
+  # @!attribute [rw] architecture
+  #   The architecture of the host's CPU OR the programming language for virtual machine programming language like
+  #   Ruby, PHP, and Java.
+  #
+  #   @return [Mdm::Module::Architecture]
+  belongs_to :architecture
 
   # @!attribute [rw] task_hosts
   #   Details about what Tasks touched this host
@@ -222,12 +205,6 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [String]
 
-  # @!attribute [rw] arch
-  #   The architecture of the host's CPU OR the programming language for virtual machine programming language like
-  #   Ruby, PHP, and Java.
-  #
-  #   @return [String] an element of {ARCHITECTURES}
-
   # @!attribute [rw] comm
   #   @todo https://www.pivotaltracker.com/story/show/49722411
   #
@@ -371,11 +348,6 @@ class Mdm::Host < ActiveRecord::Base
             :uniqueness => {
                 :scope => :workspace_id,
                 :unless => :ip_address_invalid?
-            }
-  validates :arch,
-            :allow_blank => true,
-            :inclusion => {
-                :in => ARCHITECTURES
             }
   validates :state,
             :allow_nil => true,

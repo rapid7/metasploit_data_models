@@ -21,7 +21,9 @@ class Mdm::Module::Instance < ActiveRecord::Base
   ]
 
   #
+  #
   # Associations
+  #
   #
 
   # @!attribute [rw] actions
@@ -29,12 +31,6 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Action>]
   has_many :actions, :class_name => 'Mdm::Module::Action', :dependent => :destroy, :foreign_key => :module_instance_id
-
-  # @!attribute [rw] archs
-  #   Architectures supported by this module.
-  #
-  #   @return [Array<Mdm::Module::Arch>]
-  has_many :archs, :class_name => 'Mdm::Module::Arch', :dependent => :destroy
 
   # @!attribute [rw] authors
   #   Authors (and their emails) of this module.  Usually includes the original discoverer who wrote the
@@ -61,6 +57,15 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Mixin>]
   has_many :mixins, :class_name => 'Mdm::Module::Mixin', :dependent => :destroy
 
+  # @!attribute [rw] module_architectures
+  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Module::Architecture architectures}.
+  #
+  #   @return [Array<Mdm::Module::Architecture>]
+  has_many :module_architectures,
+           :class_name => 'Mdm::Module::Architecture',
+           :dependent => :destroy,
+           :foreign_key => :module_instance_id
+
   # @!attribute [rw] module_class
   #   Class-derived metadata to go along with the instance-derived metadata in this model.
   #
@@ -84,6 +89,16 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Target>]
   has_many :targets, :class_name => 'Mdm::Module::Target', :dependent => :destroy
+
+  #
+  # :through => :module_architectures
+  #
+
+  # @!attribute [r] architectures
+  #   The {Mdm::Module::Architecture architectures} supported by this {Mdm::Module::Architecture}.
+  #
+  #   @return [Array<Mdm::Architecture>]
+  has_many :architectures, :class_name => 'Mdm::Architecture', :through => :module_architectures
 
   #
   # Attributes

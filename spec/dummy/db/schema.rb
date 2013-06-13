@@ -11,13 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130612134845) do
+ActiveRecord::Schema.define(:version => 20130613131314) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "architectures", :force => true do |t|
+    t.integer "bits"
+    t.string  "abbreviation", :null => false
+    t.string  "endianness"
+    t.string  "family"
+    t.string  "summary",      :null => false
+  end
+
+  add_index "architectures", ["abbreviation"], :name => "index_architectures_on_abbreviation", :unique => true
+  add_index "architectures", ["family", "bits", "endianness"], :name => "index_architectures_on_family_and_bits_and_endianness", :unique => true
+  add_index "architectures", ["summary"], :name => "index_architectures_on_summary", :unique => true
 
   create_table "attachments", :force => true do |t|
     t.string  "name",         :limit => 512
@@ -135,7 +147,7 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
 
   create_table "hosts", :force => true do |t|
     t.datetime "created_at"
-    t.string   "address",               :limit => nil,                  :null => false
+    t.string   "address",                                               :null => false
     t.string   "mac"
     t.string   "comm"
     t.string   "name"
@@ -144,7 +156,6 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
     t.string   "os_flavor"
     t.string   "os_sp"
     t.string   "os_lang"
-    t.string   "arch"
     t.integer  "workspace_id",                                          :null => false
     t.datetime "updated_at"
     t.text     "purpose"
@@ -158,8 +169,10 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
     t.integer  "host_detail_count",                      :default => 0
     t.integer  "exploit_attempt_count",                  :default => 0
     t.integer  "cred_count",                             :default => 0
+    t.integer  "architecture_id"
   end
 
+  add_index "hosts", ["architecture_id"], :name => "index_hosts_on_architecture_id"
   add_index "hosts", ["name"], :name => "index_hosts_on_name"
   add_index "hosts", ["os_flavor"], :name => "index_hosts_on_os_flavor"
   add_index "hosts", ["os_name"], :name => "index_hosts_on_os_name"
@@ -248,12 +261,12 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
   add_index "module_ancestors", ["real_path"], :name => "index_module_ancestors_on_real_path", :unique => true
   add_index "module_ancestors", ["real_path_sha1_hex_digest"], :name => "index_module_ancestors_on_real_path_sha1_hex_digest", :unique => true
 
-  create_table "module_archs", :force => true do |t|
-    t.integer "detail_id", :null => false
-    t.text    "name",      :null => false
+  create_table "module_architectures", :force => true do |t|
+    t.integer "architecture_id",    :null => false
+    t.integer "module_instance_id", :null => false
   end
 
-  add_index "module_archs", ["detail_id", "name"], :name => "index_module_archs_on_detail_id_and_name", :unique => true
+  add_index "module_architectures", ["module_instance_id", "architecture_id"], :name => "index_unique_module_architectures", :unique => true
 
   create_table "module_authors", :force => true do |t|
     t.integer "detail_id", :null => false
@@ -687,7 +700,7 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
 
   create_table "wmap_requests", :force => true do |t|
     t.string   "host"
-    t.string   "address",    :limit => nil
+    t.string   "address"
     t.integer  "port"
     t.integer  "ssl"
     t.string   "meth",       :limit => 32
@@ -704,7 +717,7 @@ ActiveRecord::Schema.define(:version => 20130612134845) do
 
   create_table "wmap_targets", :force => true do |t|
     t.string   "host"
-    t.string   "address",    :limit => nil
+    t.string   "address"
     t.integer  "port"
     t.integer  "ssl"
     t.integer  "selected"

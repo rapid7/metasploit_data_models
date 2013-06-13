@@ -5,30 +5,6 @@ describe Mdm::Host do
     FactoryGirl.build(:mdm_host)
   end
 
-  let(:architectures) do
-    [
-        'armbe',
-        'armle',
-        'cbea',
-        'cbea64',
-        'cmd',
-        'java',
-        'mips',
-        'mipsbe',
-        'mipsle',
-        'php',
-        'ppc',
-        'ppc64',
-        'ruby',
-        'sparc',
-        'tty',
-        'x64',
-        'x86',
-        'x86_64',
-        ''
-    ]
-  end
-
   let(:states) do
     [
         'alive',
@@ -38,6 +14,7 @@ describe Mdm::Host do
   end
 
 	context 'associations' do
+    it { should belong_to(:architecture).class_name('Mdm::Architecture') }
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
 		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
 		it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
@@ -212,71 +189,6 @@ describe Mdm::Host do
 	end
 
 	context 'CONSTANTS' do
-    context 'ARCHITECTURES' do
-      subject(:architectures) do
-        described_class::ARCHITECTURES
-      end
-
-      it 'should be an Array<String>' do
-        architectures.should be_an Array
-
-        architectures.each do |architecture|
-          architecture.should be_a String
-        end
-      end
-
-      it 'should include both endians of ARM' do
-        architectures.should include('armbe')
-        architectures.should include('armle')
-      end
-
-      it 'should include 32-bit and 64-bit versions of Cell Broadband Engine Architecture' do
-        architectures.should include('cbea')
-        architectures.should include('cbea64')
-      end
-
-      it 'should include cmd for command shell' do
-        architectures.should include('cmd')
-      end
-
-      it 'should include java for Java Virtual Machine' do
-        architectures.should include('java')
-      end
-
-      it 'should include plain and endian-ware MIPS' do
-        architectures.should include('mips')
-        architectures.should include('mipsbe')
-        architectures.should include('mipsle')
-      end
-
-      it 'should include php for PHP code' do
-        architectures.should include('php')
-      end
-
-      it 'should include 32-bit and 64-bit PowerPC' do
-        architectures.should include('ppc')
-        architectures.should include('ppc64')
-      end
-
-      it 'should include ruby for Ruby code' do
-        architectures.should include('ruby')
-      end
-
-      it 'should include sparc for Sparc' do
-        architectures.should include('sparc')
-      end
-
-      it 'should include tty for Terminals' do
-        architectures.should include('tty')
-      end
-
-      it 'should include 32-bit and 64-bit x86' do
-        architectures.should include('x64')
-        architectures.should include('x86')
-        architectures.should include('x86_64')
-      end
-    end
-
 		context 'SEARCH_FIELDS' do
 			subject(:search_fields) do
 				described_class::SEARCH_FIELDS
@@ -311,7 +223,7 @@ describe Mdm::Host do
   context 'database' do
     context 'columns' do
       it { should have_db_column(:address).of_type(:string).with_options(:null => false) }
-      it { should have_db_column(:arch).of_type(:string) }
+      it { should have_db_column(:architecture_id).of_type(:integer).with_options(:null => true) }
       it { should have_db_column(:comm).of_type(:string) }
       it { should have_db_column(:comments).of_type(:text) }
       it { should have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }

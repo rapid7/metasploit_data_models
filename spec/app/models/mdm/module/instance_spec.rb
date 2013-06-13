@@ -14,7 +14,8 @@ describe Mdm::Module::Instance do
 
   context 'associations' do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy).with_foreign_key(:module_instance_id) }
-    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:module_architectures).class_name('Mdm::Module::Architecture').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:architectures).class_name('Mdm::Architecture').through(:module_architectures) }
     it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should belong_to(:default_action).class_name('Mdm::Module::Action') }
     it { should belong_to(:default_target).class_name('Mdm::Module::Target') }

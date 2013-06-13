@@ -12,7 +12,7 @@ FactoryGirl.define do
     name { generate :mdm_host_name }
 
     factory :full_mdm_host do
-      arch { generate :mdm_host_arch }
+      architecture { generate :mdm_architecture }
       comm { generate :mdm_host_comm }
       comments { generate :mdm_host_comments }
       info { generate :mdm_host_info }
@@ -31,8 +31,6 @@ FactoryGirl.define do
   sequence :mdm_host_name do |n|
     "mdm_host_#{n}"
   end
-
-  sequence :mdm_host_arch, Mdm::Host::ARCHITECTURES.cycle
 
   sequence :mdm_host_comm do |n|
     "Mdm::Host#comm #{n}"
