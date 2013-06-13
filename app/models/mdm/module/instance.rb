@@ -51,12 +51,6 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Mdm::Module::Target]
   belongs_to :default_target, :class_name => 'Mdm::Module::Target'
 
-  # @!attribute [rw] mixins
-  #   Mixins used by this module.
-  #
-  #   @return [Array<Mdm::Module::Mixin>]
-  has_many :mixins, :class_name => 'Mdm::Module::Mixin', :dependent => :destroy
-
   # @!attribute [rw] module_architectures
   #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Module::Architecture architectures}.
   #

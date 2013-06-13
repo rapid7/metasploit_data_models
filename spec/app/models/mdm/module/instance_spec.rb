@@ -19,7 +19,6 @@ describe Mdm::Module::Instance do
     it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should belong_to(:default_action).class_name('Mdm::Module::Action') }
     it { should belong_to(:default_target).class_name('Mdm::Module::Target') }
-    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should belong_to(:module_class).class_name('Mdm::Module::Class') }
     it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy).with_foreign_key(:module_instance_id) }
