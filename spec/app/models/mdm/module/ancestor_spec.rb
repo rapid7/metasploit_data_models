@@ -88,10 +88,6 @@ describe Mdm::Module::Ancestor do
       described_class::REFERENCE_NAME_REGEXP.should be_a Regexp
     end
 
-    it 'should define SHA1_CHUNK_SIZE to save memory when reading large files' do
-      described_class::SHA1_CHUNK_SIZE.should be_a Fixnum
-    end
-
     # pattern is tested in validation tests below
     it 'should define SHA_HEX_DIGEST_REGEXP' do
       described_class::SHA1_HEX_DIGEST_REGEXP.should be_a Regexp
@@ -941,25 +937,10 @@ describe Mdm::Module::Ancestor do
       end
 
       context 'that exists' do
-
-
-        it 'should read the file in binary mode for windows compatibility' do
-          File.should_receive(:open).with(ancestor.real_path, 'rb')
+        it 'should read the using Digest::SHA1.file' do
+          Digest::SHA1.should_receive(:file).with(ancestor.real_path).and_call_original
 
           derived_real_path_sha1_hex_digest
-        end
-
-        it 'should read the file in chunks' do
-          f = File.open(ancestor.real_path, 'rb')
-
-          begin
-            File.should_receive(:open).with(ancestor.real_path, anything).and_yield(f)
-            f.should_receive(:read).with(described_class::SHA1_CHUNK_SIZE).at_least(:once).and_call_original
-
-            derived_real_path_sha1_hex_digest
-          ensure
-            f.close
-          end
         end
 
         context 'with content' do
@@ -987,22 +968,9 @@ describe Mdm::Module::Ancestor do
             end
           end
 
-          context 'that is longer than chunk size' do
+          context 'that is not empty' do
             let(:content) do
-              content = ''
-              line_number = 1
-
-              until content.length > described_class::SHA1_CHUNK_SIZE
-                content += "# Line #{line_number}"
-                line_number += 1
-              end
-
-              content
-            end
-
-
-            it 'should have file longer than SHA1_CHUNK_SIZE at real_path' do
-              File.size(ancestor.real_path).should == content.length
+              "# Non-empty content"
             end
 
             it 'should have SHA1 hex digest for content' do

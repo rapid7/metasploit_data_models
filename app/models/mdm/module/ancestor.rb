@@ -47,8 +47,6 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # Regexp to keep '\' out of reference names
   REFERENCE_NAME_REGEXP = /\A[a-z][a-z_0-9]*(?:\/[a-z][a-z_0-9]*)*\Z/
 
-  # Number of bytes to read at one time from {#real_path} when calculating {#derived_real_path_sha1_hex_digest}.
-  SHA1_CHUNK_SIZE = 2 ** 10
   # Regular expression matching a full SHA-1 hex digest.
   SHA1_HEX_DIGEST_REGEXP = /\A[0-9a-z]{40}\Z/
 
@@ -256,21 +254,8 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # @retuurn [String] 40 character SHA1 hex digest if {#real_path} can be read.
   # @return [nil] if {#real_path} cannot be read.
   def derived_real_path_sha1_hex_digest
-    hex_digest = nil
-
-    sha1 = Digest::SHA1.new
-    real_path_string = real_path.to_s
-
     begin
-      # binary mode for Windows compatibility
-      File.open(real_path_string, 'rb') do |f|
-        chunk = f.read(SHA1_CHUNK_SIZE)
-
-        while chunk
-          sha1.update(chunk)
-          chunk = f.read(SHA1_CHUNK_SIZE)
-        end
-      end
+      sha1 = Digest::SHA1.file(real_path.to_s)
     rescue Errno::ENOENT
       hex_digest = nil
     else
