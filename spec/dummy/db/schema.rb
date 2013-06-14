@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613152322) do
+ActiveRecord::Schema.define(:version => 20130614130338) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -337,11 +337,11 @@ ActiveRecord::Schema.define(:version => 20130613152322) do
   add_index "module_paths", ["real_path"], :name => "index_module_paths_on_real_path", :unique => true
 
   create_table "module_platforms", :force => true do |t|
-    t.integer "detail_id"
-    t.text    "name"
+    t.integer "module_instance_id", :null => false
+    t.integer "platform_id",        :null => false
   end
 
-  add_index "module_platforms", ["detail_id"], :name => "index_module_platforms_on_module_detail_id"
+  add_index "module_platforms", ["module_instance_id", "platform_id"], :name => "index_module_platforms_on_module_instance_id_and_platform_id", :unique => true
 
   create_table "module_ranks", :force => true do |t|
     t.string  "name",   :null => false
@@ -403,6 +403,12 @@ ActiveRecord::Schema.define(:version => 20130613152322) do
   end
 
   add_index "notes", ["ntype"], :name => "index_notes_on_ntype"
+
+  create_table "platforms", :force => true do |t|
+    t.text "name", :null => false
+  end
+
+  add_index "platforms", ["name"], :name => "index_platforms_on_name", :unique => true
 
   create_table "profiles", :force => true do |t|
     t.datetime "created_at",                   :null => false

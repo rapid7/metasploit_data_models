@@ -52,7 +52,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   belongs_to :default_target, :class_name => 'Mdm::Module::Target'
 
   # @!attribute [rw] module_architectures
-  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Module::Architecture architectures}.
+  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Architecture architectures}.
   #
   #   @return [Array<Mdm::Module::Architecture>]
   has_many :module_architectures,
@@ -66,11 +66,14 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Mdm::Module::Class]
   belongs_to :module_class, :class_name => 'Mdm::Module::Class'
 
-  # @!attribute [rw] platforms
-  #   Platforms supported by this module.
+  # @!attribute [rw] module_platform
+  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Platforms platforms}.
   #
   #   @return [Array<Mdm::Module::Platform>]
-  has_many :platforms, :class_name => 'Mdm::Module::Platform', :dependent => :destroy
+  has_many :module_platforms,
+           :class_name => 'Mdm::Module::Platform',
+           :dependent => :destroy,
+           :foreign_key => :module_instance_id
 
   # @!attribute [rw] refs
   #   External references to the vulnerabilities this module exploits.
@@ -93,6 +96,16 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Architecture>]
   has_many :architectures, :class_name => 'Mdm::Architecture', :through => :module_architectures
+
+  #
+  # :through => :module_platforms
+  #
+
+  # @!attribute [r] platforms
+  #   Platforms supported by this module.
+  #
+  #   @return [Array<Mdm::Module::Platform>]
+  has_many :platforms, :class_name => 'Mdm::Platform', :through => :module_platforms
 
   #
   # Attributes
