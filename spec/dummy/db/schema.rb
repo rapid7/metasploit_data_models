@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614130338) do
+ActiveRecord::Schema.define(:version => 20130614181004) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(:version => 20130614130338) do
     t.integer "attachment_id"
     t.integer "email_template_id"
   end
+
+  create_table "authorities", :force => true do |t|
+    t.string  "abbreviation",                    :null => false
+    t.boolean "obsolete",     :default => false, :null => false
+    t.string  "summary"
+    t.text    "url"
+  end
+
+  add_index "authorities", ["abbreviation"], :name => "index_authorities_on_abbreviation", :unique => true
+  add_index "authorities", ["summary"], :name => "index_authorities_on_summary", :unique => true
+  add_index "authorities", ["url"], :name => "index_authorities_on_url", :unique => true
 
   create_table "campaigns", :force => true do |t|
     t.integer  "workspace_id",                               :null => false
