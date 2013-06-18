@@ -25,6 +25,10 @@ describe Mdm::Module::Instance do
     it { should have_many(:platforms).class_name('Mdm::Platform').through(:module_platforms) }
     it { should have_many(:references).class_name('Mdm::Reference').through(:module_references) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:vuln_references).class_name('Mdm::VulnReference').through(:references) }
+    it { should have_many(:vulnerable_hosts).class_name('Mdm::Host').through(:vulns) }
+    it { should have_many(:vulnerable_services).class_name('Mdm::Service').through(:vulns) }
+    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:vuln_references) }
   end
 
   context 'CONSTANTS' do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618150940) do
+ActiveRecord::Schema.define(:version => 20130618163932) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -626,6 +626,13 @@ ActiveRecord::Schema.define(:version => 20130618150940) do
     t.datetime "nx_vulnerable_since"
     t.string   "nx_pci_compliance_status"
   end
+
+  create_table "vuln_references", :force => true do |t|
+    t.integer "reference_id", :null => false
+    t.integer "vuln_id",      :null => false
+  end
+
+  add_index "vuln_references", ["vuln_id", "reference_id"], :name => "index_vuln_references_on_vuln_id_and_reference_id", :unique => true
 
   create_table "vulns", :force => true do |t|
     t.integer  "host_id"

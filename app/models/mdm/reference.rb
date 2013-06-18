@@ -19,7 +19,7 @@ class Mdm::Reference < ActiveRecord::Base
   #   Joins this {Mdm::Reference} to {#module_instances}.
   #
   #   @return [Array<Mdm::Module::References>]
-  has_many :module_references, :class_name => 'Mdm::Module::References', :dependent => :destroy
+  has_many :module_references, :class_name => 'Mdm::Module::Reference', :dependent => :destroy
 
   # @!attribute [rw] vuln_references
   #   Joins this {Mdm::Reference} to {#vulns}.

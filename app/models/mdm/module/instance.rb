@@ -121,6 +121,42 @@ class Mdm::Module::Instance < ActiveRecord::Base
   has_many :references, :class_name => 'Mdm::Reference', :through => :module_references
 
   #
+  # :through => :references
+  #
+
+  # @!attribute [r] vuln_references
+  #   Joins {#vulns} to {#references}.
+  #
+  #   @return [Array<Mdm::VulnReference>]
+  has_many :vuln_references, :class_name => 'Mdm::VulnReference', :through => :references
+
+  #
+  # :through => :vuln_references
+  #
+
+  # @!attribute [r] vulns
+  #   Vulnerabilities with same {Mdm::Reference reference} as this module.
+  #
+  #   @return [Array<Mdm::Vuln>]
+  has_many :vulns, :class_name => 'Mdm::Vuln', :through => :vuln_references
+
+  #
+  # :through => :vulns
+  #
+
+  # @!attribute [r] vulnerable_hosts
+  #   Hosts vulnerable to this module.
+  #
+  #   @return [Array<Mdm::Host>]
+  has_many :vulnerable_hosts, :class_name => 'Mdm::Host', :through => :vulns
+
+  # @!attribute [r] vulnerable_services
+  #   Services vulnerable to this module.
+  #
+  #   @return [Array<Mdm::Service>]
+  has_many :vulnerable_services, :class_name => 'Mdm::Service', :through => :vulns
+
+  #
   # Attributes
   #
 
