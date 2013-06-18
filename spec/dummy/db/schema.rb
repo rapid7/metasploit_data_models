@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618190204) do
+ActiveRecord::Schema.define(:version => 20130618204649) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -437,15 +437,6 @@ ActiveRecord::Schema.define(:version => 20130618190204) do
 
   add_index "references", ["authority_id", "designation"], :name => "index_references_on_authority_id_and_designation", :unique => true
   add_index "references", ["url"], :name => "index_references_on_url", :unique => true
-
-  create_table "refs", :force => true do |t|
-    t.integer  "ref_id"
-    t.datetime "created_at"
-    t.string   "name",       :limit => 512
-    t.datetime "updated_at"
-  end
-
-  add_index "refs", ["name"], :name => "index_refs_on_name"
 
   create_table "report_templates", :force => true do |t|
     t.integer  "workspace_id",                 :default => 1, :null => false
