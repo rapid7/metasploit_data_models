@@ -5,7 +5,7 @@ class CreateAuthorities < ActiveRecord::Migration
   #
 
   # Attributes for seeds
-  ATTRIBUTES = [
+  ATTRIBUTE_HASHES = [
       {
           :abbreviation => 'BID',
           :obsolete => false,
@@ -86,5 +86,9 @@ class CreateAuthorities < ActiveRecord::Migration
     end
 
     # seeds
+    ATTRIBUTE_HASHES.each do |attributes|
+      say("Seeding #{attributes[:abbreviation]}", true)
+      Mdm::Authority.create!(attributes)
+    end
   end
 end
