@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618163932) do
+ActiveRecord::Schema.define(:version => 20130618185051) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -368,14 +368,6 @@ ActiveRecord::Schema.define(:version => 20130618163932) do
   end
 
   add_index "module_references", ["module_instance_id", "reference_id"], :name => "index_module_references_on_module_instance_id_and_reference_id", :unique => true
-
-  create_table "module_refs", :force => true do |t|
-    t.integer "detail_id"
-    t.text    "name"
-  end
-
-  add_index "module_refs", ["detail_id"], :name => "index_module_refs_on_module_detail_id"
-  add_index "module_refs", ["name"], :name => "index_module_refs_on_name"
 
   create_table "module_relationships", :force => true do |t|
     t.integer "ancestor_id",   :null => false
