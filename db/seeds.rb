@@ -117,7 +117,6 @@ architecture_attributes.each do |attributes|
   Mdm::Architecture.where(attributes).first_or_create!
 end
 
-
 authority_attributes = [
     {
         :abbreviation => 'BID',

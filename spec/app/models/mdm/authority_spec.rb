@@ -65,54 +65,63 @@ describe Mdm::Authority do
   context 'seeds' do
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'BID',
+                          :extension_name => 'Mdm::Authority::Bid',
                           :obsolete => false,
                           :summary => 'BuqTraq ID',
                           :url => 'http://www.securityfocus.com/bid'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'CVE',
+                          :extension_name => 'Mdm::Authority::Cve',
                           :obsolete => false,
                           :summary => 'Common Vulnerabilities and Exposures',
                           :url => 'http://cvedetails.com'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'MIL',
+                          :extension_name => nil,
                           :obsolete => true,
                           :summary => 'milw0rm',
                           :url => 'https://en.wikipedia.org/wiki/Milw0rm'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'MSB',
+                          :extension_name => 'Mdm::Authority::Msb',
                           :obsolete => false,
                           :summary => 'Microsoft Security Bulletin',
                           :url => 'http://www.microsoft.com/technet/security/bulletin'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'OSVDB',
+                          :extension_name => 'Mdm::Authority::Osvdb',
                           :obsolete => false,
                           :summary => 'Open Sourced Vulnerability Database',
                           :url => 'http://osvdb.org'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'PMASA',
+                          :extension_name => 'Mdm::Authority::Pmasa',
                           :obsolete => false,
                           :summary => 'phpMyAdmin Security Announcement',
                           :url => 'http://www.phpmyadmin.net/home_page/security/'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'SECUNIA',
+                          :extension_name => 'Mdm::Authority::Secunia',
                           :obsolete => false,
                           :summary => 'Secunia',
                           :url => 'https://secunia.com/advisories'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'US-CERT-VU',
+                          :extension_name => 'Mdm::Authority::UsCertVu',
                           :obsolete => false,
                           :summary => 'United States Computer Emergency Readiness Team Vulnerability Notes Database',
                           :url => 'http://www.kb.cert.org/vuls'
 
     it_should_behave_like 'Mdm::Authority seed',
                           :abbreviation => 'waraxe',
+                          :extension_name => 'Mdm::Authority::Waraxe',
                           :obsolete => false,
                           :summary => 'Waraxe Advisories',
                           :url => 'http://www.waraxe.us/content-cat-1.html'

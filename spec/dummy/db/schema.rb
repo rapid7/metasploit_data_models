@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614181004) do
+ActiveRecord::Schema.define(:version => 20130617151106) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -429,6 +429,15 @@ ActiveRecord::Schema.define(:version => 20130614181004) do
     t.text     "owner"
     t.binary   "settings"
   end
+
+  create_table "references", :force => true do |t|
+    t.string  "designation"
+    t.text    "url"
+    t.integer "authority_id"
+  end
+
+  add_index "references", ["authority_id", "designation"], :name => "index_references_on_authority_id_and_designation", :unique => true
+  add_index "references", ["url"], :name => "index_references_on_url", :unique => true
 
   create_table "refs", :force => true do |t|
     t.integer  "ref_id"

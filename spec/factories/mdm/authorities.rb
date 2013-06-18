@@ -12,6 +12,25 @@ FactoryGirl.define do
     end
   end
 
+  seeded_abbreviations = [
+      'BID',
+      'CVE',
+      'MIL',
+      'MSB',
+      'OSVDB',
+      'PMASA',
+      'SECUNIA',
+      'US-CERT-VU',
+      'waraxe'
+  ]
+  seeded_abbreviation_count = seeded_abbreviations.length
+
+  sequence :seeded_mdm_authority do |n|
+    abbreviation = seeded_abbreviations[n % seeded_abbreviation_count]
+
+    Mdm::Authority.where(:abbreviation => abbreviation).first
+  end
+
   sequence :mdm_authority_abbreviation do |n|
     'MDM-AUTHORITY-#{n}'
   end
