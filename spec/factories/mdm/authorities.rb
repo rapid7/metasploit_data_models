@@ -32,7 +32,7 @@ FactoryGirl.define do
   end
 
   sequence :mdm_authority_abbreviation do |n|
-    'MDM-AUTHORITY-#{n}'
+    "MDM-AUTHORITY-#{n}"
   end
 
   sequence :mdm_authority_summary do |n|

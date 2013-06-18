@@ -75,11 +75,14 @@ class Mdm::Module::Instance < ActiveRecord::Base
            :dependent => :destroy,
            :foreign_key => :module_instance_id
 
-  # @!attribute [rw] refs
-  #   External references to the vulnerabilities this module exploits.
+  # @!attribute [rw] module_references
+  #   Joins {#references} to this {Mdm::Module:Instance}.
   #
-  #   @return [Array<Mdm::Module::Ref>]
-  has_many :refs, :class_name => 'Mdm::Module::Ref', :dependent => :destroy
+  #   @return [Array<Mdm::Module::Refeference>]
+  has_many :module_references,
+           :class_name => 'Mdm::Module::Reference',
+           :dependent => :destroy,
+           :foreign_key => :module_instance_id
 
   # @!attribute [rw] targets
   #   Names of targets with different configurations that can be exploited by this module.
@@ -106,6 +109,16 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Platform>]
   has_many :platforms, :class_name => 'Mdm::Platform', :through => :module_platforms
+
+  #
+  # :through => :module_references
+  #
+
+  # @!attribute [r] references
+  #   External references to the exploit or proof-of-concept (PoC) code in this module.
+  #
+  #   @return [Array<Mdm::Reference>]
+  has_many :references, :class_name => 'Mdm::Reference', :through => :module_references
 
   #
   # Attributes

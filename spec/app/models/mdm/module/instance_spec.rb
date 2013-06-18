@@ -16,13 +16,14 @@ describe Mdm::Module::Instance do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:module_architectures).class_name('Mdm::Module::Architecture').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:module_references).class_name('Mdm::Module::Reference').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:architectures).class_name('Mdm::Architecture').through(:module_architectures) }
     it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should belong_to(:default_action).class_name('Mdm::Module::Action') }
     it { should belong_to(:default_target).class_name('Mdm::Module::Target') }
     it { should belong_to(:module_class).class_name('Mdm::Module::Class') }
     it { should have_many(:platforms).class_name('Mdm::Platform').through(:module_platforms) }
-    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy).with_foreign_key(:module_instance_id) }
+    it { should have_many(:references).class_name('Mdm::Reference').through(:module_references) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy).with_foreign_key(:module_instance_id) }
   end
 
