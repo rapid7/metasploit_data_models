@@ -5,6 +5,31 @@ describe Mdm::Vuln do
     FactoryGirl.build(:mdm_vuln)
   end
 
+  context '#destroy' do
+    it 'should successfully destroy the object and dependent objects' do
+      vuln = FactoryGirl.create(:mdm_vuln)
+      vuln_attempt = FactoryGirl.create(:mdm_vuln_attempt, :vuln => vuln)
+      vuln_detail = FactoryGirl.create(:mdm_vuln_detail, :vuln => vuln)
+      vuln_ref = FactoryGirl.create(:mdm_vuln_ref, :vuln => vuln)
+      expect {
+        vuln.destroy
+      }.to_not raise_error
+      expect {
+        vuln.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        vuln_attempt.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        vuln_detail.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+      expect {
+        vuln_ref.reload
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+
   context 'associations' do
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }

@@ -15,6 +15,8 @@ group :development, :test do
 end
 
 group :test do
+  # used for building markup for webpage factories
+  gem 'builder'
   # for cleaning the database before suite in case previous run was aborted without clean up
   gem 'database_cleaner'
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the

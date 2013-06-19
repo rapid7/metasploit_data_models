@@ -33,6 +33,18 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [Mdm::Workspace]
   has_one :workspace, :through => :host, :class_name => 'Mdm::Workspace'
 
+  # @!attribute [rw] task_sessions
+  #   Details about sessions this task touched
+  #
+  #   @return [Array<Mdm::TaskSession>]
+  has_many :task_sessions, :dependent => :destroy, :class_name => 'Mdm::TaskSession'
+
+  # @!attribute [rw] task
+  #   Session this task touched
+  #
+  #   @return [Mdm::Session]
+  has_many :tasks, :through => :task_sessions, :class_name => 'Mdm::Task'
+
   #
   # Attributes
   #
@@ -123,7 +135,11 @@ class Mdm::Session < ActiveRecord::Base
   # @return [true] if {#platform} is some version of Windows and {#stype} is `'shell'`.
   # @return [false] otherwise.
   def upgradeable?
-    (self.platform =~ /win/ and self.stype == 'shell')
+    if (self.platform =~ /win/i and self.stype == 'shell')
+      return true
+    else
+      return false
+    end
   end
 
   private
