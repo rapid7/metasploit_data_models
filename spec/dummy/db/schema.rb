@@ -11,22 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619191802) do
+ActiveRecord::Schema.define(:version => 20130619192506) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "campaigns", :force => true do |t|
-    t.integer  "workspace_id",                               :null => false
-    t.string   "name",         :limit => 512
-    t.text     "prefs"
-    t.integer  "status",                      :default => 0
-    t.datetime "started_at"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
   end
 
   create_table "clients", :force => true do |t|
