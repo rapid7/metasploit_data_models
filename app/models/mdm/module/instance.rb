@@ -91,7 +91,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Names of targets with different configurations that can be exploited by this module.
   #
   #   @return [Array<Mdm::Module::Target>]
-  has_many :targets, :class_name => 'Mdm::Module::Target', :dependent => :destroy
+  has_many :targets, :class_name => 'Mdm::Module::Target', :dependent => :destroy, :foreign_key => :module_instance_id
 
   #
   # :through => :module_architectures

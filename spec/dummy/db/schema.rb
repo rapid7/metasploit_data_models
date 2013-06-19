@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619204107) do
+ActiveRecord::Schema.define(:version => 20130619212332) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -345,12 +345,13 @@ ActiveRecord::Schema.define(:version => 20130619204107) do
   add_index "module_relationships", ["descendant_id", "ancestor_id"], :name => "index_module_relationships_on_descendant_id_and_ancestor_id", :unique => true
 
   create_table "module_targets", :force => true do |t|
-    t.integer "detail_id"
-    t.integer "index"
-    t.text    "name"
+    t.integer "index",              :null => false
+    t.text    "name",               :null => false
+    t.integer "module_instance_id", :null => false
   end
 
-  add_index "module_targets", ["detail_id"], :name => "index_module_targets_on_module_detail_id"
+  add_index "module_targets", ["module_instance_id", "index"], :name => "index_module_targets_on_module_instance_id_and_index", :unique => true
+  add_index "module_targets", ["module_instance_id", "name"], :name => "index_module_targets_on_module_instance_id_and_name", :unique => true
 
   create_table "nexpose_consoles", :force => true do |t|
     t.datetime "created_at",                     :null => false
