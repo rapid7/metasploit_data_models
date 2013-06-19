@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130604145732) do
+ActiveRecord::Schema.define(:version => 20130619160512) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -26,11 +26,6 @@ ActiveRecord::Schema.define(:version => 20130604145732) do
     t.boolean "inline",                      :default => true,  :null => false
     t.boolean "zip",                         :default => false, :null => false
     t.integer "campaign_id"
-  end
-
-  create_table "attachments_email_templates", :id => false, :force => true do |t|
-    t.integer "attachment_id"
-    t.integer "email_template_id"
   end
 
   create_table "campaigns", :force => true do |t|
