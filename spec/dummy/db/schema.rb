@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619190652) do
+ActiveRecord::Schema.define(:version => 20130619191802) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -548,14 +548,6 @@ ActiveRecord::Schema.define(:version => 20130619190652) do
   add_index "web_sites", ["comments"], :name => "index_web_sites_on_comments"
   add_index "web_sites", ["options"], :name => "index_web_sites_on_options"
   add_index "web_sites", ["vhost"], :name => "index_web_sites_on_vhost"
-
-  create_table "web_templates", :force => true do |t|
-    t.string  "name",        :limit => 512
-    t.string  "title",       :limit => 512
-    t.string  "body",        :limit => 524288
-    t.integer "campaign_id"
-    t.text    "prefs"
-  end
 
   create_table "web_vulns", :force => true do |t|
     t.integer  "web_site_id",                 :null => false
