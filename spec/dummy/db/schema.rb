@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619185710) do
+ActiveRecord::Schema.define(:version => 20130619190652) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -49,15 +49,6 @@ ActiveRecord::Schema.define(:version => 20130619185710) do
     t.string   "ptype",       :limit => 256
     t.integer  "source_id"
     t.string   "source_type"
-  end
-
-  create_table "email_templates", :force => true do |t|
-    t.string  "name",        :limit => 512
-    t.string  "subject",     :limit => 1024
-    t.text    "body"
-    t.integer "parent_id"
-    t.integer "campaign_id"
-    t.text    "prefs"
   end
 
   create_table "events", :force => true do |t|
