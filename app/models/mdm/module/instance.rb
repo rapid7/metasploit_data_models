@@ -32,16 +32,6 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Action>]
   has_many :actions, :class_name => 'Mdm::Module::Action', :dependent => :destroy, :foreign_key => :module_instance_id
 
-  # @!attribute [rw] authors
-  #   Authors (and their emails) of this module.  Usually includes the original discoverer who wrote the
-  #   proof-of-concept and then the people that ported the proof-of-concept to metasploit-framework.
-  #
-  #   @return [Array<Mdm::Module::Mixin>]
-  has_many :authors,
-           :class_name => 'Mdm::Module::Author',
-           :dependent => :destroy,
-           :foreign_key => :module_instance_id
-
   # @!attribute [rw] default_action
   #   The default action in {#actions}.
   #
@@ -60,6 +50,16 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Architecture>]
   has_many :module_architectures,
            :class_name => 'Mdm::Module::Architecture',
+           :dependent => :destroy,
+           :foreign_key => :module_instance_id
+
+  # @!attribute [rw] module_authors
+  #   Joins this with {#authors} and {#email_addresses} to model the name and email address used for an author entry in
+  #   the module metadata.
+  #
+  #   @return [Array<Mdm::Module::Author>]
+  has_many :module_authors,
+           :class_name => 'Mdm::Module::Author',
            :dependent => :destroy,
            :foreign_key => :module_instance_id
 
@@ -102,6 +102,22 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Architecture>]
   has_many :architectures, :class_name => 'Mdm::Architecture', :through => :module_architectures
+
+  #
+  # :through => :module_authors
+  #
+
+  # @!attribute [r] authors
+  #   The names of the authors of this module.
+  #
+  #   @return [Array<Mdm::Author>]
+  has_many :authors, :class_name => 'Mdm::Author', :through => :module_authors
+
+  # @!attribute [r] email_addresses
+  #   The email addresses of the authors of this module.
+  #
+  #   @return [Array<Mdm::EmailAddress>]
+  has_many :email_addresses, :class_name => 'Mdm::EmailAddress', :through => :module_authors
 
   #
   # :through => :module_platforms

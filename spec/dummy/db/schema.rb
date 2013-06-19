@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619195002) do
+ActiveRecord::Schema.define(:version => 20130619204107) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(:version => 20130619195002) do
 
   create_table "hosts", :force => true do |t|
     t.datetime "created_at"
-    t.string   "address",                                               :null => false
+    t.string   "address",               :limit => nil,                  :null => false
     t.string   "mac"
     t.string   "comm"
     t.string   "name"
@@ -245,12 +245,15 @@ ActiveRecord::Schema.define(:version => 20130619195002) do
   add_index "module_architectures", ["module_instance_id", "architecture_id"], :name => "index_unique_module_architectures", :unique => true
 
   create_table "module_authors", :force => true do |t|
-    t.integer "detail_id", :null => false
-    t.text    "name",      :null => false
-    t.text    "email"
+    t.integer "author_id",          :null => false
+    t.integer "email_address_id"
+    t.integer "module_instance_id", :null => false
   end
 
-  add_index "module_authors", ["detail_id", "name"], :name => "index_module_authors_on_detail_id_and_name", :unique => true
+  add_index "module_authors", ["author_id"], :name => "index_module_authors_on_author_id"
+  add_index "module_authors", ["email_address_id"], :name => "index_module_authors_on_email_address_id"
+  add_index "module_authors", ["module_instance_id", "author_id"], :name => "index_module_authors_on_module_instance_id_and_author_id", :unique => true
+  add_index "module_authors", ["module_instance_id"], :name => "index_module_authors_on_module_instance_id"
 
   create_table "module_classes", :force => true do |t|
     t.text    "full_name",      :null => false
@@ -675,7 +678,7 @@ ActiveRecord::Schema.define(:version => 20130619195002) do
 
   create_table "wmap_requests", :force => true do |t|
     t.string   "host"
-    t.string   "address"
+    t.string   "address",    :limit => nil
     t.integer  "port"
     t.integer  "ssl"
     t.string   "meth",       :limit => 32
@@ -692,7 +695,7 @@ ActiveRecord::Schema.define(:version => 20130619195002) do
 
   create_table "wmap_targets", :force => true do |t|
     t.string   "host"
-    t.string   "address"
+    t.string   "address",    :limit => nil
     t.integer  "port"
     t.integer  "ssl"
     t.integer  "selected"
