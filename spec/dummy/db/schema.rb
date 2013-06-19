@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619212332) do
+ActiveRecord::Schema.define(:version => 20130619215217) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -266,29 +266,6 @@ ActiveRecord::Schema.define(:version => 20130619212332) do
   add_index "module_classes", ["full_name"], :name => "index_module_classes_on_full_name", :unique => true
   add_index "module_classes", ["module_type", "reference_name"], :name => "index_module_classes_on_module_type_and_reference_name", :unique => true
   add_index "module_classes", ["rank_id"], :name => "index_module_classes_on_rank_id"
-
-  create_table "module_details", :force => true do |t|
-    t.datetime "mtime"
-    t.string   "mtype"
-    t.text     "refname"
-    t.text     "fullname"
-    t.text     "name"
-    t.integer  "rank"
-    t.text     "description"
-    t.string   "license"
-    t.boolean  "privileged"
-    t.datetime "disclosure_date"
-    t.integer  "default_target"
-    t.text     "default_action"
-    t.string   "stance"
-    t.boolean  "ready"
-    t.integer  "parent_path_id",  :null => false
-  end
-
-  add_index "module_details", ["description"], :name => "index_module_details_on_description"
-  add_index "module_details", ["mtype"], :name => "index_module_details_on_mtype"
-  add_index "module_details", ["name"], :name => "index_module_details_on_name"
-  add_index "module_details", ["refname"], :name => "index_module_details_on_refname"
 
   create_table "module_instances", :force => true do |t|
     t.text    "description",       :null => false
