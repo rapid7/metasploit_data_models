@@ -2,32 +2,28 @@ require 'spec_helper'
 
 describe Mdm::Module::Author do
   context 'associations' do
-    it { should belong_to(:detail).class_name('Mdm::Module::Detail') }
-  end
-
-  context 'callbacks' do
-    context 'before validation' do
-      it 'should convert blank email to nil' do
-        author.email = ''
-
-        author.email.should be_blank
-
-        author.valid?
-
-        author.email.should be_nil
-      end
-    end
+    it { should belong_to(:author).class_name('Mdm::Author') }
+    it { should belong_to(:email_address).class_name('Mdm::EmailAddress') }
+    it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
   end
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:detail_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:name).of_type(:text).with_options(:null => false) }
-      it { should have_db_column(:email).of_type(:text).with_options(:null => true) }
+      it { should have_db_column(:author_id).of_type(:integer).with_options(:null => false) }
+      it { should have_db_column(:email_address_id).of_type(:integer).with_options(:null => true) }
+      it { should have_db_column(:module_instance_id).of_type(:integer).with_options(:null => false) }
     end
 
     context 'indices' do
-      it { should have_db_index([:detail_id, :name]).unique(true) }
+      context 'foreign key' do
+        it { should have_db_index(:author_id) }
+        it { should have_db_index(:email_address_id) }
+        it { should have_db_index(:module_instance_id) }
+      end
+
+      context 'unique' do
+        it { should have_db_index([:module_instance_id, :author_id]).unique(true) }
+      end
     end
   end
 
@@ -38,7 +34,7 @@ describe Mdm::Module::Author do
       end
 
       it { should be_valid }
-      its(:email) { should_not be_nil }
+      its(:email_address) { should_not be_nil }
     end
 
     context 'mdm_module_author' do
@@ -51,22 +47,14 @@ describe Mdm::Module::Author do
   end
 
   context 'mass assignment security' do
-    it { should_not allow_mass_assignment_of(:detail_id) }
-    it { should allow_mass_assignment_of(:email) }
-    it { should allow_mass_assignment_of(:name) }
+    it { should_not allow_mass_assignment_of(:author_id) }
+    it { should_not allow_mass_assignment_of(:email_address_id) }
+    it { should_not allow_mass_assignment_of(:module_instance_id) }
   end
 
   context 'validations' do
-    it { should validate_presence_of(:detail) }
+    it { should validate_presence_of(:author) }
+    it { should validate_presence_of(:module_instance) }
     it { should_not validate_presence_of(:email) }
-
-    context 'name' do
-      it { should validate_presence_of(:name) }
-
-      it_should_behave_like 'validates uniqueness scoped to module_instance_id',
-                            :of => :name,
-                            :factory => :mdm_module_author,
-                            :sequence => :mdm_module_author_name
-    end
   end
 end

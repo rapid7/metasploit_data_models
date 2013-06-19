@@ -37,7 +37,10 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   proof-of-concept and then the people that ported the proof-of-concept to metasploit-framework.
   #
   #   @return [Array<Mdm::Module::Mixin>]
-  has_many :authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy
+  has_many :authors,
+           :class_name => 'Mdm::Module::Author',
+           :dependent => :destroy,
+           :foreign_key => :module_instance_id
 
   # @!attribute [rw] default_action
   #   The default action in {#actions}.

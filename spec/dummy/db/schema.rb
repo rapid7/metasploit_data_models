@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618205631) do
+ActiveRecord::Schema.define(:version => 20130619020112) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -55,6 +55,12 @@ ActiveRecord::Schema.define(:version => 20130618205631) do
   add_index "authorities", ["abbreviation"], :name => "index_authorities_on_abbreviation", :unique => true
   add_index "authorities", ["summary"], :name => "index_authorities_on_summary", :unique => true
   add_index "authorities", ["url"], :name => "index_authorities_on_url", :unique => true
+
+  create_table "authors", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  add_index "authors", ["name"], :name => "index_authors_on_name", :unique => true
 
   create_table "campaigns", :force => true do |t|
     t.integer  "workspace_id",                               :null => false
