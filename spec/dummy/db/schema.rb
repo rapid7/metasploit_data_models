@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619192506) do
+ActiveRecord::Schema.define(:version => 20130619195002) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(:version => 20130619192506) do
     t.string   "source_type"
   end
 
+  create_table "email_addresses", :force => true do |t|
+    t.string "domain", :null => false
+    t.string "local",  :null => false
+  end
+
+  add_index "email_addresses", ["domain", "local"], :name => "index_email_addresses_on_domain_and_local", :unique => true
+  add_index "email_addresses", ["domain"], :name => "index_email_addresses_on_domain"
+  add_index "email_addresses", ["local"], :name => "index_email_addresses_on_local"
+
   create_table "events", :force => true do |t|
     t.integer  "workspace_id"
     t.integer  "host_id"
@@ -121,7 +130,7 @@ ActiveRecord::Schema.define(:version => 20130619192506) do
 
   create_table "hosts", :force => true do |t|
     t.datetime "created_at"
-    t.string   "address",               :limit => nil,                  :null => false
+    t.string   "address",                                               :null => false
     t.string   "mac"
     t.string   "comm"
     t.string   "name"
@@ -666,7 +675,7 @@ ActiveRecord::Schema.define(:version => 20130619192506) do
 
   create_table "wmap_requests", :force => true do |t|
     t.string   "host"
-    t.string   "address",    :limit => nil
+    t.string   "address"
     t.integer  "port"
     t.integer  "ssl"
     t.string   "meth",       :limit => 32
@@ -683,7 +692,7 @@ ActiveRecord::Schema.define(:version => 20130619192506) do
 
   create_table "wmap_targets", :force => true do |t|
     t.string   "host"
-    t.string   "address",    :limit => nil
+    t.string   "address"
     t.integer  "port"
     t.integer  "ssl"
     t.integer  "selected"
