@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619215217) do
+ActiveRecord::Schema.define(:version => 20130620194037) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token"
@@ -128,6 +128,15 @@ ActiveRecord::Schema.define(:version => 20130619215217) do
     t.float   "nx_risk_score"
   end
 
+  create_table "host_tags", :force => true do |t|
+    t.integer "host_id", :null => false
+    t.integer "tag_id",  :null => false
+  end
+
+  add_index "host_tags", ["host_id", "tag_id"], :name => "index_host_tags_on_host_id_and_tag_id", :unique => true
+  add_index "host_tags", ["host_id"], :name => "index_host_tags_on_host_id"
+  add_index "host_tags", ["tag_id"], :name => "index_host_tags_on_tag_id"
+
   create_table "hosts", :force => true do |t|
     t.datetime "created_at"
     t.string   "address",               :limit => nil,                  :null => false
@@ -162,11 +171,6 @@ ActiveRecord::Schema.define(:version => 20130619215217) do
   add_index "hosts", ["purpose"], :name => "index_hosts_on_purpose"
   add_index "hosts", ["state"], :name => "index_hosts_on_state"
   add_index "hosts", ["workspace_id", "address"], :name => "index_hosts_on_workspace_id_and_address", :unique => true
-
-  create_table "hosts_tags", :force => true do |t|
-    t.integer "host_id"
-    t.integer "tag_id"
-  end
 
   create_table "listeners", :force => true do |t|
     t.datetime "created_at",                     :null => false

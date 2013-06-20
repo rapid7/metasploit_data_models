@@ -1,9 +1,4 @@
 class Mdm::Workspace < ActiveRecord::Base
-  #
-  # Callbacks
-  #
-
-  before_save :normalize
 
   #
   # CONSTANTS
@@ -12,43 +7,193 @@ class Mdm::Workspace < ActiveRecord::Base
   DEFAULT = 'default'
 
   #
-  # Relations
+  #
+  # Associations
+  #
   #
 
-  has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
+  # @!attribute [rw] events
+  #   Events that occured in this workspace.
+  #
+  #   @return [Array<Mdm::Event>]
   has_many :events, :class_name => 'Mdm::Event'
-  has_many :hosts, :dependent => :destroy, :class_name => 'Mdm::Host'
-  has_many :listeners, :dependent => :destroy, :class_name => 'Mdm::Listener'
-  has_many :notes, :class_name => 'Mdm::Note'
+
+  # @!attribute [rw] hosts
+  #   Hosts in this workspace.
+  #
+  #   @return [Array<Mdm::Host>]
+  has_many :hosts, :class_name => 'Mdm::Host', :dependent => :destroy
+
+  # @!attribute [rw] listeners
+  #   Listeners running for this workspace.
+  #
+  #   @return [Array<Mdm::Listener>]
+  has_many :listeners, :class_name => 'Mdm::Listener', :dependent => :destroy
+
+  # @!attribute [rw] notes
+  #   Notes about this workspace.
+  #
+  #   @return [Array<Mdm::Note>]
+  has_many :notes, :class_name => 'Mdm::Note', :dependent => :destroy
+
+  # @!attribute [rw] owner
+  #   User that owns this workspace and has full permissions within this workspace even if they are not an
+  #   {Mdm::User#admin administrator}.
+  #
+  #   @return [Mdm::User]
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
-  has_many :report_templates, :dependent => :destroy, :class_name => 'Mdm::ReportTemplate'
-  has_many :reports, :dependent => :destroy, :class_name => 'Mdm::Report'
-  has_many :tasks, :dependent => :destroy, :class_name => 'Mdm::Task', :order => 'created_at DESC'
-  has_and_belongs_to_many :users, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::User'
+
+  # @!attribrute [rw] report_templates
+  #   Templates for {#reports}.
+  #
+  #   @return [Array<Mdm::ReportTemplate>]
+  has_many :report_templates, :class_name => 'Mdm::ReportTemplate', :dependent => :destroy
+
+  # @!attribute [rw] reports
+  #   Reports generated about data in this workspace.
+  #
+  #   @return [Array<Mdm::Report>]
+  has_many :reports, :class_name => 'Mdm::Report', :dependent => :destroy
+
+  # @!attribute [rw] tasks
+  #   Tasks run inside this workspace.
+  #
+  #   @return [Array<Mdm::Task>]
+  has_many :tasks, :class_name => 'Mdm::Task', :dependent => :destroy, :order => 'created_at DESC'
+
+  # @!attribute [rw] users
+  #   Users that are allowed to use this workspace.  Does not necessarily include all users, as an {Mdm::User#admin
+  #   administrator} can access any workspace, even ones where they are not a member.
+  has_and_belongs_to_many :users,
+                          :class_name => 'Mdm::User',
+                          :join_table => 'workspace_members',
+                          :uniq => true
 
   #
-  # Through :hosts
+  # :through => :hosts
   #
-  has_many :clients, :through => :hosts, :class_name => 'Mdm::Client'
-  has_many :exploited_hosts, :through => :hosts, :class_name => 'Mdm::ExploitedHost'
-  has_many :loots, :through => :hosts, :class_name => 'Mdm::Loot'
-  has_many :vulns, :through => :hosts, :class_name => 'Mdm::Vuln'
-  has_many :services, :through => :hosts, :class_name => 'Mdm::Service', :foreign_key => 'service_id'
-  has_many :sessions, :through => :hosts, :class_name => 'Mdm::Session'
+
+  # @!attribute [r] clients
+  #   Campaign clients from {#hosts} in this workspace
+  #
+  #   @return [Array<Mdm::Client>]
+  has_many :clients, :class_name => 'Mdm::Client', :through => :hosts
+
+  # @!attribute [r] exploited_hosts
+  #   Hosts exploited in this workspace.
+  #
+  #   @return [Array<Mdm::ExploitedHost>]
+  has_many :exploited_hosts, :class_name => 'Mdm::ExploitedHost', :through => :hosts
+
+  # @!attribute [r] host_tags
+  #   Joins {#hosts} to {#tags}.
+  #
+  #   @return [Array<Mdm::HostTag>]
+  has_many :host_tags, :class_name => 'Mdm::HostTag', :through => :hosts
+
+  # @!attribute [r] loots
+  #   Loot gathered from {#hosts} in this workspace.
+  #
+  #   @return [Array<Mdm::Loot>]
+  has_many :loots, :class_name => 'Mdm::Loot', :through => :hosts
+
+  # @!attribute [r] services
+  #   Services running on {#hosts} in this workspace.
+  #
+  #   @return [Array<Mdm::Service>]
+  has_many :services, :class_name => 'Mdm::Service', :foreign_key => 'service_id', :through => :hosts
+
+  # @!attribute [r] sessions
+  #   Sessions opened on {#hosts} in this workspace.
+  #
+  #    @return [Array<Mdm::Session>]
+  has_many :sessions, :class_name => 'Mdm::Session', :through => :hosts
+
+  # @!attribute [r] vulns
+  #   Vulnerabilities found on {#hosts} in this workspace.
+  #
+  #   @return [Array<Mdm::Vuln>]
+  has_many :vulns, :class_name => 'Mdm::Vuln', :through => :hosts
+
+  #
+  # :through => :host_tags
+  #
+
+  # @!attribute [r] tags
+  #   Tags {#host_tags applied} to {#hosts} in this workspace.
+  #
+  #   @return [Array<Mdm::Tag>]
+  has_many :tags, :class_name => 'Mdm::Tag', :through => :host_tags, :uniq => true
+
+  #
+  # :through => :services
+  #
+
+  # @!attribute [r] creds
+  #   Credentials captured from {#services} in this workspace.
+  #
+  #   @return [Array<Mdm::Cred>]
+  has_many :creds, :class_name => 'Mdm::Cred', :through => :services
+
+  # @!attribute [r] web_sites
+  #   Web sites running on {#services} in this workspace.
+  #
+  #   @return [Array<Mdm::WebSite>]
+  has_many :web_sites, :class_name => 'Mdm::WebSite', :through => :services
+
+  #
+  # :through => :web_sites
+  #
+
+  # @!attribute [r] web_forms
+  #   Forms on web sites on {#services} in this workspace.
+  #
+  #   @return [Array<Mdm::WebForm>]
+  has_many :web_forms, :class_name => 'Mdm::WebForm', :through => :web_sites
+
+  # @!attribute [r] web_pages
+  #   Pages of web sites on {#services} in this workspace.
+  #
+  #   @return [Array<Mdm::WebPage>]
+  has_many :web_pages, :class_name => 'Mdm::WebPage', :through => :web_sites
+
+  # @!attribute [r] web_vulns
+  #   Vulnerabilities found in {#web_sites} on {#services} in this workspace.
+  #
+  #   @return [Array<Mdm::WebVuln>]
+  has_many :web_vulns, :class_name => 'Mdm::WebVuln', :through => :web_sites
+
+  #
+  # Callbacks
+  #
+
+  before_save :normalize
 
   #
   # Validations
   #
 
-  validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 255}
-  validates :description, :length => {:maximum => 4096}
   validate :boundary_must_be_ip_range
 
-  #
+  validates :description,
+            :length => {
+                :maximum => 4096
+            }
+  validates :name,
+            :length => {
+                :maximum => 255
+            },
+            :presence => true,
+            :uniqueness => true
+
   # If limit_to_network is disabled, this will always return true.
   # Otherwise, return true only if all of the given IPs are within the project
   # boundaries.
   #
+  #
+  # @param ips [String] IP range(s)
+  # @return [true] if actions on ips are allowed.
+  # @return [false] if actions are not allowed on ips.
   def allow_actions_on?(ips)
     return true unless limit_to_network
     return true unless boundary
@@ -69,91 +214,12 @@ class Mdm::Workspace < ActiveRecord::Base
     errors.add(:boundary, "must be a valid IP range") unless valid_ip_or_range?(boundary)
   end
 
-  def creds
-    Mdm::Cred.find(
-        :all,
-        :include => {:service => :host},
-        :conditions => ["hosts.workspace_id = ?", self.id]
-    )
-  end
-
   def self.default
-    find_or_create_by_name(DEFAULT)
+    where(:name => DEFAULT).first_or_create!
   end
 
   def default?
     name == DEFAULT
-  end
-
-  #
-  # This method iterates the creds table calling the supplied block with the
-  # cred instance of each entry.
-  #
-  def each_cred(&block)
-    creds.each do |cred|
-      block.call(cred)
-    end
-  end
-
-  def each_host_tag(&block)
-    host_tags.each do |host_tag|
-      block.call(host_tag)
-    end
-  end
-
-  def host_tags
-    Mdm::Tag.find(
-        :all,
-        :include => :hosts,
-        :conditions => ["hosts.workspace_id = ?", self.id]
-    )
-  end
-
-  def web_forms
-    query = <<-EOQ
-          SELECT DISTINCT web_forms.*
-          FROM hosts, services, web_sites, web_forms
-          WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_forms.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebForm.find_by_sql(query)
-  end
-
-  def web_pages
-    query = <<-EOQ
-          SELECT DISTINCT web_pages.*
-            FROM hosts, services, web_sites, web_pages
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_pages.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebPage.find_by_sql(query)
-  end
-
-  def web_sites
-    query = <<-EOQ
-          SELECT DISTINCT web_sites.*
-            FROM hosts, services, web_sites
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id
-    EOQ
-    Mdm::WebSite.find_by_sql(query)
-  end
-
-  def web_vulns
-    query = <<-EOQ
-          SELECT DISTINCT web_vulns.*
-          FROM hosts, services, web_sites, web_vulns
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_vulns.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebVuln.find_by_sql(query)
   end
 
   def unique_web_forms

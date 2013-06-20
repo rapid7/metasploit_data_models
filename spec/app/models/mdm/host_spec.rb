@@ -76,104 +76,20 @@ describe Mdm::Host do
 		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
 		it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
     it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
-    it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
+    it { should have_many(:hosts_tags).class_name('Mdm::HostTag').dependent(:destroy) }
     it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
+    it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }
+    it { should have_many(:module_references).class_name('Mdm::Module::Reference').through(:references) }
+    it { should have_many(:notes).class_name('Mdm::Note').dependent(:destroy).order('notes.created_at') }
+    it { should have_many(:references).class_name('Mdm::Reference').through(:vuln_references) }
+    it { should have_many(:services).class_name('Mdm::Service').dependent(:destroy).order('services.port, services.proto') }
+    it { should have_many(:sessions).class_name('Mdm::Session').dependent(:destroy).order('sessions.opened_at') }
+    it { should have_many(:service_notes).through(:services) }
+    it { should have_many(:tags).class_name('Mdm::Tag').through(:hosts_tags) }
     it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
-
-    context 'module_details' do
-      it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_refs) }
-
-      context 'with Mdm::Vulns' do
-        let!(:vulns) do
-          FactoryGirl.create_list(
-              :mdm_vuln,
-              2,
-              :host => host
-          )
-        end
-
-        context 'with Mdm::Ref' do
-          let(:name) do
-            FactoryGirl.generate :mdm_ref_name
-          end
-
-          let!(:ref) do
-            FactoryGirl.create(:mdm_ref, :name => name)
-          end
-
-          context 'with Mdm::VulnRefs' do
-            let!(:vuln_refs) do
-              vulns.collect { |vuln|
-                FactoryGirl.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
-              }
-            end
-
-            context 'with Mdm::Module::Instance' do
-              let!(:module_instance) do
-                FactoryGirl.create(
-                    :mdm_module_instance
-                )
-              end
-
-              context 'with Mdm::Module::Ref with same name as Mdm::Ref' do
-                let!(:module_ref) do
-                  FactoryGirl.create(
-                      :mdm_module_ref,
-                      :module_instance => module_instance,
-                      :name => name
-                  )
-                end
-
-                it 'should list unique Mdm::Module::Instance' do
-                  host.module_instances.should =~ [module_instance]
-                end
-
-                it 'should have duplicate Mdm::Module::Instances if collected through chain' do
-                  vuln_refs = []
-
-                  host.vulns.each do |vuln|
-                    # @todo https://www.pivotaltracker.com/story/show/49004623
-                    vuln_refs += vuln.vulns_refs
-                  end
-
-                  refs = []
-
-                  vuln_refs.each do |vuln_ref|
-                    refs << vuln_ref.ref
-                  end
-
-                  module_refs = []
-
-                  refs.each do |ref|
-                    module_refs += ref.module_refs
-                  end
-
-                  module_instances = []
-
-                  module_refs.each do |module_ref|
-                    module_instances << module_ref.module_instance
-                  end
-
-                  host.module_instances.count.should < module_instances.length
-                  module_instances.uniq.count.should == host.module_instances.count
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-
-    it { should have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
-    it { should have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
-    it { should have_many(:refs).class_name('Mdm::Ref').through(:vuln_refs) }
-    it { should have_many(:services).class_name('Mdm::Service').dependent(:destroy).order('services.port, services.proto') }
-    it { should have_many(:service_notes).through(:services) }
-    it { should have_many(:sessions).class_name('Mdm::Session').dependent(:destroy).order('sessions.opened_at') }
-    it { should have_many(:tags).class_name('Mdm::Tag').through(:hosts_tags) }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:delete_all) }
-    it { should have_many(:vuln_refs).class_name('Mdm::VulnRef') }
+    it { should have_many(:vuln_references).class_name('Mdm::VulnReference').through(:vulns) }
+    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
     it { should have_many(:web_sites).class_name('Mdm::WebSite').through(:services) }
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
 	end
@@ -358,7 +274,6 @@ describe Mdm::Host do
       end
     end
 
-    it { should ensure_inclusion_of(:arch).in_array(architectures).allow_blank }
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end

@@ -5,31 +5,6 @@ describe Mdm::Vuln do
     FactoryGirl.build(:mdm_vuln)
   end
 
-  context '#destroy' do
-    it 'should successfully destroy the object and dependent objects' do
-      vuln = FactoryGirl.create(:mdm_vuln)
-      vuln_attempt = FactoryGirl.create(:mdm_vuln_attempt, :vuln => vuln)
-      vuln_detail = FactoryGirl.create(:mdm_vuln_detail, :vuln => vuln)
-      vuln_ref = FactoryGirl.create(:mdm_vuln_ref, :vuln => vuln)
-      expect {
-        vuln.destroy
-      }.to_not raise_error
-      expect {
-        vuln.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        vuln_attempt.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        vuln_detail.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        vuln_ref.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
-
   context 'associations' do
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }
@@ -177,5 +152,76 @@ describe Mdm::Vuln do
 
   context 'validations' do
     it { should validate_presence_of :name }
+  end
+
+  context '#destroy' do
+    let!(:vuln) do
+      FactoryGirl.create(:mdm_vuln)
+    end
+
+    let!(:vuln_attempt) do
+      FactoryGirl.create(
+          :mdm_vuln_attempt,
+          :vuln => vuln
+      )
+    end
+
+    let!(:vuln_detail) do
+      FactoryGirl.create(
+          :mdm_vuln_detail,
+          :vuln => vuln
+      )
+    end
+
+    let!(:vuln_reference) do
+      FactoryGirl.create(
+          :mdm_vuln_reference,
+          :vuln => vuln
+      )
+    end
+
+    context 'before' do
+      it 'should have 1 Mdm::Vuln' do
+        Mdm::Vuln.count.should == 1
+      end
+
+      it 'should have 1 Mdm::VulnAttempt' do
+        Mdm::VulnAttempt.count.should == 1
+      end
+
+      it 'should have 1 Mdm::VulnDetail' do
+        Mdm::VulnDetail.count.should == 1
+      end
+
+      it 'should have 1 Mdm::VulnReference' do
+        Mdm::VulnReference.count.should == 1
+      end
+    end
+
+    context 'after' do
+      it 'should delete 1 Mdm::Vuln' do
+        expect {
+          vuln.destroy
+        }.to change(Mdm::Vuln, :count).by(-1)
+      end
+
+      it 'should delete 1 Mdm::VulnAttempt' do
+        expect {
+          vuln.destroy
+        }.to change(Mdm::VulnAttempt, :count).by(-1)
+      end
+
+      it 'should delete 1 Mdm::VulnDetail' do
+        expect {
+          vuln.destroy
+        }.to change(Mdm::VulnDetail, :count).by(-1)
+      end
+
+      it 'should delete 1 Mdm::VulnReference' do
+        expect {
+          vuln.destroy
+        }.to change(Mdm::VulnReference, :count).by(-1)
+      end
+    end
   end
 end

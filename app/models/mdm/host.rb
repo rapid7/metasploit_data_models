@@ -33,20 +33,14 @@ class Mdm::Host < ActiveRecord::Base
   #   The architecture of the host's CPU OR the programming language for virtual machine programming language like
   #   Ruby, PHP, and Java.
   #
-  #   @return [Mdm::Module::Architecture]
-  belongs_to :architecture
+  #   @return [Mdm::Architecture]
+  belongs_to :architecture, :class_name => 'Mdm::Architecture'
 
   # @!attribute [rw] task_hosts
-  #   Details about what Tasks touched this host
+  #   Joins {#tasks} to this host.
   #
   #   @return [Array<Mdm::TaskHost>]
-  has_many :task_hosts, :dependent => :destroy, :class_name => 'Mdm::TaskHost'
-
-  # @!attribute [rw] tasks
-  #   Tasks that touched this service
-  #
-  #   @return [Array<Mdm::Task>]
-  has_many :tasks, :through => :task_hosts, :class_name => 'Mdm::Task'
+  has_many :task_hosts, :class_name => 'Mdm::TaskHost', :dependent => :destroy
 
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
@@ -71,7 +65,7 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @todo https://www.pivotaltracker.com/story/show/48923201
   #   @return [Array<Mdm::HostTag>]
-  has_many :hosts_tags, :class_name => 'Mdm::HostTag'
+  has_many :hosts_tags, :class_name => 'Mdm::HostTag', :dependent => :destroy
 
   # @!attribute [rw] loots
   #   Loot gathered from the host with {Mdm::Loot#created_at newest loot} first.
@@ -84,7 +78,7 @@ class Mdm::Host < ActiveRecord::Base
   #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
   #   @return [Array<Mdm::Note>]
-  has_many :notes, :class_name => 'Mdm::Note', :dependent => :delete_all, :order => 'notes.created_at'
+  has_many :notes, :class_name => 'Mdm::Note', :dependent => :destroy, :order => 'notes.created_at'
 
   # @!attribute [rw] services
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
@@ -104,7 +98,7 @@ class Mdm::Host < ActiveRecord::Base
   #   Vulnerabilities found on the host.
   #
   #   @return [Array<Mdm::Vuln>]
-  has_many :vulns, :class_name => 'Mdm::Vuln', :dependent => :delete_all
+  has_many :vulns, :class_name => 'Mdm::Vuln', :dependent => :destroy
 
   # @!attribute [rw] workspace
   #   The workspace in which this host was found.
@@ -113,7 +107,7 @@ class Mdm::Host < ActiveRecord::Base
   belongs_to :workspace, :class_name => 'Mdm::Workspace'
 
   #
-  # Through host_tags
+  # :through => :host_tags
   #
 
   # @!attribute [r] tags
@@ -124,7 +118,7 @@ class Mdm::Host < ActiveRecord::Base
   has_many :tags, :class_name => 'Mdm::Tag', :through => :hosts_tags
 
   #
-  # Through services
+  # :through => :services
   #
 
   # @!attribute [r] creds
@@ -148,52 +142,60 @@ class Mdm::Host < ActiveRecord::Base
   #   @see services
   has_many :web_sites, :class_name => 'Mdm::WebSite', :through => :services
 
-	#
-	# Through vulns
-	#
-
-  # @!attribute [r] vuln_refs
-  #   Join model between {#vulns} and {#refs}.  Use either of those asssociations instead of this join model.
   #
-  #   @todo https://www.pivotaltracker.com/story/show/49004623
-  #   @return [Array<Mdm::VulnRef>]
-  #   @see #refs
+  # :through => :task_hosts
+  #
+
+  # @!attribute [rw] tasks
+  #   Tasks that touched this service
+  #
+  #   @return [Array<Mdm::Task>]
+  has_many :tasks, :class_name => 'Mdm::Task', :through => :task_hosts
+
+	#
+	# :through => :vulns
+	#
+
+  # @!attribute [r] vuln_references
+  #   Join model between {#vulns} and {#references}.  Use either of those associations instead of this join model.
+  #
+  #   @return [Array<Mdm::VulnReference>]
+  #   @see #references
   #   @see #vulns
-	has_many :vuln_refs, :class_name => 'Mdm::VulnRef', :source => :vulns_refs, :through => :vulns
+	has_many :vuln_references, :class_name => 'Mdm::VulnReference', :through => :vulns
 
 	#
-	# Through vuln_refs
+	# :through => :vuln_references
 	#
 
-  # @!attribute [r] refs
+  # @!attribute [r] references
   #   External references, such as CVE, to vulnerabilities found on this host.
   #
-  #   @return [Array<Mdm::Ref>]
-  #   @see #vuln_refs
-	has_many :refs, :class_name => 'Mdm::Ref', :through => :vuln_refs
+  #   @return [Array<Mdm::Reference>]
+  #   @see #vuln_references
+	has_many :references, :class_name => 'Mdm::Reference', :through => :vuln_references
 
 	#
-	# Through refs
+	# :through => :references
 	#
 
-  # @!attribute [r] module_refs
-  #   {Mdm::Module::Ref References for modules} for {Mdm::Ref references for vulnerabilities}.
+  # @!attribute [r] module_references
+  #   Joins {#module_instances} to {#references}
   #
-  #   @return [Array<Mdm::Module::Ref>]
-	has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
+  #   @return [Array<Mdm::Module::Reference>]
+	has_many :module_references, :class_name => 'Mdm::Module::Reference', :through => :references
 
 	#
-	# Through module_refs
+	# :through => :module_references
 	#
 
-  # @!attribute [r] module_details
-  #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
+  # @!attribute [r] module_instances
+  #   {Mdm::Module::Instance Modules} that were used to find {#vulns vulnerabilities} on this host.
   #
-  #   @return [Array<Mdm::Module::Detail]
-	has_many :module_details,
-           :class_name => 'Mdm::Module::Detail',
-           :source =>:detail,
-           :through => :module_refs,
+  #   @return [Array<Mdm::Module::Instance>]
+	has_many :module_instances,
+           :class_name => 'Mdm::Module::Instance',
+           :through => :module_references,
            :uniq => true
 
   #
@@ -323,12 +325,6 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Integer]
 
   #
-  # Callbacks
-  #
-
-  before_destroy :cleanup_tags
-
-  #
   # Nested Attributes
   # @note Must be declared after relations being referenced.
   #
@@ -387,18 +383,6 @@ class Mdm::Host < ActiveRecord::Base
   def attribute_locked?(attr)
     n = notes.find_by_ntype("host.updated.#{attr}")
     n && n.data[:locked]
-  end
-
-  # Destroys any {Mdm::Tag Mdm::Tags} that will have no {Mdm::Tag#hosts} left after this host is deleted.
-  #
-  # @return [void]
-  def cleanup_tags
-    # No need to keep tags with no hosts
-    tags.each do |tag|
-      tag.destroy if tag.hosts == [self]
-    end
-    # Clean up association table records
-    Mdm::HostTag.delete_all("host_id = #{self.id}")
   end
 
   # This is replicated by the IpAddressValidator class. Had to put it here as well to avoid

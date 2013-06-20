@@ -1,22 +1,31 @@
+# Tag {#hosts_tags assigned} to {#hosts}.  Tags can be used to group together hosts for targeting and reporting.
 class Mdm::Tag < ActiveRecord::Base
   #
-  # Callbacks
+  # Associations
   #
 
-  before_destroy :cleanup_hosts
-
+  # @!attribute [rw] host_tags
+  #  Joins {#hosts} to this tag.
   #
-  # Relations
+  #  @return [Array<Mdm::HostTag>]
+  has_many :host_tags,
+           :class_name => 'Mdm::HostTag',
+           :dependent => :destroy
+  # @!attribute [rw] user
+  #   User that created this tag.
   #
-
-  has_many :hosts_tags, :class_name => 'Mdm::HostTag'
+  #   @return [Mdm::User]
   belongs_to :user, :class_name => 'Mdm::User'
 
   #
-  # Through :hosts_tags
+  # :through => :hosts_tags
   #
-  has_many :hosts, :through => :hosts_tags, :class_name => 'Mdm::Host'
 
+  # @!attribute [r] hosts
+  #   Host that are tagged with this tag.
+  #
+  #   @return [Array<Mdm::Host>]
+  has_many :hosts, :class_name => 'Mdm::Host', :through => :host_tags
 
   #
   # Validations
@@ -33,9 +42,15 @@ class Mdm::Tag < ActiveRecord::Base
             },
             :presence => true
 
-  def cleanup_hosts
-    # Clean up association table records
-    Mdm::HostTag.delete_all("tag_id = #{self.id}")
+  # Destroy this tag if it has no {#host_tags}
+  #
+  # @return [void]
+  def destroy_if_orphaned
+    self.class.transaction do
+      if host_tags.empty?
+        destroy
+      end
+    end
   end
 
   def to_s
