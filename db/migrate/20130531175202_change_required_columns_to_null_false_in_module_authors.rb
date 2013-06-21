@@ -10,5 +10,5 @@ class ChangeRequiredColumnsToNullFalseInModuleAuthors < MetasploitDataModels::Ch
       :name
   ]
   # Table whose {COLUMNS} to change.
-  TABLE_NAME= :module_authors
+  TABLE_NAME = :module_authors
 end
