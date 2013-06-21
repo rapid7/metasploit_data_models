@@ -5,7 +5,7 @@ class Mdm::EmailAddress < ActiveRecord::Base
   #
 
   # @!attribute [rw] module_authors
-  #   Credits where {#authors} used this email address for {#module_instance modules}.
+  #   Credits where {#authors} used this email address for {#module_instances modules}.
   #
   #   @return [Array<Mdm::Module::Author>]
   has_many :module_authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy

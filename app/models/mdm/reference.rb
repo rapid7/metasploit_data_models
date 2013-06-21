@@ -1,5 +1,5 @@
 # Reference to a {#url} or a {#designation} maintained by an {#authority}, such as CVE, that describes an exposure or
-# vulnerability on a {#hosts host} or that is exploited by a {#module_instance module}.
+# vulnerability on a {#hosts host} or that is exploited by a {#module_instances module}.
 class Mdm::Reference < ActiveRecord::Base
   include MetasploitDataModels::Derivation
 
@@ -32,7 +32,7 @@ class Mdm::Reference < ActiveRecord::Base
   #
 
   # @!attribute [r] module_instances
-  #   {Mdm::Module::Instance Modules} that exploit this {#reference} or describe a proof-of-concept (PoC) code that the
+  #   {Mdm::Module::Instance Modules} that exploit this reference or describe a proof-of-concept (PoC) code that the
   #   module is based on.
   #
   #   @return [Array<Mdm::Module::Instance>]

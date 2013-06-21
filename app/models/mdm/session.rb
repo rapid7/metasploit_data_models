@@ -101,12 +101,12 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [String]
 
   # @!attribute [rw] via_exploit
-  #   The {Mdm::Module::Detail#fullname full name} of the exploit module that opened this session.
+  #   The {Mdm::Module::Class#full_name full name} of the exploit module that opened this session.
   #
   #   @return [String]
 
   # @!attribute [rw] via_payload
-  #   The {Mdm::Module::Detail#fullname full name} if the payload module that's running this session.
+  #   The {Mdm::Module::Class#full_name full name} if the payload module that's running this session.
   #
   #   @return [String]
 

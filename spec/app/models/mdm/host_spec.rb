@@ -76,7 +76,7 @@ describe Mdm::Host do
 		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
 		it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
     it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
-    it { should have_many(:hosts_tags).class_name('Mdm::HostTag').dependent(:destroy) }
+    it { should have_many(:host_tags).class_name('Mdm::HostTag').dependent(:destroy) }
     it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }
     it { should have_many(:module_references).class_name('Mdm::Module::Reference').through(:references) }
@@ -85,7 +85,7 @@ describe Mdm::Host do
     it { should have_many(:services).class_name('Mdm::Service').dependent(:destroy).order('services.port, services.proto') }
     it { should have_many(:sessions).class_name('Mdm::Session').dependent(:destroy).order('sessions.opened_at') }
     it { should have_many(:service_notes).through(:services) }
-    it { should have_many(:tags).class_name('Mdm::Tag').through(:hosts_tags) }
+    it { should have_many(:tags).class_name('Mdm::Tag').through(:host_tags) }
     it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
     it { should have_many(:vuln_references).class_name('Mdm::VulnReference').through(:vulns) }
@@ -153,7 +153,7 @@ describe Mdm::Host do
             it "should not destroy the other host's tags" do
               host.destroy
 
-              other_host.hosts_tags.count.should == 1
+              other_host.host_tags.count.should == 1
             end
           end
         end

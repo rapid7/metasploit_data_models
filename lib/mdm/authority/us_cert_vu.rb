@@ -1,6 +1,6 @@
 # United States Computer Emergency Readiness Team Vulnerability Notes Database authority-specific code.
 module Mdm::Authority::UsCertVu
-  # Returns URL to {#designation Vul ID's} page on US CERT Notes Database.
+  # Returns URL to {Mdm::Reference#designation Vul ID's} page on US CERT Notes Database.
   #
   # @param designation [String] N US CERT ID.
   # @return [String] URL

@@ -70,7 +70,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   belongs_to :module_class, :class_name => 'Mdm::Module::Class'
 
   # @!attribute [rw] module_platform
-  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Platforms platforms}.
+  #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Platform platforms}.
   #
   #   @return [Array<Mdm::Module::Platform>]
   has_many :module_platforms,
@@ -79,9 +79,9 @@ class Mdm::Module::Instance < ActiveRecord::Base
            :foreign_key => :module_instance_id
 
   # @!attribute [rw] module_references
-  #   Joins {#references} to this {Mdm::Module:Instance}.
+  #   Joins {#references} to this {Mdm::Module::Instance}.
   #
-  #   @return [Array<Mdm::Module::Refeference>]
+  #   @return [Array<Mdm::Module::Reference>]
   has_many :module_references,
            :class_name => 'Mdm::Module::Reference',
            :dependent => :destroy,
@@ -195,8 +195,8 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [String]
 
   # @!attribute [rw] name
-  #   The human readable name of the module.  It is unrelated to {#fullname} or {#refname} and is better thought of
-  #   as a short summary of the {#description}.
+  #   The human readable name of the module.  It is unrelated to {Mdm::Module::Class#full_name} or
+  #   {Mdm::Module::Class#reference_name} and is better thought of as a short summary of the {#description}.
   #
   #   @return [String]
 
@@ -206,7 +206,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [Boolean]
 
   # @!attribute [rw] stance
-  #   Whether the module is active or passive.  `nil` if the {#mtype module type} does not
+  #   Whether the module is active or passive.  `nil` if the {Mdm::Module::Class#module_type module type} does not
   #   {#supports_stance? support stances}.
   #
   #   @return ['active', 'passive', nil]
@@ -227,8 +227,8 @@ class Mdm::Module::Instance < ActiveRecord::Base
                 :in => STANCES
             }
 
-  # Returns whether this module supports a {#stance}.  Only modules with {#mtype} `'auxiliary'` and `'exploit'` support
-  # a non-nil {#stance}.
+  # Returns whether this module supports a {#stance}.  Only modules with {Mdm::Module::Class#module_type} `'auxiliary'`
+  # and `'exploit'` support a non-nil {#stance}.
   #
   # @return [true] if {Mdm::Module::Class#module_type module_class.module_type} is `'auxiliary'` or `'exploit'`
   # @return [false] otherwise

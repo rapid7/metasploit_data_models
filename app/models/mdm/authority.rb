@@ -42,7 +42,7 @@ class Mdm::Authority < ActiveRecord::Base
   # :through => :vuln_references
   #
 
-  # @!attirbute [r] vulns
+  # @!attribute [r] vulns
   #   Vulnerabilities that have a reference under this authority.
   #
   #   @return [Array<Mdm::Vuln>]
@@ -57,7 +57,13 @@ class Mdm::Authority < ActiveRecord::Base
   #
   #   @return [String]
 
-  # @!atrribute [rw] summary
+  # @!attribute [rw] obsolete
+  #   Whether this authority is obsolete and no longer exists on the internet.
+  #
+  #   @return [false]
+  #   @return [true] {#url} may be `nil` because authory no longer has a web site.
+
+  # @!attribute [rw] summary
   #   An expansion of the {#abbreviation}.
   #
   #   @return [String, nil]

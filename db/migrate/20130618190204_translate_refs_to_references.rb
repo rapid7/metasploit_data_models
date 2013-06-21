@@ -8,7 +8,7 @@ class TranslateRefsToReferences < ActiveRecord::Migration
 
   # Translates refs and vulns_refs to authorities, references, and vuln_references.
   #
-  # @void
+  # return [@void]
   def up
     # Maps refs.id to references.id
     reference_id_by_ref_id = {}

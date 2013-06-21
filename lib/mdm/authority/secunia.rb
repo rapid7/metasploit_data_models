@@ -1,6 +1,6 @@
 # Secunia authority-specific code.
 module Mdm::Authority::Secunia
-  # Returns URL to {#designation Secunia Advisory ID's} page on Secunia.
+  # Returns URL to {Mdm::Reference#designation Secunia Advisory ID's} page on Secunia.
   #
   # @param designation [String] NNNNN Secunia Advisory ID.
   # @return [String] URL

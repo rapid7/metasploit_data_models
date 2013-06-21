@@ -43,7 +43,7 @@ class Mdm::Workspace < ActiveRecord::Base
   #   @return [Mdm::User]
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
 
-  # @!attribrute [rw] report_templates
+  # @!attribute [rw] report_templates
   #   Templates for {#reports}.
   #
   #   @return [Array<Mdm::ReportTemplate>]

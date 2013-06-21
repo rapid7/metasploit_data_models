@@ -17,7 +17,7 @@ class Mdm::Platform < ActiveRecord::Base
   #
 
   # @!attribute [r] module_instance
-  #   {Mdm::Module::Instances Modules} that has this {Mdm::Platform} as one of their supported
+  #   {Mdm::Module::Instance Modules} that has this {Mdm::Platform} as one of their supported
   #   {Mdm::Module::Instance#platforms platforms}.
   #
   #   @return [Array<Mdm::Module::Instance>]

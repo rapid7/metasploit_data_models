@@ -1,4 +1,4 @@
-# The architecture of a {Mdm::Module::Host host's cpu} or that is targeted by the shellcode for a
+# The architecture of a {Mdm::Host host's cpu} or that is targeted by the shellcode for a
 # {Mdm::Module::Instance module}.
 class Mdm::Architecture < ActiveRecord::Base
   #

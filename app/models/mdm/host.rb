@@ -61,11 +61,9 @@ class Mdm::Host < ActiveRecord::Base
 
   # @!attribute [rw] hosts_tags
   #   A join model between {Mdm::Tag} and {Mdm::Host}.  Use {#tags} to get the actual {Mdm::Tag Mdm::Tags} on this host.
-  #   {#hosts_tags} are cleaned up in a before_destroy: {#cleanup_tags}.
   #
-  #   @todo https://www.pivotaltracker.com/story/show/48923201
   #   @return [Array<Mdm::HostTag>]
-  has_many :hosts_tags, :class_name => 'Mdm::HostTag', :dependent => :destroy
+  has_many :host_tags, :class_name => 'Mdm::HostTag', :dependent => :destroy
 
   # @!attribute [rw] loots
   #   Loot gathered from the host with {Mdm::Loot#created_at newest loot} first.
@@ -115,7 +113,7 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Tag>]
   #   @see #hosts_tags
-  has_many :tags, :class_name => 'Mdm::Tag', :through => :hosts_tags
+  has_many :tags, :class_name => 'Mdm::Tag', :through => :host_tags
 
   #
   # :through => :services

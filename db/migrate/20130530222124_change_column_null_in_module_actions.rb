@@ -1,5 +1,5 @@
 # Changes module_actions.detail_id and module_actions.name to be `:null => false` to mirror presence validations
-# on {Mdm::Module::Action#detail} and {Mdm::Module::Action#name}.
+# on `Mdm::Module::Action#detail` and `Mdm::Module::Action#name`.
 class ChangeColumnNullInModuleActions < MetasploitDataModels::ChangeRequiredColumnsToNullFalse
   #
   # CONSTANTS

@@ -1,4 +1,4 @@
-# Author of one of more {#module_instance modules}.  An author can have 0 or more {#email_addresses} representing that
+# Author of one of more {#module_instances modules}.  An author can have 0 or more {#email_addresses} representing that
 # the author's email may have changed over the history of metasploit-framework or they are submitting from a work and
 # personal email for different code.
 class Mdm::Author < ActiveRecord::Base
@@ -7,7 +7,7 @@ class Mdm::Author < ActiveRecord::Base
   #
 
   # @!attribute [rw] module_authors
-  #   Joins this to {email_addresses} and {#module_instances}.
+  #   Joins this to {#email_addresses} and {#module_instances}.
   #
   #   @return [Array<Mdm::Module::Author>]
   has_many :module_authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy

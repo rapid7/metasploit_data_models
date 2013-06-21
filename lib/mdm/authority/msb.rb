@@ -1,6 +1,6 @@
 # Microsoft Security Bulletin authority-specific code.
 module Mdm::Authority::Msb
-  # Returns URL to {#designation the security bulletin's} page on Technet.
+  # Returns URL to {Mdm::Reference#designation the security bulletin's} page on Technet.
   #
   # @param designation [String] MSYY-NNN Security Bulletin ID.
   # @return [String] URL

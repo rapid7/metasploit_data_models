@@ -16,7 +16,7 @@ module MetasploitDataModels
   #     end
   #   end
   module Spec
-    # Removes {#temporary_pathname} from disk if it's been set and exists on disk.
+    # Removes {temporary_pathname} from disk if it's been set and exists on disk.
     #
     # @return [void]
     def self.remove_temporary_pathname
@@ -47,7 +47,7 @@ module MetasploitDataModels
     # sequences.
     #
     # @param pathname [Pathname] path to a directory.  It does not need to exist, but need to be in a writable parent
-    #   directory so it can be removed by {#remove_temporary_pathname}.
+    #   directory so it can be removed by {remove_temporary_pathname}.
     # @return [Pathname] `pathname`
     def self.temporary_pathname=(pathname)
       @temporary_pathname = pathname

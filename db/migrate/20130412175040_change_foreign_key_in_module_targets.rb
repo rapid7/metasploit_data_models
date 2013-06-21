@@ -1,5 +1,5 @@
 # Changes `module_targets.module_detail_id` to `module_targets.detail_id` so that foreign key matches the conventional
-# name when `Mdm::ModuleDetail` became {Mdm::Module::Detail}.
+# name when `Mdm::ModuleDetail` became `Mdm::Module::Detail`.
 class ChangeForeignKeyInModuleTargets < ActiveRecord::Migration
   #
   # CONSTANTS

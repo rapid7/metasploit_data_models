@@ -14,7 +14,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #
 
   # The directory for a given {#module_type} is a not always the pluralization of {#module_type}, so this maps the
-  # {#module_type} to the {#type_directory type directory} that is used to {#derived_real_path generate} the
+  # {#module_type} to the {#module_type_directory type directory} that is used to {#derived_real_path generate} the
   # {#real_path} from the {#module_type} and {#reference_name}.
   DIRECTORY_BY_MODULE_TYPE = {
       'auxiliary' => 'auxiliary',
@@ -28,7 +28,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # File extension used for metasploit modules.
   EXTENSION = '.rb'
 
-  # The {#payload_types payload types} that require {#handler_type}.
+  # The {#payload_type payload types} that require {#handler_type}.
   HANDLED_TYPES = [
       'single',
       'stager'
@@ -57,14 +57,15 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #
 
   # @!attribute [rw] parent_path
-  #   Path under which this load's {#type_directory type directory} and {#reference_path reference name path} exists.
+  #   Path under which this load's {#module_type_directory type directory} and {#reference_path reference name path}
+  #   exists.
   #
   #   @return [Mdm::Module::Path]
   belongs_to :parent_path, :class_name => 'Mdm::Module::Path'
 
   # @!attribute [rw] relationships
-  #   Relates this {Mdm::Module::Ancestor} to the {Mdm::Module::Class Mdm::Module::Classes} that {#descendents descend}
-  #   from the {Mdm::Module::Ancestor}.
+  #   Relates this {Mdm::Module::Ancestor} to the {Mdm::Module::Class Mdm::Module::Classes} that
+  #   {Mdm::Module::Relationship#descendant descend} from the {Mdm::Module::Ancestor}.
   #
   #   @return [Array<Mdm::Module::Relationship>]
   has_many :relationships, :class_name => 'Mdm::Module::Relationship', :dependent => :destroy
@@ -85,7 +86,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #
 
   # @!attribute [rw] full_name
-  #   The full name of the module.  The full name is "#{module_type}/#{reference_name}".
+  #   The full name of the module.  The full name is `"#{module_type}/#{reference_name}"`.
   #
   #   @return [String]
 
@@ -93,14 +94,20 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #   The handler type (in the case of singles) or (in the case of stagers) the handler type alias.  Handler type is
   #   appended to the end of the single's or stage's {#reference_name} to get the {Mdm::Module::Class#reference_name}.
   #
-  #   @return [String] if {#requires_handler?} is `true`.
-  #   @return [nil] if {#requires_hanlder?} is `false`.
+  #   @return [String] if {#handled?} is `true`.
+  #   @return [nil] if {#handled?} is `false`.
 
   # @!attribute [rw] module_type
   #   The type of the module. This would be called #type, but #type is reserved for ActiveRecord's single table
   #   inheritance.
   #
-  #   @return [String] key in {DIRECTORY_BY_TYPE}
+  #   @return [String] key in {DIRECTORY_BY_MODULE_TYPE}
+
+  # @!attribute [rw] payload_type
+  #   For payload modules, the {PAYLOAD_TYPES type} of payload, either 'single', 'stage', or 'stager'.
+  #
+  #   @return ['single', 'stage', 'stager'] if {#payload?} is `true`.
+  #   @return [nil] if {#payload?} is `false`
 
   # @!attribute [rw] real_path
   #   The real (absolute) path to module file on-disk.
@@ -251,7 +258,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
 
   # Derives {#real_path_sha1_hex_digest} by running the contents of {#real_path} through Digest::SHA1.hexdigest.
   #
-  # @retuurn [String] 40 character SHA1 hex digest if {#real_path} can be read.
+  # @return [String] 40 character SHA1 hex digest if {#real_path} can be read.
   # @return [nil] if {#real_path} cannot be read.
   def derived_real_path_sha1_hex_digest
     begin
@@ -300,7 +307,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # The directory for {#module_type} under {Mdm::Module::Path parent_path.real_path}.
   #
   # @return [String]
-  # @see DIRECTORY_BY_TYPE
+  # @see DIRECTORY_BY_MODULE_TYPE
   def module_type_directory
     DIRECTORY_BY_MODULE_TYPE[module_type]
   end

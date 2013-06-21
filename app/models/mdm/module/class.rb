@@ -87,12 +87,11 @@ class Mdm::Module::Class < ActiveRecord::Base
   #   @return [String] if {#payload?} is `true`.
   #   @return [nil] if {#payload?} is `false`
 
-
   # @!attribute [rw] reference_name
   #   The reference name for the Class<Msf::Module>. For non-payloads, this will just be
-  #   {Mdm::Module::Ancestor#reference_name} for the only element in {#loads}.  For payloads composed of a stage and
-  #   stager, the reference name will be derived from the {Mdm::Module::Ancestor#reference_name} of each element
-  #   {#ancestors} or an alias defined in those Modules.
+  #   {Mdm::Module::Ancestor#reference_name} for the only element in {#ancestors}.  For payloads composed of a
+  #   stage and stager, the reference name will be derived from the {Mdm::Module::Ancestor#reference_name} of each
+  #   element {#ancestors} or an alias defined in those Modules.
   #
   #   @return [String]
 
@@ -142,7 +141,7 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
   # @return [String] if all {#ancestors} have the same {Mdm::Module::Ancestor#module_type module_type}.
   # @return [nil] if there are no {#ancestors}.
-  # @retrun [nil] if {#ancestors} do not have the same {Mdm::Module::Ancestor#module_type module_type}.
+  # @return [nil] if {#ancestors} do not have the same {Mdm::Module::Ancestor#module_type module_type}.
   def derived_module_type
     module_type_consensus = nil
     module_type_set = Set.new

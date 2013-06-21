@@ -29,7 +29,7 @@ class Mdm::Vuln < ActiveRecord::Base
   has_many :vuln_details, :class_name => 'Mdm::VulnDetail', :dependent => :destroy
 
   # @!attribute [rw] vuln_references
-  #   Joins this {Mdm::Vuln} to its {references}.
+  #   Joins this {Mdm::Vuln} to its {#references}.
   #
   #   @return [Array<Mdm::VulnReference>]
   has_many :vuln_references, :class_name => 'Mdm::VulnReference', :dependent => :destroy
@@ -59,7 +59,7 @@ class Mdm::Vuln < ActiveRecord::Base
   #
 
   # @!attribute [r] module_instances
-  #   {Mdm::Module::Detail Modules} that share the same external references as this vuln.
+  #   {Mdm::Module::Instance Modules} that share the same external references as this vuln.
   #
   #   @return [Array<Mdm::Module::Instance>]
   has_many :module_instances,

@@ -1,4 +1,4 @@
-# Tag {#hosts_tags assigned} to {#hosts}.  Tags can be used to group together hosts for targeting and reporting.
+# Tag {#host_tags assigned} to {#hosts}.  Tags can be used to group together hosts for targeting and reporting.
 class Mdm::Tag < ActiveRecord::Base
   #
   # Associations

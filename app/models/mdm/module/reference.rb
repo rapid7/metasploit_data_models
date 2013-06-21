@@ -1,4 +1,4 @@
-# Join model between {Mdm::Module::Instance modules} and {Mdm::References references} that refer to the exploit in the
+# Join model between {Mdm::Module::Instance modules} and {Mdm::Reference references} that refer to the exploit in the
 # modules.
 class Mdm::Module::Reference < ActiveRecord::Base
   self.table_name = 'module_references'
