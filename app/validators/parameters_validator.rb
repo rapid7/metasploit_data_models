@@ -4,6 +4,13 @@ class ParametersValidator < ActiveModel::EachValidator
   # Sentence explaining the valid type signature for parameters.
   TYPE_SIGNATURE_SENTENCE = 'Valid parameters are an Array<Array(String, String)>.'
 
+  # Validates that attribute's value is Array<Array(String, String)> which is the only valid type signature for
+  # serialized parameters.  Errors are specific to the how different `value` is compared to correct format.
+  #
+  # @param record [#errors, ActiveRecord::Base] ActiveModel or ActiveRecord
+  # @param attribute [Symbol] serialized parameters attribute name.
+  # @param value [Object, nil, Array, Array<Array>, Array<Array(String, String)>] serialized parameters.
+  # @return [void]
   def validate_each(record, attribute, value)
     if value.is_a? Array
       value.each_with_index do |element, index|

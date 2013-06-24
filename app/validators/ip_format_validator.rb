@@ -1,8 +1,17 @@
 require "ipaddr"
 
+# Validates that value is an IPv4 or IPv6 address.
 class IpFormatValidator < ActiveModel::EachValidator
+  # Validates that `value` is an IPv4 or IPv4 address.  Error is `'must be a valid IPv4 or IPv6 address'`.
+  #
+  # @param object [#errors, ActiveRecord::Base] ActiveModel or ActiveRecord
+  # @param attribute [Symbol] name of IP address attribute.
+  # @param value [String, nil] IP address.
+  # @return [void]
+  # @see IPAddr#ipv4?
+  # @see IPAddr#ipv6?
   def validate_each(object, attribute, value)
-    error_message_block = lambda{ object.errors[attribute] << " must be a valid IPv4 or IPv6 address" }
+    error_message_block = lambda{ object.errors[attribute] << "must be a valid IPv4 or IPv6 address" }
     begin
       potential_ip = IPAddr.new(value)
       error_message_block.call unless potential_ip.ipv4? || potential_ip.ipv6?

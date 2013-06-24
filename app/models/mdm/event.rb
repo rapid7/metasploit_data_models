@@ -53,7 +53,7 @@ class Mdm::Event < ActiveRecord::Base
 
   # @!attribute [rw] username
   #   Name of user that triggered the event.  Not necessarily a {Mdm::User#username}, as {#username} may be set to
-  #   the username of the user inferred from {ENV} when using metasploit-framework.
+  #   the username of the user inferred from `ENV` when using metasploit-framework.
   #
   #   @return [String]
   #   @todo https://www.pivotaltracker.com/story/show/52193783
