@@ -2,6 +2,7 @@
 class Mdm::Event < ActiveRecord::Base
   #
   # Associations
+  # @todo https://www.pivotaltracker.com/story/show/52193783
   # @todo https://www.pivotaltracker.com/story/show/52193911
   #
 
