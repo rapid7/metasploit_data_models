@@ -1,11 +1,21 @@
+# Drops vulns where vulns.name starts with NSS-*.
 class RenameAndPruneNessusVulns < ActiveRecord::Migration
-
+  # Model to help find vulns with NSS-* vulns.name.
 	class Vuln < ActiveRecord::Base
 	end
 
+  # Does nothing.
+  #
+  # @return [void]
+	def down
+		say "Cannot un-rename and un-prune NSS vulns for migration 20110517160800."
+  end
+
 	# No table changes, just vuln renaming to drop the NSS id
 	# from those vulns that have it and a descriptive name.
-	def self.up
+  #
+  # @return [void]
+	def up
 		Vuln.find(:all).each do |v|
 			if v.name =~ /^NSS-0?\s*$/
 				v.delete
@@ -18,9 +28,4 @@ class RenameAndPruneNessusVulns < ActiveRecord::Migration
 			v.save!
 		end
 	end
-
-	def self.down
-		say "Cannot un-rename and un-prune NSS vulns for migration 20110517160800."
-	end
-
 end

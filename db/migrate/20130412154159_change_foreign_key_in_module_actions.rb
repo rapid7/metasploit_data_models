@@ -5,8 +5,11 @@ class ChangeForeignKeyInModuleActions < ActiveRecord::Migration
   # CONSTANTS
   #
 
-  NEW_COLUMN_NAME= :detail_id
+  # New name for column.
+  NEW_COLUMN_NAME = :detail_id
+  # Old name for column.
   OLD_COLUMN_NAME = :module_detail_id
+  # Name of table where {OLD_COLUMN_NAME} is being renamed to {NEW_COLUMN_NAME}.
   TABLE_NAME = :module_actions
 
   # Renames `module_actions.detail_id` to `module_actions.module_detail_id`.

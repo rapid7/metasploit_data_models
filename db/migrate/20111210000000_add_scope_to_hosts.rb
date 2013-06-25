@@ -1,9 +1,16 @@
+# Adds IPv6 scope as hosts.scope.
 class AddScopeToHosts < ActiveRecord::Migration
-  def self.up
-    add_column :hosts, :scope, :text
+  # Removes hosts.scope.
+  #
+  # @return [void]
+  def down
+    remove_column :hosts, :scope
   end
 
-  def self.down
-    remove_column :hosts, :scope
+  # Adds IPv6 scope as hosts.scope.
+  #
+  # @return [void]
+  def up
+    add_column :hosts, :scope, :text
   end
 end

@@ -4,7 +4,9 @@ class UniqueTokenInApiKeys < ActiveRecord::Migration
   # CONSTANTS
   #
 
+  # Column being indexed.
   COLUMN_NAME = :token
+  # Table where {COLUMN_NAME} is.
   TABLE_NAME = :api_keys
 
   # Remove unique index on token in api_keys

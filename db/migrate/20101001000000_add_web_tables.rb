@@ -1,6 +1,19 @@
+# Creates web_forms, web_pages, web_sites, and web_vulns.
 class AddWebTables < ActiveRecord::Migration
-	
-	def self.up
+  # Drops web_forms, web_pages, web_sites, and web_vulns.
+  #
+  # @return [void]
+  def down
+    drop_table :web_sites
+    drop_table :web_pages
+    drop_table :web_forms
+    drop_table :web_vulns
+  end
+
+  # Creates web_forms, web_pages, web_sites, and web_vulns.
+  #
+  # @return [void]
+	def up
 		create_table :web_sites do |t|
 			t.integer   :service_id, :null => false
 			t.timestamps 
@@ -43,15 +56,7 @@ class AddWebTables < ActiveRecord::Migration
 			t.integer   :risk
 			t.string    :name,    :limit => 1024	
 		end	
-							
-	end
-	
-	def self.down
-		drop_table :web_sites
-		drop_table :web_pages
-		drop_table :web_forms
-		drop_table :web_vulns
-	end
+  end
 end
 
 

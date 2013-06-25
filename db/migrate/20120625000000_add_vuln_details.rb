@@ -1,6 +1,16 @@
+# Creates vuln_details.
 class AddVulnDetails < ActiveRecord::Migration
+  # Drops vuln_details.
+  #
+  # @return [void]
+	def down
+		drop_table :vuln_details
+	end
 
-	def self.up
+  # Creates vuln_details.
+  #
+  # @return [void]
+	def up
 		create_table :vuln_details do |t|
 			t.integer   :vuln_id     # Vuln table reference
 			t.float		:cvss_score  # 0.0 to 10.0
@@ -24,11 +34,6 @@ class AddVulnDetails < ActiveRecord::Migration
 			t.timestamp	:nx_added        # Normalized from "20081205T000000000"
 			t.timestamp	:nx_modified     # Normalized from "20081205T000000000"
 			t.text		:nx_tags         # Comma separated
-	
 		end
-	end
-
-	def self.down
-		drop_table :vuln_details
 	end
 end

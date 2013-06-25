@@ -1,9 +1,20 @@
 # Changes index on address so it scoped to workspace_id and is unique to match the validation in {Mdm::Host} on
 # {Mdm::Host#address}.
 class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
+  #
+  # CONSTANTS
+  #
+
+  # Table being chaned.
   TABLE_NAME = :hosts
 
+  #
+  # Methods
+  #
+
   # Restores old index on address
+  #
+  #
   def down
     change_table TABLE_NAME do |t|
       t.remove_index [:workspace_id, :address]
@@ -12,7 +23,9 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
     end
   end
 
-  # Make index on address scope to workspace_id and be unique
+  # Make index on address scope to workspace_id and be unique.
+  #
+  # @return [void]
   def up
     change_table TABLE_NAME do |t|
       t.remove_index :address

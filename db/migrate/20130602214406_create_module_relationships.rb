@@ -11,10 +11,16 @@ class CreateModuleRelationships < ActiveRecord::Migration
   # Methods
   #
 
+  # Drops module_relationships.
+  #
+  # @return [void]
   def down
     drop_table TABLE_NAME
   end
 
+  # Creates module_relationships.
+  #
+  # @return [void]
   def up
     create_table TABLE_NAME do |t|
       #

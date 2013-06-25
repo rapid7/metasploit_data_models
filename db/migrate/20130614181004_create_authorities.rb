@@ -65,10 +65,16 @@ class CreateAuthorities < ActiveRecord::Migration
   # Table being created
   TABLE_NAME = :authorities
 
+  # Drops authorities.
+  #
+  # @return [void]
   def down
     drop_table TABLE_NAME
   end
 
+  # Creates authorities.
+  #
+  # @return [void]
   def up
     # columns
     create_table TABLE_NAME do |t|

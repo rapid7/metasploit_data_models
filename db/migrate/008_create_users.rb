@@ -1,5 +1,16 @@
+# Creates users.
 class CreateUsers < ActiveRecord::Migration
-  def self.up
+  # Drops users.
+  #
+  # @return [void]
+  def down
+    drop_table :users
+  end
+
+  # Creates users.
+  #
+  # @return [void]
+  def up
     create_table :users do |t|
       t.string :username
       t.string :crypted_password
@@ -8,9 +19,5 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :users
   end
 end
