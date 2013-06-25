@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Mdm::Loot do
    context 'associations' do
+     it { should have_one(:exploit_attempt).class_name('Mdm::ExploitAttempt') }
      it { should belong_to(:workspace).class_name('Mdm::Workspace') }
      it { should belong_to(:service).class_name('Mdm::Service') }
      it { should belong_to(:host).class_name('Mdm::Host') }

@@ -11,6 +11,12 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [Array<Mdm::Event>]
   has_many :events, :class_name => 'Mdm::SessionEvent', :order => 'created_at', :dependent => :delete_all
 
+  # @!attribute [rw] exploit_attempt
+  #   Exploit attempt that created this session.
+  #
+  #   @return [Mdm::ExploitAttempt]
+  has_one :exploit_attempt, :class_name => 'Mdm::ExploitAttempt'
+
   # @!attribute [rw] host
   #   {Mdm::Host Host} on which this session was opened.
   #

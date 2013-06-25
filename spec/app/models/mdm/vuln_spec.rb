@@ -6,6 +6,7 @@ describe Mdm::Vuln do
   end
 
   context 'associations' do
+    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt') }
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }
     it { should have_many(:module_references).class_name('Mdm::Module::Reference').through(:references) }

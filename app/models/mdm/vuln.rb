@@ -4,6 +4,12 @@ class Mdm::Vuln < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] exploit_attempts
+  #   Attempts to exploit this vulnerability.
+  #
+  #   @return [Array<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts, :class_name => 'Mdm::ExploitAttempt'
+
   # @!attribute [rw] host
   #   The host with this vulnerability.
   #

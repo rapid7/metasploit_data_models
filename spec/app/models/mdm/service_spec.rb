@@ -3,18 +3,18 @@ require 'spec_helper'
 describe Mdm::Service do
 
   context "Associations" do
-
-    it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
+    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
     it { should have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
     it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
-    it { should have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
-    it { should have_many(:web_sites).class_name('Mdm::WebSite').dependent(:destroy) }
-    it { should have_many(:web_pages).class_name('Mdm::WebPage').through(:web_sites) }
-    it { should have_many(:web_forms).class_name('Mdm::WebForm').through(:web_sites) }
-    it { should have_many(:web_vulns).class_name('Mdm::WebVuln').through(:web_sites) }
     it { should belong_to(:host).class_name('Mdm::Host') }
+    it { should have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
+    it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
+    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
+    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
+    it { should have_many(:web_forms).class_name('Mdm::WebForm').through(:web_sites) }
+    it { should have_many(:web_pages).class_name('Mdm::WebPage').through(:web_sites) }
+    it { should have_many(:web_sites).class_name('Mdm::WebSite').dependent(:destroy) }
+    it { should have_many(:web_vulns).class_name('Mdm::WebVuln').through(:web_sites) }
   end
 
   context 'scopes' do

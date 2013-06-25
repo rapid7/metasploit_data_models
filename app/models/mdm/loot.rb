@@ -16,6 +16,12 @@ class Mdm::Loot < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] exploit_attempt
+  #   Exploit attempt where this loot was gathered.
+  #
+  #   @return [Mdm::ExploitAttempt]
+  has_one :exploit_attempt, :class_name => 'Mdm::ExploitAttempt'
+
   # @!attribute [rw] host
   #   The host from which the loot was gathered.
   #

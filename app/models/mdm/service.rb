@@ -11,6 +11,12 @@ class Mdm::Service < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] exploit_attempts
+  #   Exploit attempts against this service.
+  #
+  #   @return [Array<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts, :class_name => 'Mdm::ExploitAttempt', :dependent => :destroy
+
   # @!attribute [rw] task_services
   #   Details about what Tasks touched this service
   #
