@@ -2,6 +2,48 @@ module MetasploitDataModels
   # Allow to declare that attributes should be derived, which will set the attribute equal to derived_<attribute> if
   # the attribute is `nil` before validation.  Optionally, it can be checked if the attribute matches the
   # derived_<attribute> in a validation.
+  #
+  #
+  # @example Full setup
+  #   class Person < ActiveRecord::Base
+  #     include MetasploitDataModels::Derivation
+  #
+  #     #
+  #     # Attributes
+  #     #
+  #
+  #     # @!attributes [rw] first_name
+  #     #   First Name.
+  #     #
+  #     #   @return [String]
+  #
+  #     # @!attribute [rw] full_name
+  #     #   Full name. (Includes first and last name).
+  #     #
+  #     #   @return [String]
+  #
+  #     # @!attribute [rw] last_name
+  #     #   Last name.
+  #     #
+  #     #   @return [String]
+  #
+  #     #
+  #     # Derivations
+  #     #
+  #
+  #     derives :full_name
+  #
+  #     #
+  #     # Methods
+  #     #
+  #
+  #     # Derives {#full_name} from {#first_name} and {#last_name}.
+  #     #
+  #     # @return [String] "<first_name> <last_name>"
+  #     def derive_full_name
+  #       "#{first_name} #{last_name}"
+  #     end
+  #   end
   module Derivation
     extend ActiveSupport::Concern
 
@@ -9,6 +51,8 @@ module MetasploitDataModels
       before_validation :derive
     end
 
+    # Defines class methods include {#derives}, which can be used to declare derived attributes after mixing in
+    # {MetasploitDataModels::Derivation}.
     module ClassMethods
       # Declares that the attribute should be derived using the derived_<attribute> method if it is `nil` before
       # validation.

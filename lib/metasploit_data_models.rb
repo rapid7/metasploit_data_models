@@ -27,13 +27,20 @@ if defined? Rails
   require 'metasploit_data_models/engine'
 end
 
+# Namespace module for the metasploit_data_models gems.
 module MetasploitDataModels
   extend MetasploitDataModels::Models
 
+  # Pathname to the app directory that contains the models and validators.
+  #
+  # @return [Pathname]
   def self.app_pathname
     root.join('app')
   end
 
+  # Pathname to the top of the metasploit_data_models gem's files.
+  #
+  # @return [Pathname]
   def self.root
     unless instance_variable_defined? :@root
       lib_pathname = Pathname.new(__FILE__).dirname
