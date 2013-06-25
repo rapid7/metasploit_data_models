@@ -22,7 +22,7 @@ module MetasploitDataModels
 
     private
 
-    # Changes {COLUMNS} to either `:null => false` or `:null => true`.
+    # Changes `COLUMNS` (defined on subclass) to either `:null => false` or `:null => true`.
     #
     # @param null [Boolean] `true` to allow column to be null. `false` to not allow column to be null.
     # @return [void]
@@ -33,8 +33,8 @@ module MetasploitDataModels
       end
     end
 
-    # Delete row in TABLE_NAME that have `NULL` values for any of the COLUMNS, which would prevent
-    # `change_column_null(table, column, false)`.
+    # Delete row in `TABLE_NAME` (defined on subclass) that have `NULL` values for any of the `COLUMNS` (defined on
+    # subclass), which would prevent `change_column_null(table, column, false)`.
     #
     # @return [void]
     def delete_null_rows
