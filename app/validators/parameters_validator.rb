@@ -77,6 +77,15 @@ class ParametersValidator < ActiveModel::EachValidator
 
   private
 
+  # Generates error message for element at the given index.  Prefix is prepened to {#location_clause} to make a
+  # sentence.  {TYPE_SIGNATURE_SENTENCE} is appended to that sentence.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Object] :element The element that has the error.
+  # @option options [Integer] :index The index of element in its parent Array.
+  # @option options [String] :prefix Specific error prefix to differentiate from other calls to {#error_at}.
+  # @return [String]
+  # @see #location_clause
   def error_at(options={})
     options.assert_valid_keys(:element, :index, :prefix)
     prefix = options.fetch(:prefix)
@@ -97,6 +106,14 @@ class ParametersValidator < ActiveModel::EachValidator
     error
   end
 
+  # Generates error message for too few or too many elements.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Array] :element Array that has the wrong number of elements.
+  # @option options [:few, :many] :extreme whether :element has too `:few` or too `:many` child elements.
+  # @option options [Integer] :index index of `:element` in its parent Array.
+  # @return [String]
+  # @see {#error_at}
   def length_error_at(options={})
     options.assert_valid_keys(:element, :extreme, :index)
     extreme = options.fetch(:extreme)
@@ -111,6 +128,12 @@ class ParametersValidator < ActiveModel::EachValidator
     error
   end
 
+  # Generates a clause with the location of element and its value.
+  #
+  # @param options [Hash{Symbol => String,Integer}]
+  # @option options [Object, #inspect] :element an element in a parent Array.
+  # @option options [Integer] :index index of `:element` in parent Array.
+  # @return [String] "at index <index> (<element.inspect>)"
   def location_clause(options={})
     options.assert_valid_keys(:element, :index)
 
