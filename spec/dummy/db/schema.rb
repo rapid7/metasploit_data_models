@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130621181259) do
+ActiveRecord::Schema.define(:version => 20130626183210) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -210,12 +210,6 @@ ActiveRecord::Schema.define(:version => 20130621181259) do
     t.text     "description"
     t.binary   "actions"
     t.binary   "prefs"
-  end
-
-  create_table "mod_refs", :force => true do |t|
-    t.string "module", :limit => 1024
-    t.string "mtype",  :limit => 128
-    t.text   "ref"
   end
 
   create_table "module_actions", :force => true do |t|
