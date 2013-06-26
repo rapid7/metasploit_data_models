@@ -17,6 +17,11 @@ class Mdm::Service < ActiveRecord::Base
   #   @return [Array<Mdm::ExploitAttempt>]
   has_many :exploit_attempts, :class_name => 'Mdm::ExploitAttempt', :dependent => :destroy
 
+  # @!attribute [rw] exploited_hosts
+  #   @todo https://www.pivotaltracker.com/story/show/48993731
+  #   @return [Array<Mdm::ExploitHost>]
+  has_many :exploited_hosts, :class_name => 'Mdm::ExploitedHost', :dependent => :destroy
+
   # @!attribute [rw] task_services
   #   Details about what Tasks touched this service
   #
@@ -34,11 +39,6 @@ class Mdm::Service < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Cred>]
   has_many :creds, :dependent => :destroy, :class_name => 'Mdm::Cred'
-
-  # @!attribute [rw] exploited_hosts
-  #   @todo https://www.pivotaltracker.com/story/show/48993731
-  #   @return [Array<Mdm::ExploitHost>]
-  has_many :exploited_hosts, :dependent => :destroy, :class_name => 'Mdm::ExploitedHost'
 
   # @!attribute [rw] host
   #   The host on which this service runs.
