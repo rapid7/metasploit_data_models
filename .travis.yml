@@ -7,5 +7,4 @@ rvm:
   - 'jruby-19mode'
 script:
   - bundle exec rake
-  - bundle exec rake yard | tee yard.out
-  - grep --silent '100.00% documented' yard.out
+  - bundle exec rake yard
