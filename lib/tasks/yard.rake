@@ -16,18 +16,6 @@ if defined? YARD
     task :stats => :environment do
       stats = YARD::CLI::Stats.new
       stats.run('--compact', '--list-undoc')
-
-      undocumented_count = stats.instance_variable_get(:@undocumented)
-
-      if undocumented_count > 0
-        # flush so that fail's error occurs after normal output
-        $stdout.flush
-        $stderr.flush
-
-        object = 'object'.pluralize(undocumented_count)
-        fail "#{undocumented_count} #{object} are undocumented.  " \
-             "Document the objects in Undocumented Objects list above for `rake yard` to pass (exit with 0)."
-      end
     end
   end
 
