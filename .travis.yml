@@ -7,4 +7,3 @@ rvm:
   - 'jruby-19mode'
 script:
   - bundle exec rake
-  - bundle exec rake yard

@@ -35,4 +35,8 @@ if defined? YARD
   desc "Generate YARD documentation"
   # allow calling namespace to as a task that goes to default task for namespace
   task :yard => ['yard:doc']
+
+  task :default => :yard
+else
+  puts 'YARD not defined, so yard tasks cannot be setup.'
 end
