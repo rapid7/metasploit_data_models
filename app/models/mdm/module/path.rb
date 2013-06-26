@@ -77,6 +77,8 @@ class Mdm::Module::Path < ActiveRecord::Base
   private
 
   # Validates that either both {#gem} and {#name} are present or both are `nil`.
+  #
+  # @return [void]
   def gem_and_name
     if name.present? and gem.blank?
       errors[:gem] << "can't be blank if name is present"
@@ -87,6 +89,10 @@ class Mdm::Module::Path < ActiveRecord::Base
     end
   end
 
+  # If {#real_path} is set and exists on disk, then converts it to a real path to eliminate any symlinks.
+  #
+  # @return [void]
+  # @see MetasploitDataModels::File.realpath
   def normalize_real_path
     if real_path and File.exist?(real_path)
       self.real_path = MetasploitDataModels::File.realpath(real_path)
