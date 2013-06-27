@@ -11,6 +11,7 @@ class Mdm::Tag < ActiveRecord::Base
   has_many :host_tags,
            :class_name => 'Mdm::HostTag',
            :dependent => :destroy
+
   # @!attribute [rw] user
   #   User that created this tag.
   #
@@ -26,6 +27,49 @@ class Mdm::Tag < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Host>]
   has_many :hosts, :class_name => 'Mdm::Host', :through => :host_tags
+
+  #
+  # Attributes
+  #
+
+  # @!attribute [rw] created_at
+  #   When this tag was created by {#user}.
+  #
+  #   @return [DateTime]
+
+  # @!attribute [rw] critical
+  #   Whether this tag represents a critical finding about the {#hosts}.
+  #
+  #   @return [true] this tag is critical.
+  #   @return [false] this tag is non-critical.
+
+  # @!attribute [rw] desc
+  #   Longer description of what this tag should be used for or means when applied to a {#hosts host}.
+  #
+  #   @return [String]
+
+  # @!attribute [rw] name
+  #   The name of the tag.  The name is what a user actually enters to tag a {#hosts host}.
+  #
+  #   @return [String]
+
+  # @!attribute [rw] report_detail
+  #   Whether to include this tag in a {Mdm::Report report} details section.
+  #
+  #   @return [true] include this tag in the report details section.
+  #   @return [false] do not include this tag in the report details section.
+
+  # @!attribute [rw] report_summary
+  #   Whether to include this tag in a {Mdm::Report report} summary section.
+  #
+  #   @return [true] include this tag in the report summary section.
+  #   @return [false] do not include this tag in the report summary section.
+  #   @todo https://www.pivotaltracker.com/story/show/52417783
+
+  # @!attribute [rw] updated_at
+  #   The last time this tag was updated.
+  #
+  #   @return [DateTime]
 
   #
   # Validations
@@ -53,6 +97,7 @@ class Mdm::Tag < ActiveRecord::Base
     end
   end
 
+  # (see #name)
   def to_s
     name
   end
