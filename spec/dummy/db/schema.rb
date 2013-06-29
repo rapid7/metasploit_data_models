@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627175028) do
+ActiveRecord::Schema.define(:version => 20130629144839) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -480,6 +480,8 @@ ActiveRecord::Schema.define(:version => 20130627175028) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "task_hosts", ["task_id", "host_id"], :name => "index_task_hosts_on_task_id_and_host_id", :unique => true
 
   create_table "task_services", :force => true do |t|
     t.integer  "task_id",    :null => false
