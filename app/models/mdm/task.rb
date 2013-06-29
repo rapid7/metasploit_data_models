@@ -1,6 +1,6 @@
 # A task run by metasploit Pro.
 #
-# @todo Move to metasploit Pro.
+# @todo https://www.pivotaltracker.com/story/show/52582701
 class Mdm::Task < ActiveRecord::Base
   #
   #
@@ -104,7 +104,7 @@ class Mdm::Task < ActiveRecord::Base
   #   {Mdm::User#username Name of user} that created this task.
   #
   #   @return [String]
-  #   @todo Mdm::Task#created_by should be association to Mdm::User instead of an Mdm::User#username.
+  #   @todo https://www.pivotaltracker.com/story/show/52582707
 
   # @!attribute [rw] description
   #   Description of what the this task does.
@@ -125,13 +125,13 @@ class Mdm::Task < ActiveRecord::Base
   #   {Mdm::Module::Class#full_name Module full name} that was run for this task.
   #
   #   @return [String]
-  #   @todo Mdm::Task#module should be replaced with belongs_to :module_class with matching Mdm::Module::Class#full_name.
+  #   @todo https://www.pivotaltracker.com/story/show/52582717
 
   # @!attribute [rw] module_uuid
   #   UUID of {#module} that was run by this task.
   #
   #   @return [String]
-  #   @todo Remove Mdm::Task#module_uuid.
+  #   @todo https://www.pivotaltracker.com/story/show/52582729
 
   # @!attribute [rw] path
   #   Path to the log for this task.

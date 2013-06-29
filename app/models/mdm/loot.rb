@@ -96,7 +96,7 @@ class Mdm::Loot < ActiveRecord::Base
   #
 
   scope :search, lambda { |*args|
-    # @todo replace with AREL
+    # @todo https://www.pivotaltracker.com/story/show/52582671
     terms = RELATIVE_SEARCH_FIELDS.collect { |relative_field|
       "loots.#{relative_field} ILIKE ?"
     }

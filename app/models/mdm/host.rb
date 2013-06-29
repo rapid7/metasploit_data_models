@@ -358,7 +358,7 @@ class Mdm::Host < ActiveRecord::Base
   scope :flagged, where('notes.critical = true AND notes.seen = false').includes(:notes)
   scope :search,
         lambda { |*args|
-          # @todo replace with AREL
+          # @todo https://www.pivotaltracker.com/story/show/52582651
           terms = SEARCH_FIELDS.collect { |field|
             "#{self.table_name}.#{field} ILIKE ?"
           }
