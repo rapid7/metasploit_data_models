@@ -29,6 +29,12 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [Array<Mdm::Route>]
   has_many :routes, :class_name => 'Mdm::Route', :dependent => :delete_all
 
+  # @!attribute [rw] vuln_attempt
+  #   Vulnerability attempt that created this session.
+  #
+  #   @return [Mdm::VulnAttempt]
+  has_one :vuln_attempt, :class_name => 'Mdm::VulnAttempt'
+
   #
   # Through :host
   #

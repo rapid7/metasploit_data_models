@@ -48,8 +48,9 @@ describe Mdm::Session do
     it { should have_one(:exploit_attempt).class_name('Mdm::ExploitAttempt') }
     it { should have_many(:routes).class_name('Mdm::Route').dependent(:delete_all) }
     it { should have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
-    it { should have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy)}
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_sessions)}
+    it { should have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy) }
+    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_sessions) }
+    it { should have_one(:vuln_attempt).class_name('Mdm::Session') }
   end
 
   context 'scopes' do

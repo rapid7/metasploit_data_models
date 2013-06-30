@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Mdm::VulnAttempt do
 
   context 'association' do
+    it { should belong_to(:loot).class_name('Mdm::Loot') }
+    it { should belong_to(:session).class_name('Mdm::Session') }
     it { should belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
