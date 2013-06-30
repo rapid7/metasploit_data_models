@@ -50,7 +50,7 @@ describe Mdm::Session do
     it { should have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
     it { should have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_sessions) }
-    it { should have_one(:vuln_attempt).class_name('Mdm::Session') }
+    it { should have_one(:vuln_attempt).class_name('Mdm::VulnAttempt') }
   end
 
   context 'scopes' do
