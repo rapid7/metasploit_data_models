@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Mdm::NexposeConsole do
+  context 'associations' do
+    it { should have_many(:vuln_details).class_name('Mdm::VulnDetail').with_foreign_key(:nx_console_id) }
+  end
 
   context 'factory' do
     it 'should be valid' do
