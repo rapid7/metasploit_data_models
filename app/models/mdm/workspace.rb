@@ -1,3 +1,5 @@
+# Workspace to separate different collections of {#hosts}.  Can be used to separate pentests against different networks
+# or different clients as {#reports} are normally generated against all records in a workspace.
 class Mdm::Workspace < ActiveRecord::Base
 
   #
@@ -13,7 +15,7 @@ class Mdm::Workspace < ActiveRecord::Base
   #
 
   # @!attribute [rw] events
-  #   Events that occured in this workspace.
+  #   Events that occurred in this workspace.
   #
   #   @return [Array<Mdm::Event>]
   has_many :events, :class_name => 'Mdm::Event'
@@ -210,18 +212,32 @@ class Mdm::Workspace < ActiveRecord::Base
     return allowed
   end
 
+  # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or IP address range}.
+  #
+  # @return [void]
   def boundary_must_be_ip_range
     errors.add(:boundary, "must be a valid IP range") unless valid_ip_or_range?(boundary)
   end
 
+  # Returns default {Mdm::Workspace}.
+  #
+  # @return [Mdm::Workspace]
   def self.default
     where(:name => DEFAULT).first_or_create!
   end
 
+  # Whether this is the {default} workspace.
+  #
+  # @return [true] if this is the {default} workspace.
+  # @return [false] if this is not the {default} workspace.
   def default?
     name == DEFAULT
   end
 
+  # Returns all unique {Mdm::WebForm web forms} in this workspace.  Web forms are considered the same if they have the
+  # same {Mdm::WebForm#web_site}, {Mdm::WebForm#path}, {Mdm::WebForm#method}, and {Mdm::WebForm#query}.
+  #
+  # @return [ActiveRecord::Relation]
   def unique_web_forms
     query = <<-EOQ
           SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query  
@@ -234,6 +250,11 @@ class Mdm::Workspace < ActiveRecord::Base
     Mdm::WebForm.find_by_sql(query)
   end
 
+  # Returns all {Mdm::WebForm web forms} from hosts with the given addresses.
+  #
+  # @param addrs [Array<String>, nil] A list of {Mdm::Host#addresses} to include.  If `nil`, then all {Mdm::WebForms}
+  #   from {#unique_web_forms} are returned.
+  # @return [Array<Mdm::WebForm>]
   def web_unique_forms(addrs=nil)
     forms = unique_web_forms
     if addrs
@@ -244,16 +265,28 @@ class Mdm::Workspace < ActiveRecord::Base
 
   private
 
+  # Strips {#boundary}.
+  #
+  # @return [void]
   def normalize
     boundary.strip! if boundary
   end
 
+  # Returns whether `string` is a valid IP address or IP address range.
+  #
+  # @return [true] if valid IP address or IP address range.
+  # @return [false] otherwise.
+  # @todo https://www.pivotaltracker.com/story/show/43173995
   def valid_ip_or_range?(string)
+    valid = true
+
     begin
       Rex::Socket::RangeWalker.new(string)
     rescue
-      return false
+      valid = false
     end
+
+    valid
   end
 
   ActiveSupport.run_load_hooks(:mdm_workspace, self)
