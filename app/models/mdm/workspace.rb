@@ -166,6 +166,42 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :web_vulns, :class_name => 'Mdm::WebVuln', :through => :web_sites
 
   #
+  # Attributes
+  #
+
+  # @!attribute [rw] boundary
+  #   Comma separated list of IP ranges (in various formats) and IP addresses that users of this workspace are allowed
+  #   to interact with if {#limit_to_network} is `true`.
+  #
+  #   @return [String]
+
+  # @!attribute [rw] description
+  #   Long description (beyond {#name}) that explains the purpose of this workspace.
+  #
+  #   @return [String]
+
+  # @!attribute [rw] limit_to_network
+  #   Whether {#boundary} is respected.
+  #
+  #   @return [false] do not limit interactions to {#boundary}.
+  #   @return [true] limit interactions to {#boundary}.
+
+  # @!attribute [rw] name
+  #   Name of this workspace.
+  #
+  #   @return [String]
+
+  # @!attribute [rw] created_at
+  #   When this workspace was created.
+  #
+  #   @return [DateTime]
+
+  # @!attribute [rw] updated_at
+  #   The last time this workspace was updated.
+  #
+  #   @return [DateTime]
+
+  #
   # Callbacks
   #
 
@@ -252,8 +288,8 @@ class Mdm::Workspace < ActiveRecord::Base
 
   # Returns all {Mdm::WebForm web forms} from hosts with the given addresses.
   #
-  # @param addrs [Array<String>, nil] A list of {Mdm::Host#addresses} to include.  If `nil`, then all {Mdm::WebForms}
-  #   from {#unique_web_forms} are returned.
+  # @param addrs [Array<String>, nil] A list of {Mdm::Host#addresses} to include.  If `nil`, then all {Mdm::WebForm
+  #   Mdm::WebForms} from {#unique_web_forms} are returned.
   # @return [Array<Mdm::WebForm>]
   def web_unique_forms(addrs=nil)
     forms = unique_web_forms
