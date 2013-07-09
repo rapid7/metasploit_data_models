@@ -1,4 +1,4 @@
-require 'metasploit_data_models/validators'
+require 'metasploit/model/validators'
 
 module MetasploitDataModels
   # Helpers for loading models (and their validators) in a non-Rails environment, such as in metasploit-framework.
@@ -10,7 +10,7 @@ module MetasploitDataModels
   #   # main.rb
   #   MetasploitDataModels.require_models
   module Models
-    include MetasploitDataModels::Validators
+    include Metasploit::Model::Validators
 
     # Pathname to the app/models directory.
     #

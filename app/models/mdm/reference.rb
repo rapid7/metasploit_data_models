@@ -1,7 +1,7 @@
 # Reference to a {#url} or a {#designation} maintained by an {#authority}, such as CVE, that describes an exposure or
 # vulnerability on a {#hosts host} or that is exploited by a {#module_instances module}.
 class Mdm::Reference < ActiveRecord::Base
-  include MetasploitDataModels::Derivation
+  include Metasploit::Model::Derivation
 
   #
   #

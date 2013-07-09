@@ -5,7 +5,7 @@ shared_examples_for 'derives' do |attribute, options={}|
   validates = options.fetch(:validates)
 
   context attribute do
-    it { should be_a MetasploitDataModels::Derivation }
+    it { should be_a Metasploit::Model::Derivation }
 
     let(:validate) do
       described_class.validate_by_derived_attribute[attribute]

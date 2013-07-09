@@ -9,7 +9,7 @@ describe Mdm::Module::Path do
     context 'before validation' do
       context '#normalize_real_path' do
         let(:parent_pathname) do
-          MetasploitDataModels::Spec.temporary_pathname.join('mdm', 'module', 'path')
+          Metasploit::Model::Spec.temporary_pathname.join('mdm', 'module', 'path')
         end
 
         let(:path) do
@@ -44,11 +44,11 @@ describe Mdm::Module::Path do
         end
 
         after(:each) do
-          MetasploitDataModels::Spec.temporary_pathname.rmtree
+          Metasploit::Model::Spec.temporary_pathname.rmtree
         end
 
         it 'should convert real_path to a real path using File#real_path' do
-          expected_real_path = MetasploitDataModels::File.realpath(path.real_path)
+          expected_real_path = Metasploit::Model::File.realpath(path.real_path)
 
           path.real_path.should_not == expected_real_path
 

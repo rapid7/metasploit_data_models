@@ -2,7 +2,7 @@
 # directories can be moved, but the cached metadata in {Mdm::Module::Ancestor} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
 class Mdm::Module::Path < ActiveRecord::Base
-  include MetasploitDataModels::NilifyBlanks
+  include Metasploit::Model::NilifyBlanks
 
   self.table_name = 'module_paths'
 
@@ -95,7 +95,7 @@ class Mdm::Module::Path < ActiveRecord::Base
   # @see MetasploitDataModels::File.realpath
   def normalize_real_path
     if real_path and File.exist?(real_path)
-      self.real_path = MetasploitDataModels::File.realpath(real_path)
+      self.real_path = Metasploit::Model::File.realpath(real_path)
     end
   end
 end

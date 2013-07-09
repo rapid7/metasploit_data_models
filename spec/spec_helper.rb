@@ -33,9 +33,9 @@ RSpec.configure do |config|
     # run a subset of specs.
     load MetasploitDataModels.root.join('db', 'seeds.rb')
 
-    MetasploitDataModels::Spec.temporary_pathname = MetasploitDataModels.root.join('spec', 'tmp')
+    Metasploit::Model::Spec.temporary_pathname = MetasploitDataModels.root.join('spec', 'tmp')
     # Clean up any left over files from a previously aborted suite
-    MetasploitDataModels::Spec.remove_temporary_pathname
+    Metasploit::Model::Spec.remove_temporary_pathname
   end
 
   config.before(:each) do
@@ -44,7 +44,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    MetasploitDataModels::Spec.remove_temporary_pathname
+    Metasploit::Model::Spec.remove_temporary_pathname
   end
 
   config.mock_with :rspec

@@ -4,8 +4,8 @@ require 'digest/sha1'
 # Module#ancestor, or a metasploit module class, Class<Msf::Module>.  Loaded modules will be either a ruby Module
 # (for payloads) or a ruby Class (for all non-payloads).
 class Mdm::Module::Ancestor < ActiveRecord::Base
-  include MetasploitDataModels::Derivation
-  include MetasploitDataModels::Derivation::FullName
+  include Metasploit::Model::Derivation
+  include Metasploit::Model::Derivation::FullName
 
   self.table_name = 'module_ancestors'
 

@@ -59,7 +59,7 @@ FactoryGirl.define do
 
       if path
         pathname = Pathname.new(path)
-        MetasploitDataModels::Spec::PathnameCollision.check!(pathname)
+        Metasploit::Model::Spec::PathnameCollision.check!(pathname)
         # make directory
         pathname.parent.mkpath
 

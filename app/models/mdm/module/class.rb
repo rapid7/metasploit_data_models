@@ -2,8 +2,8 @@
 # 2. A ruby Class with one or more ruby Modules mixed into the Class from {Mdm::Module::Ancestor#real_path multiple paths}
 #    for payloads.
 class Mdm::Module::Class < ActiveRecord::Base
-  include MetasploitDataModels::Derivation
-  include MetasploitDataModels::Derivation::FullName
+  include Metasploit::Model::Derivation
+  include Metasploit::Model::Derivation::FullName
 
   self.table_name = 'module_classes'
 

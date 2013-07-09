@@ -13,7 +13,18 @@ module MetasploitDataModels
       g.test_framework :rspec, :fixture => false
     end
 
-    initializer 'metasploit_data_models.prepend_factory_path', :after => 'factory_girl.set_factory_paths' do
+    # Order so that paths are ordered
+    # 1. metasploit-model
+    # 2. metasploit_data_models
+    # 3. pro
+    initializer('metasploit_data_models.prepend_factory_path',
+                # after factory girl so pro's path (which factory_girl would add when it is run in pro) is already in
+                # definition_file_paths
+                :after => 'factory_girl.set_factory_paths',
+                # make sure to run before metasploit-model so that metasploit_data_models' path is added in front of
+                # pro's and then metasploit-model is added in front of metasploit_data_models's path.
+                :before => 'metasploit_model.prepend_factory_path'
+    ) do
       if defined? FactoryGirl
         relative_definition_file_path = config.generators.options[:factory_girl][:dir]
         definition_file_path = root.join(relative_definition_file_path)

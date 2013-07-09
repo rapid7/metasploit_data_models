@@ -10,6 +10,8 @@ group :development, :test do
   gem 'factory_girl', '>= 4.1.0'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
+  # Needs to be defined here because runtime dependencies from gemspec will not load for rspec environment
+  gem 'metasploit-model', '~> 0.0.1'
   # rails is only used for the dummy application in spec/dummy
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
   # @see https://www.pivotaltracker.com/story/show/52309083

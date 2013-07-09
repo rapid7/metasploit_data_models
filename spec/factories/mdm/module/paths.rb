@@ -17,8 +17,8 @@ FactoryGirl.define do
   end
 
   sequence :mdm_module_path_real_path do |n|
-    pathname = MetasploitDataModels::Spec.temporary_pathname.join('mdm', 'module', 'path', 'real', 'path', n.to_s)
-    MetasploitDataModels::Spec::PathnameCollision.check!(pathname)
+    pathname = Metasploit::Model::Spec.temporary_pathname.join('mdm', 'module', 'path', 'real', 'path', n.to_s)
+    Metasploit::Model::Spec::PathnameCollision.check!(pathname)
     pathname.mkpath
 
     pathname.to_path
