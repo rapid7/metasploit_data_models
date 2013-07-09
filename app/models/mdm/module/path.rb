@@ -2,7 +2,7 @@
 # directories can be moved, but the cached metadata in {Mdm::Module::Ancestor} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
 class Mdm::Module::Path < ActiveRecord::Base
-  include Metasploit::Model::NilifyBlanks
+  include Metasploit::Model::Module::Path
 
   self.table_name = 'module_paths'
 
@@ -51,24 +51,12 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Callbacks - in calling order
   #
 
-  nilify_blank :gem,
-               :name
-  before_validation :normalize_real_path
   after_update :update_module_ancestor_real_paths
-
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :gem
-  attr_accessible :name
-  attr_accessible :real_path
 
   #
   # Validations
   #
 
-  validate :gem_and_name
   validates :name,
             :uniqueness => {
                 :allow_nil => true,
@@ -76,29 +64,9 @@ class Mdm::Module::Path < ActiveRecord::Base
                 :unless => :add_context?
             }
   validates :real_path,
-            :directory => true,
-            :presence => true,
             :uniqueness => {
                 :unless => :add_context?
             }
-
-  #
-  # Methods
-  #
-
-  # Returns whether is a named path.
-  #
-  # @return [false] if gem is blank or name is blank.
-  # @return [true] if gem is not blank and name is not blank.
-  def named?
-    named = false
-
-    if gem.present? and name.present?
-      named = true
-    end
-
-    named
-  end
 
   private
 
@@ -114,29 +82,6 @@ class Mdm::Module::Path < ActiveRecord::Base
       true
     else
       false
-    end
-  end
-
-  # Validates that either both {#gem} and {#name} are present or both are `nil`.
-  #
-  # @return [void]
-  def gem_and_name
-    if name.present? and gem.blank?
-      errors[:gem] << "can't be blank if name is present"
-    end
-
-    if gem.present? and name.blank?
-      errors[:name] << "can't be blank if gem is present"
-    end
-  end
-
-  # If {#real_path} is set and exists on disk, then converts it to a real path to eliminate any symlinks.
-  #
-  # @return [void]
-  # @see MetasploitDataModels::File.realpath
-  def normalize_real_path
-    if real_path and File.exist?(real_path)
-      self.real_path = Metasploit::Model::File.realpath(real_path)
     end
   end
 

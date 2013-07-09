@@ -1,95 +1,17 @@
 require 'spec_helper'
 
 describe Mdm::Module::Path do
+  it_should_behave_like 'Metasploit::Model::Module::Path' do
+    let(:path_class) do
+      described_class
+    end
+  end
+
   context 'associations' do
     it { should have_many(:module_ancestors).class_name('Mdm::Module::Ancestor').dependent(:destroy).with_foreign_key(:parent_path_id) }
   end
 
   context 'callbacks' do
-    context 'before validation' do
-      context '#normalize_real_path' do
-        let(:parent_pathname) do
-          Metasploit::Model::Spec.temporary_pathname.join('mdm', 'module', 'path')
-        end
-
-        let(:path) do
-          FactoryGirl.build(
-              :mdm_module_path,
-              :real_path => symlink_pathname.to_path
-          )
-        end
-
-        let(:real_basename) do
-          'real'
-        end
-
-        let(:real_pathname) do
-          parent_pathname.join(real_basename)
-        end
-
-        let(:symlink_basename) do
-          'symlink'
-        end
-
-        let(:symlink_pathname) do
-          parent_pathname.join(symlink_basename)
-        end
-
-        before(:each) do
-          real_pathname.mkpath
-
-          Dir.chdir(parent_pathname.to_path) do
-            File.symlink(real_basename, 'symlink')
-          end
-        end
-
-        after(:each) do
-          Metasploit::Model::Spec.temporary_pathname.rmtree
-        end
-
-        it 'should convert real_path to a real path using File#real_path' do
-          expected_real_path = Metasploit::Model::File.realpath(path.real_path)
-
-          path.real_path.should_not == expected_real_path
-
-          path.valid?
-
-          path.real_path.should == expected_real_path
-        end
-      end
-
-      context 'nilify blanks' do
-        let(:path) do
-          FactoryGirl.build(
-              :mdm_module_path,
-              :gem => '',
-              :name => '',
-              # don't care about real_path validation or path validity, so real_path can be nil.
-              :real_path => nil
-          )
-        end
-
-        it 'should have empty gem' do
-          path.gem.should_not be_nil
-          path.gem.should be_empty
-        end
-
-        it 'should have empty name' do
-          path.name.should_not be_nil
-          path.name.should be_empty
-        end
-
-        context 'after validation' do
-          before(:each) do
-            path.valid?
-          end
-
-          its(:gem) { should be_nil }
-          its(:name) { should be_nil }
-        end
-      end
-    end
-
     context 'after update' do
       context '#update_module_ancestor_real_paths' do
         context 'with change to #real_path' do
@@ -170,105 +92,7 @@ describe Mdm::Module::Path do
     end
   end
 
-  context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:gem) }
-    it { should allow_mass_assignment_of(:name) }
-    it { should allow_mass_assignment_of(:real_path) }
-  end
-
   context 'validations' do
-    context 'gem and name' do
-      let(:gem_error) do
-        "can't be blank if name is present"
-      end
-
-      let(:name_error) do
-        "can't be blank if gem is present"
-      end
-
-      subject(:path) do
-        FactoryGirl.build(
-            :named_mdm_module_path,
-            :gem => gem,
-            :name => name,
-            # don't care about real_path validation or path validity, so real_path can be nil.
-            :real_path => nil
-        )
-      end
-
-      before(:each) do
-        path.valid?
-      end
-
-      context 'with gem' do
-        let(:gem) do
-          'metasploit_data_models'
-        end
-
-        context 'with name' do
-          let(:name) do
-            'modules'
-          end
-
-          it 'should not record error on gem' do
-            path.errors[:gem].should_not include(gem_error)
-          end
-
-          it 'should not record error on name' do
-            path.errors[:name].should_not include(name_error)
-          end
-        end
-
-        context 'without name' do
-          let(:name) do
-            nil
-          end
-
-          it 'should not record error on gem' do
-            path.errors[:gem].should_not include(gem_error)
-          end
-
-          it 'should record error on name' do
-            path.errors[:name].should include(name_error)
-          end
-        end
-      end
-
-      context 'without gem' do
-        let(:gem) do
-          nil
-        end
-
-        context 'with name' do
-          let(:name) do
-            'modules'
-          end
-
-          it 'should record error on gem' do
-            path.errors[:gem].should include(gem_error)
-          end
-
-          it 'should not record error on name' do
-            path.errors[:name].should_not include(name_error)
-          end
-        end
-
-        context 'without name' do
-          let(:name) do
-            nil
-          end
-
-          it 'should not record error on gem' do
-            path.errors[:gem].should_not include(gem_error)
-          end
-
-          it 'should not record error on name' do
-            path.errors[:name].should_not include(name_error)
-          end
-        end
-      end
-    end
-
     context 'validate unique of name scoped to gem' do
       context 'with different real_paths' do
         let(:duplicate) do
@@ -341,63 +165,6 @@ describe Mdm::Module::Path do
       end
 
       it { should validate_directory_at(:real_path) }
-    end
-  end
-
-  context '#named?' do
-    subject(:named?) do
-      path.named?
-    end
-
-    let(:path) do
-      described_class.new(
-          :gem => gem,
-          :name => name
-      )
-    end
-
-    context 'with blank gem' do
-      let(:gem) do
-        ''
-      end
-
-      context 'with blank name' do
-        let(:name) do
-          ''
-        end
-
-        it { should be_false }
-      end
-
-      context 'without blank name' do
-        let(:name) do
-          FactoryGirl.generate :mdm_module_path_name
-        end
-
-        it { should be_false }
-      end
-    end
-
-    context 'without blank gem' do
-      let(:gem) do
-        FactoryGirl.generate :mdm_module_path_gem
-      end
-
-      context 'with blank name' do
-        let(:name) do
-          ''
-        end
-
-        it { should be_false }
-      end
-
-      context 'without blank name' do
-        let(:name) do
-          FactoryGirl.generate :mdm_module_path_name
-        end
-
-        it { should be_true }
-      end
     end
   end
 end
