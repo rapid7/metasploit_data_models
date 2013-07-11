@@ -16,12 +16,6 @@ describe Mdm::Module::Ancestor do
     ]
   end
 
-  context 'associations' do
-    it { should have_many(:descendants).class_name('Mdm::Module::Class').through(:relationships) }
-    it { should belong_to(:parent_path).class_name('Mdm::Module::Path') }
-    it { should have_many(:relationships).class_name('Mdm::Module::Relationship').dependent(:destroy) }
-  end
-
   context 'CONSTANTS' do
     context 'DIRECTORY_BY_MODULE_TYPE' do
       subject(:directory_by_type) do
@@ -263,6 +257,31 @@ describe Mdm::Module::Ancestor do
   end
 
   context 'validations' do
+    context 'full_name' do
+      # can't use validate_uniqueness_of(:full_name) because of null value in module_type
+      context 'validates uniqueness' do
+        let!(:original_ancestor) do
+          FactoryGirl.create(:mdm_module_ancestor)
+        end
+
+        context 'with same full_name' do
+          let(:same_full_name_ancestor) do
+            FactoryGirl.build(
+                :mdm_module_ancestor,
+                # set module_type and reference_name as full_name is derived from them
+                :module_type => original_ancestor.module_type,
+                :reference_name => original_ancestor.reference_name
+            )
+          end
+
+          it 'should record error on full_name' do
+            same_full_name_ancestor.should_not be_valid
+            same_full_name_ancestor.errors[:full_name].should include('has already been taken')
+          end
+        end
+      end
+    end
+
     it { should ensure_inclusion_of(:module_type).in_array(module_types) }
 
     context 'handler_type' do
@@ -606,6 +625,36 @@ describe Mdm::Module::Ancestor do
       end
     end
 
+    context 'real_path' do
+      # can't use validate_uniqueness_of(:real_path) because of null full_name
+      context 'validate presence' do
+        let!(:original_ancestor) do
+          FactoryGirl.create(:mdm_module_ancestor)
+        end
+
+        context 'with same real_path' do
+          let(:same_real_path_ancestor) do
+            FactoryGirl.build(
+                :mdm_module_ancestor,
+                # real_path is derived from parent_path, module_type, and reference_name, so set copy those attributes
+                # to get the same real_path.
+                :module_type => original_ancestor.module_type,
+                :parent_path => original_ancestor.parent_path,
+            ).tap do |ancestor|
+              # At least one attribute needs to be set outside the call to build because the factory will attempt to
+              # created the derived_real_path and throw a Metasploit::Model::Spec::PathnameCollision.
+              ancestor.reference_name = original_ancestor.reference_name
+            end
+          end
+
+          it 'should record error on real_path' do
+            same_real_path_ancestor.should_not be_valid
+            same_real_path_ancestor.errors[:real_path].should include('has already been taken')
+          end
+        end
+      end
+    end
+
     it { should validate_presence_of(:real_path_modified_at) }
 
     context 'real_path_sha1_hex_digest' do
@@ -627,6 +676,28 @@ describe Mdm::Module::Ancestor do
         end
 
         it { should_not allow_value(nil).for(:real_path_sha1_hex_digest) }
+      end
+
+      context 'validates uniqueness' do
+        let!(:original_ancestor) do
+          FactoryGirl.create(:mdm_module_ancestor)
+        end
+
+        context 'with same real_path_sha1_hex_digest' do
+          let(:same_real_path_sha1_hex_digest_ancestor) do
+            FactoryGirl.build(
+                :mdm_module_ancestor,
+                # real_path_sha1_hex_digest is derived, but not validated (as it would take too long)
+                # so it can just be set directly
+                :real_path_sha1_hex_digest => original_ancestor.real_path_sha1_hex_digest
+            )
+          end
+
+          it 'should record error on real_path_sha1_hex_digest' do
+            same_real_path_sha1_hex_digest_ancestor.should_not be_valid
+            same_real_path_sha1_hex_digest_ancestor.errors[:real_path_sha1_hex_digest].should include('has already been taken')
+          end
+        end
       end
     end
 
@@ -710,6 +781,69 @@ describe Mdm::Module::Ancestor do
 
             it "should not allow '\\'" do
               ancestor.should_not allow_value("#{section}\\").for(:reference_name)
+            end
+          end
+        end
+      end
+
+      context 'validates uniqueness scoped to module_type' do
+        let(:new_ancestor) do
+          FactoryGirl.build(
+              :mdm_module_ancestor,
+              :module_type => new_module_type,
+              :reference_name => new_reference_name
+          )
+        end
+
+        let(:original_module_type) do
+          # don't use payload so sequence can be used to generate reference_name
+          FactoryGirl.generate :mdm_module_ancestor_non_payload_module_type
+        end
+
+        let(:original_reference_name) do
+          FactoryGirl.generate :mdm_module_ancestor_non_payload_reference_name
+        end
+
+        let!(:original_ancestor) do
+          FactoryGirl.create(
+              :mdm_module_ancestor,
+              :module_type => original_module_type,
+              :reference_name => original_reference_name
+          )
+        end
+
+        context 'with same module_type' do
+          let(:new_module_type) do
+            original_module_type
+          end
+
+          context 'with same reference_name' do
+            let(:new_reference_name) do
+              original_reference_name
+            end
+
+            it 'should record error on reference_name' do
+              new_ancestor.should_not be_valid
+              new_ancestor.errors[:reference_name].should include(I18n.translate!('activerecord.errors.messages.taken'))
+            end
+          end
+        end
+
+        context 'without same module_type' do
+          let(:new_module_type) do
+            # don't use payload so sequence can be used to generate reference_name
+            FactoryGirl.generate :mdm_module_ancestor_non_payload_module_type
+          end
+
+          context 'with same reference_name' do
+            let(:new_reference_name) do
+              original_reference_name
+            end
+
+            it 'should not record error on reference_name' do
+              new_ancestor.valid?
+
+              new_ancestor.errors[:reference_name].should be_empty
             end
           end
         end

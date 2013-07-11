@@ -165,6 +165,8 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # Validations
   #
 
+  validates :full_name,
+            :uniqueness => true
   validates :handler_type,
             :nil => {
                 :unless => :handled?
@@ -186,15 +188,21 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
             :nil => {
                 :unless => :payload?
             }
+  validates :real_path,
+            :uniqueness => true
   validates :real_path_modified_at,
             :presence => true
   validates :real_path_sha1_hex_digest,
             :format => {
                 :with => SHA1_HEX_DIGEST_REGEXP
-            }
+            },
+            :uniqueness => true
   validates :reference_name,
             :format => {
                 :with => REFERENCE_NAME_REGEXP
+            },
+            :uniqueness => {
+                :scope => :module_type
             }
 
   #

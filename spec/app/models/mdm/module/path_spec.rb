@@ -23,16 +23,16 @@ describe Mdm::Module::Path do
             FactoryGirl.generate :mdm_module_path_real_path
           end
 
-          context 'with #ancestors' do
+          context 'with #module_ancestors' do
             let!(:ancestors) do
               FactoryGirl.create_list(:mdm_module_ancestor, 2, :parent_path => path)
             end
 
             before(:each) do
-              # Have to remove new_real_path as sequence will have already created
+              # Have to remove new_real_path as sequence will have already created it
               FileUtils.rmdir(new_real_path)
               # Move old real_path to new real_path to simulate install location for path changing and to ensure
-              # that
+              # that ancestors exist on path.
               FileUtils.mv(path.real_path, new_real_path)
 
               path.real_path = new_real_path
