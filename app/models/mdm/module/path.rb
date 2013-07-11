@@ -13,7 +13,7 @@ class Mdm::Module::Path < ActiveRecord::Base
   # @!attribute [rw] module_ancestors
   #   The modules ancestors that use this as a {Mdm::Module::Ancestor#parent_path}.
   #
-  #   @return [Array<Mdm::Module::Detail>]
+  #   @return [Array<Mdm::Module::Ancestor>]
   has_many :module_ancestors,
            :class_name => 'Mdm::Module::Ancestor',
            :dependent => :destroy,
