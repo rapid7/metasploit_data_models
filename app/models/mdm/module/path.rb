@@ -68,6 +68,38 @@ class Mdm::Module::Path < ActiveRecord::Base
                 :unless => :add_context?
             }
 
+  #
+  # Methods
+  #
+
+  # @note This path should be validated before calling {#name_collision} so that {#gem} and {#name} is normalized.
+	#
+	# Returns path with the same {#gem} and {#name}.
+	#
+	# @return [Mdm::Module::Path] if there is a {Mdm::Module::Path} with the same {#gem} and {#name} as this path.
+	# @return [nil] if #named? is `false`.
+	# @return [nil] if there is not match.
+  def name_collision
+    collision = nil
+
+    # Don't query database if gem and name are `nil` since all unnamed paths will match.
+    if named?
+      collision = self.class.where(:gem => gem, :name => name).first
+    end
+
+    collision
+  end
+
+  # @note This path should be validated before calling {#real_path_collision} so that {#real_path} is normalized.
+  #
+  # Returns path with the same {#real_path}.
+  #
+  # @return [Mdm::Module::Path] if there is a {Mdm::Module::Path} with the same {#real_path} as this path.
+  # @return [nil] if there is not match.
+  def real_path_collision
+    self.class.where(:real_path => real_path).first
+  end
+
   private
 
   # Returns whether #validation_context is `:add`.  If #validation_context is :add then the uniqueness validations on

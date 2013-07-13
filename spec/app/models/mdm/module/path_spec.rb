@@ -167,4 +167,86 @@ describe Mdm::Module::Path do
       it { should validate_directory_at(:real_path) }
     end
   end
+
+  context '#name_collision' do
+    subject(:name_collision) do
+      path.name_collision
+    end
+
+    let!(:collision) do
+      FactoryGirl.create(:named_mdm_module_path)
+    end
+
+    let!(:other_named) do
+      FactoryGirl.create(:named_mdm_module_path)
+    end
+
+    let!(:unnamed) do
+      FactoryGirl.create(:unnamed_mdm_module_path)
+    end
+
+    before(:each) do
+      path.valid?
+    end
+
+    context 'with named' do
+      context 'with same (gem, name)' do
+        let(:path) do
+          FactoryGirl.build(
+              :named_mdm_module_path,
+              :gem => collision.gem,
+              :name => collision.name
+          )
+        end
+
+        it 'should return collision' do
+          name_collision.should == collision
+        end
+      end
+
+      context 'without same (gem, name)' do
+        let(:path) do
+          FactoryGirl.build(:named_mdm_module_path)
+        end
+
+        it { should be_nil }
+      end
+    end
+
+    context 'without named' do
+      let(:path) do
+        FactoryGirl.build(:unnamed_mdm_module_path)
+      end
+
+      it { should be_nil }
+    end
+  end
+
+  context '#real_path_collision' do
+    subject(:real_path_collision) do
+      path.real_path_collision
+    end
+
+    let!(:collision) do
+      FactoryGirl.create(:mdm_module_path)
+    end
+
+    context 'with same real_path' do
+      let(:path) do
+        FactoryGirl.build(:mdm_module_path, :real_path => collision.real_path)
+      end
+
+      it 'should return collision' do
+        real_path_collision.should == collision
+      end
+    end
+
+    context 'without same real_path' do
+      let(:path) do
+        FactoryGirl.build(:mdm_module_path)
+      end
+
+      it { should be_nil }
+    end
+  end
 end
