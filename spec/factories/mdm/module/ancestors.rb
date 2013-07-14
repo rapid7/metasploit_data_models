@@ -124,10 +124,9 @@ FactoryGirl.define do
     "mdm_module_ancestor_handler_type#{n}"
   end
 
-  ordered_types = Mdm::Module::Ancestor::MODULE_TYPES.sort
-	sequence :mdm_module_ancestor_module_type, ordered_types.cycle
+  sequence :mdm_module_ancestor_module_type, Metasploit::Model::Module::Ancestor::MODULE_TYPES.cycle
 
-  non_payload_ordered_types = ordered_types - ['payload']
+  non_payload_ordered_types = Metasploit::Model::Module::Ancestor::MODULE_TYPES - ['payload']
   sequence :mdm_module_ancestor_non_payload_module_type, non_payload_ordered_types.cycle
 
   sequence :mdm_module_ancestor_non_payload_reference_name do |n|

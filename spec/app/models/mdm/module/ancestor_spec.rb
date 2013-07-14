@@ -17,19 +17,6 @@ describe Mdm::Module::Ancestor do
   end
 
   context 'CONSTANTS' do
-    context 'DIRECTORY_BY_MODULE_TYPE' do
-      subject(:directory_by_type) do
-        described_class::DIRECTORY_BY_MODULE_TYPE
-      end
-
-      its(['auxiliary']) { should == 'auxiliary' }
-      its(['encoder']) { should == 'encoders' }
-      its(['exploit']) { should == 'exploits' }
-      its(['nop']) { should == 'nops' }
-      its(['payload']) { should == 'payloads' }
-      its(['post']) { should == 'post' }
-    end
-
     context 'EXTENSION' do
       subject(:extension) do
         described_class::EXTENSION
@@ -58,12 +45,6 @@ describe Mdm::Module::Ancestor do
         payload_type_set = Set.new(described_class::PAYLOAD_TYPES)
 
         handled_type_set.should be_a_subset(payload_type_set)
-      end
-    end
-
-    context 'MODULE_TYPES' do
-      it 'should include module types in any order' do
-        described_class::MODULE_TYPES.should =~ module_types
       end
     end
 
@@ -1369,8 +1350,8 @@ describe Mdm::Module::Ancestor do
           FactoryGirl.generate :mdm_module_ancestor_module_type
         end
 
-        it 'should use DIRECTORY_BY_MODULE_TYPE' do
-          module_type_directory.should == described_class::DIRECTORY_BY_MODULE_TYPE[module_type]
+        it 'should use Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE' do
+          module_type_directory.should == Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE[module_type]
         end
       end
 

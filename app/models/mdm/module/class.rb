@@ -117,7 +117,7 @@ class Mdm::Module::Class < ActiveRecord::Base
 
   validates :module_type,
             :inclusion => {
-                :in => Mdm::Module::Ancestor::MODULE_TYPES
+                :in => Metasploit::Model::Module::Ancestor::MODULE_TYPES
             }
   validates :payload_type,
             :inclusion => {

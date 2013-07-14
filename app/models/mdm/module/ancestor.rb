@@ -13,18 +13,6 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # CONSTANTS
   #
 
-  # The directory for a given {#module_type} is a not always the pluralization of {#module_type}, so this maps the
-  # {#module_type} to the {#module_type_directory type directory} that is used to {#derived_real_path generate} the
-  # {#real_path} from the {#module_type} and {#reference_name}.
-  DIRECTORY_BY_MODULE_TYPE = {
-      'auxiliary' => 'auxiliary',
-      'encoder' => 'encoders',
-      'exploit' => 'exploits',
-      'nop' => 'nops',
-      'payload' => 'payloads',
-      'post' => 'post'
-  }
-
   # File extension used for metasploit modules.
   EXTENSION = '.rb'
 
@@ -33,9 +21,6 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
       'single',
       'stager'
   ]
-
-  # The modules types from {DIRECTORY_BY_MODULE_TYPE}.
-  MODULE_TYPES = DIRECTORY_BY_MODULE_TYPE.keys
 
   # Valid values for {#payload_type} if {#payload?} is `true`.
   PAYLOAD_TYPES = [
@@ -101,7 +86,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #   The type of the module. This would be called #type, but #type is reserved for ActiveRecord's single table
   #   inheritance.
   #
-  #   @return [String] key in {DIRECTORY_BY_MODULE_TYPE}
+  #   @return [String] key in `Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE`.
 
   # @!attribute [rw] payload_type
   #   For payload modules, the {PAYLOAD_TYPES type} of payload, either 'single', 'stage', or 'stager'.
@@ -176,7 +161,7 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
             }
   validates :module_type,
             :inclusion => {
-                :in => MODULE_TYPES
+                :in => Metasploit::Model::Module::Ancestor::MODULE_TYPES
             }
   validates :parent_path,
             :presence => true
@@ -283,7 +268,8 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # Returns whether {#handler_type} is required or must be `nil` for the given payload_type.
   #
   # @param options [Hash{Symbol => String,nil}]
-  # @option options [String, nil] module_type (nil) `nil` or an element of {MODULE_TYPES}.
+  # @option options [String, nil] module_type (nil) `nil` or an element of
+  #   `Metasploit::Model::Module::Ancestor::MODULE_TYPES`.
   # @option options [String, nil] payload_type (nil) `nil` or an element of {PAYLOAD_TYPES}.
   # @return [true] if {#handler_type} must be present.
   # @return [false] if {#handler_type} must be `nil`.
@@ -315,9 +301,9 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   # The directory for {#module_type} under {Mdm::Module::Path parent_path.real_path}.
   #
   # @return [String]
-  # @see DIRECTORY_BY_MODULE_TYPE
+  # @see Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE
   def module_type_directory
-    DIRECTORY_BY_MODULE_TYPE[module_type]
+    Metasploit::Model::Module::Ancestor::DIRECTORY_BY_MODULE_TYPE[module_type]
   end
 
   # Return whether this forms part of a payload (either a single, stage, or stager).
