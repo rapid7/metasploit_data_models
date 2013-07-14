@@ -972,7 +972,7 @@ describe Mdm::Module::Class do
         module_class.module_type = module_type
       end
 
-      Metasploit::Model::Module::Ancestor::MODULE_TYPES.each do |context_module_type|
+      Metasploit::Model::Module::Type::ALL.each do |context_module_type|
         context "with #{context_module_type}" do
           let(:module_type) do
             context_module_type

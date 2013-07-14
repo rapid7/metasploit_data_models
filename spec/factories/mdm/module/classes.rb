@@ -59,9 +59,9 @@ FactoryGirl.define do
   # set :mdm_module_class attributes.
   #
 
-  sequence :mdm_module_class_module_type, Metasploit::Model::Module::Ancestor::MODULE_TYPES.cycle
+  sequence :mdm_module_class_module_type, Metasploit::Model::Module::Type::ALL.cycle
 
-  non_payload_ordered_types = Metasploit::Model::Module::Ancestor::MODULE_TYPES - ['payload']
+  non_payload_ordered_types = Metasploit::Model::Module::Type::ALL - ['payload']
   sequence :mdm_module_class_non_payload_module_type, non_payload_ordered_types.cycle
 
   sequence :mdm_module_class_payload_type, Mdm::Module::Class::PAYLOAD_TYPES.cycle
