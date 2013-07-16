@@ -129,42 +129,6 @@ describe Mdm::Module::Path do
         duplicate.should_not be_valid
         duplicate.errors[:real_path].should include('has already been taken')
       end
-
-      context 'presence' do
-        subject(:path) do
-          FactoryGirl.build(:mdm_module_path, :real_path => real_path)
-        end
-
-        context 'with nil' do
-          let(:real_path) do
-            nil
-          end
-
-          it { should_not be_valid }
-
-          it 'should record error' do
-            path.valid?
-
-            path.errors[:real_path].should include("can't be blank")
-          end
-        end
-
-        context "with ''" do
-          let(:real_path) do
-            ''
-          end
-
-          it { should_not be_valid }
-
-          it 'should record error' do
-            path.valid?
-
-            path.errors[:real_path].should include("can't be blank")
-          end
-        end
-      end
-
-      it { should validate_directory_at(:real_path) }
     end
   end
 
