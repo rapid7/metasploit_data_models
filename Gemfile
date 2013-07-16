@@ -11,7 +11,9 @@ group :development, :test do
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
   # rails is only used for the dummy application in spec/dummy
-  gem 'rails'
+  # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
+  # @see https://www.pivotaltracker.com/story/show/52309083
+  gem 'rails', '>= 3.2', '< 4.0.0'
 end
 
 group :test do
