@@ -5,6 +5,10 @@ describe Mdm::Module::Path do
     let(:path_class) do
       described_class
     end
+
+    let(:path_factory) do
+      :mdm_module_path
+    end
   end
 
   context 'associations' do
@@ -20,7 +24,7 @@ describe Mdm::Module::Path do
           end
 
           let(:new_real_path) do
-            FactoryGirl.generate :mdm_module_path_real_path
+            FactoryGirl.generate :metasploit_model_module_path_real_path
           end
 
           context 'with #module_ancestors' do
@@ -119,7 +123,7 @@ describe Mdm::Module::Path do
 
     context 'real_path' do
       let(:real_path) do
-        FactoryGirl.generate :mdm_module_path_real_path
+        FactoryGirl.generate :metasploit_model_module_path_real_path
       end
 
       it 'should validate uniqueness of real path' do

@@ -33,6 +33,16 @@ describe Mdm::Reference do
       )
     end
 
+    def attribute_type(attribute)
+      column = base_class.columns_hash.fetch(attribute.to_s)
+
+      column.type
+    end
+
+    let(:base_class) do
+      described_class
+    end
+
     context 'with authority' do
       let(:authority) do
         Mdm::Authority.where(:abbreviation => abbreviation).first

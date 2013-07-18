@@ -58,6 +58,16 @@ describe Mdm::Module::Class do
   end
 
   context 'derivations' do
+    def attribute_type(attribute)
+      column = described_class.columns_hash.fetch(attribute.to_s)
+
+      column.type
+    end
+
+    let(:base_class) do
+      described_class
+    end
+
     context 'with module_type derived' do
       before(:each) do
         module_class.module_type = module_class.derived_module_type
@@ -669,7 +679,7 @@ describe Mdm::Module::Class do
             end
 
             let(:module_type) do
-              FactoryGirl.generate :mdm_module_ancestor_module_type
+              FactoryGirl.generate :metasploit_model_module_ancestor_module_type
             end
 
             let(:module_type_set) do
@@ -693,8 +703,8 @@ describe Mdm::Module::Class do
 
             let(:module_types) do
               [
-                  FactoryGirl.generate(:mdm_module_ancestor_module_type),
-                  FactoryGirl.generate(:mdm_module_ancestor_module_type)
+                  FactoryGirl.generate(:metasploit_model_module_ancestor_module_type),
+                  FactoryGirl.generate(:metasploit_model_module_ancestor_module_type)
               ]
             end
 
@@ -1153,7 +1163,7 @@ describe Mdm::Module::Class do
           end
 
           let(:module_type) do
-            FactoryGirl.generate :mdm_module_ancestor_module_type
+            FactoryGirl.generate :metasploit_model_module_ancestor_module_type
           end
 
           it 'should return shared module_type' do
@@ -1384,7 +1394,7 @@ describe Mdm::Module::Class do
 
           context 'with handler_type' do
             let(:handler_type) do
-              FactoryGirl.generate :mdm_module_ancestor_handler_type
+              FactoryGirl.generate :metasploit_model_module_ancestor_handler_type
             end
 
             it 'should return <reference_name>/<handler_type>' do
@@ -1469,7 +1479,7 @@ describe Mdm::Module::Class do
 
             context 'with handler_type' do
               let(:stager_handler_type) do
-                FactoryGirl.generate :mdm_module_ancestor_handler_type
+                FactoryGirl.generate :metasploit_model_module_ancestor_handler_type
               end
 
               it 'should be <stage.reference_name>/<stager.handler_type>' do
@@ -1557,7 +1567,7 @@ describe Mdm::Module::Class do
 
     context 'without payload' do
       let(:module_type) do
-        FactoryGirl.generate :mdm_module_ancestor_non_payload_module_type
+        FactoryGirl.generate :metasploit_model_module_ancestor_non_payload_module_type
       end
 
       it { should be_false }
@@ -1574,7 +1584,7 @@ describe Mdm::Module::Class do
     end
 
     let(:ancestor_payload_type) do
-      FactoryGirl.generate :mdm_module_ancestor_payload_type
+      FactoryGirl.generate :metasploit_model_module_ancestor_payload_type
     end
 
     before(:each) do
