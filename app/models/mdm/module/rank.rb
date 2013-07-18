@@ -1,26 +1,19 @@
 # The reliability of the module and likelyhood that the module won't knock over the service or host being exploited.
 # Bigger {#number values} are better.
 class Mdm::Module::Rank < ActiveRecord::Base
+  include Metasploit::Model::Module::Rank
+
   self.table_name = 'module_ranks'
 
   #
-  # CONSTANTS
+  # Associations
   #
 
-  # Regular expression to ensure that {#name} is a word starting with a capital letter
-  NAME_REGEXP = /\A[A-Z][a-z]+\Z/
-
-  # Converts {#name} to {#number}.  Used for seeding.  Seeds exist so that reports can use module_ranks to get the name
-  # of a rank without having to duplicate this constant.
-  NUMBER_BY_NAME = {
-      'Manual' => 0,
-      'Low' => 100,
-      'Average' => 200,
-      'Normal' => 300,
-      'Good' => 400,
-      'Great' => 500,
-      'Excellent' => 600
-  }
+  # @!attribute [rw] module_classes
+  #   {Mdm::Module::Class Module classes} assigned this rank.
+  #
+  #   @return [Array<Mdm::Module::Class>]
+  has_many :module_classes, :class_name => 'Mdm::Module::Class', :dependent => :destroy
 
   #
   # Attributes
@@ -37,34 +30,13 @@ class Mdm::Module::Rank < ActiveRecord::Base
   #   @return [Integer]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-  attr_accessible :number
-
-  #
   # Validations
   #
 
   validates :name,
-            # To ensure NUMBER_BY_NAME and seeds stay in sync.
-            :inclusion => {
-                :in => NUMBER_BY_NAME.keys
-            },
-            # To ensure new seeds follow pattern.
-            :format => {
-                :with => NAME_REGEXP
-            }
+            :uniqueness => true
   validates :number,
-            # to ensure NUMBER_BY_NAME and seeds stay in sync.
-            :inclusion => {
-                :in => NUMBER_BY_NAME.values
-            },
-            # To ensure new seeds follow pattern.
-            :numericality => {
-                :integer_only => true
-            }
+            :uniqueness => true
 
   ActiveSupport.run_load_hooks(:mdm_module_rank, self)
 end
