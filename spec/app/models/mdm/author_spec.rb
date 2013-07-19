@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Author do
+  it_should_behave_like 'Metasploit::Model::Author'
+
   context 'associations' do
     it { should have_many(:email_addresses).class_name('Mdm::EmailAddress').through(:module_authors) }
     it { should have_many(:module_authors).class_name('Mdm::Module::Author').dependent(:destroy) }
@@ -27,14 +29,7 @@ describe Mdm::Author do
     end
   end
 
-  context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:name) }
-  end
-
   context 'validations' do
-    context 'name' do
-      it { should validate_presence_of :name }
-      it { should validate_uniqueness_of :name }
-    end
+    it { should validate_uniqueness_of :name }
   end
 end

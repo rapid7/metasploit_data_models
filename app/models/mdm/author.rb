@@ -2,6 +2,8 @@
 # the author's email may have changed over the history of metasploit-framework or they are submitting from a work and
 # personal email for different code.
 class Mdm::Author < ActiveRecord::Base
+  include Metasploit::Model::Author
+
   #
   # Associations
   #
@@ -38,18 +40,10 @@ class Mdm::Author < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
-  #
   # Validations
   #
 
-  validates :name,
-            :presence => true,
-            :uniqueness => true
+  validates :name, :uniqueness => true
 
   ActiveSupport.run_load_hooks(:mdm_author, self)
 end
