@@ -217,7 +217,7 @@ describe Mdm::Module::Ancestor do
 
         let(:original_module_type) do
           # don't use payload so sequence can be used to generate reference_name
-          FactoryGirl.generate :metasploit_model_module_ancestor_non_payload_module_type
+          FactoryGirl.generate :metasploit_model_non_payload_module_type
         end
 
         let(:original_reference_name) do
@@ -252,7 +252,7 @@ describe Mdm::Module::Ancestor do
         context 'without same module_type' do
           let(:new_module_type) do
             # don't use payload so sequence can be used to generate reference_name
-            FactoryGirl.generate :metasploit_model_module_ancestor_non_payload_module_type
+            FactoryGirl.generate :metasploit_model_non_payload_module_type
           end
 
           context 'with same reference_name' do
