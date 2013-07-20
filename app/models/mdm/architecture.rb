@@ -1,48 +1,7 @@
 # The architecture of a {Mdm::Host host's cpu} or that is targeted by the shellcode for a
 # {Mdm::Module::Instance module}.
 class Mdm::Architecture < ActiveRecord::Base
-  #
-  # CONSTANTS
-  #
-
-  # Valid values for {#abbreviation}
-  ABBREVIATIONS = [
-      'armbe',
-      'armle',
-      'cbea',
-      'cbea64',
-      'cmd',
-      'java',
-      'mipsbe',
-      'mipsle',
-      'php',
-      'ppc',
-      'ppc64',
-      'ruby',
-      'sparc',
-      'tty',
-      'x86',
-      'x86_64'
-  ]
-  # Valid values for {#bits}.
-  BITS = [
-      32,
-      64
-  ]
-  # Valid values for {#endianness}.
-  ENDIANNESSES = [
-      'big',
-      'little'
-  ]
-  # Valid values for {#family}.
-  FAMILIES = [
-      'arm',
-      'cbea',
-      'mips',
-      'ppc',
-      'sparc',
-      'x86'
-  ]
+  include Metasploit::Model::Architecture
 
   #
   #
@@ -121,27 +80,8 @@ class Mdm::Architecture < ActiveRecord::Base
   #
 
   validates :abbreviation,
-            :inclusion => {
-                :in => ABBREVIATIONS
-            },
             :uniqueness => true
-  validates :bits,
-            :inclusion => {
-                :allow_nil => true,
-                :in => BITS
-            }
-  validates :endianness,
-            :inclusion => {
-                :allow_nil => true,
-                :in => ENDIANNESSES
-            }
-  validates :family,
-            :inclusion => {
-                :allow_nil => true,
-                :in => FAMILIES
-            }
   validates :summary,
-            :presence => true,
             :uniqueness => true
 
   ActiveSupport.run_load_hooks(:mdm_architecture, self)

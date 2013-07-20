@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  abbreviations = Mdm::Architecture::ABBREVIATIONS
+  abbreviations = Metasploit::Model::Architecture::ABBREVIATIONS
 
   # mdm_architectures is not a factory, but a sequence because only the seeded Mdm::Architectures are valid
   sequence :mdm_architecture do |n|
