@@ -1,5 +1,7 @@
 # Email address for used by an {Mdm::Author} for {Mdm::Module::Author credit} on a given {Mdm::Module::Instance module}.
 class Mdm::EmailAddress < ActiveRecord::Base
+  include Metasploit::Model::EmailAddress
+
   #
   # Associations
   #
@@ -41,19 +43,10 @@ class Mdm::EmailAddress < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :domain
-  attr_accessible :local
-
-  #
   # Validations
   #
 
-  validates :domain, :presence => true
   validates :local,
-            :presence => true,
             :uniqueness => {
                 :scope => :domain
             }

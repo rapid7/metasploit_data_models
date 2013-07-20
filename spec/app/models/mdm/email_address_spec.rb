@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::EmailAddress do
+  it_should_behave_like 'Metasploit::Model::EmailAddress'
+
   context 'associations' do
     it { should have_many(:module_authors).class_name('Mdm::Module::Author').dependent(:destroy) }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_authors) }
@@ -29,69 +31,58 @@ describe Mdm::EmailAddress do
     end
   end
 
-  context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:domain) }
-    it { should allow_mass_assignment_of(:local) }
-  end
-
   context 'validations' do
-    it { should validate_presence_of :domain }
+    # Can't use validate_uniqueness_of(:local).scoped_to(:domain) because it will attempt to
+    # INSERT with NULL domain, which is invalid.
+    context 'validate uniqueness of domain scoped to local' do
+      let(:existing_domain) do
+        FactoryGirl.generate :metasploit_model_email_address_domain
+      end
 
-    context 'local' do
-      it { should validate_presence_of :local }
+      let(:existing_local) do
+        FactoryGirl.generate :metasploit_model_email_address_local
+      end
 
-      # Can't use validate_uniqueness_of(:local).scoped_to(:domain) because it will attempt to
-      # INSERT with NULL domain, which is invalid.
-      context 'validate uniqueness of domain scoped to local' do
-        let(:existing_domain) do
-          FactoryGirl.generate :mdm_email_address_domain
-        end
+      let!(:existing_email_address) do
+        FactoryGirl.create(
+            :mdm_email_address,
+            :domain => existing_domain,
+            :local => existing_local
+        )
+      end
 
-        let(:existing_local) do
-          FactoryGirl.generate :mdm_email_address_local
-        end
-
-        let!(:existing_email_address) do
-          FactoryGirl.create(
+      context 'with same domain' do
+        subject(:new_email_address) do
+          FactoryGirl.build(
               :mdm_email_address,
               :domain => existing_domain,
               :local => existing_local
           )
         end
 
-        context 'with same domain' do
-          subject(:new_email_address) do
-            FactoryGirl.build(
-                :mdm_email_address,
-                :domain => existing_domain,
-                :local => existing_local
-            )
-          end
+        it { should_not be_valid }
 
-          it { should_not be_valid }
+        it 'should record error on local' do
+          new_email_address.valid?
 
-          it 'should record error on local' do
-            new_email_address.valid?
+          new_email_address.errors[:local].should include('has already been taken')
+        end
+      end
 
-            new_email_address.errors[:local].should include('has already been taken')
-          end
+      context 'without same domain' do
+        subject(:new_email_address) do
+          FactoryGirl.build(
+              :mdm_email_address,
+              :domain => new_domain,
+              :local => existing_local
+          )
         end
 
-        context 'without same domain' do
-          subject(:new_email_address) do
-            FactoryGirl.build(
-                :mdm_email_address,
-                :domain => new_domain,
-                :local => existing_local
-            )
-          end
-
-          let(:new_domain) do
-            FactoryGirl.generate :mdm_email_address_domain
-          end
-
-          it { should be_valid }
+        let(:new_domain) do
+          FactoryGirl.generate :metasploit_model_email_address_domain
         end
+
+        it { should be_valid }
       end
     end
   end
