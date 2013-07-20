@@ -1,5 +1,7 @@
 # An authority that supplies {Mdm::Reference references}, such as CVE.
 class Mdm::Authority < ActiveRecord::Base
+  include Metasploit::Model::Authority
+
   #
   #
   # Associations
@@ -74,67 +76,9 @@ class Mdm::Authority < ActiveRecord::Base
   #   @return [String, nil]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :abbreviation
-  attr_accessible :obsolete
-  attr_accessible :summary
-  attr_accessible :url
-
-  #
   # Validations
   #
 
   validates :abbreviation,
-            :presence => true,
             :uniqueness => true
-
-  #
-  # Methods
-  #
-
-  # Returns the {Mdm::Reference#url URL} for a {Mdm::Reference#designation designation}.
-  #
-  # @param designation [String] {Mdm::Reference#designation}.
-  # @return [String] {Mdm::Reference#url}
-  # @return [nil] if this {Mdm::Authority} is {#obsolete}.
-  # @return [nil] if this {Mdm::Authority} does have a way to derive URLS from designations.
-  def designation_url(designation)
-    url = nil
-
-    if extension
-      url = extension.designation_url(designation)
-    end
-
-    url
-  end
-
-  # Returns module that include authority specific methods.
-  #
-  # @return [Module] if {#abbreviation} has a corresponding module under the Mdm::Authority namespace.
-  # @return [nil] otherwise.
-  def extension
-    begin
-      extension_name.constantize
-    rescue NameError
-      nil
-    end
-  end
-
-  # Returns name of module that includes authority specific methods.
-  #
-  # @return [String] unless {#abbreviation} is blank.
-  # @return [nil] if {#abbreviation} is blank.
-  def extension_name
-    extension_name = nil
-
-    unless abbreviation.blank?
-      # underscore before camelize to eliminate -'s
-      relative_model_name = abbreviation.underscore.camelize
-      extension_name = "#{self.class.name}::#{relative_model_name}"
-    end
-
-    extension_name
-  end
 end

@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Mdm::Authority do
+  it_should_behave_like 'Metasploit::Model::Authority' do
+    def seed_with_abbreviation(abbreviation)
+      Mdm::Authority.where(:abbreviation => abbreviation).first
+    end
+  end
+
   context 'associations' do
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_references) }
     it { should have_many(:module_references).class_name('Mdm::Module::Reference').through(:references) }
@@ -55,82 +61,7 @@ describe Mdm::Authority do
     end
   end
 
-  context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:abbreviation) }
-    it { should allow_mass_assignment_of(:obsolete) }
-    it { should allow_mass_assignment_of(:summary) }
-    it { should allow_mass_assignment_of(:url) }
-  end
-
-  context 'seeds' do
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'BID',
-                          :extension_name => 'Mdm::Authority::Bid',
-                          :obsolete => false,
-                          :summary => 'BuqTraq ID',
-                          :url => 'http://www.securityfocus.com/bid'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'CVE',
-                          :extension_name => 'Mdm::Authority::Cve',
-                          :obsolete => false,
-                          :summary => 'Common Vulnerabilities and Exposures',
-                          :url => 'http://cvedetails.com'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'MIL',
-                          :extension_name => nil,
-                          :obsolete => true,
-                          :summary => 'milw0rm',
-                          :url => 'https://en.wikipedia.org/wiki/Milw0rm'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'MSB',
-                          :extension_name => 'Mdm::Authority::Msb',
-                          :obsolete => false,
-                          :summary => 'Microsoft Security Bulletin',
-                          :url => 'http://www.microsoft.com/technet/security/bulletin'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'OSVDB',
-                          :extension_name => 'Mdm::Authority::Osvdb',
-                          :obsolete => false,
-                          :summary => 'Open Sourced Vulnerability Database',
-                          :url => 'http://osvdb.org'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'PMASA',
-                          :extension_name => 'Mdm::Authority::Pmasa',
-                          :obsolete => false,
-                          :summary => 'phpMyAdmin Security Announcement',
-                          :url => 'http://www.phpmyadmin.net/home_page/security/'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'SECUNIA',
-                          :extension_name => 'Mdm::Authority::Secunia',
-                          :obsolete => false,
-                          :summary => 'Secunia',
-                          :url => 'https://secunia.com/advisories'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'US-CERT-VU',
-                          :extension_name => 'Mdm::Authority::UsCertVu',
-                          :obsolete => false,
-                          :summary => 'United States Computer Emergency Readiness Team Vulnerability Notes Database',
-                          :url => 'http://www.kb.cert.org/vuls'
-
-    it_should_behave_like 'Mdm::Authority seed',
-                          :abbreviation => 'waraxe',
-                          :extension_name => 'Mdm::Authority::Waraxe',
-                          :obsolete => false,
-                          :summary => 'Waraxe Advisories',
-                          :url => 'http://www.waraxe.us/content-cat-1.html'
-  end
-
   context 'validations' do
-    context 'abbreviation' do
-      it { should validate_presence_of(:abbreviation) }
-      it { should validate_uniqueness_of(:abbreviation) }
-    end
+    it { should validate_uniqueness_of(:abbreviation) }
   end
 end
