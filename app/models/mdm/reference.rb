@@ -1,7 +1,7 @@
 # Reference to a {#url} or a {#designation} maintained by an {#authority}, such as CVE, that describes an exposure or
 # vulnerability on a {#hosts host} or that is exploited by a {#module_instances module}.
 class Mdm::Reference < ActiveRecord::Base
-  include Metasploit::Model::Derivation
+  include Metasploit::Model::Reference
 
   #
   #
@@ -77,58 +77,4 @@ class Mdm::Reference < ActiveRecord::Base
   #   URL to web page with information about referenced exploit.
   #
   #   @return [String, nil]
-
-  #
-  # Derivations
-  #
-
-  derives :url, :validate => false
-
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :designation
-  attr_accessible :url
-
-  #
-  # Validations
-  #
-
-  validates :designation,
-            :presence => {
-                :if => :authority?
-            },
-            :nil => {
-                :unless => :authority?
-            }
-  validates :url,
-            :presence => {
-                :unless => :authority?
-            }
-
-  #
-  # Methods
-  #
-
-  # Returns whether {#authority} is not `nil`.
-  #
-  # @return [true] unless {#authority} is `nil`.
-  # @return [false] if {#authority} is `nil`.
-  def authority?
-    authority.present?
-  end
-
-  # Derives {#url} based how {#authority} routes {#designation designations} to a URL.
-  #
-  # @return [String, nil]
-  def derived_url
-    derived = nil
-
-    if authority and designation.present?
-      derived = authority.designation_url(designation)
-    end
-
-    derived
-  end
 end
