@@ -45,21 +45,9 @@ only if the user wants to use the database.
 
 ### Elsewhere
 
-__NOTE: This isn't in RubyGems yet.  Using a Gemfile entry pointing to this repo (i.e., using
-[Bundler](http://gembundler.com)) is the suggested option for now.__
+In Metasploit Pro, MDM is loaded via the metasploit_data_models gem: https://rubygems.org/gems/metasploit_data_models
 
-Usage outside of Rapid7 is still alpha, as reflected in the pre-1.0.0 version, and we're not making many promises.  That
-being said, usage is easy:
-
-    connection_info = YAML.load_file("path/to/rails-style/db_config_file")
-    ActiveRecord::Base.establish_connection(connection_info['development'])
-    MetasploitDataModels.require_models
-
-Basically you need to do the following things:
-
-1. Establish an ActiveRecord connection.  A Rails __config/database.yml__ is ideal for this.
-2. `MetasploitDataModels.require_models`
-
+An MRI and JRuby implementation is generated for all substantial updates.
 
 ## Developer Info
 
