@@ -1,5 +1,7 @@
 # {Mdm::Module::Instance#platforms Platforms} for {Mdm::Module::Instance modules}.
 class Mdm::Platform < ActiveRecord::Base
+  include Metasploit::Model::Platform
+
   #
   #
   # Associations
@@ -37,7 +39,6 @@ class Mdm::Platform < ActiveRecord::Base
   #
 
   validates :name,
-            :presence => true,
             :uniqueness => true
 
   ActiveSupport.run_load_hooks(:mdm_platform, self)

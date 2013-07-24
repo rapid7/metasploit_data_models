@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Platform do
+  it_should_behave_like 'Metasploit::Model::Platform'
+
   context 'associations' do
     it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_platforms) }
@@ -27,9 +29,6 @@ describe Mdm::Platform do
   end
 
   context 'validations' do
-    context 'name' do
-      it { should validate_presence_of(:name) }
-      it { should validate_uniqueness_of(:name) }
-    end
+    it { should validate_uniqueness_of(:name) }
   end
 end
