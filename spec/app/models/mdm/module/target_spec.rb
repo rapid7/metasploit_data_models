@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Module::Target do
+  it_should_behave_like 'Metasploit::Model::Module::Target'
+
   context 'associations' do
     it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
   end
@@ -29,14 +31,6 @@ describe Mdm::Module::Target do
   end
 
   context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:index) }
     it { should_not allow_mass_assignment_of(:module_instance_id) }
-    it { should allow_mass_assignment_of(:name) }
-  end
-
-  context 'validations' do
-    it { should validate_presence_of(:index) }
-    it { should validate_presence_of(:module_instance) }
-    it { should validate_presence_of(:name) }
   end
 end

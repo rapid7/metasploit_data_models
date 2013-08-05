@@ -1,6 +1,8 @@
 # A potential target for a {Mdm::Module::Instance module}.  Targets can change options including offsets for ROP chains
 # to tune an exploit to work with different system libraries and versions.
 class Mdm::Module::Target < ActiveRecord::Base
+  include Metasploit::Model::Module::Target
+
   self.table_name = 'module_targets'
 
   #
@@ -14,7 +16,7 @@ class Mdm::Module::Target < ActiveRecord::Base
   belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
 
   #
-  # Associations
+  # Attributes
   #
 
   # @!attribute [rw] index
@@ -29,21 +31,6 @@ class Mdm::Module::Target < ActiveRecord::Base
   #   The name of this target.
   #
   #   @return [String]
-
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :index
-  attr_accessible :name
-
-  #
-  # Validators
-  #
-
-  validates :index, :presence => true
-  validates :module_instance, :presence => true
-  validates :name, :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_target, self)
 end
