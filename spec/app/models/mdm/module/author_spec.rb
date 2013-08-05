@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Module::Author do
+  it_should_behave_like 'Metasploit::Model::Module::Author'
+
   context 'associations' do
     it { should belong_to(:author).class_name('Mdm::Author') }
     it { should belong_to(:email_address).class_name('Mdm::EmailAddress') }
@@ -50,11 +52,5 @@ describe Mdm::Module::Author do
     it { should_not allow_mass_assignment_of(:author_id) }
     it { should_not allow_mass_assignment_of(:email_address_id) }
     it { should_not allow_mass_assignment_of(:module_instance_id) }
-  end
-
-  context 'validations' do
-    it { should validate_presence_of(:author) }
-    it { should validate_presence_of(:module_instance) }
-    it { should_not validate_presence_of(:email_address) }
   end
 end

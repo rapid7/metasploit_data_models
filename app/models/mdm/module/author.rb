@@ -1,6 +1,8 @@
 # Joins {Mdm::Author} and {Mdm::EmailAddress} to {Mdm::Module::Instance} to record authors and the email they used for
 # a given module.
 class Mdm::Module::Author < ActiveRecord::Base
+  include Metasploit::Model::Module::Author
+
   self.table_name = 'module_authors'
 
   #
@@ -30,14 +32,10 @@ class Mdm::Module::Author < ActiveRecord::Base
   # Validations
   #
 
-  validates :author,
-            :presence => true
   validates :author_id,
             :uniqueness => {
                 :scope => :module_instance_id
             }
-  validates :module_instance,
-            :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_author, self)
 end
