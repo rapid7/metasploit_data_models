@@ -3,6 +3,8 @@
 # {Mdm::Module::Instance modules} have {Mdm::Module::Action actions} with the same {Mdm::Module::Action name}, no
 # similarity should be assumed between those two {Mdm::Module::Action actions} or {Mdm::Module::Instance modules}.
 class Mdm::Module::Action < ActiveRecord::Base
+  include Metasploit::Model::Module::Action
+
   self.table_name = 'module_actions'
 
   #
@@ -25,18 +27,10 @@ class Mdm::Module::Action < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
-  #
   # Validations
   #
 
-  validates :module_instance, :presence => true
   validates :name,
-            :presence => true,
             :uniqueness => {
                 :scope => :module_instance_id
             }

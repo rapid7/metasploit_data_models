@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Module::Action do
+  it_should_behave_like 'Metasploit::Model::Module::Action'
+
   context 'associations' do
     it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
   end
@@ -28,19 +30,12 @@ describe Mdm::Module::Action do
 
   context 'mass assignment security' do
     it { should_not allow_mass_assignment_of(:module_instance_id) }
-    it { should allow_mass_assignment_of(:name) }
   end
 
   context 'validations' do
-    it { should validate_presence_of(:module_instance) }
-
-    context 'name' do
-      it { should validate_presence_of(:name) }
-
-      it_should_behave_like 'validates uniqueness scoped to module_instance_id',
-                            :of => :name,
-                            :factory => :mdm_module_action,
-                            :sequence => :mdm_module_action_name
-    end
+    it_should_behave_like 'validates uniqueness scoped to module_instance_id',
+                          :of => :name,
+                          :factory => :mdm_module_action,
+                          :sequence => :metasploit_model_module_action_name
   end
 end
