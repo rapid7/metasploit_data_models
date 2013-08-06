@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.4.14'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.4.16'
 
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard

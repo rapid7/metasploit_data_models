@@ -1,24 +1,9 @@
 # Details about an Msf::Module.  Metadata that can be an array is stored in associations in modules under the
 # {Mdm::Module} namespace.
 class Mdm::Module::Instance < ActiveRecord::Base
+  include Metasploit::Model::Module::Instance
+
   self.table_name = 'module_instances'
-
-  #
-  # CONSTANTS
-  #
-
-  # {#privileged} is Boolean so, valid values are just `true` and `false`, but since both the validation and
-  # factory need an array of valid values, this constant exists.
-  PRIVILEGES = [
-      false,
-      true
-  ]
-
-  # Valid values for {#stance}.
-  STANCES = [
-      'aggressive',
-      'passive'
-  ]
 
   #
   #
@@ -98,7 +83,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
 
   # @!attribute [r] architectures
-  #   The {Mdm::Module::Architecture architectures} supported by this {Mdm::Module::Architecture}.
+  #   The {Mdm::Module::Architecture architectures} supported by this module.
   #
   #   @return [Array<Mdm::Architecture>]
   has_many :architectures, :class_name => 'Mdm::Architecture', :through => :module_architectures
@@ -117,7 +102,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   The email addresses of the authors of this module.
   #
   #   @return [Array<Mdm::EmailAddress>]
-  has_many :email_addresses, :class_name => 'Mdm::EmailAddress', :through => :module_authors
+  has_many :email_addresses, :class_name => 'Mdm::EmailAddress', :through => :module_authors, :uniq => true
 
   #
   # :through => :module_platforms
@@ -157,7 +142,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Vulnerabilities with same {Mdm::Reference reference} as this module.
   #
   #   @return [Array<Mdm::Vuln>]
-  has_many :vulns, :class_name => 'Mdm::Vuln', :through => :vuln_references
+  has_many :vulns, :class_name => 'Mdm::Vuln', :through => :vuln_references, :uniq => true
 
   #
   # :through => :vulns
@@ -167,13 +152,13 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Hosts vulnerable to this module.
   #
   #   @return [Array<Mdm::Host>]
-  has_many :vulnerable_hosts, :class_name => 'Mdm::Host', :through => :vulns
+  has_many :vulnerable_hosts, :class_name => 'Mdm::Host', :through => :vulns, :uniq => true
 
   # @!attribute [r] vulnerable_services
   #   Services vulnerable to this module.
   #
   #   @return [Array<Mdm::Service>]
-  has_many :vulnerable_services, :class_name => 'Mdm::Service', :through => :vulns
+  has_many :vulnerable_services, :class_name => 'Mdm::Service', :through => :vulns, :uniq => true
 
   #
   # Attributes
@@ -207,42 +192,10 @@ class Mdm::Module::Instance < ActiveRecord::Base
 
   # @!attribute [rw] stance
   #   Whether the module is active or passive.  `nil` if the {Mdm::Module::Class#module_type module type} does not
-  #   {#supports_stance? support stances}.
+  #   support stances.
   #
   #   @return ['active', 'passive', nil]
-
-  #
-  # Validations
-  #
-
-  validates :module_class,
-            :presence => true
-  validates :privileged,
-            :inclusion => {
-                :in => PRIVILEGES
-            }
-  validates :stance,
-            :inclusion => {
-                :if => :supports_stance?,
-                :in => STANCES
-            }
-
-  # Returns whether this module supports a {#stance}.  Only modules with {Mdm::Module::Class#module_type} `'auxiliary'`
-  # and `'exploit'` support a non-nil {#stance}.
-  #
-  # @return [true] if {Mdm::Module::Class#module_type module_class.module_type} is `'auxiliary'` or `'exploit'`
-  # @return [false] otherwise
-  # @see https://github.com/rapid7/metasploit-framework/blob/a6070f8584ad9e48918b18c7e765d85f549cb7fd/lib/msf/core/db_manager.rb#L423
-  # @see https://github.com/rapid7/metasploit-framework/blob/a6070f8584ad9e48918b18c7e765d85f549cb7fd/lib/msf/core/db_manager.rb#L436
-  def supports_stance?
-    supports_stance = false
-
-    if module_class and ['auxiliary', 'exploit'].include?(module_class.module_type)
-      supports_stance = true
-    end
-
-    supports_stance
-  end
+  #   @see Metasploit::Model::Module::Instance#supports_stance?
 
   ActiveSupport.run_load_hooks(:mdm_module_instance, self)
 end

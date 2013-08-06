@@ -5,11 +5,14 @@ describe Mdm::Module::Instance do
     FactoryGirl.build(:mdm_module_instance)
   end
 
-  let(:stances) do
-    [
-        'aggressive',
-        'passive'
-    ]
+  it_should_behave_like 'Metasploit::Model::Module::Instance' do
+    let(:module_class_factory) do
+      :mdm_module_class
+    end
+
+    let(:module_instance_factory) do
+      :mdm_module_instance
+    end
   end
 
   context 'associations' do
@@ -31,28 +34,6 @@ describe Mdm::Module::Instance do
     it { should have_many(:vulnerable_hosts).class_name('Mdm::Host').through(:vulns) }
     it { should have_many(:vulnerable_services).class_name('Mdm::Service').through(:vulns) }
     it { should have_many(:vulns).class_name('Mdm::Vuln').through(:vuln_references) }
-  end
-
-  context 'CONSTANTS' do
-    context 'PRIVILEGES' do
-      subject(:privileges) do
-        described_class::PRIVILEGES
-      end
-
-      it 'should contain both Boolean values' do
-        privileges.should include(false)
-        privileges.should include(true)
-      end
-    end
-
-    context 'STANCES' do
-      subject(:stances) do
-        described_class::STANCES
-      end
-
-      it { should include('aggressive') }
-      it { should include('passive') }
-    end
   end
 
   context 'database' do
@@ -119,85 +100,6 @@ describe Mdm::Module::Instance do
           its(:stance) { should be_nil }
           its(:supports_stance?) { should be_false }
         end
-      end
-    end
-  end
-
-  context 'validations' do
-    it { should validate_presence_of :module_class }
-
-    context 'ensure inclusion of privileged is boolean' do
-      let(:error) do
-        'is not included in the list'
-      end
-
-      before(:each) do
-        module_instance.privileged = privileged
-
-        module_instance.valid?
-      end
-
-      context 'with nil' do
-        let(:privileged) do
-          nil
-        end
-
-        it 'should record error' do
-          module_instance.errors[:privileged].should include(error)
-        end
-      end
-
-      context 'with false' do
-        let(:privileged) do
-          false
-        end
-
-        it 'should not record error' do
-          module_instance.errors[:privileged].should be_empty
-        end
-      end
-
-      context 'with true' do
-        let(:privileged) do
-          true
-        end
-
-        it 'should not record error' do
-          module_instance.errors[:privileged].should be_empty
-        end
-      end
-    end
-
-    context 'stance' do
-      context 'module_type' do
-        subject(:module_instance) do
-          FactoryGirl.build(
-              :mdm_module_instance,
-              :module_class => module_class,
-              # set by shared examples
-              :stance => stance
-          )
-        end
-
-        let(:module_class) do
-          FactoryGirl.create(
-              :mdm_module_class,
-              # set by shared examples
-              :module_type => module_type
-          )
-        end
-
-        let(:stance) do
-          nil
-        end
-
-        it_should_behave_like 'Mdm::Module::Instance supports stance with module_type', 'auxiliary'
-        it_should_behave_like 'Mdm::Module::Instance supports stance with module_type', 'exploit'
-
-        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'encoder'
-        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'nop'
-        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'payload'
-        it_should_behave_like 'Mdm::Module::Instance does not support stance with module_type', 'post'
       end
     end
   end
