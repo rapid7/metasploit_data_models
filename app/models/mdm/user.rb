@@ -44,7 +44,7 @@ class Mdm::User < ActiveRecord::Base
   #   Hosts this user has tagged or that have had tags created by this user applied to the host.
   #
   #   @return [Array<Mdm::Host>]
-  has_many :tagged_hosts, :class_name => 'Mdm::Host', :through => :host_tags
+  has_many :tagged_hosts, :class_name => 'Mdm::Host', :source => :host, :through => :host_tags
 
   #
   # Attributes

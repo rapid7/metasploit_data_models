@@ -36,6 +36,12 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Mdm::Architecture]
   belongs_to :architecture, :class_name => 'Mdm::Architecture'
 
+  # @!attribute [rw] clients
+  #   @deprecated New style SocialEngineering campaigns are Pro-only models.
+  #   @todo https://www.pivotaltracker.com/story/show/52149851
+  #   @return [Array<Mdm::Client>]
+  has_many :clients, :class_name => 'Mdm::Client', :dependent => :destroy
+
   # @!attribute [rw] task_hosts
   #   Joins {#tasks} to this host.
   #
@@ -131,7 +137,7 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Note>]
   #   @see #services
-  has_many :service_notes, :class_name => 'Mdm::Note', :through => :services
+  has_many :service_notes, :class_name => 'Mdm::Note', :source => :notes, :through => :services
 
   # @!attribute [r] web_sites
   #   {Mdm::WebSite Web sites} running on top of {#services} on this host.

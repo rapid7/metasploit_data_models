@@ -152,13 +152,13 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Hosts vulnerable to this module.
   #
   #   @return [Array<Mdm::Host>]
-  has_many :vulnerable_hosts, :class_name => 'Mdm::Host', :through => :vulns, :uniq => true
+  has_many :vulnerable_hosts, :class_name => 'Mdm::Host', :source => :host, :through => :vulns, :uniq => true
 
   # @!attribute [r] vulnerable_services
   #   Services vulnerable to this module.
   #
   #   @return [Array<Mdm::Service>]
-  has_many :vulnerable_services, :class_name => 'Mdm::Service', :through => :vulns, :uniq => true
+  has_many :vulnerable_services, :class_name => 'Mdm::Service', :source => :service, :through => :vulns, :uniq => true
 
   #
   # Attributes
