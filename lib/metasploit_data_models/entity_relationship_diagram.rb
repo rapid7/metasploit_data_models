@@ -1,4 +1,7 @@
+require 'rails_erd/domain'
+
 module MetasploitDataModels
+  # Generate Entity-Relationship Diagrams (ERD) {domain domains} for models under {Mdm}.
   module EntityRelationshipDiagram
     #
     # CONSTANTS
@@ -20,7 +23,7 @@ module MetasploitDataModels
     # Use crowsfoot notation since its what we use for manually drawn diagrams.
     NOTATION = :crowsfoot
 
-    # Default options for {#initialize}
+    # Default options for Diagram.
     DEFAULT_OPTIONS = {
         :attributes => ATTRIBUTES,
         :indirect => INDIRECT,

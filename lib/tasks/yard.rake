@@ -12,6 +12,25 @@ if defined? YARD
       }
     end
 
+    task :doc => :environment
+
+    task :erd => :environment do
+      require 'rails_erd/diagram/graphviz'
+
+      merged_options = MetasploitDataModels::EntityRelationshipDiagram::DEFAULT_OPTIONS.merge(
+          :filename => 'doc/mdm.erd',
+          :filetype => :svg,
+          :title => 'Mdm (Direct) Entity-Relationship Diagram'
+      )
+      diagram = RailsERD::Diagram::Graphviz.new(
+          MetasploitDataModels::EntityRelationshipDiagram.domain,
+          merged_options
+      )
+      diagram.create
+    end
+
+    task :doc => :erd
+
     desc "Shows stats for YARD Documentation including listing undocumented modules, classes, constants, and methods"
     task :stats => :environment do
       stats = YARD::CLI::Stats.new

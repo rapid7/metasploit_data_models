@@ -3,3 +3,5 @@
 --protected
 {app,lib}/**/*.rb
 db/migrate/*.rb
+-
+doc/mdm.erd.svg

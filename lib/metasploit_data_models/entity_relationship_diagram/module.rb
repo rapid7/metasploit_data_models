@@ -1,5 +1,6 @@
 module MetasploitDataModels
   module EntityRelationshipDiagram
+    # Generate Entity-Relationship Diagrams (ERD) {domain domains} for models under {Mdm::Module}.
     module Module
       #
       # CONSTANTS
