@@ -17,6 +17,8 @@ group :development, :test do
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
   # @see https://www.pivotaltracker.com/story/show/52309083
   gem 'rails', '>= 3.2', '< 4.0.0'
+  # Entity-Relationship diagrams for developers that need to access database using SQL directly.
+  gem 'rails-erd'
 end
 
 group :test do
