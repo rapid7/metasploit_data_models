@@ -26,7 +26,15 @@ if defined? YARD
           MetasploitDataModels::EntityRelationshipDiagram.domain,
           merged_options
       )
-      diagram.create
+      path = diagram.create
+
+      File.open(path) do |svg|
+        document = Nokogiri::XML(svg)
+
+        File.open("#{path}.inline", 'w') do |inline|
+          inline.puts document.root.serialize
+        end
+      end
     end
 
     task :doc => :erd

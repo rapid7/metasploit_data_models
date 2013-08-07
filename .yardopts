@@ -4,4 +4,4 @@
 {app,lib}/**/*.rb
 db/migrate/*.rb
 -
-doc/mdm.erd.svg
+doc/mdm.erd.svg.inline
