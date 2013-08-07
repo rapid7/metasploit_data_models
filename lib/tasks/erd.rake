@@ -1,5 +1,4 @@
 if defined? RailsERD
-
   namespace :erd do
     create = ->(domain, options={}) {
       merged_options = MetasploitDataModels::EntityRelationshipDiagram::DEFAULT_OPTIONS.merge(
@@ -20,6 +19,18 @@ if defined? RailsERD
             :filename => 'mdm-module.erd',
             :title => 'Mdm::Module (Direct) Entity-Relationship Diagram',
         )
+      end
+    end
+
+    desc "List maximal clusters for all models"
+    task :maximal_clusters => :require do
+      maximal_clusters = MetasploitDataModels::EntityRelationshipDiagram.maximal_clusters
+      formatted_maximal_clusters = maximal_clusters.collect { |maximal_cluster|
+        maximal_cluster.map(&:name).sort.join(', ')
+      }
+
+      formatted_maximal_clusters.sort.each do |formatted_maximal_cluster|
+        say formatted_maximal_cluster
       end
     end
 

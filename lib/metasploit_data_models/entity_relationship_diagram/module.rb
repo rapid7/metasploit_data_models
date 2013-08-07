@@ -26,33 +26,17 @@ module MetasploitDataModels
 
       # Models under Mdm::Module or that are needed by those models through belongs_to associations.
       #
-      # @return [Set<Class<ActiveRecord::Base>>]
+      # @return (see MetasploitDataModels::EntityRelationshipDiagram.cluster)
       def self.models
         MetasploitDataModels.require_models
 
-        class_queue = ActiveRecord::Base.descendants.select { |klass|
+        classes = ActiveRecord::Base.descendants.select { |klass|
           klass.name.starts_with? NAMESPACE
         }
-        visited_class_set = Set.new
 
-        until class_queue.empty?
-          klass = class_queue.pop
-          # add immediately to visited set in case there are recursive associations
-          visited_class_set.add klass
+        cluster = MetasploitDataModels::EntityRelationshipDiagram.cluster(*classes)
 
-          # only iterate belongs_to as they need to be included so that foreign keys aren't let dangling in the ERD.
-          reflections = klass.reflect_on_all_associations(:belongs_to)
-
-          reflections.each do |reflection|
-            target_klass = reflection.klass
-
-            unless visited_class_set.include? target_klass
-              class_queue << target_klass
-            end
-          end
-        end
-
-        visited_class_set
+        cluster
       end
     end
   end
