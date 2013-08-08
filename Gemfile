@@ -19,6 +19,23 @@ group :development, :test do
   gem 'rails', '>= 3.2', '< 4.0.0'
 end
 
+group :documentation do
+  # Entity-Relationship diagrams for developers that need to access database using SQL directly.
+  gem 'rails-erd'
+  # for generating documentation
+  gem 'yard'
+
+  platforms :jruby do
+    # markdown formatting for yard
+    gem 'kramdown'
+  end
+
+  platforms :ruby do
+    # markdown formatting for yard
+    gem 'redcarpet'
+  end
+end
+
 group :test do
   # used for building markup for webpage factories
   gem 'builder'

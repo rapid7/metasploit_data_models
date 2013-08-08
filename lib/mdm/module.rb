@@ -8,6 +8,12 @@
 #    payloads.
 # 3. {Mdm::Module::Instance} which represents the instance of Msf::Module created from a {Mdm::Module::Class}.  Metadata
 #    that is only available after running #initialize is stored in this model.
+#
+# # Translation from metasploit_data_models <= 0.16.5
+#
+# If you're trying to convert your SQL queries from metasploit_data_models <= 0.16.5 and the Mdm::Module::Details cache
+# to the new Mdm::Module::Instance cache available in metasploit_data_models >= 0.17.2, then see this
+# {file:docs/mdm_module_sql_translation.md guide}.
 module Mdm::Module
 
 end

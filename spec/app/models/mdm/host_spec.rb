@@ -72,6 +72,7 @@ describe Mdm::Host do
 
 	context 'associations' do
     it { should belong_to(:architecture).class_name('Mdm::Architecture') }
+    it { should have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
 		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
 		it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }

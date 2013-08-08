@@ -29,8 +29,6 @@ Gem::Specification.new do |s|
   # ---- Dependencies ----
   s.add_development_dependency 'rake'
 
-  # documentation
-  s.add_development_dependency 'yard'
   # debugging
   s.add_development_dependency 'pry'
 
@@ -39,17 +37,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'metasploit-model', '~> 0.4.16'
 
   if RUBY_PLATFORM =~ /java/
-    # markdown formatting for yard
-    s.add_development_dependency 'kramdown'
-
     s.add_runtime_dependency 'jdbc-postgres'
     s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
     
     s.platform = Gem::Platform::JAVA
   else
-    # markdown formatting for yard
-    s.add_development_dependency 'redcarpet'
-
     s.add_runtime_dependency 'pg'
     
     s.platform = Gem::Platform::RUBY
