@@ -13,14 +13,27 @@ group :development, :test do
   # Needs to be defined here because runtime dependencies from gemspec will not load for rspec environment
   # @todo Change back to `gem 'metasploi-model', '~> <X>.<Y>.<Z>'` once metasploit-model version X.Y.Z is released to rubygems.
   gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.4.16.module-caching'
-  # for yard:erd
-  gem 'nokogiri'
   # rails is only used for the dummy application in spec/dummy
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
   # @see https://www.pivotaltracker.com/story/show/52309083
   gem 'rails', '>= 3.2', '< 4.0.0'
+end
+
+group :documentation do
   # Entity-Relationship diagrams for developers that need to access database using SQL directly.
   gem 'rails-erd'
+  # for generating documentation
+  gem 'yard'
+
+  platforms :jruby do
+    # markdown formatting for yard
+    gem 'kramdown'
+  end
+
+  platforms :ruby do
+    # markdown formatting for yard
+    gem 'redcarpet'
+  end
 end
 
 group :test do

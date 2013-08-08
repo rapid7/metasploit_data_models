@@ -5,7 +5,7 @@
 # The below Entity-Relationship Diagram (ERD) shows all direct relationships between the models in the Mdm namespace.
 # All columns are included for ease-of-use with manually written SQL.
 #
-# {include:file:doc/mdm.erd.svg.inline}
+# ![Mdm (Direct) Entity-Relationship Diagram](images/mdm.erd.png)
 module Mdm
   # Causes the model_name for all Mdm modules to not include the Mdm:: prefix in their name.
   #

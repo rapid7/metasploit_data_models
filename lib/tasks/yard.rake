@@ -18,23 +18,15 @@ if defined? YARD
       require 'rails_erd/diagram/graphviz'
 
       merged_options = MetasploitDataModels::EntityRelationshipDiagram::DEFAULT_OPTIONS.merge(
-          :filename => 'doc/mdm.erd',
-          :filetype => :svg,
+          :filename => 'docs/images/mdm.erd',
+          :filetype => :png,
           :title => 'Mdm (Direct) Entity-Relationship Diagram'
       )
       diagram = RailsERD::Diagram::Graphviz.new(
           MetasploitDataModels::EntityRelationshipDiagram.domain,
           merged_options
       )
-      path = diagram.create
-
-      File.open(path) do |svg|
-        document = Nokogiri::XML(svg)
-
-        File.open("#{path}.inline", 'w') do |inline|
-          inline.puts document.root.serialize
-        end
-      end
+      diagram.create
     end
 
     task :doc => :erd
