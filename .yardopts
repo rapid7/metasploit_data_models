@@ -4,3 +4,5 @@
 --protected
 {app,lib}/**/*.rb
 db/migrate/*.rb
+-
+docs/mdm_module_sql_translation.md
