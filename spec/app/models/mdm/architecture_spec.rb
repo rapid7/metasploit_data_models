@@ -5,7 +5,11 @@ describe Mdm::Architecture do
     described_class.new
   end
 
-  it_should_behave_like 'Metasploit::Model::Architecture'
+  it_should_behave_like 'Metasploit::Model::Architecture' do
+    let(:architecture_class) do
+      described_class
+    end
+  end
 
   context 'associations' do
     it { should have_many(:hosts).class_name('Mdm::Host').dependent(:nullify) }
