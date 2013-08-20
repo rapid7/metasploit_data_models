@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   # debugging
   s.add_development_dependency 'pry'
 
-  s.add_runtime_dependency 'activerecord', '>= 3.2.13'
+  s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
   
   if RUBY_PLATFORM =~ /java/
