@@ -19,6 +19,8 @@ module MetasploitDataModels
     #
     # @return [void]
     def require_models
+      require 'metasploit/model'
+
       models_globs = models_pathname.join('**', '*.rb')
 
       Dir.glob(models_globs) do |model_path|

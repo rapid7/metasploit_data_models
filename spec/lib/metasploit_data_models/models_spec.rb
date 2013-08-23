@@ -35,6 +35,8 @@ describe MetasploitDataModels::Models do
     end
 
     it 'should require each file the glob finds' do
+      base_module.should_receive(:require).with('metasploit/model').and_call_original
+
       model_paths = [
           double('Model Path 1'),
           double('Model Path 2')
