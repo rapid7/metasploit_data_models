@@ -1,5 +1,3 @@
-require 'metasploit/model'
-
 module MetasploitDataModels
   # Helpers for loading models (and their validators) in a non-Rails environment, such as in metasploit-framework.
   #
@@ -21,8 +19,6 @@ module MetasploitDataModels
     #
     # @return [void]
     def require_models
-      Metasploit::Model.autoload_validators
-
       models_globs = models_pathname.join('**', '*.rb')
 
       Dir.glob(models_globs) do |model_path|
