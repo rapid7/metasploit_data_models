@@ -34,7 +34,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
         context 'with query' do
           let(:query) do
-            mock('Query')
+            double('Query')
           end
 
           before(:each) do
@@ -94,7 +94,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
-        visited = mock('Visited')
+        visited = double('Visited')
         includes_visitor.stub(:visit).with(query.tree).and_return(visited)
 
         ActiveRecord::Relation.any_instance.should_receive(:includes).with(visited).and_return(query.klass.scoped)
@@ -115,7 +115,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
-        visited = mock('Visited')
+        visited = double('Visited')
         where_visitor.stub(:visit).with(query.tree).and_return(visited)
 
         ActiveRecord::Relation.any_instance.should_receive(:where).with(visited).and_return(query.klass.scoped)

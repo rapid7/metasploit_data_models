@@ -64,7 +64,7 @@ describe MetasploitDataModels::Base64Serializer do
 
     it 'should return a duplicate' do
       duplicate = base64_serializer.default
-      value = mock('Value')
+      value = double('Value')
       duplicate[:key] = value
 
       duplicate.should_not == base64_serializer.default
@@ -131,7 +131,7 @@ describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should return #default' do
-        default = mock('Default')
+        default = double('Default')
         base64_serializer.stub(:default => default)
         deserialized = base64_serializer.load(serialized)
 

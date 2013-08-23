@@ -31,7 +31,7 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
       it 'should return visit of Metasploit::Model::Search::Operator::Association#attribute_operator' do
         visitor.should_receive(:visit).with(node).and_call_original
 
-        visited = mock('Attribute Operator Visited')
+        visited = double('Attribute Operator Visited')
         visitor.stub(:visit).with(attribute_operator).and_return(visited)
 
         visit.should == visited
