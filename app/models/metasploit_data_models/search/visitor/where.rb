@@ -18,10 +18,11 @@ class MetasploitDataModels::Search::Visitor::Where
   # Visitor
   #
 
-  visit :module_name => 'Metasploit::Model::Search::Group::Base' do |group|
-    method = method_visitor.visit group
+  visit 'Metasploit::Model::Search::Group::Base',
+        'Metasploit::Model::Search::Operation::Union' do |parent|
+    method = method_visitor.visit parent
 
-    children_arel = group.children.collect { |child|
+    children_arel = parent.children.collect { |child|
       visit child
     }
 
@@ -30,20 +31,18 @@ class MetasploitDataModels::Search::Visitor::Where
     }
   end
 
-  EQUALITY_OPERATION_CLASS_NAMES.each do |class_name|
-    visit :module_name => class_name do |operation|
-      attribute = attribute_visitor.visit operation.operator
+  visit *EQUALITY_OPERATION_CLASS_NAMES do |operation|
+    attribute = attribute_visitor.visit operation.operator
 
-      attribute.eq(operation.value)
-    end
+    attribute.eq(operation.value)
   end
 
-  visit :module_name => 'Metasploit::Model::Search::Operation::String' do |operation|
+  visit 'Metasploit::Model::Search::Operation::String' do |operation|
     attribute = attribute_visitor.visit operation.operator
     match_value = "%#{operation.value}%"
 
     attribute.matches(match_value)
-  end
+	end
 
   #
   # Methods

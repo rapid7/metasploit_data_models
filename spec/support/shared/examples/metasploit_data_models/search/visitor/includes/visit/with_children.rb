@@ -1,7 +1,7 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with Metasploit::Model::Search::Group::Base' do
+shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with #children' do
   let(:children) do
     2.times.collect { |n|
-      double("Group Child #{n}")
+      double("Child #{n}")
     }
   end
 

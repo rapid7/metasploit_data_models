@@ -2,11 +2,12 @@
 class MetasploitDataModels::Search::Visitor::Method
   include Metasploit::Model::Visitation::Visit
 
-  visit :module_name => 'Metasploit::Model::Search::Group::Intersection' do
+  visit 'Metasploit::Model::Search::Group::Intersection' do
     :and
   end
 
-  visit :module_name => 'Metasploit::Model::Search::Group::Union' do
+  visit 'Metasploit::Model::Search::Group::Union',
+        'Metasploit::Model::Search::Operation::Union' do
     :or
   end
 end

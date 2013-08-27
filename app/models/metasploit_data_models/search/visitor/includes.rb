@@ -7,23 +7,22 @@ class MetasploitDataModels::Search::Visitor::Includes
   # Visitors
   #
 
-  visit :module_name => 'Metasploit::Model::Search::Group::Base' do |group|
-    group.children.inject([]) { |includes, child|
-      child_includes = visit child
-
-      includes.concat(child_includes)
+  visit 'Metasploit::Model::Search::Group::Base',
+        'Metasploit::Model::Search::Operation::Union' do |parent|
+    parent.children.flat_map { |child|
+      visit child
     }
-  end
+	end
 
-  visit :module_name => 'Metasploit::Model::Search::Operation::Base' do |operation|
+  visit 'Metasploit::Model::Search::Operation::Base' do |operation|
     visit operation.operator
   end
 
-  visit :module_name => 'Metasploit::Model::Search::Operator::Association' do |operator|
+  visit 'Metasploit::Model::Search::Operator::Association' do |operator|
     [operator.association]
   end
 
-  visit :module_name => 'Metasploit::Model::Search::Operator::Attribute' do |_operator|
+  visit 'Metasploit::Model::Search::Operator::Attribute' do |_operator|
     []
   end
 end
