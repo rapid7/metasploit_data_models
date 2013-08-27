@@ -384,8 +384,61 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
 
           context 'with Mdm::Reference#designation' do
+            #
+            # lets
+            #
+
+            let(:matching_reference_designation) do
+              'foo'
+            end
+
+            let(:non_matching_reference_designation) do
+              'bar'
+            end
+
+            let(:reference_count) do
+              # metasploit_model_reference_designation just generates numbers, but a lot of the other sequences contain
+              # numbers, too, so using the factory generated designations can lead to substring matches on other fields
+              # that ref searches, such as authors.name and references.url.
+              0
+            end
+
             let(:value) do
               matching_reference.designation
+            end
+
+            #
+            # let!s
+            #
+
+            let!(:matching_module_reference) do
+              FactoryGirl.create(
+                  :mdm_module_reference,
+                  :module_instance => matching_record,
+                  :reference => matching_reference
+              )
+            end
+
+            let!(:matching_reference) do
+              FactoryGirl.create(
+                  :mdm_reference,
+                  :designation => matching_reference_designation
+              )
+            end
+
+            let!(:non_matching_module_reference) do
+              FactoryGirl.create(
+                  :mdm_module_reference,
+                  :module_instance => non_matching_record,
+                  :reference => non_matching_reference
+              )
+            end
+
+            let!(:non_matching_reference) do
+              FactoryGirl.create(
+                  :mdm_reference,
+                  :designation => non_matching_reference_designation
+              )
             end
 
             it 'should find only matching record' do
