@@ -123,7 +123,6 @@ class Mdm::WebVuln < ActiveRecord::Base
   validates :name, :presence => true
   validates :params, :parameters => true
   validates :path, :presence => true
-  validates :pname, :presence => true
   validates :proof, :presence => true
   validates :risk,
             :inclusion => {

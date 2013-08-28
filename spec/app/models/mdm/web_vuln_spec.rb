@@ -68,7 +68,7 @@ describe Mdm::WebVuln do
       it { should have_db_column(:params).of_type(:text).with_options(:null => false) }
       it { should have_db_column(:path).of_type(:text).with_options(:null => false) }
       it { should have_db_column(:payload).of_type(:text) }
-      it { should have_db_column(:pname).of_type(:text).with_options(:null => false) }
+      it { should have_db_column(:pname).of_type(:text) }
       it { should have_db_column(:proof).of_type(:binary).with_options(:null => false) }
       it { should have_db_column(:query).of_type(:text) }
       it { should have_db_column(:request).of_type(:binary) }
@@ -278,7 +278,6 @@ describe Mdm::WebVuln do
       end
     end
 
-    it { should validate_presence_of :pname }
     it { should validate_presence_of :proof }
     it { should ensure_inclusion_of(:risk).in_range(risk_range) }
     it { should validate_presence_of :web_site }
