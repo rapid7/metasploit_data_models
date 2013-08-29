@@ -2,63 +2,7 @@ Metasploit::Model::Architecture::SEED_ATTRIBUTES.each do |attributes|
   Mdm::Architecture.where(attributes).first_or_create!
 end
 
-authority_attributes = [
-    {
-        :abbreviation => 'BID',
-        :obsolete => false,
-        :summary => 'BuqTraq ID',
-        :url => 'http://www.securityfocus.com/bid'
-    },
-    {
-        :abbreviation => 'CVE',
-        :obsolete => false,
-        :summary => 'Common Vulnerabilities and Exposures',
-        :url => 'http://cvedetails.com'
-    },
-    {
-        :abbreviation => 'MIL',
-        :obsolete => true,
-        :summary => 'milw0rm',
-        :url => 'https://en.wikipedia.org/wiki/Milw0rm'
-    },
-    {
-        :abbreviation => 'MSB',
-        :obsolete => false,
-        :summary => 'Microsoft Security Bulletin',
-        :url => 'http://www.microsoft.com/technet/security/bulletin'
-    },
-    {
-        :abbreviation => 'OSVDB',
-        :obsolete => false,
-        :summary => 'Open Sourced Vulnerability Database',
-        :url => 'http://osvdb.org'
-    },
-    {
-        :abbreviation => 'PMASA',
-        :obsolete => false,
-        :summary => 'phpMyAdmin Security Announcement',
-        :url => 'http://www.phpmyadmin.net/home_page/security/'
-    },
-    {
-        :abbreviation => 'SECUNIA',
-        :obsolete => false,
-        :summary => 'Secunia',
-        :url => 'https://secunia.com/advisories'
-    },
-    {
-        :abbreviation => 'US-CERT-VU',
-        :obsolete => false,
-        :summary => 'United States Computer Emergency Readiness Team Vulnerability Notes Database',
-        :url => 'http://www.kb.cert.org/vuls'
-    },
-    {
-        :abbreviation => 'waraxe',
-        :obsolete => false,
-        :summary => 'Waraxe Advisories',
-        :url => 'http://www.waraxe.us/content-cat-1.html'
-    }
-]
-authority_attributes.each do |attributes|
+Metasploit::Model::Authority::SEED_ATTRIBUTES.each do |attributes|
   abbreviation = attributes.fetch(:abbreviation)
 
   # abbreviation is the only unique and :null => false column, so use it to look for updates.  Authority may be updated
