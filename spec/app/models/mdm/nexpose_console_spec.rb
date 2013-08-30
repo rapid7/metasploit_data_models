@@ -63,11 +63,6 @@ describe Mdm::NexposeConsole do
         ipv6_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :address => '2001:0db8:85a3:0000:0000:8a2e:0370:7334')
         ipv6_nexpose_console.should be_valid
       end
-
-      it 'should not be valid for strings not conforming to IPv4 or IPv6' do
-        invalid_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :address => '1234-fark')
-        invalid_nexpose_console.should_not be_valid
-      end
     end
 
     context 'port' do
