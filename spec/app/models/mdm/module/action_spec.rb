@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe Mdm::Module::Action do
-  it_should_behave_like 'Metasploit::Model::Module::Action'
+  it_should_behave_like 'Metasploit::Model::Module::Action' do
+    let(:base_class) do
+      described_class
+    end
+  end
 
   context 'associations' do
     it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }

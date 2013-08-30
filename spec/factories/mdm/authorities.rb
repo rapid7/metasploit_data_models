@@ -1,15 +1,18 @@
 FactoryGirl.define do
-  factory :mdm_authority, :class => Mdm::Authority do
-    abbreviation { generate :mdm_authority_abbreviation }
+  factory :mdm_authority,
+          :class => Mdm::Authority,
+          :traits => [
+              :metasploit_model_authority
+          ] do
+    factory :full_mdm_authority,
+            :traits => [
+                :full_metasploit_model_authority
+            ]
 
-    factory :full_mdm_authority do
-      summary { generate :mdm_authority_summary }
-      url { generate :mdm_authority_url }
-    end
-
-    factory :obsolete_mdm_authority do
-      obsolete { true }
-    end
+    factory :obsolete_mdm_authority,
+            :traits => [
+                :obsolete_metasploit_model_authority
+            ]
   end
 
   seeded_abbreviations = [
@@ -29,17 +32,5 @@ FactoryGirl.define do
     abbreviation = seeded_abbreviations[n % seeded_abbreviation_count]
 
     Mdm::Authority.where(:abbreviation => abbreviation).first
-  end
-
-  sequence :mdm_authority_abbreviation do |n|
-    "MDM-AUTHORITY-#{n}"
-  end
-
-  sequence :mdm_authority_summary do |n|
-    "Mdm::Authority #{n}"
-  end
-
-  sequence :mdm_authority_url do |n|
-    "http://example.com/mdm/authority/#{n}"
   end
 end

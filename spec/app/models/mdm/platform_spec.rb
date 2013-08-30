@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe Mdm::Platform do
-  it_should_behave_like 'Metasploit::Model::Platform'
+  it_should_behave_like 'Metasploit::Model::Platform' do
+    let(:platform_class) do
+      described_class
+    end
+  end
 
   context 'associations' do
     it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }

@@ -6,6 +6,10 @@ describe Mdm::Architecture do
   end
 
   it_should_behave_like 'Metasploit::Model::Architecture' do
+    let(:architecture_class) do
+      described_class
+    end
+    
     let(:seed) do
       described_class.where(abbreviation: abbreviation).first
     end

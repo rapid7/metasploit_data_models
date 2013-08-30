@@ -6,6 +6,10 @@ describe Mdm::Module::Instance do
   end
 
   it_should_behave_like 'Metasploit::Model::Module::Instance' do
+    let(:base_class) do
+      described_class
+    end
+
     let(:module_class_factory) do
       :mdm_module_class
     end
@@ -19,6 +23,7 @@ describe Mdm::Module::Instance do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:architectures).class_name('Mdm::Architecture').through(:module_architectures) }
     it { should have_many(:authors).class_name('Mdm::Author').through(:module_authors) }
+    it { should have_many(:authorities).class_name('Mdm::Authority').through(:references) }
     it { should belong_to(:default_action).class_name('Mdm::Module::Action') }
     it { should belong_to(:default_target).class_name('Mdm::Module::Target') }
     it { should have_many(:email_addresses).class_name('Mdm::EmailAddress').through(:module_authors) }
@@ -28,6 +33,7 @@ describe Mdm::Module::Instance do
     it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:module_references).class_name('Mdm::Module::Reference').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:platforms).class_name('Mdm::Platform').through(:module_platforms) }
+    it { should have_one(:rank).class_name('Mdm::Module::Rank').through(:module_class) }
     it { should have_many(:references).class_name('Mdm::Reference').through(:module_references) }
     it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy).with_foreign_key(:module_instance_id) }
     it { should have_many(:vuln_references).class_name('Mdm::VulnReference').through(:references) }

@@ -28,11 +28,11 @@ describe Mdm::ApiKey do
 
       context 'with License defined' do
         let(:license_class) do
-          mock('License', :instance => license_singleton)
+          double('License', :instance => license_singleton)
         end
 
         let(:license_singleton) do
-          mock('License Singleton', :supports_api? => false)
+          double('License Singleton', :supports_api? => false)
         end
 
         before(:each) do

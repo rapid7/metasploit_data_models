@@ -3,7 +3,11 @@ require 'spec_helper'
 describe Mdm::Authority do
   it_should_behave_like 'Metasploit::Model::Authority' do
     def seed_with_abbreviation(abbreviation)
-      Mdm::Authority.where(:abbreviation => abbreviation).first
+      described_class.where(:abbreviation => abbreviation).first
+    end
+
+    let(:authority_class) do
+      described_class
     end
   end
 
