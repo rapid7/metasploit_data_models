@@ -10,6 +10,10 @@ describe Mdm::Module::Rank do
       described_class.new
     end
 
+    let(:rank_class) do
+      described_class
+    end
+
     # have to delete the seeds because Metasploit::Model::Module::Rank validations specs can't handle uniqueness
     # constraint supplied by database model.
     before(:each) do

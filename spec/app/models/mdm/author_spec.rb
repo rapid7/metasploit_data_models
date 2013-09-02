@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe Mdm::Author do
-  it_should_behave_like 'Metasploit::Model::Author'
+  it_should_behave_like 'Metasploit::Model::Author' do
+    let(:author_class) do
+      described_class
+    end
+  end
 
   context 'associations' do
     it { should have_many(:email_addresses).class_name('Mdm::EmailAddress').through(:module_authors) }

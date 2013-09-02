@@ -1,7 +1,12 @@
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - rake db:setup
+env:
+  - JAVA_OPTS="-Xmx8192m"
 language: ruby
+matrix:
+  allow_failures:
+    - rvm: 'jruby-19mode'
 rvm:
   - '1.9.3'
   - 'jruby-19mode'

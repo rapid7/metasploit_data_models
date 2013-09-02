@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe Mdm::EmailAddress do
-  it_should_behave_like 'Metasploit::Model::EmailAddress'
+  it_should_behave_like 'Metasploit::Model::EmailAddress' do
+    let(:email_address_class) do
+      described_class
+    end
+  end
 
   context 'associations' do
     it { should have_many(:module_authors).class_name('Mdm::Module::Author').dependent(:destroy) }

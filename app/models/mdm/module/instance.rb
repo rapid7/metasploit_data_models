@@ -105,6 +105,16 @@ class Mdm::Module::Instance < ActiveRecord::Base
   has_many :email_addresses, :class_name => 'Mdm::EmailAddress', :through => :module_authors, :uniq => true
 
   #
+  # :through => :module_class
+  #
+
+  # @!attribute [r] rank
+  #   The rank of this module.
+  #
+  #   @return [Mdm::Module::Rank]
+  has_one :rank, :class_name => 'Mdm::Module::Rank', :through => :module_class
+
+  #
   # :through => :module_platforms
   #
 
@@ -127,6 +137,12 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   # :through => :references
   #
+
+  # @!attribute [r] authorities
+  #   Authorities across all {#references} to this module.
+  #
+  #   @return [Array<Mdm::Authority>]
+  has_many :authorities, :class_name => 'Mdm::Authority', :through => :references, :uniq => true
 
   # @!attribute [r] vuln_references
   #   Joins {#vulns} to {#references}.
