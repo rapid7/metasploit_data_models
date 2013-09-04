@@ -161,6 +161,20 @@ describe Mdm::Module::Path do
       module_ancestor.derived_real_path
     end
 
+    it 'should call ActiveRecord::Base.connection_pool.with_connection around database accesses' do
+      ActiveRecord::Base.connection_pool.should_receive(:with_connection) do |&block|
+        module_ancestor = double('Mdm::Module::Ancestor').as_null_object
+        where_relation = double('ActiveRecord::Relation#where', first_or_initialize: module_ancestor)
+        module_ancestors = double('Mdm::Module::Path#module_ancestors', where: where_relation)
+        with_connection = double('With Connection', module_ancestors: module_ancestors)
+        module_ancestor.should_receive(:save!)
+
+        with_connection.instance_eval(&block)
+      end
+
+      module_ancestor_from_real_path
+    end
+
     context 'with pre-existing Mdm::Module::Ancestor' do
       before(:each) do
         # Place the modification time in the past so it can be changed to the present when needed

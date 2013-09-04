@@ -91,19 +91,23 @@ class Mdm::Module::Path < ActiveRecord::Base
   #   {Metasploit::Model::Module::Ancestor#real_path_sha1_hex_digest}
   def module_ancestor_from_real_path(real_path, options={})
     changed = options.fetch(:changed, false)
+    module_ancestor = nil
 
-    module_ancestor = module_ancestors.where(:real_path => real_path).first_or_initialize
-    module_ancestor.real_path_modified_at = module_ancestor.derived_real_path_modified_at
+    # ensure the connection doesn't stay checked out for thread in metasploit-framework.
+    ActiveRecord::Base.connection_pool.with_connection do
+      module_ancestor = module_ancestors.where(:real_path => real_path).first_or_initialize
+      module_ancestor.real_path_modified_at = module_ancestor.derived_real_path_modified_at
 
-    # only derive the SHA1 Hex Digest if modification time has changed to save time
-    if module_ancestor.real_path_modified_at_changed?
-      module_ancestor.real_path_sha1_hex_digest = module_ancestor.derived_real_path_sha1_hex_digest
+      # only derive the SHA1 Hex Digest if modification time has changed to save time
+      if module_ancestor.real_path_modified_at_changed?
+        module_ancestor.real_path_sha1_hex_digest = module_ancestor.derived_real_path_sha1_hex_digest
 
-      # have to check for change prior to saving as changes are reset after save
-      changed ||= module_ancestor.real_path_sha1_hex_digest_changed?
+        # have to check for change prior to saving as changes are reset after save
+        changed ||= module_ancestor.real_path_sha1_hex_digest_changed?
+      end
+
+      module_ancestor.save!
     end
-
-    module_ancestor.save!
 
     if changed
       module_ancestor
