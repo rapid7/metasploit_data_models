@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.9.3'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.9.7'
 
   if RUBY_PLATFORM =~ /java/
     s.add_runtime_dependency 'jdbc-postgres'
