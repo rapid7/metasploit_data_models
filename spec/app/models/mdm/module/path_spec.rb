@@ -136,6 +136,132 @@ describe Mdm::Module::Path do
     end
   end
 
+  context '#module_ancestor_from_real_path' do
+    subject(:module_ancestor_from_real_path) do
+      path.module_ancestor_from_real_path(real_path, options)
+    end
+
+    let(:module_ancestor) do
+      FactoryGirl.build(
+          :mdm_module_ancestor,
+          :parent_path => path
+      )
+    end
+
+    let(:options) do
+      {}
+    end
+
+    let(:path) do
+      FactoryGirl.create(:mdm_module_path)
+    end
+
+    let(:real_path) do
+      # need to use derived_real_path as real_path is not derived until validation.
+      module_ancestor.derived_real_path
+    end
+
+    context 'with pre-existing Mdm::Module::Ancestor' do
+      before(:each) do
+        # Place the modification time in the past so it can be changed to the present when needed
+        past_modification_time = File.mtime(real_path) - 5.seconds
+        past_access_time = past_modification_time
+        File.utime(past_access_time, past_modification_time, real_path)
+
+        # save with altered real_path_modification_time
+        module_ancestor.save!
+      end
+
+      context 'with change to file modification time' do
+        before(:each) do
+          changed_time = Time.now
+          File.utime(changed_time, changed_time, module_ancestor.real_path)
+        end
+
+        context 'with change to file contents' do
+          before(:each) do
+            File.open(real_path, 'a') do |f|
+              f.puts "# Change to file"
+            end
+          end
+
+          it 'should return pre-existing Mdm::Module::Ancestor' do
+            module_ancestor_from_real_path.should == module_ancestor
+          end
+
+          context 'Mdm::Module::Ancestor' do
+            before(:each) do
+              @real_path_modified_at = module_ancestor.real_path_modified_at
+              @real_path_sha1_hex_digest = module_ancestor.real_path_sha1_hex_digest
+
+              module_ancestor_from_real_path
+
+              module_ancestor.reload
+            end
+
+            it 'should update #real_path_modified_at' do
+              module_ancestor.real_path_modified_at.should_not == @real_path_modified_at
+            end
+
+            it 'should update #real_path_sha1_hex_digest' do
+              module_ancestor.real_path_sha1_hex_digest.should_not == @real_path_modified_at
+            end
+          end
+        end
+
+        context 'without change to file contents' do
+          it { should be_nil }
+
+          context 'Mdm::Module::Ancestor' do
+            before(:each) do
+              @real_path_modified_at = module_ancestor.real_path_modified_at
+
+              module_ancestor_from_real_path
+
+              module_ancestor.reload
+            end
+
+            it 'should update #real_path_modified_at' do
+              module_ancestor.real_path_modified_at.should_not == @real_path_modified_at
+            end
+          end
+        end
+      end
+
+      context 'without change to file modification time' do
+        context 'with changed: true' do
+          let(:options) do
+            {
+                changed: true
+            }
+          end
+
+          it 'should return pre-existing Mdm::Module::Ancestor' do
+            module_ancestor_from_real_path.should == module_ancestor
+          end
+        end
+
+        context 'with changed: false' do
+          let(:options) do
+            {
+                changed: false
+            }
+          end
+
+          it { should be_nil }
+        end
+      end
+    end
+
+    context 'without pre-existing Mdm::Module::Ancestor' do
+      it 'should create Mdm::Module::Ancestor' do
+        expect {
+          module_ancestor_from_real_path
+        }.to change(Mdm::Module::Ancestor, :count)
+      end
+    end
+  end
+
   context '#name_collision' do
     subject(:name_collision) do
       path.name_collision

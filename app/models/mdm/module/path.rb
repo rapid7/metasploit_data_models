@@ -72,6 +72,46 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Methods
   #
 
+  # Returns {Metasploit::Model::Module::Ancestor} at `real_path` under this module path if `path` has changed.
+  #
+  # @param real_path [String] real_path under {#real_path}.
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Boolean] :changed (false) if `true`, assume the
+  #   {Metasploit::Model::Module::Ancestor#real_path_modified_at} and
+  #   {Metasploit::Model::Module::Ancestor#real_path_sha1_hex_digest} have changed and that
+  #   {Metasploit::Model::Module::Ancestor} should be returned.
+  # @return [nil] if {Metasploit::Model::Module::Ancestor#real_path_modified_at} has not changed.
+  # @return [nil] if {Metasploit::Model::Module::Ancestor#real_path_modified_at} has changed, but
+  #   {Metasploit::Model::Module:Ancestor#real_path_sha1_hex_digest} has not changed.
+  # @return [Metasploit::Model::Module::Ancestor] if {Metasploit::Model::Module::Ancestor#real_path_modified_at}
+  #   and {Metasploit::Model::Module:Ancestor#real_path_sha1_hex_digest} have changed.
+  # @return [Metasploit::Model::Module::Ancestor] if `:changed` is `true`.
+  # @raise [ActiveRecord::Invalid] if {Metasploit::Model::Module::Ancestor} is invalid when updating
+  #   {Metasploit::Model::Module::Ancestor#real_path_modified_at} and
+  #   {Metasploit::Model::Module::Ancestor#real_path_sha1_hex_digest}
+  def module_ancestor_from_real_path(real_path, options={})
+    changed = options.fetch(:changed, false)
+
+    module_ancestor = module_ancestors.where(:real_path => real_path).first_or_initialize
+    module_ancestor.real_path_modified_at = module_ancestor.derived_real_path_modified_at
+
+    # only derive the SHA1 Hex Digest if modification time has changed to save time
+    if module_ancestor.real_path_modified_at_changed?
+      module_ancestor.real_path_sha1_hex_digest = module_ancestor.derived_real_path_sha1_hex_digest
+
+      # have to check for change prior to saving as changes are reset after save
+      changed ||= module_ancestor.real_path_sha1_hex_digest_changed?
+    end
+
+    module_ancestor.save!
+
+    if changed
+      module_ancestor
+    else
+      nil
+    end
+  end
+
   # @note This path should be validated before calling {#name_collision} so that {#gem} and {#name} is normalized.
 	#
 	# Returns path with the same {#gem} and {#name}.
