@@ -1,3 +1,9 @@
+#
+# Gems
+#
+
+require 'file/find'
+
 # Stores the load paths used by Msf::ModuleManager#add_module_path (with symbolic {#name names}) so that the module path
 # directories can be moved, but the cached metadata in {Mdm::Module::Ancestor} and its associations can remain valid by
 # just changing the Mdm::Module::Path records in the database.
@@ -116,6 +122,44 @@ class Mdm::Module::Path < ActiveRecord::Base
       module_ancestor
     else
       nil
+    end
+  end
+
+  # @overload each_changed_module_ancestor(options={}, &block)
+  #   Yields each module ancestor that is changed under this module path.
+  #
+  #   @param options (see #changed_module_ancestor_from_real_path)
+  #   @option (see #changed_module_ancestor_from_real_path)
+  #   @yield [module_ancestor]
+  #   @yieldparam module_ancestor [Metasploit::Module::Ancestor]
+  #   @yieldreturn [void]
+  #   @return [void]
+  #
+  # @overload each_changed_module_ancestor(options={})
+  #   Returns enumerator that yields each module ancestor that is changed under this module path.
+  #
+  #   @param options (see #changed_module_ancestor_from_real_path)
+  #   @option (see #changed_module_ancestor_from_real_path)
+  #   @return [Enumerator]
+  #
+  # @see #changed_module_ancestor_from_real_path
+  def each_changed_module_ancestor(options={})
+    unless block_given?
+      to_enum(__method__, options)
+    else
+      rule = File::Find.new(
+          ftype: 'file',
+          pattern: "*#{Metasploit::Model::Module::Ancestor::EXTENSION}",
+          path: real_path
+      )
+
+      rule.find do |real_path|
+        changed_module_ancestor = changed_module_ancestor_from_real_path(real_path, options)
+
+        if changed_module_ancestor
+          yield changed_module_ancestor
+        end
+      end
     end
   end
 

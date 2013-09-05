@@ -298,6 +298,123 @@ describe Mdm::Module::Path do
     end
   end
 
+
+  context '#each_changed_module_ancestor' do
+    subject(:each_changed_module_ancestor) do
+      path.each_changed_module_ancestor(options, &block)
+    end
+
+    #
+    # lets
+    #
+
+    let(:options) do
+      {
+          changed: true
+      }
+    end
+
+    let(:path) do
+      FactoryGirl.create(:mdm_module_path)
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:existing_module_ancestors) do
+      FactoryGirl.create_list(
+          :mdm_module_ancestor,
+          2,
+          parent_path: path
+      )
+    end
+
+    let!(:new_module_ancestors) do
+      # makes file on disk, but not Mdm::Module::Ancestor record in database
+      FactoryGirl.build_list(
+          :mdm_module_ancestor,
+          2,
+          parent_path: path
+      )
+    end
+
+    #
+    # callbacks
+    #
+
+    before(:each) do
+      2.times do |n|
+        path.real_pathname.join("directory_#{n}").mkpath
+      end
+
+      2.times do |n|
+        path.real_pathname.join("file_#{n}").open('wb') do |f|
+          f.puts "File without extension #{n}"
+        end
+      end
+    end
+
+    context 'with block' do
+      let(:block) do
+        lambda { |module_ancestor|
+        }
+      end
+
+      it 'should pass options to #changed_module_ancestor_from_real_path' do
+        path.should_receive(:changed_module_ancestor_from_real_path) { |_actual_real_path, actual_options|
+          actual_options.should == options
+        }.at_least(:once)
+
+        each_changed_module_ancestor
+      end
+
+      it 'should not pass directories to #changed_module_ancestor_from_real_path' do
+        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
+          File.directory?(actual_real_path).should be_false
+        }.at_least(:once)
+
+        each_changed_module_ancestor
+      end
+
+      it 'should only pass files' do
+        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
+          File.file?(actual_real_path).should be_true
+        }.at_least(:once)
+
+        each_changed_module_ancestor
+      end
+
+      it 'should only pass files that have Metasploit::Model::Module::Ancestor::EXTENSION' do
+        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
+          File.extname(actual_real_path).should == Metasploit::Model::Module::Ancestor::EXTENSION
+        }.at_least(:once)
+
+        each_changed_module_ancestor
+      end
+
+      it 'should pass all Mdm::Module::Ancestor#real_paths' do
+        expected_real_paths = []
+        expected_real_paths.concat existing_module_ancestors.map(&:real_path)
+        expected_real_paths.concat new_module_ancestors.map(&:derived_real_path)
+
+        expected_real_paths.each do |expected_real_path|
+          path.should_receive(:changed_module_ancestor_from_real_path).with(expected_real_path, anything)
+        end
+
+        each_changed_module_ancestor
+      end
+    end
+
+    context 'without block' do
+      let(:block) do
+        nil
+      end
+
+      it { should be_an Enumerator }
+    end
+  end
+
   context '#name_collision' do
     subject(:name_collision) do
       path.name_collision
