@@ -72,7 +72,7 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Methods
   #
 
-  # Returns {Mdm::Module::Ancestor} at `real_path` under this module path if `path` has changed.
+  # Returns {Mdm::Module::Ancestor} at `real_path` under this module path if `real_path` has changed.
   #
   # @param real_path [String] real_path under {#real_path}.
   # @param options [Hash{Symbol => Object}]
@@ -89,7 +89,7 @@ class Mdm::Module::Path < ActiveRecord::Base
   # @raise [ActiveRecord::Invalid] if {Mdm::Module::Ancestor} is invalid when updating
   #   {Mdm::Module::Ancestor#real_path_modified_at} and
   #   {Mdm::Module::Ancestor#real_path_sha1_hex_digest}
-  def module_ancestor_from_real_path(real_path, options={})
+  def changed_module_ancestor_from_real_path(real_path, options={})
     changed = options.fetch(:changed, false)
     module_ancestor = nil
 

@@ -136,9 +136,9 @@ describe Mdm::Module::Path do
     end
   end
 
-  context '#module_ancestor_from_real_path' do
-    subject(:module_ancestor_from_real_path) do
-      path.module_ancestor_from_real_path(real_path, options)
+  context '#changed_module_ancestor_from_real_path' do
+    subject(:changed_module_ancestor_from_real_path) do
+      path.changed_module_ancestor_from_real_path(real_path, options)
     end
 
     let(:module_ancestor) do
@@ -172,7 +172,7 @@ describe Mdm::Module::Path do
         with_connection.instance_eval(&block)
       end
 
-      module_ancestor_from_real_path
+      changed_module_ancestor_from_real_path
     end
 
     context 'with pre-existing Mdm::Module::Ancestor' do
@@ -200,7 +200,7 @@ describe Mdm::Module::Path do
           end
 
           it 'should return pre-existing Mdm::Module::Ancestor' do
-            module_ancestor_from_real_path.should == module_ancestor
+            changed_module_ancestor_from_real_path.should == module_ancestor
           end
 
           context 'Mdm::Module::Ancestor' do
@@ -208,7 +208,7 @@ describe Mdm::Module::Path do
               @real_path_modified_at = module_ancestor.real_path_modified_at
               @real_path_sha1_hex_digest = module_ancestor.real_path_sha1_hex_digest
 
-              module_ancestor_from_real_path
+              changed_module_ancestor_from_real_path
 
               module_ancestor.reload
             end
@@ -230,7 +230,7 @@ describe Mdm::Module::Path do
             before(:each) do
               @real_path_modified_at = module_ancestor.real_path_modified_at
 
-              module_ancestor_from_real_path
+              changed_module_ancestor_from_real_path
 
               module_ancestor.reload
             end
@@ -251,7 +251,7 @@ describe Mdm::Module::Path do
           end
 
           it 'should return pre-existing Mdm::Module::Ancestor' do
-            module_ancestor_from_real_path.should == module_ancestor
+            changed_module_ancestor_from_real_path.should == module_ancestor
           end
         end
 
@@ -270,7 +270,7 @@ describe Mdm::Module::Path do
     context 'without pre-existing Mdm::Module::Ancestor' do
       it 'should create Mdm::Module::Ancestor' do
         expect {
-          module_ancestor_from_real_path
+          changed_module_ancestor_from_real_path
         }.to change(Mdm::Module::Ancestor, :count)
       end
     end
