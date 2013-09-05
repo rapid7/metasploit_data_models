@@ -167,7 +167,6 @@ describe Mdm::Module::Path do
         where_relation = double('ActiveRecord::Relation#where', first_or_initialize: module_ancestor)
         module_ancestors = double('Mdm::Module::Path#module_ancestors', where: where_relation)
         with_connection = double('With Connection', module_ancestors: module_ancestors)
-        module_ancestor.should_receive(:save!)
 
         with_connection.instance_eval(&block)
       end
@@ -188,7 +187,7 @@ describe Mdm::Module::Path do
 
       context 'with change to file modification time' do
         before(:each) do
-          changed_time = Time.now
+          changed_time = File.mtime(real_path) + 5.seconds
           File.utime(changed_time, changed_time, module_ancestor.real_path)
         end
 
@@ -204,21 +203,12 @@ describe Mdm::Module::Path do
           end
 
           context 'Mdm::Module::Ancestor' do
-            before(:each) do
-              @real_path_modified_at = module_ancestor.real_path_modified_at
-              @real_path_sha1_hex_digest = module_ancestor.real_path_sha1_hex_digest
-
-              changed_module_ancestor_from_real_path
-
-              module_ancestor.reload
-            end
-
             it 'should update #real_path_modified_at' do
-              module_ancestor.real_path_modified_at.should_not == @real_path_modified_at
+              changed_module_ancestor_from_real_path.real_path_modified_at.should_not == module_ancestor.real_path_modified_at
             end
 
             it 'should update #real_path_sha1_hex_digest' do
-              module_ancestor.real_path_sha1_hex_digest.should_not == @real_path_modified_at
+              changed_module_ancestor_from_real_path.real_path_sha1_hex_digest.should_not == module_ancestor.real_path_sha1_hex_digest
             end
           end
         end
@@ -227,16 +217,8 @@ describe Mdm::Module::Path do
           it { should be_nil }
 
           context 'Mdm::Module::Ancestor' do
-            before(:each) do
-              @real_path_modified_at = module_ancestor.real_path_modified_at
-
-              changed_module_ancestor_from_real_path
-
-              module_ancestor.reload
-            end
-
             it 'should update #real_path_modified_at' do
-              module_ancestor.real_path_modified_at.should_not == @real_path_modified_at
+              module_ancestor.real_path_modified_at_changed?.should_not == module_ancestor.real_path_modified_at
             end
           end
         end
