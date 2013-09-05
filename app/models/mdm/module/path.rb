@@ -72,6 +72,11 @@ class Mdm::Module::Path < ActiveRecord::Base
   # Methods
   #
 
+  # @note The returned {Mdm::Module::Ancestor} may contain unsaved changes.  It is the responsibility of the caller to
+  #   save the record and to populate the {Mdm::Module::Ancestor#handler_type} if the {Mdm::Module::Ancestor#handled?}
+  #   is `true` because the {Mdm::Module::Ancestor#handler_type} can only be determined by loading the ancestor, not
+  #   from the file system alone.
+  #
   # Returns {Mdm::Module::Ancestor} at `real_path` under this module path if `real_path` has changed.
   #
   # @param real_path [String] real_path under {#real_path}.
@@ -105,8 +110,6 @@ class Mdm::Module::Path < ActiveRecord::Base
         # have to check for change prior to saving as changes are reset after save
         changed ||= module_ancestor.real_path_sha1_hex_digest_changed?
       end
-
-      module_ancestor.save!
     end
 
     if changed

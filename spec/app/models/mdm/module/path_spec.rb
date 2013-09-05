@@ -268,10 +268,50 @@ describe Mdm::Module::Path do
     end
 
     context 'without pre-existing Mdm::Module::Ancestor' do
-      it 'should create Mdm::Module::Ancestor' do
-        expect {
-          changed_module_ancestor_from_real_path
-        }.to change(Mdm::Module::Ancestor, :count)
+      context 'with payload' do
+        context 'with single' do
+          let(:module_ancestor) do
+            FactoryGirl.build(
+                :single_payload_mdm_module_ancestor,
+                :parent_path => path
+            )
+          end
+
+          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path with handled'
+        end
+
+        context 'with stage' do
+          let(:module_ancestor) do
+            FactoryGirl.build(
+                :stage_payload_mdm_module_ancestor,
+                :parent_path => path
+            )
+          end
+
+          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path without handled'
+        end
+
+        context 'with stager' do
+          let(:module_ancestor) do
+            FactoryGirl.build(
+                :single_payload_mdm_module_ancestor,
+                :parent_path => path
+            )
+          end
+
+          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path with handled'
+        end
+      end
+
+      context 'without payload' do
+        let(:module_ancestor) do
+          FactoryGirl.build(
+              :non_payload_mdm_module_ancestor,
+              :parent_path => path
+          )
+        end
+
+        it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path without handled'
       end
     end
   end
