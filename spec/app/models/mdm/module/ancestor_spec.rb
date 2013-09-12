@@ -5,23 +5,11 @@ describe Mdm::Module::Ancestor do
     FactoryGirl.build(:mdm_module_ancestor)
   end
 
-  it_should_behave_like 'Metasploit::Model::Module::Ancestor' do
+  it_should_behave_like 'Metasploit::Model::Module::Ancestor', namespace_name: 'Mdm' do
     def attribute_type(attribute)
       column = ancestor_class.columns_hash.fetch(attribute.to_s)
 
       column.type
-    end
-
-    let(:ancestor_class) do
-      described_class
-    end
-
-    let(:ancestor_factory) do
-      :mdm_module_ancestor
-    end
-
-    let(:path_factory) do
-      :mdm_module_path
     end
   end
 
@@ -68,60 +56,6 @@ describe Mdm::Module::Ancestor do
           ancestor.should have_db_index(:real_path_sha1_hex_digest).unique(true)
         end
       end
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_module_ancestor' do
-      subject(:mdm_module_ancestor) do
-        FactoryGirl.build(:mdm_module_ancestor)
-      end
-
-      it { should be_valid }
-    end
-
-    context 'payload_mdm_module_ancestor' do
-      subject(:payload_mdm_module_ancestor) do
-        FactoryGirl.build(:payload_mdm_module_ancestor)
-      end
-
-      it { should be_valid }
-
-      its(:module_type) { should == 'payload' }
-      its(:derived_payload_type) { should_not be_nil }
-    end
-
-    context 'single_payload_mdm_module_ancestor' do
-      subject(:single_payload_mdm_module_ancestor) do
-        FactoryGirl.build(:single_payload_mdm_module_ancestor)
-      end
-
-      it { should be_valid }
-
-      its(:module_type) { should == 'payload' }
-      its(:derived_payload_type) { should == 'single' }
-    end
-
-    context 'stage_payload_mdm_module_ancestor' do
-      subject(:stage_payload_mdm_module_ancestor) do
-        FactoryGirl.build(:stage_payload_mdm_module_ancestor)
-      end
-
-      it { should be_valid }
-
-      its(:module_type) { should == 'payload' }
-      its(:derived_payload_type) { should == 'stage' }
-    end
-
-    context 'stager_payload_mdm_module_ancestor' do
-      subject(:stager_payload_mdm_module_ancestor) do
-        FactoryGirl.build(:stager_payload_mdm_module_ancestor)
-      end
-
-      it { should be_valid }
-
-      its(:module_type) { should == 'payload' }
-      its(:derived_payload_type) { should == 'stager' }
     end
   end
 
