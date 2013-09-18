@@ -68,7 +68,7 @@ describe Mdm::Module::Ancestor do
         end
 
         context 'with same full_name' do
-          let(:same_full_name_ancestor) do
+          subject(:same_full_name_ancestor) do
             FactoryGirl.build(
                 :mdm_module_ancestor,
                 # set module_type and reference_name as full_name is derived from them
@@ -77,10 +77,7 @@ describe Mdm::Module::Ancestor do
             )
           end
 
-          it 'should record error on full_name' do
-            same_full_name_ancestor.should_not be_valid
-            same_full_name_ancestor.errors[:full_name].should include('has already been taken')
-          end
+          it_should_behave_like 'defer to unique index'
         end
       end
     end
@@ -93,7 +90,7 @@ describe Mdm::Module::Ancestor do
         end
 
         context 'with same real_path' do
-          let(:same_real_path_ancestor) do
+          subject(:same_real_path_ancestor) do
             FactoryGirl.build(
                 :mdm_module_ancestor,
                 # real_path is derived from parent_path, module_type, and reference_name, so set copy those attributes
@@ -107,10 +104,7 @@ describe Mdm::Module::Ancestor do
             end
           end
 
-          it 'should record error on real_path' do
-            same_real_path_ancestor.should_not be_valid
-            same_real_path_ancestor.errors[:real_path].should include('has already been taken')
-          end
+          it_should_behave_like 'defer to unique index'
         end
       end
     end
@@ -122,7 +116,7 @@ describe Mdm::Module::Ancestor do
         end
 
         context 'with same real_path_sha1_hex_digest' do
-          let(:same_real_path_sha1_hex_digest_ancestor) do
+          subject(:same_real_path_sha1_hex_digest_ancestor) do
             FactoryGirl.build(
                 :mdm_module_ancestor,
                 # real_path_sha1_hex_digest is derived, but not validated (as it would take too long)
@@ -131,17 +125,14 @@ describe Mdm::Module::Ancestor do
             )
           end
 
-          it 'should record error on real_path_sha1_hex_digest' do
-            same_real_path_sha1_hex_digest_ancestor.should_not be_valid
-            same_real_path_sha1_hex_digest_ancestor.errors[:real_path_sha1_hex_digest].should include('has already been taken')
-          end
+          it_should_behave_like 'defer to unique index'
         end
       end
     end
 
     context 'reference_name' do
       context 'validates uniqueness scoped to module_type' do
-        let(:new_ancestor) do
+        subject(:new_ancestor) do
           FactoryGirl.build(
               :mdm_module_ancestor,
               :module_type => new_module_type,
@@ -176,10 +167,7 @@ describe Mdm::Module::Ancestor do
               original_reference_name
             end
 
-            it 'should record error on reference_name' do
-              new_ancestor.should_not be_valid
-              new_ancestor.errors[:reference_name].should include(I18n.translate!('activerecord.errors.messages.taken'))
-            end
+            it_should_behave_like 'defer to unique index'
           end
         end
 

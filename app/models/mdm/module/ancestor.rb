@@ -96,20 +96,5 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
 
   # parent_path_id is NOT accessible since it should be supplied from context
 
-  #
-  # Validations
-  #
-
-  validates :full_name,
-            :uniqueness => true
-  validates :real_path,
-            :uniqueness => true
-  validates :real_path_sha1_hex_digest,
-            :uniqueness => true
-  validates :reference_name,
-            :uniqueness => {
-                :scope => :module_type
-            }
-
   ActiveSupport.run_load_hooks(:mdm_module_ancestor, self)
 end
