@@ -136,169 +136,6 @@ describe Mdm::Module::Path do
     end
   end
 
-  context '#changed_module_ancestor_from_real_path' do
-    subject(:changed_module_ancestor_from_real_path) do
-      path.changed_module_ancestor_from_real_path(real_path, options)
-    end
-
-    let(:module_ancestor) do
-      FactoryGirl.build(
-          :mdm_module_ancestor,
-          :parent_path => path
-      )
-    end
-
-    let(:options) do
-      {}
-    end
-
-    let(:path) do
-      FactoryGirl.create(:mdm_module_path)
-    end
-
-    let(:real_path) do
-      # need to use derived_real_path as real_path is not derived until validation.
-      module_ancestor.derived_real_path
-    end
-
-    it 'should call ActiveRecord::Base.connection_pool.with_connection around database accesses' do
-      ActiveRecord::Base.connection_pool.should_receive(:with_connection) do |&block|
-        module_ancestor = double('Mdm::Module::Ancestor').as_null_object
-        where_relation = double('ActiveRecord::Relation#where', first_or_initialize: module_ancestor)
-        module_ancestors = double('Mdm::Module::Path#module_ancestors', where: where_relation)
-        with_connection = double('With Connection', module_ancestors: module_ancestors)
-
-        with_connection.instance_eval(&block)
-      end
-
-      changed_module_ancestor_from_real_path
-    end
-
-    context 'with pre-existing Mdm::Module::Ancestor' do
-      before(:each) do
-        # Place the modification time in the past so it can be changed to the present when needed
-        past_modification_time = File.mtime(real_path) - 5.seconds
-        past_access_time = past_modification_time
-        File.utime(past_access_time, past_modification_time, real_path)
-
-        # save with altered real_path_modification_time
-        module_ancestor.save!
-      end
-
-      context 'with change to file modification time' do
-        before(:each) do
-          changed_time = File.mtime(real_path) + 5.seconds
-          File.utime(changed_time, changed_time, module_ancestor.real_path)
-        end
-
-        context 'with change to file contents' do
-          before(:each) do
-            File.open(real_path, 'a') do |f|
-              f.puts "# Change to file"
-            end
-          end
-
-          it 'should return pre-existing Mdm::Module::Ancestor' do
-            changed_module_ancestor_from_real_path.should == module_ancestor
-          end
-
-          context 'Mdm::Module::Ancestor' do
-            it 'should update #real_path_modified_at' do
-              changed_module_ancestor_from_real_path.real_path_modified_at.should_not == module_ancestor.real_path_modified_at
-            end
-
-            it 'should update #real_path_sha1_hex_digest' do
-              changed_module_ancestor_from_real_path.real_path_sha1_hex_digest.should_not == module_ancestor.real_path_sha1_hex_digest
-            end
-          end
-        end
-
-        context 'without change to file contents' do
-          it { should be_nil }
-
-          context 'Mdm::Module::Ancestor' do
-            it 'should update #real_path_modified_at' do
-              module_ancestor.real_path_modified_at_changed?.should_not == module_ancestor.real_path_modified_at
-            end
-          end
-        end
-      end
-
-      context 'without change to file modification time' do
-        context 'with changed: true' do
-          let(:options) do
-            {
-                changed: true
-            }
-          end
-
-          it 'should return pre-existing Mdm::Module::Ancestor' do
-            changed_module_ancestor_from_real_path.should == module_ancestor
-          end
-        end
-
-        context 'with changed: false' do
-          let(:options) do
-            {
-                changed: false
-            }
-          end
-
-          it { should be_nil }
-        end
-      end
-    end
-
-    context 'without pre-existing Mdm::Module::Ancestor' do
-      context 'with payload' do
-        context 'with single' do
-          let(:module_ancestor) do
-            FactoryGirl.build(
-                :single_payload_mdm_module_ancestor,
-                :parent_path => path
-            )
-          end
-
-          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path with handled'
-        end
-
-        context 'with stage' do
-          let(:module_ancestor) do
-            FactoryGirl.build(
-                :stage_payload_mdm_module_ancestor,
-                :parent_path => path
-            )
-          end
-
-          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path without handled'
-        end
-
-        context 'with stager' do
-          let(:module_ancestor) do
-            FactoryGirl.build(
-                :single_payload_mdm_module_ancestor,
-                :parent_path => path
-            )
-          end
-
-          it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path with handled'
-        end
-      end
-
-      context 'without payload' do
-        let(:module_ancestor) do
-          FactoryGirl.build(
-              :non_payload_mdm_module_ancestor,
-              :parent_path => path
-          )
-        end
-
-        it_should_behave_like 'Mdm::Module::Path#changed_module_ancestor_from_real_path without handled'
-      end
-    end
-  end
-
-
   context '#each_changed_module_ancestor' do
     subject(:each_changed_module_ancestor) do
       path.each_changed_module_ancestor(options, &block)
@@ -307,6 +144,15 @@ describe Mdm::Module::Path do
     #
     # lets
     #
+
+    let(:new_module_ancestors) do
+      # makes file on disk, but not Mdm::Module::Ancestor record in database
+      FactoryGirl.build_list(
+          :mdm_module_ancestor,
+          2,
+          parent_path: path
+      )
+    end
 
     let(:options) do
       {
@@ -330,29 +176,10 @@ describe Mdm::Module::Path do
       )
     end
 
-    let!(:new_module_ancestors) do
-      # makes file on disk, but not Mdm::Module::Ancestor record in database
-      FactoryGirl.build_list(
-          :mdm_module_ancestor,
-          2,
-          parent_path: path
-      )
-    end
-
-    #
-    # callbacks
-    #
 
     before(:each) do
-      2.times do |n|
-        path.real_pathname.join("directory_#{n}").mkpath
-      end
-
-      2.times do |n|
-        path.real_pathname.join("file_#{n}").open('wb') do |f|
-          f.puts "File without extension #{n}"
-        end
-      end
+      # validate to derive real_path
+      new_module_ancestors.each(&:valid?)
     end
 
     context 'with block' do
@@ -361,48 +188,196 @@ describe Mdm::Module::Path do
         }
       end
 
-      it 'should pass options to #changed_module_ancestor_from_real_path' do
-        path.should_receive(:changed_module_ancestor_from_real_path) { |_actual_real_path, actual_options|
-          actual_options.should == options
-        }.at_least(:once)
+      let(:existing_module_ancestor_real_paths) do
+        existing_module_ancestors.map(&:real_path)
+      end
+
+      let(:module_ancestors) do
+        existing_module_ancestors + new_module_ancestors
+      end
+
+      let(:module_ancestor_real_paths) do
+        existing_module_ancestor_real_paths + new_module_ancestor_real_paths
+      end
+
+      let(:new_module_ancestor_real_paths) do
+        new_module_ancestors.map(&:derived_real_path)
+      end
+
+      it 'should use #module_ancestor_real_paths to gather Metasploit::Model::Module::Ancestor#real_path' do
+        path.should_receive(:module_ancestor_real_paths).and_return([])
 
         each_changed_module_ancestor
       end
 
-      it 'should not pass directories to #changed_module_ancestor_from_real_path' do
-        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
-          File.directory?(actual_real_path).should be_false
-        }.at_least(:once)
+      it 'should call ActiveRecord::Base.connection_pool.with_connection around database accesses' do
+        ActiveRecord::Base.connection_pool.should_receive(:with_connection) do |&block|
+          new = double('ActiveRecord::Association#new')
+          where_relation = double('ActiveRecord::Relation#where', find_each: nil)
+          module_ancestors = double(
+              'Mdm::Module::Path#module_ancestor',
+              new: new,
+              where: where_relation
+          )
+          with_connection = double('With Connection', module_ancestors: module_ancestors)
 
-        each_changed_module_ancestor
-      end
-
-      it 'should only pass files' do
-        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
-          File.file?(actual_real_path).should be_true
-        }.at_least(:once)
-
-        each_changed_module_ancestor
-      end
-
-      it 'should only pass files that have Metasploit::Model::Module::Ancestor::EXTENSION' do
-        path.should_receive(:changed_module_ancestor_from_real_path) { |actual_real_path, _actual_options|
-          File.extname(actual_real_path).should == Metasploit::Model::Module::Ancestor::EXTENSION
-        }.at_least(:once)
-
-        each_changed_module_ancestor
-      end
-
-      it 'should pass all Mdm::Module::Ancestor#real_paths' do
-        expected_real_paths = []
-        expected_real_paths.concat existing_module_ancestors.map(&:real_path)
-        expected_real_paths.concat new_module_ancestors.map(&:derived_real_path)
-
-        expected_real_paths.each do |expected_real_path|
-          path.should_receive(:changed_module_ancestor_from_real_path).with(expected_real_path, anything)
+          with_connection.instance_eval(&block)
         end
 
         each_changed_module_ancestor
+      end
+
+      it 'should use one query to find all updatable Mdm::Module::Ancestors' do
+        path.module_ancestors.should_receive(:where) { |hash|
+          hash.should have_key(:real_path)
+          actual_real_paths = hash[:real_path]
+          actual_real_paths.should be_an Array
+
+          expect(actual_real_paths).to match_array(module_ancestor_real_paths)
+        }.and_call_original
+
+        each_changed_module_ancestor
+      end
+
+      it 'should use Set to calculate new real_paths' do
+        set = Set.new(module_ancestor_real_paths)
+        Set.should_receive(:new) { |actual_real_paths|
+          expect(actual_real_paths).to match_array(module_ancestor_real_paths)
+        }.and_return(set)
+
+        existing_module_ancestor_real_paths.each do |real_path|
+          set.should_receive(:delete).with(real_path).and_call_original
+        end
+
+        each_changed_module_ancestor
+      end
+
+      it 'should only fetch :changed option once as a loop optimization' do
+        options.should_receive(:fetch).with(:changed, false)
+        options.should_not_receive(:[])
+
+        each_changed_module_ancestor
+      end
+
+      context ':changed option' do
+        context 'with true' do
+          let(:options) do
+            {
+                changed: true
+            }
+          end
+
+          it 'should yield existing and new Mdm::Module::Ancestors' do
+            changed_module_ancestors = path.each_changed_module_ancestor(options)
+
+            existing_module_ancestors.each do |existing_module_ancestor|
+              changed_module_ancestors.should include(existing_module_ancestor)
+            end
+
+            actual_real_paths = changed_module_ancestors.map(&:real_path)
+
+            new_module_ancestor_real_paths.each do |real_path|
+              actual_real_paths.should include(real_path)
+            end
+          end
+        end
+
+        context 'with false' do
+          subject(:changed_module_ancestors) do
+            path.each_changed_module_ancestor(options).to_a
+          end
+
+          let(:options) do
+            {
+                changed: false
+            }
+          end
+
+          context 'without change to file modification time' do
+            it 'should yield only new Mdm::Module::Ancestors' do
+              actual_real_paths = changed_module_ancestors.map(&:real_path)
+
+              changed_module_ancestors.all? { |module_ancestor|
+                module_ancestor.new_record?
+              }.should be_true
+
+              expect(actual_real_paths).to match_array(new_module_ancestor_real_paths)
+            end
+          end
+
+          context 'with change to file modification time' do
+            def change_real_path_modification_time(module_ancestor)
+              changed_time_with_zone = module_ancestor.real_path_modified_at + 5.seconds
+              changed_time = changed_time_with_zone.time()
+              File.utime(changed_time, changed_time, module_ancestor.real_path)
+            end
+
+            context 'with change to file contents' do
+              def change_contents(module_ancestor)
+                File.open(module_ancestor.real_path, 'a') do |f|
+                  f.puts "# Change to contents"
+                end
+              end
+
+              before(:each) do
+                existing_module_ancestors.each do |existing_module_ancestor|
+                  change_contents(existing_module_ancestor)
+                  # have to change modification time after changing contents as changing contents will write to the
+                  # file, which will update atime and mtime.
+                  change_real_path_modification_time(existing_module_ancestor)
+                end
+              end
+
+              it 'should return all Mdm::module::Ancestors' do
+                actual_real_paths = changed_module_ancestors.map(&:real_path)
+
+                existing_module_ancestors.each do |existing_module_ancestor|
+                  actual_real_paths.should include(existing_module_ancestor.real_path)
+                end
+
+                new_module_ancestors.each do |new_module_ancestor|
+                  actual_real_paths.should include(new_module_ancestor.real_path)
+                end
+              end
+
+              context 'existing Mdm::Module::Ancestors' do
+                it 'should update #real_path_modified_at' do
+                  existing_module_ancestors.each do |existing_module_ancestor|
+                    changed_module_ancestor = changed_module_ancestors.find { |changed_module_ancestor|
+                      changed_module_ancestor == existing_module_ancestor
+                    }
+
+                    changed_module_ancestor.real_path_modified_at.should_not == existing_module_ancestor.real_path_modified_at
+                  end
+                end
+
+                it 'should update #real_path_sha1_hex_digest' do
+                  existing_module_ancestors.each do |existing_module_ancestor|
+                    changed_module_ancestor = changed_module_ancestors.find { |changed_module_ancestor|
+                      changed_module_ancestor == existing_module_ancestor
+                    }
+
+                    changed_module_ancestor.real_path_sha1_hex_digest.should_not == existing_module_ancestor.real_path_sha1_hex_digest
+                  end
+                end
+              end
+            end
+
+            context 'without change to file contents' do
+              before(:each) do
+                existing_module_ancestors.each do |existing_module_ancestor|
+                  change_real_path_modification_time(existing_module_ancestor)
+                end
+              end
+
+              it 'should not return pre-existing Mdm::Module::Ancestor because real_path_sha1_hex_digest has not changed' do
+                existing_module_ancestors.each do |existing_module_ancestor|
+                  changed_module_ancestors.should_not include(existing_module_ancestor)
+                end
+              end
+            end
+          end
+        end
       end
     end
 
@@ -412,6 +387,122 @@ describe Mdm::Module::Path do
       end
 
       it { should be_an Enumerator }
+    end
+  end
+
+  context '#module_ancestor_real_paths' do
+    subject(:module_ancestor_real_paths) do
+      module_path.module_ancestor_real_paths
+    end
+
+    #
+    # lets
+    #
+
+    let(:module_path) do
+      FactoryGirl.create(:mdm_module_path)
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:existing_module_ancestors) do
+      FactoryGirl.create_list(
+          :mdm_module_ancestor,
+          2,
+          parent_path: module_path
+      )
+    end
+
+    let!(:new_module_ancestors) do
+      FactoryGirl.create_list(
+          :mdm_module_ancestor,
+          2,
+          parent_path: module_path
+      )
+    end
+
+    #
+    # callbacks
+    #
+
+    before(:each) do
+      2.times do |n|
+        module_path.real_pathname.join("directory_#{n}").mkpath
+      end
+
+      2.times do |n|
+        module_path.real_pathname.join("file_#{n}").open('wb') do |f|
+          f.puts "File without extension #{n}"
+        end
+      end
+    end
+
+    it 'should use #module_ancestor_rule to find Metasploit::Model::Module::Ancestor#real_paths' do
+      module_path.should_receive(:module_ancestor_rule).and_call_original
+
+      module_ancestor_real_paths
+    end
+
+    it 'should not include directories' do
+      module_ancestor_real_paths.any? { |real_path|
+        File.directory?(real_path)
+      }.should be_false
+    end
+
+    it 'should only include files' do
+      module_ancestor_real_paths.all? { |real_path|
+        File.file?(real_path)
+      }.should be_true
+    end
+
+    it 'should only include file names with Metasploit::Model::Module::Ancestor::EXTENSION' do
+      module_ancestor_real_paths.all? { |real_path|
+        File.extname(real_path) == Metasploit::Model::Module::Ancestor::EXTENSION
+      }.should be_true
+    end
+
+    it 'should include all Mdm::Module::Ancestor#real_paths' do
+      expected_real_paths = []
+      expected_real_paths.concat existing_module_ancestors.map(&:real_path)
+      expected_real_paths.concat new_module_ancestors.map(&:derived_real_path)
+
+      expect(module_ancestor_real_paths).to match_array(expected_real_paths)
+    end
+  end
+
+  context '#module_ancestor_rule' do
+    subject(:module_ancestor_rule) do
+      module_path.module_ancestor_rule
+    end
+
+    let(:module_path) do
+      FactoryGirl.create(:mdm_module_path)
+    end
+
+    it { should be_a File::Find }
+
+    its(:ftype) { should == 'file' }
+
+    context '#path' do
+      subject(:path) do
+        module_ancestor_rule.path
+      end
+
+      it 'should be Mdm::Module::Path#real_path' do
+        path.should == module_path.real_path
+      end
+    end
+
+    context '#pattern' do
+      subject(:pattern) do
+        module_ancestor_rule.pattern
+      end
+
+      it 'should be file with Metasploit::Model::Module::Ancetor::EXTENSION' do
+        pattern.should == "*#{Metasploit::Model::Module::Ancestor::EXTENSION}"
+      end
     end
   end
 
