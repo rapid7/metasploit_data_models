@@ -83,7 +83,6 @@ describe Mdm::Module::Ancestor do
     end
 
     context 'real_path' do
-      # can't use validate_uniqueness_of(:real_path) because of null full_name
       context 'validate uniqueness' do
         let!(:original_ancestor) do
           FactoryGirl.create(:mdm_module_ancestor)
@@ -91,17 +90,10 @@ describe Mdm::Module::Ancestor do
 
         context 'with same real_path' do
           subject(:same_real_path_ancestor) do
-            FactoryGirl.build(
-                :mdm_module_ancestor,
-                # real_path is derived from parent_path, module_type, and reference_name, so set copy those attributes
-                # to get the same real_path.
-                :module_type => original_ancestor.module_type,
-                :parent_path => original_ancestor.parent_path,
-            ).tap do |ancestor|
-              # At least one attribute needs to be set outside the call to build because the factory will attempt to
-              # created the derived_real_path and throw a Metasploit::Model::Spec::PathnameCollision.
-              ancestor.reference_name = original_ancestor.reference_name
-            end
+            # Don't use factory as it will try to write real_path, which cause a path collision
+            original_ancestor.parent_path.module_ancestors.new(
+                real_path: original_ancestor.real_path
+            )
           end
 
           it_should_behave_like 'defer to unique index'
