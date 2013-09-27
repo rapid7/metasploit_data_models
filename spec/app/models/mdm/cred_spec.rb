@@ -239,11 +239,26 @@ describe Mdm::Cred do
 
   end
 
-  context 'factory' do
-    it 'should be valid' do
-      cred = FactoryGirl.build(:mdm_cred)
-      cred.should be_valid
+  context 'factories' do
+    context 'full_mdm_cred' do
+      subject(:full_mdm_cred) do
+        FactoryGirl.build(:full_mdm_cred)
+      end
+
+      it { should be_valid }
+
+      its(:pass) { should_not be_nil }
+      its(:proof) { should_not be_nil }
+      its(:ptype) { should_not be_nil }
+      its(:user) { should_not be_nil }
+    end
+
+    context 'mdm_cred' do
+      subject(:mdm_cred) do
+        FactoryGirl.build(:mdm_cred)
+      end
+
+      it { should be_valid }
     end
   end
-
 end
