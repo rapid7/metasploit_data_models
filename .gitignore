@@ -21,6 +21,8 @@
 coverage
 # generated yardocs
 doc
+# generated images for yardocs
+docs/images
 # Installed gem versions.  Not stored for the same reasons as .rvmrc
 Gemfile.lock
 # Packaging directory for builds

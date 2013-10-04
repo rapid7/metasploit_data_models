@@ -1,47 +1,42 @@
 # @note All options not specific to any given rake task should go in the .yardopts file so they are available to both
 #   the below rake tasks and when invoking `yard` from the command line
 
+load Metasploit::Model.root.join('lib', 'tasks', 'yard.rake')
+
 if defined? YARD
   namespace :yard do
-    YARD::Rake::YardocTask.new(:doc) do |t|
-      # --no-stats here as 'stats' task called after will print fuller stats
-      t.options = ['--no-stats']
-
-      t.after = Proc.new {
-        Rake::Task['yard:stats'].execute
-      }
-    end
-
-    task :doc => :environment
-
-    task :erd => :environment do
+    begin
       require 'rails_erd/diagram/graphviz'
+    rescue LoadError
+      puts "Won't be able to generate Mdm Entity-Relationship Diagram"
+    else
+      namespace :erd do
+        images_directory = 'docs/images'
 
-      merged_options = MetasploitDataModels::EntityRelationshipDiagram::DEFAULT_OPTIONS.merge(
-          :filename => 'docs/images/mdm.erd',
-          :filetype => :png,
-          :title => 'Mdm (Direct) Entity-Relationship Diagram'
-      )
-      diagram = RailsERD::Diagram::Graphviz.new(
-          MetasploitDataModels::EntityRelationshipDiagram.domain,
-          merged_options
-      )
-      diagram.create
-    end
+        namespace :mdm do
+          task :module => [:environment] do
+            MetasploitDataModels::EntityRelationshipDiagram.create(
+                :domain => MetasploitDataModels::EntityRelationshipDiagram::Module.domain,
+                :filename => File.join(images_directory, 'mdm-module.erd'),
+                :filetype => :png,
+                :title => 'Mdm::Module (Direct) Entity-Relationship Diagram'
+            )
+          end
+        end
 
-    task :doc => :erd
+        task :mdm => [:environment] do
+          MetasploitDataModels::EntityRelationshipDiagram.create(
+              :filename => File.join(images_directory, 'mdm.erd'),
+              :filetype => :png,
+              :title => 'Mdm (Direct) Entity-Relationship Diagram'
+          )
+        end
+      end
 
-    desc "Shows stats for YARD Documentation including listing undocumented modules, classes, constants, and methods"
-    task :stats => :environment do
-      stats = YARD::CLI::Stats.new
-      stats.run('--compact', '--list-undoc')
+      task :erd => ['erd:mdm', 'erd:mdm:module']
+      task :doc => :erd
     end
   end
-
-  # @todo Figure out how to just clone description from yard:doc
-  desc "Generate YARD documentation"
-  # allow calling namespace to as a task that goes to default task for namespace
-  task :yard => ['yard:doc']
 
   task :default => :yard
 else

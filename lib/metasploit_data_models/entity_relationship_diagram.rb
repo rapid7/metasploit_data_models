@@ -80,6 +80,26 @@ module MetasploitDataModels
       visited_class_set
     end
 
+    # Creates Graphviz diagram.
+    #
+    # @param options [Hash{Symbol => Object}]
+    # @option options [RailsERD::Domain] :domain ({domain}) The domain to diagram.
+    # @option options [String] :filename name of file (without extension) to which to write diagram.
+    # @option options [String] :title Title of the diagram to include on the diagram.
+    # @return [String] path where diagram was written.
+    def self.create(options={})
+      domain = options[:domain]
+      domain ||= self.domain
+
+      diagram_options = options.except(:domain)
+      merged_diagram_options = DEFAULT_OPTIONS.merge(diagram_options)
+
+      diagram = RailsERD::Diagram::Graphviz.new(domain, merged_diagram_options)
+      path = diagram.create
+
+      path
+    end
+
     # Domain containing all models in this gem.
     #
     # @return [RailsERD::Domain]
