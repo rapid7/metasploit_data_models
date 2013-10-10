@@ -5,6 +5,8 @@ class PasswordIsStrongValidator < ActiveModel::EachValidator
 			changeme test1234 rapid7
 		}
 
+  SPECIAL_CHARS = %q{!@"#$%&'()*+,-./:;<=>?[\\]^_`{|}~ }
+
   def validate_each(record, attribute, value)
     return if value.blank?
 
@@ -28,7 +30,7 @@ class PasswordIsStrongValidator < ActiveModel::EachValidator
   private
 
   def is_simple?(password)
-    not (password =~ /[A-Za-z]/ and password =~ /[0-9]/ and password =~ /[\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x3a\x3b\x3c\x3d\x3e\x3f\x5b\x5c\x5d\x5e\x5f\x60\x7b\x7c\x7d\x7e]/)
+    not (password =~ /[A-Za-z]/ and password =~ /[0-9]/ and password =~ /[#{Regexp.escape(SPECIAL_CHARS)}]/)
   end
 
   def contains_username?(username, password)
@@ -37,13 +39,49 @@ class PasswordIsStrongValidator < ActiveModel::EachValidator
 
   def is_common_password?(password)
     COMMON_PASSWORDS.each do |pw|
-      common_pw = [pw, pw + "!", pw + "1", pw + "12", pw + "123", pw + "1234"]
-      if common_pw.include?(password.downcase)
-        return true
+      common_pw = [pw] # pw + "!", pw + "1", pw + "12", pw + "123", pw + "1234"]
+      common_pw += mutate_pass(pw)
+      common_pw.each do |common_pass|
+        if password.downcase =~ /#{common_pass}[\d!]*/
+          return true
+        end
       end
     end
     false
   end
+
+  def mutate_pass(password)
+    mutations = {
+        'a' => '@',
+        'o' => '0',
+        'e' => '3',
+        's' => '$',
+        't' => '7',
+        'l' => '1'
+    }
+
+    iterations = mutations.keys.dup
+    results = []
+
+    # Find PowerSet of all possible mutation combinations
+    iterations = iterations.inject([[]]){|c,y|r=[];c.each{|i|r<<i;r<<i+[y]};r}
+
+    # Iterate through combinations to create each possible mutation
+    iterations.each do |iteration|
+      next if iteration.flatten.empty?
+      first = iteration.shift
+      intermediate = password.gsub(/#{first}/i, mutations[first])
+      iteration.each do |mutator|
+        next unless mutator.kind_of? String
+        intermediate.gsub!(/#{mutator}/i, mutations[mutator])
+      end
+      results << intermediate
+    end
+
+    return results
+  end
+
+
 
   def contains_repetition?(password)
     # Password repetition (quite basic) -- no "aaaaaa" or "ababab" or "abcabc" or
