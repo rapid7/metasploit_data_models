@@ -1,6 +1,8 @@
 # Join model between {Mdm::Module::Instance modules} and {Mdm::Reference references} that refer to the exploit in the
 # modules.
 class Mdm::Module::Reference < ActiveRecord::Base
+  include Metasploit::Model::Module::Reference
+
   self.table_name = 'module_references'
 
   #
@@ -23,8 +25,6 @@ class Mdm::Module::Reference < ActiveRecord::Base
   # Validations
   #
 
-  validates :module_instance, :presence => true
-  validates :reference, :presence => true
   validates :reference_id,
             :uniqueness => {
                 :scope => :module_instance_id

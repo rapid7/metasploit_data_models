@@ -8,9 +8,9 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit match
       "#{name}:\"#{value}\""
     end
 
-    context 'with Mdm::Platform#name' do
+    context 'with Mdm::Platform#fully_qualified_name' do
       let(:value) do
-        matching_record.platforms.sample.name
+        matching_record.platforms.sample.fully_qualified_name
       end
 
       it 'should find only matching record' do

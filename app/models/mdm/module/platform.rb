@@ -1,6 +1,8 @@
 # Join model between {Mdm::Module::Instance} and {Mdm::Platform} used to represent a platform that a given module
 # supports.
 class Mdm::Module::Platform < ActiveRecord::Base
+  include Metasploit::Model::Module::Platform
+
   self.table_name = 'module_platforms'
 
   #
@@ -23,8 +25,6 @@ class Mdm::Module::Platform < ActiveRecord::Base
   # Validations
   #
 
-  validates :module_instance, :presence => true
-  validates :platform, :presence => true
   validates :platform_id,
             :uniqueness => {
                 :scope => :module_instance_id

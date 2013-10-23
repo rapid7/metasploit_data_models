@@ -5,19 +5,8 @@ describe Mdm::Module::Instance do
     FactoryGirl.build(:mdm_module_instance)
   end
 
-  it_should_behave_like 'Metasploit::Model::Module::Instance' do
-    let(:base_class) do
-      described_class
-    end
-
-    let(:module_class_factory) do
-      :mdm_module_class
-    end
-
-    let(:module_instance_factory) do
-      :mdm_module_instance
-    end
-  end
+  it_should_behave_like 'Metasploit::Model::Module::Instance',
+                        namespace_name: 'Mdm'
 
   context 'associations' do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy).with_foreign_key(:module_instance_id) }
@@ -59,54 +48,6 @@ describe Mdm::Module::Instance do
       it { should have_db_index(:default_action_id).unique(true) }
       it { should have_db_index(:default_target_id).unique(true) }
       it { should have_db_index(:module_class_id).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_module_instance' do
-      subject(:mdm_module_instance) do
-        FactoryGirl.build(:mdm_module_instance)
-      end
-
-      it { should be_valid }
-
-      context 'stance' do
-        subject(:mdm_module_instance) do
-          FactoryGirl.build(
-              :mdm_module_instance,
-              :module_class => module_class
-          )
-        end
-
-        let(:module_class) do
-          FactoryGirl.create(
-              :mdm_module_class,
-              :module_type => module_type
-          )
-        end
-
-        context 'with supports_stance?' do
-          let(:module_type) do
-            'exploit'
-          end
-
-          it { should be_valid }
-
-          its(:stance) { should_not be_nil }
-          its(:supports_stance?) { should be_true }
-        end
-
-        context 'without supports_stance?' do
-          let(:module_type) do
-            'post'
-          end
-
-          it { should be_valid }
-
-          its(:stance) { should be_nil }
-          its(:supports_stance?) { should be_false }
-        end
-      end
     end
   end
 end

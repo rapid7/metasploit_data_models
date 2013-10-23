@@ -15,6 +15,12 @@ FactoryGirl.define do
                 :obsolete_metasploit_model_reference
             ]
 
+    factory :seeded_authority_mdm_reference do
+      authority { generate :seeded_mdm_authority }
+      # nil url so that it is derived using authority
+      url { nil }
+    end
+
     factory :url_mdm_reference,
             :traits => [
                 :url_metasploit_model_reference

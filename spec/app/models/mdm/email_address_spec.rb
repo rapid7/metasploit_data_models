@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe Mdm::EmailAddress do
-  it_should_behave_like 'Metasploit::Model::EmailAddress' do
-    let(:email_address_class) do
-      described_class
-    end
+  it_should_behave_like 'Metasploit::Model::EmailAddress',
+                        namespace_name: 'Mdm' do
+    include_context 'ActiveRecord attribute_type'
   end
 
   context 'associations' do
@@ -22,16 +21,6 @@ describe Mdm::EmailAddress do
       it { should have_db_index(:domain) }
       it { should have_db_index(:local) }
       it { should have_db_index([:domain, :local]).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_email_address' do
-      subject(:mdm_email_address) do
-        FactoryGirl.build(:mdm_email_address)
-      end
-
-      it { should be_valid }
     end
   end
 

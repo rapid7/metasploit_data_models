@@ -1,18 +1,22 @@
 FactoryGirl.define do
+  factory_by_attribute = {
+      actions: :mdm_module_action,
+      module_architectures: :mdm_module_architecture,
+      module_platforms: :mdm_module_platform,
+      module_references: :mdm_module_reference,
+      targets: :mdm_module_target
+  }
+
   factory :mdm_module_instance,
           :class => Mdm::Module::Instance,
           :traits => [
               :metasploit_model_module_instance
           ] do
-    ignore do
-      module_type { generate :metasploit_model_module_type }
-    end
-
     #
     # Associations
     #
 
-    module_class { FactoryGirl.create(:mdm_module_class, :module_type => module_type) }
+    association :module_class, factory: :mdm_module_class
 
     #
     # Attributes
@@ -20,83 +24,35 @@ FactoryGirl.define do
 
     # must be explicit and not part of trait to ensure it is run after module_class is created.
     stance {
-      if supports_stance?
-        generate :metasploit_model_module_instance_stance
+      if supports?(:stance)
+        generate :metasploit_model_module_stance
       else
         nil
       end
     }
 
-    factory :full_mdm_module_instance do
-      ignore do
-        action_count {
-          # only auxiliary modules have actions
-          if module_class.derived_module_type == Metasploit::Model::Module::Type::AUX
-            rand(2) + 1
-          else
-            0
+    # needs to be an after(:build) and not an after(:create) to ensure counted associations are populated before being
+    # validated.
+    after(:build) do |mdm_module_instance, evaluator|
+      mdm_module_instance.module_authors = evaluator.module_authors_length.times.collect {
+        FactoryGirl.build(:mdm_module_author, module_instance: mdm_module_instance)
+      }
+
+      module_class = mdm_module_instance.module_class
+
+      # only attempt to build supported associations if the module_class is valid because supports depends on a valid
+      # module_type and validating the module_class will derive module_type.
+      if module_class && module_class.valid?
+        factory_by_attribute.each do |attribute, factory|
+          if mdm_module_instance.supports?(attribute)
+            length = evaluator.send("#{attribute}_length")
+
+            collection = length.times.collect {
+              FactoryGirl.build(factory, module_instance: mdm_module_instance)
+            }
+
+            mdm_module_instance.send("#{attribute}=", collection)
           end
-        }
-
-        architecture_count {
-          # Every module needs at least one architecture
-          rand(Metasploit::Model::Architecture::ABBREVIATIONS.length - 1) + 1
-        }
-
-        author_count {
-          # Every module needs at least one author
-          rand(2) + 1
-        }
-
-        platform_count {
-          # only exploit modules have platforms and they must have at least one platform
-          if module_class.derived_module_type == Metasploit::Model::Module::Type::EXPLOIT
-            rand(2) + 1
-          else
-            0
-          end
-        }
-
-        reference_count {
-          # a module can have 0 references
-          rand(2)
-        }
-
-        target_count {
-          # only exploit modules have targets and they must have at least one target
-          if module_class.derived_module_type == Metasploit::Model::Module::Type::EXPLOIT
-            rand(2) + 1
-          else
-            0
-          end
-        }
-      end
-
-      after(:create) do |module_instance, evaluator|
-        default_names = [:action, :target]
-        names = [:action, :architecture, :author, :platform, :reference, :target]
-
-        names.each do |name|
-          factory = "mdm_module_#{name}".to_sym
-          count = evaluator.send("#{name}_count")
-          list = FactoryGirl.create_list(
-              factory,
-              count,
-              :module_instance => module_instance
-          )
-
-          if default_names.include? name
-            module_instance.send("default_#{name}=", list.sample)
-          end
-        end
-
-        # save module_instance to update default_*.
-        module_instance.save!
-      end
-
-      factory :stanced_full_mdm_module_instance do
-        ignore do
-          module_type { generate :metasploit_model_module_instance_stanced_module_type }
         end
       end
     end

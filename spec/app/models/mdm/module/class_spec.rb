@@ -5,51 +5,12 @@ describe Mdm::Module::Class do
     FactoryGirl.build(:mdm_module_class)
   end
 
-  it_should_behave_like 'Metasploit::Model::Module::Class' do
-    subject(:module_class) do
-      FactoryGirl.build(module_class_factory)
-    end
-
+  it_should_behave_like 'Metasploit::Model::Module::Class',
+                        namespace_name: 'Mdm' do
     def attribute_type(attribute)
       column = module_class_class.columns_hash.fetch(attribute.to_s)
 
       column.type
-    end
-
-    let(:base_class) do
-      module_class_class
-    end
-
-    let(:module_ancestor_factory) do
-      :mdm_module_ancestor
-    end
-
-    let(:module_class_class) do
-      Mdm::Module::Class
-    end
-
-    let(:module_class_factory) do
-      :mdm_module_class
-    end
-
-    let(:non_payload_module_ancestor_factory) do
-      :non_payload_mdm_module_ancestor
-    end
-
-    let(:payload_module_ancestor_factory) do
-      :payload_mdm_module_ancestor
-    end
-
-    let(:single_payload_module_ancestor_factory) do
-      :single_payload_mdm_module_ancestor
-    end
-
-    let(:stage_payload_module_ancestor_factory) do
-      :stage_payload_mdm_module_ancestor
-    end
-
-    let(:stager_payload_module_ancestor_factory) do
-      :stager_payload_mdm_module_ancestor
     end
   end
 

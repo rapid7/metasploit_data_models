@@ -34,8 +34,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '>= 3.2.13'
   s.add_runtime_dependency 'activesupport'
+  s.add_runtime_dependency 'awesome_nested_set'
   s.add_runtime_dependency 'file-find'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.13.0'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.15.1'
 
   if RUBY_PLATFORM =~ /java/
     s.add_runtime_dependency 'jdbc-postgres'

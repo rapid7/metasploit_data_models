@@ -11,7 +11,8 @@ class MetasploitDataModels::Search::Visitor::Where
   EQUALITY_OPERATION_CLASS_NAMES = [
       'Metasploit::Model::Search::Operation::Boolean',
       'Metasploit::Model::Search::Operation::Date',
-      'Metasploit::Model::Search::Operation::Integer'
+      'Metasploit::Model::Search::Operation::Integer',
+      'Metasploit::Model::Search::Operation::Set'
   ]
 
   #

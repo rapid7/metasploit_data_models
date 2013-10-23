@@ -19,6 +19,22 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit match
       )
     end
 
+    let(:matching_record) do
+      FactoryGirl.build(
+          :mdm_module_instance,
+          module_class: matching_module_class,
+          # disable factory making references automatically so Mdm::Module::Reference#reference can be set to
+          # matching_reference
+          module_references_length: 0
+      ).tap { |module_instance|
+        module_instance.module_references << FactoryGirl.build(
+            :mdm_module_reference,
+            module_instance: module_instance,
+            reference: matching_reference
+        )
+      }
+    end
+
     let(:matching_reference) do
       FactoryGirl.create(
           :mdm_reference,
@@ -30,6 +46,20 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit match
       FactoryGirl.create(:mdm_authority)
     end
 
+    let(:non_matching_record) do
+      FactoryGirl.build(
+          :mdm_module_instance,
+          module_class: non_matching_module_class,
+          module_references_length: 0
+      ).tap { |module_instance|
+        module_instance.module_references << FactoryGirl.build(
+            :mdm_module_reference,
+            module_instance: module_instance,
+            reference: non_matching_reference
+        )
+      }
+    end
+
     let(:non_matching_reference) do
       FactoryGirl.create(
           :mdm_reference,
@@ -39,36 +69,6 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit match
 
     let(:value) do
       matching_reference.designation
-    end
-
-    #
-    # let!s
-    #
-
-    let!(:matching_record) do
-      FactoryGirl.create(
-          :full_mdm_module_instance,
-          :reference_count => 0
-      ).tap { |module_instance|
-        FactoryGirl.create(
-            :mdm_module_reference,
-            :module_instance => module_instance,
-            :reference => matching_reference
-        )
-      }
-    end
-
-    let!(:non_matching_record) do
-      FactoryGirl.create(
-          :full_mdm_module_instance,
-          :reference_count => 0
-      ).tap { |module_instance|
-        FactoryGirl.create(
-            :mdm_module_reference,
-            :module_instance => module_instance,
-            :reference => non_matching_reference
-        )
-      }
     end
 
     it 'should find only matching record' do

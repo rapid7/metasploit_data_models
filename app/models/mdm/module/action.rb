@@ -15,7 +15,7 @@ class Mdm::Module::Action < ActiveRecord::Base
   #   Module that has this action.
   #
   #   @return [Mdm::Module::Instance]
-  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
+  belongs_to :module_instance, class_name: 'Mdm::Module::Instance', inverse_of: :actions
 
   #
   # Attributes

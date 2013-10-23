@@ -45,7 +45,9 @@ describe MetasploitDataModels::Search::Visitor::Where do
     equality_operation_classes = [
         Metasploit::Model::Search::Operation::Boolean,
         Metasploit::Model::Search::Operation::Date,
-        Metasploit::Model::Search::Operation::Integer
+        Metasploit::Model::Search::Operation::Integer,
+        Metasploit::Model::Search::Operation::Set::Integer,
+        Metasploit::Model::Search::Operation::Set::String
     ]
 
     equality_operation_classes.each do |operation_class|
@@ -184,7 +186,7 @@ describe MetasploitDataModels::Search::Visitor::Where do
 
       context 'with stance' do
         let(:stance) do
-          FactoryGirl.generate :metasploit_model_module_instance_stance
+          FactoryGirl.generate :metasploit_model_module_stance
         end
 
         let(:formatted) do
@@ -219,8 +221,8 @@ describe MetasploitDataModels::Search::Visitor::Where do
           "architectures.abbreviation:#{abbreviation}"
         end
 
-        it 'should match architectures.abbreviation with ILIKE' do
-          visit.to_sql.should == "\"architectures\".\"abbreviation\" ILIKE '%#{abbreviation}%'"
+        it 'should match architectures.abbreviation with =' do
+          visit.to_sql.should == "\"architectures\".\"abbreviation\" = '#{abbreviation}'"
         end
       end
 
@@ -247,8 +249,8 @@ describe MetasploitDataModels::Search::Visitor::Where do
           "architectures.endianness:#{endianness}"
         end
 
-        it 'should match architectures.endianness with ILIKE' do
-          visit.to_sql.should == "\"architectures\".\"endianness\" ILIKE '%#{endianness}%'"
+        it 'should match architectures.endianness with =' do
+          visit.to_sql.should == "\"architectures\".\"endianness\" = '#{endianness}'"
         end
       end
 
@@ -261,8 +263,8 @@ describe MetasploitDataModels::Search::Visitor::Where do
           "architectures.family:#{family}"
         end
 
-        it 'should match architectures.family with ILIKE' do
-          visit.to_sql.should == "\"architectures\".\"family\" ILIKE '%#{family}%'"
+        it 'should match architectures.family with =' do
+          visit.to_sql.should == "\"architectures\".\"family\" = '#{family}'"
         end
       end
 
@@ -386,17 +388,17 @@ describe MetasploitDataModels::Search::Visitor::Where do
         end
       end
 
-      context 'with platforms.name' do
+      context 'with platforms.fully_qualified_name' do
+        let(:fully_qualified_name) do
+          Metasploit::Model::Platform.fully_qualified_name_set.to_a.sample
+        end
+
         let(:formatted) do
-          "platforms.name:\"#{name}\""
+          "platforms.fully_qualified_name:\"#{fully_qualified_name}\""
         end
 
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_platform_name
-        end
-
-        it 'should match platforms.name with ILIKE' do
-          visit.to_sql.should == "\"platforms\".\"name\" ILIKE '%#{name}%'"
+        it 'should match platforms.name with =' do
+          visit.to_sql.should == "\"platforms\".\"fully_qualified_name\" = '#{fully_qualified_name}'"
         end
       end
 

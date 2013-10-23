@@ -1,5 +1,7 @@
 # Join model that maps a {Mdm::Module::Instance model} to a supported {Mdm::Module::Architecture architecture}.
 class Mdm::Module::Architecture < ActiveRecord::Base
+  include Metasploit::Model::Module::Architecture
+
   self.table_name = 'module_architectures'
 
   #
@@ -22,14 +24,10 @@ class Mdm::Module::Architecture < ActiveRecord::Base
   # Validations
   #
 
-  validates :architecture,
-            :presence => true
   validates :architecture_id,
             :uniqueness => {
                 :scope => :module_instance_id
             }
-  validates :module_instance,
-            :presence => true
 
   ActiveSupport.run_load_hooks(:mdm_module_architecture, self)
 end

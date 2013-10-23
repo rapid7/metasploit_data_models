@@ -125,41 +125,635 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     end
 
     context 'matching record' do
-      let!(:matching_record) do
-        FactoryGirl.create(:full_mdm_module_instance)
+      #
+      # let
+      #
+
+      let(:matching_module_class) do
+        FactoryGirl.create(
+            :mdm_module_class,
+            module_type: module_type
+        )
       end
 
-      let!(:non_matching_record) do
-        FactoryGirl.create(:full_mdm_module_instance)
+      let(:matching_record) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_class: matching_module_class
+        )
+      end
+
+      let(:module_type) do
+        module_types.sample
+      end
+
+      let(:module_types) do
+        Metasploit::Model::Module::Type::ALL
+      end
+
+      let(:non_matching_module_class) do
+        FactoryGirl.create(
+            :mdm_module_class,
+            module_type: module_type
+        )
+      end
+
+      let(:non_matching_record) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_class: non_matching_module_class
+        )
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        # saved explicitly instead of with create so that lets can build and associations added on later.
+        matching_record.save!
+        non_matching_record.save!
       end
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                             :attribute => :description
 
-      context 'with app' do
-        let(:formatted) do
-          "app:#{value}"
+      context 'with module type support for attribute' do
+        def attribute_module_types(attribute)
+          module_types = []
+          support_by_module_type = attribute_support_by_module_type(attribute)
+
+          support_by_module_type.each do |module_type, support|
+            if support
+              module_types << module_type
+            end
+          end
+
+          module_types
         end
 
-        let(:value) do
-          value_by_stance = {
-              'aggressive' => 'server',
-              'passive' => 'client'
-          }
-
-          value_by_stance.fetch(matching_record.stance)
+        def attribute_support_by_module_type(attribute)
+          Metasploit::Model::Module::Instance::SUPPORT_BY_MODULE_TYPE_BY_ATTRIBUTE.fetch(attribute)
         end
 
-        let!(:matching_record) do
-          FactoryGirl.create(:stanced_full_mdm_module_instance)
+        #
+        # lets
+        #
+
+        let(:module_types) do
+          attribute_module_types(supports)
         end
 
-        let!(:non_matching_record) do
-          FactoryGirl.create(:stanced_full_mdm_module_instance)
+        context 'with supports?(:actions)' do
+          let(:supports) do
+            :actions
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :actions,
+                                :attribute => :name
+
+          context 'with text' do
+            let(:formatted) do
+              "text:\"#{value}\""
+            end
+
+            context 'with Mdm::Module::Action#name' do
+              let(:value) do
+                matching_record.actions.sample.name
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+          end
         end
 
-        it 'should find only matching record' do
-          expect(visit).to match_array([matching_record])
+        context 'with supports?(:module_architectures)' do
+          let(:supports) do
+            :module_architectures
+          end
+
+          let(:matching_record) do
+            FactoryGirl.build(
+                :mdm_module_instance,
+                module_architectures_length: 0,
+                module_class: matching_module_class
+            ).tap { |module_instance|
+              module_instance.module_architectures << FactoryGirl.build(
+                  :mdm_module_architecture,
+                  architecture: matching_architecture,
+                  module_instance: module_instance
+              )
+            }
+          end
+
+          let(:non_matching_record) do
+            FactoryGirl.build(
+                :mdm_module_instance,
+                module_architectures_length: 0,
+                module_class: non_matching_module_class
+            ).tap { |module_instance|
+              module_instance.module_architectures << FactoryGirl.build(
+                  :mdm_module_architecture,
+                  architecture: non_matching_architecture,
+                  module_instance: module_instance
+              )
+            }
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :architectures,
+                                :attribute => :abbreviation do
+            let(:matching_architecture) do
+              Mdm::Architecture.where(:abbreviation => matching_abbreviation).first
+            end
+
+            let(:matching_abbreviation) do
+              Metasploit::Model::Architecture::ABBREVIATIONS.sample
+            end
+
+            let(:non_matching_architecture) do
+              Mdm::Architecture.where(:abbreviation => non_matching_abbreviation).first
+            end
+
+            let(:non_matching_abbreviation) do
+              (Metasploit::Model::Architecture::ABBREVIATIONS - [matching_abbreviation]).sample
+            end
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :architectures,
+                                :attribute => :bits do
+            # bits has only two values, so have to make sure that one 32 and one 64 bit architecture is chosen.
+            let(:matching_architecture) do
+              Mdm::Architecture.where(:bits => matching_bits).first
+            end
+
+            let(:matching_bits) do
+              Metasploit::Model::Architecture::BITS.sample
+            end
+
+            let(:non_matching_architecture) do
+              Mdm::Architecture.where(:bits => non_matching_bits).first
+            end
+
+            let(:non_matching_bits) do
+              (Metasploit::Model::Architecture::BITS - [matching_bits]).sample
+            end
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :architectures,
+                                :attribute => :endianness do
+            # endianness has only two values, so have to make sure that one big-endian and one little-endian architecture is
+            # chosen.
+
+            let(:matching_architecture) do
+              Mdm::Architecture.where(:endianness => matching_endianness).first
+            end
+
+            let(:matching_endianness) do
+              Metasploit::Model::Architecture::ENDIANNESSES.sample
+            end
+
+            let(:non_matching_architecture) do
+              Mdm::Architecture.where(:endianness => non_matching_endianness).first
+            end
+
+            let(:non_matching_endianness) do
+              (Metasploit::Model::Architecture::ENDIANNESSES - [matching_endianness]).sample
+            end
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :architectures,
+                                :attribute => :family do
+            let(:matching_architecture) do
+              Mdm::Architecture.where(:family => matching_family).first
+            end
+
+            let(:matching_family) do
+              Metasploit::Model::Architecture::FAMILIES.sample
+            end
+
+            let(:non_matching_architecture) do
+              Mdm::Architecture.where(:family => non_matching_family).first
+            end
+
+            let(:non_matching_family) do
+              (Metasploit::Model::Architecture::FAMILIES - [matching_family]).sample
+            end
+          end
+
+          context 'with text' do
+            let(:formatted) do
+              "text:\"#{value}\""
+            end
+
+            context 'with Mdm::Architecture#abbreviation' do
+              let(:matching_architecture) do
+                Mdm::Architecture.where(:abbreviation => matching_architecture_abbreviation).first
+              end
+
+              let(:matching_architecture_abbreviation) do
+                # must not be a valid platform substring
+                'armle'
+              end
+
+              let(:non_matching_architecture) do
+                Mdm::Architecture.where(:abbreviation => non_matching_architecture_abbreviation).first
+              end
+
+              let(:non_matching_architecture_abbreviation) do
+                # must not be a valid platform substring
+                'armbe'
+              end
+
+              let(:value) do
+                matching_architecture_abbreviation
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+          end
+        end
+
+        context 'with supports?(:module_platforms)' do
+          let(:matching_record) do
+            FactoryGirl.build(
+                :mdm_module_instance,
+                module_class: matching_module_class,
+                module_platforms_length: 0
+            ).tap { |module_instance|
+              module_instance.module_platforms << FactoryGirl.build(
+                  :mdm_module_platform,
+                  module_instance: module_instance
+              )
+            }
+          end
+
+          let(:non_matching_record) do
+            FactoryGirl.build(
+                :mdm_module_instance,
+                module_class: non_matching_module_class,
+                module_platforms_length: 0
+            ).tap { |module_instance|
+              module_instance.module_platforms << FactoryGirl.build(
+                  :mdm_module_platform,
+                  module_instance: module_instance
+              )
+            }
+          end
+
+          let(:supports) do
+            :module_platforms
+          end
+
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :platforms,
+                                :attribute => :fully_qualified_name
+
+          context 'with supports?(:targets)' do
+            let(:module_platforms_module_types) do
+              attribute_module_types(:module_platforms)
+            end
+
+            let(:module_types) do
+              module_platforms_module_types & targets_module_types
+            end
+
+            let(:targets_module_types) do
+              attribute_module_types(:targets)
+            end
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Platform',
+                                  :name => :os
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Platform',
+                                  :name => :platform
+
+            context 'with text' do
+              let(:formatted) do
+                "text:\"#{value}\""
+              end
+
+              context 'with Mdm::Platform#fully_qualified_name' do
+                let(:value) do
+                  matching_record.platforms.sample.fully_qualified_name
+                end
+
+                it 'should find only matching record' do
+                  expect(visit).to match_array([matching_record])
+                end
+              end
+
+              context 'with Mdm::Module::Target#name' do
+                let(:value) do
+                  matching_record.targets.sample.name
+                end
+
+                it 'should find only matching record' do
+                  expect(visit).to match_array([matching_record])
+                end
+              end
+            end
+          end
+        end
+
+        context 'with supports?(:module_references)' do
+          let(:matching_record) do
+            FactoryGirl.create(
+                :mdm_module_instance,
+                module_class: matching_module_class,
+                module_references_length: 1
+            )
+          end
+
+          let(:non_matching_record) do
+            FactoryGirl.create(
+                :mdm_module_instance,
+                module_class: non_matching_module_class,
+                module_references_length: 1
+            )
+          end
+
+          let(:supports) do
+            :module_references
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :authorities,
+                                :attribute => :abbreviation
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :references,
+                                :attribute => :designation
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :references,
+                                :attribute => :url
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
+                                :abbreviation => :bid
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
+                                :abbreviation => :cve
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
+                                :abbreviation => :edb
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
+                                :abbreviation => :osvdb
+
+          context 'with ref' do
+            let(:formatted) do
+              "ref:#{value}"
+            end
+
+            let(:matching_reference) do
+              matching_record.references.sample
+            end
+
+            context 'with Mdm::Authority#abbreviation' do
+              let(:value) do
+                matching_reference.authority.abbreviation
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with Mdm::Reference#designation' do
+              #
+              # lets
+              #
+
+              let(:matching_reference_designation) do
+                'foo'
+              end
+
+              let(:non_matching_reference_designation) do
+                'bar'
+              end
+
+              let(:reference_count) do
+                # metasploit_model_reference_designation just generates numbers, but a lot of the other sequences contain
+                # numbers, too, so using the factory generated designations can lead to substring matches on other fields
+                # that ref searches, such as authors.name and references.url.
+                0
+              end
+
+              let(:value) do
+                matching_reference.designation
+              end
+
+              #
+              # let!s
+              #
+
+              let!(:matching_module_reference) do
+                FactoryGirl.create(
+                    :mdm_module_reference,
+                    :module_instance => matching_record,
+                    :reference => matching_reference
+                )
+              end
+
+              let!(:matching_reference) do
+                FactoryGirl.create(
+                    :mdm_reference,
+                    :designation => matching_reference_designation
+                )
+              end
+
+              let!(:non_matching_module_reference) do
+                FactoryGirl.create(
+                    :mdm_module_reference,
+                    :module_instance => non_matching_record,
+                    :reference => non_matching_reference
+                )
+              end
+
+              let!(:non_matching_reference) do
+                FactoryGirl.create(
+                    :mdm_reference,
+                    :designation => non_matching_reference_designation
+                )
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with Mdm::Reference#url' do
+              let(:value) do
+                matching_reference.url
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context "with 'URL-<Mdm::Reference#url>'" do
+              let(:value) do
+                "URL-#{matching_reference.url}"
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context "with '<Mdm::Authority#abbreviation>-<Mdm::Reference#designation>'" do
+              let(:value) do
+                "#{matching_reference.authority.abbreviation}-#{matching_reference.designation}"
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+          end
+
+          context 'with text' do
+            let(:formatted) do
+              "text:\"#{value}\""
+            end
+
+            let(:matching_reference) do
+              matching_record.references.sample
+            end
+
+            context 'with Mdm::Authority#abbreviation' do
+              let(:value) do
+                matching_reference.authority.abbreviation
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with Mdm::Reference#designation' do
+              #
+              # lets
+              #
+
+              let(:matching_reference_designation) do
+                'foo'
+              end
+
+              let(:non_matching_reference_designation) do
+                'bar'
+              end
+
+              let(:reference_count) do
+                # metasploit_model_reference_designation just generates numbers, but a lot of the other sequences contain
+                # numbers, too, so using the factory generated designations can lead to substring matches on other fields
+                # that ref searches, such as authors.name and references.url.
+                0
+              end
+
+              let(:value) do
+                matching_reference.designation
+              end
+
+              #
+              # let!s
+              #
+
+              let!(:matching_module_reference) do
+                FactoryGirl.create(
+                    :mdm_module_reference,
+                    :module_instance => matching_record,
+                    :reference => matching_reference
+                )
+              end
+
+              let!(:matching_reference) do
+                FactoryGirl.create(
+                    :mdm_reference,
+                    :designation => matching_reference_designation
+                )
+              end
+
+              let!(:non_matching_module_reference) do
+                FactoryGirl.create(
+                    :mdm_module_reference,
+                    :module_instance => non_matching_record,
+                    :reference => non_matching_reference
+                )
+              end
+
+              let!(:non_matching_reference) do
+                FactoryGirl.create(
+                    :mdm_reference,
+                    :designation => non_matching_reference_designation
+                )
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with Mdm::Reference#url' do
+              let(:value) do
+                matching_reference.url
+              end
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+          end
+        end
+
+        context 'with supports?(:stance)' do
+          let(:supports) do
+            :stance
+          end
+
+          context 'with app' do
+            let(:formatted) do
+              "app:#{value}"
+            end
+
+
+            let(:value) do
+              value_by_stance = {
+                  'aggressive' => 'server',
+                  'passive' => 'client'
+              }
+
+              value_by_stance.fetch(matching_record.stance)
+            end
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :attribute => :stance
+        end
+
+        context 'with supports?(:targets)' do
+          let(:supports) do
+            :targets
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :association => :targets,
+                                :attribute => :name
         end
       end
 
@@ -176,323 +770,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                             :attribute => :privileged
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                            :attribute => :stance do
-        let!(:matching_record) do
-          FactoryGirl.create(:stanced_full_mdm_module_instance)
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(:stanced_full_mdm_module_instance)
-        end
-      end
-
-      it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                            :association => :actions,
-                            :attribute => :name do
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
-          )
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
-          )
-        end
-
-        # Only auxiliary modules have actions
-        let(:module_type) do
-          Metasploit::Model::Module::Type::AUX
-        end
-      end
-
-      context 'with distinct architectures' do
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :architecture_count => 0
-          ).tap { |module_instance|
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => matching_architecture,
-                :module_instance => module_instance
-            )
-          }
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :architecture_count => 0
-          ).tap { |module_instance|
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => non_matching_architecture,
-                :module_instance => module_instance
-            )
-          }
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :architectures,
-                              :attribute => :abbreviation do
-          let(:matching_architecture) do
-            Mdm::Architecture.where(:abbreviation => matching_abbreviation).first
-          end
-
-          let(:matching_abbreviation) do
-            Metasploit::Model::Architecture::ABBREVIATIONS.sample
-          end
-
-          let(:non_matching_architecture) do
-            Mdm::Architecture.where(:abbreviation => non_matching_abbreviation).first
-          end
-
-          let(:non_matching_abbreviation) do
-            (Metasploit::Model::Architecture::ABBREVIATIONS - [matching_abbreviation]).sample
-          end
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :architectures,
-                              :attribute => :bits do
-          # bits has only two values, so have to make sure that one 32 and one 64 bit architecture is chosen.
-          let(:matching_architecture) do
-            Mdm::Architecture.where(:bits => matching_bits).first
-          end
-
-          let(:matching_bits) do
-            Metasploit::Model::Architecture::BITS.sample
-          end
-
-          let(:non_matching_architecture) do
-            Mdm::Architecture.where(:bits => non_matching_bits).first
-          end
-
-          let(:non_matching_bits) do
-            (Metasploit::Model::Architecture::BITS - [matching_bits]).sample
-          end
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :architectures,
-                              :attribute => :endianness do
-          # endianness has only two values, so have to make sure that one big-endian and one little-endian architecture is
-          # chosen.
-
-          let(:matching_architecture) do
-            Mdm::Architecture.where(:endianness => matching_endianness).first
-          end
-
-          let(:matching_endianness) do
-            Metasploit::Model::Architecture::ENDIANNESSES.sample
-          end
-
-          let(:non_matching_architecture) do
-            Mdm::Architecture.where(:endianness => non_matching_endianness).first
-          end
-
-          let(:non_matching_endianness) do
-            (Metasploit::Model::Architecture::ENDIANNESSES - [matching_endianness]).sample
-          end
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :architectures,
-                              :attribute => :family do
-          let(:matching_architecture) do
-            Mdm::Architecture.where(:family => matching_family).first
-          end
-
-          let(:matching_family) do
-            Metasploit::Model::Architecture::FAMILIES.sample
-          end
-
-          let(:non_matching_architecture) do
-            Mdm::Architecture.where(:family => non_matching_family).first
-          end
-
-          let(:non_matching_family) do
-            (Metasploit::Model::Architecture::FAMILIES - [matching_family]).sample
-          end
-        end
-      end
-
-      context 'with references' do
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :reference_count => 1
-          )
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :reference_count => 1
-          )
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :authorities,
-                              :attribute => :abbreviation
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :references,
-                              :attribute => :designation
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :references,
-                              :attribute => :url
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
-                              :abbreviation => :bid
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
-                              :abbreviation => :cve
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
-                              :abbreviation => :edb
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Authority',
-                              :abbreviation => :osvdb
-
-        context 'with ref' do
-          let(:formatted) do
-            "ref:#{value}"
-          end
-
-          let(:matching_reference) do
-            matching_record.references.sample
-          end
-
-          context 'with Mdm::Authority#abbreviation' do
-            let(:value) do
-              matching_reference.authority.abbreviation
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context 'with Mdm::Reference#designation' do
-            #
-            # lets
-            #
-
-            let(:matching_reference_designation) do
-              'foo'
-            end
-
-            let(:non_matching_reference_designation) do
-              'bar'
-            end
-
-            let(:reference_count) do
-              # metasploit_model_reference_designation just generates numbers, but a lot of the other sequences contain
-              # numbers, too, so using the factory generated designations can lead to substring matches on other fields
-              # that ref searches, such as authors.name and references.url.
-              0
-            end
-
-            let(:value) do
-              matching_reference.designation
-            end
-
-            #
-            # let!s
-            #
-
-            let!(:matching_module_reference) do
-              FactoryGirl.create(
-                  :mdm_module_reference,
-                  :module_instance => matching_record,
-                  :reference => matching_reference
-              )
-            end
-
-            let!(:matching_reference) do
-              FactoryGirl.create(
-                  :mdm_reference,
-                  :designation => matching_reference_designation
-              )
-            end
-
-            let!(:non_matching_module_reference) do
-              FactoryGirl.create(
-                  :mdm_module_reference,
-                  :module_instance => non_matching_record,
-                  :reference => non_matching_reference
-              )
-            end
-
-            let!(:non_matching_reference) do
-              FactoryGirl.create(
-                  :mdm_reference,
-                  :designation => non_matching_reference_designation
-              )
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context 'with Mdm::Reference#url' do
-            let(:value) do
-              matching_reference.url
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context "with 'URL-<Mdm::Reference#url>'" do
-            let(:value) do
-              "URL-#{matching_reference.url}"
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context "with '<Mdm::Authority#abbreviation>-<Mdm::Reference#designation>'" do
-            let(:value) do
-              "#{matching_reference.authority.abbreviation}-#{matching_reference.designation}"
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-        end
-      end
-
-      it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                             :association => :authors,
                             :attribute => :name
 
       context 'with email addresses' do
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :author_count => 0
+        let(:matching_record) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              module_authors_length: 0
           ).tap { |module_instance|
-            FactoryGirl.create(
+            module_instance.module_authors << FactoryGirl.build(
                 # full_mdm_module_author has an email_address
                 :full_mdm_module_author,
                 :module_instance => module_instance
@@ -500,17 +787,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           }
         end
 
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :author_count => 0
+        let(:non_matching_record) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              module_authors_length: 0
           ).tap { |module_instance|
-            FactoryGirl.create(
+            module_instance.module_authors << FactoryGirl.build(
                 # full_mdm_module_author has an email_address
                 :full_mdm_module_author,
                 :module_instance => module_instance
             )
           }
+        end
+
+        before(:each) do
+          matching_record.save!
+          non_matching_record.save!
         end
 
         context 'with author' do
@@ -569,78 +861,52 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                             :association => :module_class,
-                            :attribute => :module_type
+                            :attribute => :module_type do
+        let(:matching_module_type) do
+          module_types.sample
+        end
+
+        let(:matching_module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: matching_module_type
+          )
+        end
+
+        let(:non_matching_module_type) do
+          non_matching_module_types = module_types - [matching_module_type]
+
+          non_matching_module_types.sample
+        end
+
+        let(:non_matching_module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: non_matching_module_type
+          )
+        end
+      end
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                             :association => :module_class,
                             :attribute => :payload_type do
-        #
-        # lets
-        #
+        let(:matching_module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: module_type
+          )
+        end
 
         let(:module_type) do
           Metasploit::Model::Module::Type::PAYLOAD
         end
 
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
+        let(:non_matching_module_class) do
           FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
+              :mdm_module_class,
+              module_type: module_type
           )
         end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
-          )
-        end
-      end
-
-      context 'with exploit' do
-        #
-        # lets
-        #
-
-        let(:module_type) do
-          Metasploit::Model::Module::Type::EXPLOIT
-        end
-
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
-          )
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type
-          )
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :platforms,
-                              :attribute => :name
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :association => :targets,
-                              :attribute => :name
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Platform',
-                              :name => :os
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record with Metasploit::Model::Search::Operator::Deprecated::Platform',
-                              :name => :platform
       end
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -656,42 +922,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         # lets
         #
 
-        let(:architecture_count) do
-          1
-        end
-
         let(:formatted) do
           "text:\"#{value}\""
-        end
-
-        let(:module_type) do
-          FactoryGirl.generate :metasploit_model_module_type
-        end
-
-        let(:reference_count) do
-          0
-        end
-
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type,
-              :architecture_count => architecture_count,
-              :reference_count => reference_count
-          )
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              :module_type => module_type,
-              :architecture_count => architecture_count,
-              :reference_count => reference_count
-          )
         end
 
         context 'with Mdm::Module::Instance#description' do
@@ -713,218 +945,104 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             expect(visit).to match_array([matching_record])
           end
         end
-
-        context 'with Mdm::Module::Instance#actions' do
-          let(:module_type) do
-            Metasploit::Model::Module::Type::AUX
-          end
-
-          context 'with Mdm::Module::Action#name' do
-            let(:value) do
-              matching_record.actions.sample.name
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-        end
-
-        context 'with Mdm::Architecture#abbreviation' do
-          #
-          # lets
-          #
-
-          let(:architecture_count) do
-            # Manually create architectures to ensure that the matching_record's abbreviation is not a substring of the
-            # non_matching_record's abbreviation as architectures.abbreviation is a string column, and so matched with
-            # ILIKE.
-            0
-          end
-
-          let(:matching_architecture) do
-            Mdm::Architecture.where(:abbreviation => matching_architecture_abbreviation).first
-          end
-
-          let(:matching_architecture_abbreviation) do
-            'java'
-          end
-
-          let(:non_matching_architecture) do
-            Mdm::Architecture.where(:abbreviation => non_matching_architecture_abbreviation).first
-          end
-
-          let(:non_matching_architecture_abbreviation) do
-            'ruby'
-          end
-
-          let(:value) do
-            matching_architecture_abbreviation
-          end
-
-          #
-          # let!s
-          #
-
-          let!(:matching_module_architecture) do
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => matching_architecture,
-                :module_instance => matching_record
-            )
-          end
-
-          let!(:non_matching_module_architecture) do
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => non_matching_architecture,
-                :module_instance => non_matching_record
-            )
-          end
-
-          it 'should find only matching record' do
-            expect(visit).to match_array([matching_record])
-          end
-        end
-
-        context 'with Mdm::Module::Instance#platforms and Mdm::Module::Instance#targets' do
-          let(:module_type) do
-            Metasploit::Model::Module::Type::EXPLOIT
-          end
-
-          context 'with Mdm::Platform#name' do
-            let(:value) do
-              matching_record.platforms.sample.name
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context 'with Mdm::Module::Target#name' do
-            let(:value) do
-              matching_record.targets.sample.name
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-        end
-
-        context 'with Mdm::Module::Instance#references' do
-          let(:matching_reference) do
-            matching_record.references.sample
-          end
-
-          let(:reference_count) do
-            1
-          end
-
-          context 'with Mdm::Authority#abbreviation' do
-            let(:value) do
-              matching_reference.authority.abbreviation
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context 'with Mdm::Reference#designation' do
-            #
-            # lets
-            #
-
-            let(:matching_reference_designation) do
-              'foo'
-            end
-
-            let(:non_matching_reference_designation) do
-              'bar'
-            end
-
-            let(:reference_count) do
-              # metasploit_model_reference_designation just generates numbers, but a lot of the other sequences contain
-              # numbers, too, so using the factory generated designations can lead to substring matches on other fields
-              # that ref searches, such as authors.name and references.url.
-              0
-            end
-
-            let(:value) do
-              matching_reference.designation
-            end
-
-            #
-            # let!s
-            #
-
-            let!(:matching_module_reference) do
-              FactoryGirl.create(
-                  :mdm_module_reference,
-                  :module_instance => matching_record,
-                  :reference => matching_reference
-              )
-            end
-
-            let!(:matching_reference) do
-              FactoryGirl.create(
-                  :mdm_reference,
-                  :designation => matching_reference_designation
-              )
-            end
-
-            let!(:non_matching_module_reference) do
-              FactoryGirl.create(
-                  :mdm_module_reference,
-                  :module_instance => non_matching_record,
-                  :reference => non_matching_reference
-              )
-            end
-
-            let!(:non_matching_reference) do
-              FactoryGirl.create(
-                  :mdm_reference,
-                  :designation => non_matching_reference_designation
-              )
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          context 'with Mdm::Reference#url' do
-            let(:value) do
-              matching_reference.url
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-        end
       end
 
       context 'with all operators' do
         #
-        # lets
+        # Local shared contexts
         #
 
-        let(:full_architectures) do
-          table = Mdm::Architecture.arel_table
+        shared_context 'architectures' do
+          let(:architectures_attributes) do
+            [
+                :abbreviation,
+                :bits,
+                :endianness,
+                :family
+            ]
+          end
 
-          Mdm::Architecture.where(
-              table[:bits].not_eq(nil).and(
-                  table[:endianness].not_eq(nil)
+          let(:attributes_by_association) do
+            super().dup.tap { |attributes_by_association|
+              attributes_by_association[:architectures] = architectures_attributes
+            }
+          end
+
+          let(:full_architectures) do
+            architectures = Mdm::Architecture.arel_table
+
+            full_query = architectures_attributes.inject(Mdm::Architecture) { |query, attribute|
+              query.where(architectures[attribute].not_eq(nil))
+            }
+
+            # convert to array since it will be sampled
+            full_query.to_a
+          end
+
+          let(:matching_architecture) do
+            full_architectures.sample
+          end
+
+          let(:matching_record) do
+            super().tap { |module_instance|
+              module_instance.module_architectures << FactoryGirl.build(
+                  :mdm_module_architecture,
+                  architecture: matching_architecture,
+                  module_instance: module_instance
               )
-          ).order(table[:abbreviation].asc)
+            }
+          end
+
+          let(:non_matching_architecture) do
+            non_matching_architectures = full_architectures - [matching_architecture]
+
+            non_matching_architectures.sample
+          end
+
+          let(:non_matching_record) do
+            super().tap { |module_instance|
+              module_instance.module_architectures << FactoryGirl.build(
+                  :mdm_module_architecture,
+                  architecture: non_matching_architecture,
+                  module_instance: module_instance
+              )
+            }
+          end
         end
 
-        let(:formatted) do
-          formatted_operations.join(' ')
+        shared_context 'platforms' do
+          let(:attributes_by_association) do
+            super().merge(
+                platforms: [
+                    :fully_qualified_name
+                ]
+            )
+          end
         end
+
+        shared_context 'references' do
+          let(:attributes_by_association) do
+            super().merge(
+                references: [
+                    :designation,
+                    :url
+                ]
+            )
+          end
+        end
+
+        shared_context 'stance' do
+          let(:attributes_by_association) do
+            super().dup.tap { |attributes_by_association|
+              # += so that original Array from super() is not modified
+              attributes_by_association[nil] += [:stance]
+            }
+          end
+        end
+
+        #
+        # lets
+        #
 
         # operators common to all module types
         let(:attributes_by_association) do
@@ -935,12 +1053,6 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                   :license,
                   :name,
                   :privileged
-              ],
-              :architectures => [
-                  :abbreviation,
-                  :bits,
-                  :endianness,
-                  :family
               ],
               :authors => [
                   :name
@@ -957,12 +1069,12 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               :rank => [
                   :name,
                   :number
-              ],
-              :references => [
-                  :designation,
-                  :url
               ]
           }
+        end
+
+        let(:formatted) do
+          formatted_operations.join(' ')
         end
 
         let(:formatted_operations) do
@@ -1002,68 +1114,52 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           }
         end
 
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              # manually create architectures to ensure all attributes are set
-              :architecture_count => 0,
-              # manually create authors
-              :author_count => 0,
-              :module_type => module_type,
-              # ensure at least one reference, since can be 0+ by default
-              :reference_count => 1
+        let(:matching_record) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              # (when supported) manually build module_architectures to ensure all fields are non-nil
+              module_architectures_length: 0,
+              # manually build module_authors to ensure they have email_addresses
+              module_authors_length: 0,
+              # only 1 platform so there no chance of a collision from generator cycling
+              module_platforms_length: 1,
+              module_class: matching_module_class
           ).tap { |module_instance|
-            FactoryGirl.create(
-                # full author has an email address
+            module_instance.module_authors << FactoryGirl.build(
                 :full_mdm_module_author,
-                :module_instance => module_instance
-            )
-
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => full_architectures.first,
-                :module_instance => module_instance
+                module_instance: module_instance
             )
           }
         end
 
-        let!(:non_matching_record) do
-          FactoryGirl.create(
-              :full_mdm_module_instance,
-              # manually create architectures to ensure all attributes are set
-              :architecture_count => 0,
-              # manually create authors
-              :author_count => 0,
-              :module_type => module_type,
-              # ensure at least one reference, since can be 0+ by default
-              :reference_count => 1
+        let(:non_matching_record) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              # (when supported) manually build module_architectures to ensure all fields are non-nil
+              module_architectures_length: 0,
+              # manually build module_authors to ensure they have email_addresses
+              module_authors_length: 0,
+              # only 1 platform so there no chance of a collision from generator cycling
+              module_platforms_length: 1,
+              module_class: non_matching_module_class
           ).tap { |module_instance|
-            FactoryGirl.create(
-                # full author has an email address
+            module_instance.module_authors << FactoryGirl.build(
                 :full_mdm_module_author,
-                :module_instance => module_instance
-            )
-
-            FactoryGirl.create(
-                :mdm_module_architecture,
-                :architecture => full_architectures.last,
-                :module_instance => module_instance
+                module_instance: module_instance
             )
           }
         end
 
         context 'with auxiliary' do
+          include_context 'references'
+          include_context 'stance'
+
           let(:attributes_by_association) do
-            auxiliary_attributes_by_association = super().dup
-
-            auxiliary_attributes_by_association[nil] += [:stance]
-            auxiliary_attributes_by_association[:actions] = [:name]
-
-            auxiliary_attributes_by_association
+            super().merge(
+                actions: [
+                    :name
+                ]
+            )
           end
 
           let(:module_type) do
@@ -1076,9 +1172,12 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with encoder' do
+          include_context 'architectures'
+
           let(:module_type) do
             Metasploit::Model::Module::Type::ENCODER
           end
+
 
           it 'should find only matching record' do
             expect(visit).to match_array([matching_record])
@@ -1086,14 +1185,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with exploit' do
+          include_context 'architectures'
+          include_context 'platforms'
+          include_context 'references'
+          include_context 'stance'
+
           let(:attributes_by_association) do
-            exploit_attributes_by_association = super().dup
-
-            exploit_attributes_by_association[nil] += [:stance]
-            exploit_attributes_by_association[:platforms] = [:name]
-            exploit_attributes_by_association[:targets] = [:name]
-
-            exploit_attributes_by_association
+            super().merge(
+                targets: [
+                    :name
+                ]
+            )
           end
 
           let(:module_type) do
@@ -1106,6 +1208,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with nop' do
+          include_context 'architectures'
+
           let(:module_type) do
             Metasploit::Model::Module::Type::NOP
           end
@@ -1116,9 +1220,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with payload' do
+          include_context 'architectures'
+          include_context 'platforms'
+
           let(:attributes_by_association) do
             # dups the Hash, but not the Array values.
             payload_attributes_by_association = super().dup
+
             # Use += so original array is not modified
             payload_attributes_by_association[:module_class] += [:payload_type]
 
@@ -1135,6 +1243,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with post' do
+          include_context 'architectures'
+          include_context 'platforms'
+          include_context 'references'
+
           let(:module_type) do
             Metasploit::Model::Module::Type::POST
           end

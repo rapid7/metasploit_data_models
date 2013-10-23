@@ -44,7 +44,7 @@ describe Mdm::Module::Platform do
       end
 
       let(:existing_platform) do
-        FactoryGirl.create(:mdm_platform)
+        FactoryGirl.generate :mdm_platform
       end
 
       let!(:existing_module_platform) do
@@ -83,7 +83,7 @@ describe Mdm::Module::Platform do
         end
 
         let(:new_platform) do
-          FactoryGirl.create(:mdm_platform)
+          FactoryGirl.generate :mdm_platform
         end
 
         it { should be_valid }

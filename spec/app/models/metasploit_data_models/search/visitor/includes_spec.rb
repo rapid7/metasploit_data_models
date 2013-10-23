@@ -31,6 +31,8 @@ describe MetasploitDataModels::Search::Visitor::Includes do
         Metasploit::Model::Search::Operation::Date,
         Metasploit::Model::Search::Operation::Integer,
         Metasploit::Model::Search::Operation::Null,
+        Metasploit::Model::Search::Operation::Set::Integer,
+        Metasploit::Model::Search::Operation::Set::String,
         Metasploit::Model::Search::Operation::String
     ]
 
@@ -148,7 +150,7 @@ describe MetasploitDataModels::Search::Visitor::Includes do
 
       context 'with stance' do
         let(:stance) do
-          FactoryGirl.generate :metasploit_model_module_instance_stance
+          FactoryGirl.generate :metasploit_model_module_stance
         end
 
         let(:formatted) do
@@ -322,13 +324,13 @@ describe MetasploitDataModels::Search::Visitor::Includes do
         it { should include :module_class }
       end
 
-      context 'with platforms.name' do
+      context 'with platforms.fully_qualified_name' do
         let(:formatted) do
-          "platforms.name:\"#{name}\""
+          "platforms.fully_qualified_name:\"#{fully_qualified_name}\""
         end
 
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_platform_name
+        let(:fully_qualified_name) do
+          Metasploit::Model::Platform.fully_qualified_name_set.to_a.sample
         end
 
         it { should include :platforms }

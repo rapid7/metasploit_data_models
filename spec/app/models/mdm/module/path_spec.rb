@@ -1,15 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Module::Path do
-  it_should_behave_like 'Metasploit::Model::Module::Path' do
-    let(:path_class) do
-      described_class
-    end
-
-    let(:path_factory) do
-      :mdm_module_path
-    end
-  end
+  it_should_behave_like 'Metasploit::Model::Module::Path',
+                        namespace_name: 'Mdm'
 
   context 'associations' do
     it { should have_many(:module_ancestors).class_name('Mdm::Module::Ancestor').dependent(:destroy).with_foreign_key(:parent_path_id) }
@@ -72,27 +65,6 @@ describe Mdm::Module::Path do
     context 'indices' do
       it { should have_db_index([:gem, :name]).unique(true) }
       it { should have_db_index(:real_path).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_module_path' do
-      subject(:mdm_module_path) do
-        FactoryGirl.build(:mdm_module_path)
-      end
-
-      it { should be_valid }
-    end
-
-    context 'named_mdm_module_path' do
-      subject(:named_mdm_module_path) do
-        FactoryGirl.build(:named_mdm_module_path)
-      end
-
-      it { should be_valid }
-
-      its(:gem) { should_not be_nil }
-      its(:name) { should_not be_nil }
     end
   end
 

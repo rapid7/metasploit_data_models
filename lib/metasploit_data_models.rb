@@ -10,6 +10,7 @@ require 'active_record'
 require 'active_support'
 require 'active_support/all'
 require 'active_support/dependencies'
+require 'awesome_nested_set'
 
 #
 # Project

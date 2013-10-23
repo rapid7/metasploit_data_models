@@ -5,15 +5,8 @@ describe Mdm::Module::Rank do
     FactoryGirl.generate :mdm_module_rank
   end
 
-  it_should_behave_like 'Metasploit::Model::Module::Rank' do
-    subject(:rank) do
-      described_class.new
-    end
-
-    let(:rank_class) do
-      described_class
-    end
-
+  it_should_behave_like 'Metasploit::Model::Module::Rank',
+                        namespace_name: 'Mdm' do
     # have to delete the seeds because Metasploit::Model::Module::Rank validations specs can't handle uniqueness
     # constraint supplied by database model.
     before(:each) do

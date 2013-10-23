@@ -75,6 +75,26 @@ authority_attributes.each do |attributes|
   authority.save!
 end
 
+Metasploit::Model::Platform.each_seed_attributes do |attributes|
+  parent = attributes.fetch(:parent)
+  relative_name = attributes.fetch(:relative_name)
+  child = nil
+
+  if parent
+    child = Mdm::Platform.where(parent_id: parent.id, relative_name: relative_name).first
+  end
+
+  unless child
+    child = Mdm::Platform.new
+    child.parent = parent
+    child.relative_name = relative_name
+    child.save!
+  end
+
+  # yieldreturn
+  child
+end
+
 Mdm::Module::Rank::NUMBER_BY_NAME.each do |name, number|
   Mdm::Module::Rank.where(:name => name, :number => number).first_or_create!
 end

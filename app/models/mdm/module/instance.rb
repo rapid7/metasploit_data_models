@@ -15,13 +15,17 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Auxiliary actions to perform when this running this module.
   #
   #   @return [Array<Mdm::Module::Action>]
-  has_many :actions, :class_name => 'Mdm::Module::Action', :dependent => :destroy, :foreign_key => :module_instance_id
+  has_many :actions,
+           class_name: 'Mdm::Module::Action',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   # @!attribute [rw] default_action
   #   The default action in {#actions}.
   #
   #   @return [Mdm::Module::Action]
-  belongs_to :default_action, :class_name => 'Mdm::Module::Action'
+  belongs_to :default_action, class_name: 'Mdm::Module::Action', inverse_of: :module_instance
 
   # @!attribute [rw] default_target
   #   The default target in {#targets}.

@@ -1,13 +1,10 @@
 require 'spec_helper'
 
 describe Mdm::Authority do
-  it_should_behave_like 'Metasploit::Model::Authority' do
+  it_should_behave_like 'Metasploit::Model::Authority',
+                        namespace_name: 'Mdm' do
     def seed_with_abbreviation(abbreviation)
       described_class.where(:abbreviation => abbreviation).first
-    end
-
-    let(:authority_class) do
-      described_class
     end
   end
 
@@ -31,37 +28,6 @@ describe Mdm::Authority do
       it { should have_db_index(:abbreviation).unique(true) }
       it { should have_db_index(:summary).unique(true) }
       it { should have_db_index(:url).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_authority' do
-      subject(:mdm_authority) do
-        FactoryGirl.build(:mdm_authority)
-      end
-
-      it { should be_valid }
-    end
-
-    context 'full_mdm_authority' do
-      subject(:full_mdm_authority) do
-        FactoryGirl.build(:full_mdm_authority)
-      end
-
-      it { should be_valid }
-
-      its(:summary) { should_not be_nil }
-      its(:url) { should_not be_nil }
-    end
-
-    context 'obsolete_mdm_authority' do
-      subject(:obsolete_mdm_authority) do
-        FactoryGirl.build(:obsolete_mdm_authority)
-      end
-
-      it { should be_valid }
-
-      its(:obsolete) { should be_true }
     end
   end
 

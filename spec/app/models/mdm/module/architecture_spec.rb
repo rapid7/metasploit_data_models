@@ -38,20 +38,47 @@ describe Mdm::Module::Architecture do
     # Can't use validate_uniqueness_of(:architecture_id).scoped_to(:module_instance_id) because it will attempt to
     # INSERT with NULL module_instance_id, which is invalid.
     context 'validate uniqueness of architecture_id scoped to module_instance_id' do
-      let(:existing_module_instance) do
-        FactoryGirl.create(:mdm_module_instance)
-      end
-
       let(:existing_architecture) do
         FactoryGirl.generate :mdm_architecture
       end
 
-      let!(:existing_module_architecture) do
+      let(:existing_module_class) do
         FactoryGirl.create(
-            :mdm_module_architecture,
-            :architecture => existing_architecture,
-            :module_instance => existing_module_instance
+            :mdm_module_class,
+            module_type: module_type
         )
+      end
+
+      let(:existing_module_instance) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_architectures_length: 0,
+            module_class: existing_module_class,
+        ).tap { |module_instance|
+          module_instance.module_architectures << FactoryGirl.build(
+              :mdm_module_architecture,
+              architecture: existing_architecture,
+              module_instance: module_instance
+          )
+        }
+      end
+
+      let(:module_type) do
+        module_types.sample
+      end
+
+      let(:module_types) do
+        support_by_module_type = Metasploit::Model::Module::Instance::SUPPORT_BY_MODULE_TYPE_BY_ATTRIBUTE.fetch(:module_architectures)
+
+        support_by_module_type.each_with_object([]) do |(module_type, support), module_types|
+          if support
+            module_types << module_type
+          end
+        end
+      end
+
+      before(:each) do
+        existing_module_instance.save!
       end
 
       context 'with same architecture_id' do
@@ -61,6 +88,10 @@ describe Mdm::Module::Architecture do
               :architecture => existing_architecture,
               :module_instance => existing_module_instance
           )
+        end
+
+        before(:each) do
+          existing_module_instance.module_architectures << new_module_architecture
         end
 
         it { should_not be_valid }
@@ -83,6 +114,10 @@ describe Mdm::Module::Architecture do
 
         let(:new_architecture) do
           FactoryGirl.generate :mdm_architecture
+        end
+
+        before(:each) do
+          existing_module_instance.module_architectures << new_module_architecture
         end
 
         it { should be_valid }

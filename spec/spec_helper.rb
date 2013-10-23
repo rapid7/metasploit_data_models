@@ -46,6 +46,9 @@ RSpec.configure do |config|
     Metasploit::Model::Spec.temporary_pathname = MetasploitDataModels.root.join('spec', 'tmp')
     # Clean up any left over files from a previously aborted suite
     Metasploit::Model::Spec.remove_temporary_pathname
+
+    # catch missing translations
+    I18n.exception_handler = Metasploit::Model::Spec::I18nExceptionHandler.new
   end
 
   config.before(:each) do

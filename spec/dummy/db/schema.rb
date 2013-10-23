@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130717150737) do
+ActiveRecord::Schema.define(:version => 20131015191312) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -75,10 +75,12 @@ ActiveRecord::Schema.define(:version => 20130717150737) do
   create_table "email_addresses", :force => true do |t|
     t.string "domain", :null => false
     t.string "local",  :null => false
+    t.string "full",   :null => false
   end
 
   add_index "email_addresses", ["domain", "local"], :name => "index_email_addresses_on_domain_and_local", :unique => true
   add_index "email_addresses", ["domain"], :name => "index_email_addresses_on_domain"
+  add_index "email_addresses", ["full"], :name => "index_email_addresses_on_full", :unique => true
   add_index "email_addresses", ["local"], :name => "index_email_addresses_on_local"
 
   create_table "events", :force => true do |t|
@@ -361,10 +363,15 @@ ActiveRecord::Schema.define(:version => 20130717150737) do
   add_index "notes", ["ntype"], :name => "index_notes_on_ntype"
 
   create_table "platforms", :force => true do |t|
-    t.text "name", :null => false
+    t.text    "fully_qualified_name", :null => false
+    t.text    "relative_name",        :null => false
+    t.integer "parent_id"
+    t.integer "right",                :null => false
+    t.integer "left",                 :null => false
   end
 
-  add_index "platforms", ["name"], :name => "index_platforms_on_name", :unique => true
+  add_index "platforms", ["fully_qualified_name"], :name => "index_platforms_on_fully_qualified_name", :unique => true
+  add_index "platforms", ["parent_id", "relative_name"], :name => "index_platforms_on_parent_id_and_relative_name", :unique => true
 
   create_table "profiles", :force => true do |t|
     t.datetime "created_at",                   :null => false

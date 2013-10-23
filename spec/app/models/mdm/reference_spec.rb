@@ -1,27 +1,12 @@
 require 'spec_helper'
 
 describe Mdm::Reference do
-  it_should_behave_like 'Metasploit::Model::Reference' do
-    def attribute_type(attribute)
-      column = base_class.columns_hash.fetch(attribute.to_s)
-
-      column.type
-    end
+  it_should_behave_like 'Metasploit::Model::Reference',
+                        namespace_name: 'Mdm' do
+    include_context 'ActiveRecord attribute_type'
 
     def authority_with_abbreviation(abbreviation)
       Mdm::Authority.where(:abbreviation => abbreviation).first
-    end
-
-    let(:authority_factory) do
-      :mdm_authority
-    end
-
-    let(:base_class) do
-      Mdm::Reference
-    end
-
-    let(:reference_factory) do
-      :mdm_reference
     end
   end
 
@@ -45,44 +30,6 @@ describe Mdm::Reference do
     context 'indices' do
       it { should have_db_index([:authority_id, :designation]).unique(true) }
       it { should have_db_index([:url]).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_reference' do
-      subject(:mdm_reference) do
-        FactoryGirl.build(:mdm_reference)
-      end
-
-      it { should be_valid }
-
-      its(:authority) { should_not be_nil }
-      its(:designation) { should_not be_nil }
-      its(:url) { should_not be_nil }
-    end
-
-    context 'obsolete_mdm_reference' do
-      subject(:obsolete_mdm_reference) do
-        FactoryGirl.build(:obsolete_mdm_reference)
-      end
-
-      it { should be_valid }
-
-      its(:authority) { should_not be_nil }
-      its(:designation) { should_not be_nil }
-      its(:url) { should be_nil }
-    end
-
-    context 'url_mdm_reference' do
-      subject(:url_mdm_reference) do
-        FactoryGirl.build(:url_mdm_reference)
-      end
-
-      it { should be_valid }
-
-      its(:authority) { should be_nil }
-      its(:designation) { should be_nil }
-      its(:url) { should_not be_nil }
     end
   end
 

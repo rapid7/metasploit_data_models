@@ -2,6 +2,11 @@
 class Mdm::Platform < ActiveRecord::Base
   include Metasploit::Model::Platform
 
+  acts_as_nested_set dependent: :destroy,
+                     left_column: :left,
+                     right_column: :right,
+                     order: :fully_qualified_name
+
   #
   #
   # Associations
@@ -33,13 +38,6 @@ class Mdm::Platform < ActiveRecord::Base
   #   The name of the platform
   #
   #   @return [String]
-
-  #
-  # Validation
-  #
-
-  validates :name,
-            :uniqueness => true
 
   ActiveSupport.run_load_hooks(:mdm_platform, self)
 end

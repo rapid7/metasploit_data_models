@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Author do
-  it_should_behave_like 'Metasploit::Model::Author' do
-    let(:author_class) do
-      described_class
-    end
-  end
+  it_should_behave_like 'Metasploit::Model::Author',
+                        namespace_name: 'Mdm'
 
   context 'associations' do
     it { should have_many(:email_addresses).class_name('Mdm::EmailAddress').through(:module_authors) }
@@ -20,16 +17,6 @@ describe Mdm::Author do
 
     context 'indices' do
       it { should have_db_index(:name).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_author' do
-      subject(:mdm_author) do
-        FactoryGirl.build(:mdm_author)
-      end
-
-      it { should be_valid }
     end
   end
 

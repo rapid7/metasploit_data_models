@@ -12,7 +12,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   # Needs to be defined here because runtime dependencies from gemspec will not load for rspec environment
   # @todo Change back to `gem 'metasploi-model', '~> <X>.<Y>.<Z>'` once metasploit-model version X.Y.Z is released to rubygems.
-  gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.13.0.module-cache-construction'
+  gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.15.1.module-cache-construction'
   # rails is only used for the dummy application in spec/dummy
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
   # @see https://www.pivotaltracker.com/story/show/52309083
@@ -41,6 +41,8 @@ group :test do
   gem 'builder'
   # for cleaning the database before suite in case previous run was aborted without clean up
   gem 'database_cleaner'
+  # need rspec-core >= 2.14.0 because 2.14.0 introduced RSpec::Core::SharedExampleGroup::TopLevel
+  gem 'rspec-core', '>= 2.14.0'
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
   # named subject from the outer context without causing a stack overflow.
   gem 'rspec-rails', '>= 2.12.0'

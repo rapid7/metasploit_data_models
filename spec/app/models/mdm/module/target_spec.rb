@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Module::Target do
-  it_should_behave_like 'Metasploit::Model::Module::Target' do
-    let(:base_class) do
-      described_class
-    end
-  end
+  it_should_behave_like 'Metasploit::Model::Module::Target',
+                        namespace_name: 'Mdm'
 
   context 'associations' do
     it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
@@ -21,16 +18,6 @@ describe Mdm::Module::Target do
     context 'indices' do
       it { should have_db_index([:module_instance_id, :index]).unique(true) }
       it { should have_db_index([:module_instance_id, :name]).unique(true) }
-    end
-  end
-
-  context 'factories' do
-    context 'mdm_module_target' do
-      subject(:mdm_module_target) do
-        FactoryGirl.build :mdm_module_target
-      end
-
-      it { should be_valid }
     end
   end
 
