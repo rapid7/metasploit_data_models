@@ -14,13 +14,16 @@ class Mdm::Host < ActiveRecord::Base
       'cbea',
       'cbea64',
       'cmd',
+      'dalvik',
       'java',
       'mips',
       'mipsbe',
       'mipsle',
+      'nodejs',
       'php',
       'ppc',
       'ppc64',
+      'python',
       'ruby',
       'sparc',
       'tty',
@@ -29,6 +32,7 @@ class Mdm::Host < ActiveRecord::Base
       'x86',
       'x86_64'
   ]
+
 
   # Fields searched for the search scope
   SEARCH_FIELDS = [
