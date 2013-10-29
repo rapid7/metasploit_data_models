@@ -231,6 +231,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with supports?(:module_architectures)' do
+          let(:module_types) do
+            super().reject { |module_type|
+              # don't use exploit modules so target architectures don't need to be handled
+              module_type == 'exploit'
+            }
+          end
+
           let(:supports) do
             :module_architectures
           end
@@ -383,42 +390,63 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         context 'with supports?(:module_platforms)' do
-          let(:matching_record) do
+          #
+          # Methods
+          #
+
+          def build_module_instance(module_class)
             FactoryGirl.build(
                 :mdm_module_instance,
-                module_class: matching_module_class,
-                module_platforms_length: 0
-            ).tap { |module_instance|
-              module_instance.module_platforms << FactoryGirl.build(
-                  :mdm_module_platform,
-                  module_instance: module_instance
-              )
-            }
+                module_class: module_class,
+                module_platforms_length: 0,
+                module_architectures_length: module_architectures_length,
+                targets_length: 0
+            )
           end
 
+          #
+          # lets
+          #
+
+          let(:matching_record) do
+            build_module_instance(matching_module_class)
+          end
+
+
           let(:non_matching_record) do
-            FactoryGirl.build(
-                :mdm_module_instance,
-                module_class: non_matching_module_class,
-                module_platforms_length: 0
-            ).tap { |module_instance|
-              module_instance.module_platforms << FactoryGirl.build(
-                  :mdm_module_platform,
-                  module_instance: module_instance
-              )
-            }
+            build_module_instance(non_matching_module_class)
           end
 
           let(:supports) do
             :module_platforms
           end
 
-
-          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                                :association => :platforms,
-                                :attribute => :fully_qualified_name
-
           context 'with supports?(:targets)' do
+            #
+            # Methods
+            #
+
+            def build_module_instance(module_class)
+              super(module_class).tap { |module_instance|
+                FactoryGirl.build(
+                    :mdm_module_target,
+                    module_instance: module_instance,
+                    # restrict to 1 architecture and 1 platform to prevent collisions
+                    target_architectures_length: 1,
+                    target_platforms_length: 1
+                )
+              }
+            end
+
+            #
+            # lets
+            #
+
+            let(:module_architectures_length) do
+              # module_architectures should be derived from targets target_architectures
+              0
+            end
+
             let(:module_platforms_module_types) do
               attribute_module_types(:module_platforms)
             end
@@ -462,6 +490,44 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 end
               end
             end
+          end
+
+          context 'without supports?(:targets)' do
+            #
+            # Methods
+            #
+
+            def build_module_instance(module_class)
+              super(module_class).tap { |module_instance|
+                module_instance.module_platforms << FactoryGirl.build(
+                    :mdm_module_platform,
+                    module_instance: module_instance
+                )
+              }
+            end
+
+            #
+            # lets
+            #
+
+            let(:module_architectures_length) do
+              # can allow module architectures directly on module instance since there are no targets to provide
+              # target architectures to fill module architectures
+              1
+            end
+
+            let(:module_types) do
+              super().reject { |module_type|
+                # disable exploit so that target platforms don't have to be considered
+                module_type == 'exploit'
+              }
+            end
+
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  :association => :platforms,
+                                  :attribute => :fully_qualified_name
+
           end
         end
 
@@ -953,20 +1019,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         #
 
         shared_context 'architectures' do
-          let(:architectures_attributes) do
-            [
-                :abbreviation,
-                :bits,
-                :endianness,
-                :family
-            ]
-          end
-
-          let(:attributes_by_association) do
-            super().dup.tap { |attributes_by_association|
-              attributes_by_association[:architectures] = architectures_attributes
-            }
-          end
+          include_context 'architectures attributes_by_association'
 
           let(:full_architectures) do
             architectures = Mdm::Architecture.arel_table
@@ -1010,7 +1063,37 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
+        shared_context 'architectures attributes_by_association' do
+          let(:architectures_attributes) do
+            [
+                :abbreviation,
+                :bits,
+                :endianness,
+                :family
+            ]
+          end
+
+          let(:attributes_by_association) do
+            super().dup.tap { |attributes_by_association|
+              attributes_by_association[:architectures] = architectures_attributes
+            }
+          end
+        end
+
         shared_context 'platforms' do
+          include_context 'platforms attributes_by_association'
+
+          def build_module_instance(module_class)
+            super(module_class).tap { |module_instance|
+              module_instance.module_platforms << FactoryGirl.build(
+                  :mdm_module_platform,
+                  module_instance: module_instance
+              )
+            }
+          end
+        end
+
+        shared_context 'platforms attributes_by_association' do
           let(:attributes_by_association) do
             super().merge(
                 platforms: [
@@ -1038,6 +1121,47 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               attributes_by_association[nil] += [:stance]
             }
           end
+        end
+
+        shared_context 'targets' do
+          include_context 'architectures attributes_by_association'
+          include_context 'platforms attributes_by_association'
+
+          def build_module_instance(module_class)
+            super(module_class).tap { |module_instance|
+              FactoryGirl.build(
+                  :mdm_module_target,
+                  module_instance: module_instance,
+                  # restrict to single architecture and platform to prevent collisions
+                  target_architectures_length: 1,
+                  target_platforms_length: 1
+              )
+            }
+          end
+        end
+
+        #
+        # Methods
+        #
+
+        def build_module_instance(module_class)
+          FactoryGirl.build(
+              :mdm_module_instance,
+              # (when supported) manually build module_architectures to ensure all fields are non-nil
+              module_architectures_length: 0,
+              # manually build module_authors to ensure they have email_addresses
+              module_authors_length: 0,
+              # manually build platforms so that normal platforms and target platforms don't interfere
+              module_platforms_length: 0,
+              module_class: module_class,
+              # manually build targets to prevent target architecture and target platform collisions
+              targets_length: 0
+          ).tap { |module_instance|
+            module_instance.module_authors << FactoryGirl.build(
+                :full_mdm_module_author,
+                module_instance: module_instance
+            )
+          }
         end
 
         #
@@ -1115,39 +1239,11 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         end
 
         let(:matching_record) do
-          FactoryGirl.build(
-              :mdm_module_instance,
-              # (when supported) manually build module_architectures to ensure all fields are non-nil
-              module_architectures_length: 0,
-              # manually build module_authors to ensure they have email_addresses
-              module_authors_length: 0,
-              # only 1 platform so there no chance of a collision from generator cycling
-              module_platforms_length: 1,
-              module_class: matching_module_class
-          ).tap { |module_instance|
-            module_instance.module_authors << FactoryGirl.build(
-                :full_mdm_module_author,
-                module_instance: module_instance
-            )
-          }
+          build_module_instance(matching_module_class)
         end
 
         let(:non_matching_record) do
-          FactoryGirl.build(
-              :mdm_module_instance,
-              # (when supported) manually build module_architectures to ensure all fields are non-nil
-              module_architectures_length: 0,
-              # manually build module_authors to ensure they have email_addresses
-              module_authors_length: 0,
-              # only 1 platform so there no chance of a collision from generator cycling
-              module_platforms_length: 1,
-              module_class: non_matching_module_class
-          ).tap { |module_instance|
-            module_instance.module_authors << FactoryGirl.build(
-                :full_mdm_module_author,
-                module_instance: module_instance
-            )
-          }
+          build_module_instance(non_matching_module_class)
         end
 
         context 'with auxiliary' do
@@ -1178,17 +1274,15 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             Metasploit::Model::Module::Type::ENCODER
           end
 
-
           it 'should find only matching record' do
             expect(visit).to match_array([matching_record])
           end
         end
 
         context 'with exploit' do
-          include_context 'architectures'
-          include_context 'platforms'
           include_context 'references'
           include_context 'stance'
+          include_context 'targets'
 
           let(:attributes_by_association) do
             super().merge(

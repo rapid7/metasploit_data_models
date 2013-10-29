@@ -16,6 +16,7 @@ describe Mdm::Architecture do
     it { should have_many(:hosts).class_name('Mdm::Host').dependent(:nullify) }
     it { should have_many(:module_architectures).class_name('Mdm::Module::Architecture').dependent(:destroy) }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_architectures) }
+    it { should have_many(:target_architectures).class_name('Mdm::Module::Target::Architecture').dependent(:destroy) }
   end
 
   context 'database' do

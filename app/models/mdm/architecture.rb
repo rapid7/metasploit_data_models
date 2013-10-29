@@ -20,12 +20,20 @@ class Mdm::Architecture < ActiveRecord::Base
            :dependent => :nullify
 
   # @!attribute [rw] module_architectures
-  #   Join models between this {Mdm::Module::Architecture} and {Mdm::Module::Instance}.
+  #   Join models between this {Mdm::Architecture} and {Mdm::Module::Instance}.
   #
   #   @return [Array<Mdm::Module::Architecture>]
   has_many :module_architectures,
            :class_name => 'Mdm::Module::Architecture',
            :dependent => :destroy
+
+  # @!attribute [rw] target_architectures
+  #   Join models between this and {Mdm::Module::Target}.
+  #
+  #   @return [Array<Mdm::Module::Target::Architecture>]
+  has_many :target_architectures,
+           class_name: 'Mdm::Module::Target::Architecture',
+           dependent: :destroy
 
   #
   # :through => :module_architectures

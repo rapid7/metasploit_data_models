@@ -5,7 +5,11 @@ describe Mdm::Module::Target do
                         namespace_name: 'Mdm'
 
   context 'associations' do
+    it { should have_many(:architectures).class_name('Mdm::Architecture').through(:target_architectures) }
     it { should belong_to(:module_instance).class_name('Mdm::Module::Instance') }
+    it { should have_many(:platforms).class_name('Mdm::Platform').through(:target_platforms) }
+    it { should have_many(:target_architectures).class_name('Mdm::Module::Target::Architecture').dependent(:destroy) }
+    it { should have_many(:target_platforms).class_name('Mdm::Module::Target::Platform').dependent(:destroy) }
   end
 
   context 'database' do
