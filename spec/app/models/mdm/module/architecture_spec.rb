@@ -68,13 +68,11 @@ describe Mdm::Module::Architecture do
       end
 
       let(:module_types) do
-        support_by_module_type = Metasploit::Model::Module::Instance::SUPPORT_BY_MODULE_TYPE_BY_ATTRIBUTE.fetch(:module_architectures)
+        module_architectures_module_types = Metasploit::Model::Module::Instance.module_types_that_support(:module_architectures)
+        targets_module_types = Metasploit::Model::Module::Instance.module_types_that_support(:targets)
 
-        support_by_module_type.each_with_object([]) do |(module_type, support), module_types|
-          if support
-            module_types << module_type
-          end
-        end
+        # have to remove target module types so that target architectures don't interfere with module architectures
+        module_architectures_module_types - targets_module_types
       end
 
       before(:each) do
