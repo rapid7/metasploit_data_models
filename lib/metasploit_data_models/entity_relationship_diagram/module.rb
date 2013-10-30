@@ -29,7 +29,7 @@ module MetasploitDataModels
       #
       # @return (see MetasploitDataModels::EntityRelationshipDiagram.cluster)
       def self.models
-        MetasploitDataModels.require_models
+        MetasploitDataModels::EntityRelationshipDiagram.require_models
 
         classes = ActiveRecord::Base.descendants.select { |klass|
           klass.name.starts_with? NAMESPACE

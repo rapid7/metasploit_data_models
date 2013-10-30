@@ -1,3 +1,4 @@
+# Removes the index column from module_targets.
 class RemoveIndexFromModuleTargets < ActiveRecord::Migration
   #
   # CONSTANTS

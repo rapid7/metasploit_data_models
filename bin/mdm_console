@@ -54,8 +54,6 @@ begin
     exit
   end
 
-  MetasploitDataModels.require_models
-
   puts "\n\n\n#{mdm_banner[:color]}#{mdm_banner[:text]}\e[0m\n\n\n"
 
   Pry.config.prompt = proc { |obj, nest_level, _| "mdm:#{nest_level}> " }

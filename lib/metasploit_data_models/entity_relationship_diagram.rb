@@ -1,3 +1,4 @@
+require 'file/find'
 require 'rails_erd/domain'
 
 module MetasploitDataModels
@@ -41,7 +42,7 @@ module MetasploitDataModels
     def self.cluster_by_class
       cluster_by_class = {}
 
-      MetasploitDataModels.require_models
+      require_models
 
       ActiveRecord::Base.descendants.each do |klass|
         klass_cluster = cluster(klass)
@@ -104,7 +105,7 @@ module MetasploitDataModels
     #
     # @return [RailsERD::Domain]
     def self.domain
-      MetasploitDataModels.require_models
+      require_models
 
       RailsERD::Domain.generate
     end
@@ -137,6 +138,22 @@ module MetasploitDataModels
       end
 
       maximal_clusters
+    end
+
+    # Ensures that models are loaded prior to generating diagrams based on those models.  Must be called because
+    # models are enumerated using `ActiveRecord::Base.descendants`.
+    #
+    # @return [void]
+    def self.require_models
+      models_path = MetasploitDataModels.root.join('app', 'models').to_path
+
+      File::Find.new(
+          ftype: 'file',
+          path: models_path,
+          pattern: "*.rb"
+      ).find do |file|
+        require file
+      end
     end
   end
 end

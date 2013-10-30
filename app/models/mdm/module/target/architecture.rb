@@ -1,3 +1,4 @@
+# {#architecture} supported by {#module_target}.
 class Mdm::Module::Target::Architecture < ActiveRecord::Base
   include Metasploit::Model::Module::Target::Architecture
 

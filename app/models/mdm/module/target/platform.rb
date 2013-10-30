@@ -1,3 +1,4 @@
+# {#platform} supported by {#module_target}.
 class Mdm::Module::Target::Platform < ActiveRecord::Base
   include Metasploit::Model::Module::Target::Platform
 

@@ -38,15 +38,6 @@ different on_load name, which is just the class name converted to an underscored
         end
     end
 
-### Metasploit Framework
-
-In Metasploit Framework, `MetasploitDataModels.require_models` is called by the `Msf::DbManager` to use the data models
-only if the user wants to use the database.
-
-### Elsewhere
-
-In Metasploit Pro, MDM is loaded via the metasploit_data_models gem: https://rubygems.org/gems/metasploit_data_models
-
 An MRI and JRuby implementation is generated for all substantial updates.
 
 ## Developer Info
