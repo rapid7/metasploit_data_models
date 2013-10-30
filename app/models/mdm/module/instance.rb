@@ -31,7 +31,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   The default target in {#targets}.
   #
   #   @return [Mdm::Module::Target]
-  belongs_to :default_target, :class_name => 'Mdm::Module::Target'
+  belongs_to :default_target, class_name: 'Mdm::Module::Target', inverse_of: :module_instance
 
   # @!attribute [rw] module_architectures
   #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Architecture architectures}.
@@ -80,7 +80,11 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   Names of targets with different configurations that can be exploited by this module.
   #
   #   @return [Array<Mdm::Module::Target>]
-  has_many :targets, :class_name => 'Mdm::Module::Target', :dependent => :destroy, :foreign_key => :module_instance_id
+  has_many :targets,
+           class_name: 'Mdm::Module::Target',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   #
   # :through => :module_architectures

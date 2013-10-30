@@ -50,4 +50,56 @@ describe Mdm::Module::Instance do
       it { should have_db_index(:module_class_id).unique(true) }
     end
   end
+
+  context '#targets' do
+    subject(:targets) do
+      module_instance.targets
+    end
+
+    context 'with unsaved module_instance' do
+      let(:module_instance) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_class: module_class
+        )
+      end
+
+      let(:module_class) do
+        FactoryGirl.create(
+            :mdm_module_class,
+            module_type: module_type
+        )
+      end
+
+      let(:module_type) do
+        module_types.sample
+      end
+
+      let(:module_types) do
+        Metasploit::Model::Module::Instance.module_types_that_support(:targets)
+      end
+
+      context 'built without :module_instance' do
+        subject(:module_target) do
+          targets.build(
+              name: name
+          )
+        end
+
+        let(:name) do
+          FactoryGirl.generate :metasploit_model_module_target_name
+        end
+
+        context '#module_instance' do
+          subject(:module_target_module_instance) do
+            module_target.module_instance
+          end
+
+          it 'should be the original module instance' do
+            module_target_module_instance.should == module_instance
+          end
+        end
+      end
+    end
+  end
 end

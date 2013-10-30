@@ -15,7 +15,7 @@ class Mdm::Module::Target < ActiveRecord::Base
   #   Module where this target was declared.
   #
   #   @return [Mdm::Module::Instance]
-  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
+  belongs_to :module_instance, class_name: 'Mdm::Module::Instance', inverse_of: :targets
 
   # @!attribute [rw] target_architectures
   #   Joins this target to its {#architectures}
