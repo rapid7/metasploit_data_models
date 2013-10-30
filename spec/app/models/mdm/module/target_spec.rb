@@ -15,12 +15,10 @@ describe Mdm::Module::Target do
   context 'database' do
     context 'columns' do
       it { should have_db_column(:module_instance_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:index).of_type(:integer).with_options(:null => false) }
       it { should have_db_column(:name).of_type(:text).with_options(:null => false) }
     end
 
     context 'indices' do
-      it { should have_db_index([:module_instance_id, :index]).unique(true) }
       it { should have_db_index([:module_instance_id, :name]).unique(true) }
     end
   end

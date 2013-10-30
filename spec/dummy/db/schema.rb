@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028181807) do
+ActiveRecord::Schema.define(:version => 20131030182452) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -338,12 +338,10 @@ ActiveRecord::Schema.define(:version => 20131028181807) do
   add_index "module_target_platforms", ["module_target_id", "platform_id"], :name => "unique_module_target_platforms", :unique => true
 
   create_table "module_targets", :force => true do |t|
-    t.integer "index",              :null => false
     t.text    "name",               :null => false
     t.integer "module_instance_id", :null => false
   end
 
-  add_index "module_targets", ["module_instance_id", "index"], :name => "index_module_targets_on_module_instance_id_and_index", :unique => true
   add_index "module_targets", ["module_instance_id", "name"], :name => "index_module_targets_on_module_instance_id_and_name", :unique => true
 
   create_table "nexpose_consoles", :force => true do |t|
