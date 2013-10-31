@@ -20,25 +20,31 @@ class Mdm::Loot < ActiveRecord::Base
   #   Exploit attempt where this loot was gathered.
   #
   #   @return [Mdm::ExploitAttempt]
-  has_one :exploit_attempt, :class_name => 'Mdm::ExploitAttempt'
+  has_one :exploit_attempt, class_name: 'Mdm::ExploitAttempt', inverse_of: :loot
 
   # @!attribute [rw] host
   #   The host from which the loot was gathered.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :loots
 
   # @!attribute [rw] service
   #   The service running on the {#host} from which the loot was gathered.
   #
   #   @return [Mdm::Service]
-  belongs_to :service, :class_name => 'Mdm::Service'
+  belongs_to :service, class_name: 'Mdm::Service', inverse_of: :loots
+
+  # @!attribute [rw] vuln_attempt
+  #   Vuln attempt that gathered this loot.
+  #
+  #   @return [Mdm::VulnAttempt]
+  has_one :vuln_attempt, class_name: 'Mdm::VulnAttempt', inverse_of: :loot
 
   # @!attribute [rw] workspace
   #   The workspace in which the loot is stored and the {#host} exists.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :loots
 
   #
   # Attributes

@@ -9,7 +9,7 @@ class Mdm::Client < ActiveRecord::Base
   #   Host from which this client connected.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :clients
 
   #
   # Attributes

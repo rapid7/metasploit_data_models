@@ -50,9 +50,10 @@ describe Mdm::Workspace do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
     it { should have_many(:events).class_name('Mdm::Event') }
     it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
+    it { should have_many(:host_loots).class_name('Mdm::Loot').through(:hosts) }
     it { should have_many(:hosts).class_name('Mdm::Host') }
     it { should have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
-    it { should have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
+    it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy) }
     it { should have_many(:notes).class_name('Mdm::Note') }
     it { should belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
     it { should have_many(:report_templates).class_name('Mdm::ReportTemplate').dependent(:destroy) }

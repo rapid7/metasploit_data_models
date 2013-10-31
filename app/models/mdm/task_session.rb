@@ -8,13 +8,13 @@ class Mdm::TaskSession < ActiveRecord::Base
   #   The {Mdm::Session} found by {#task}.
   #
   #   @return [Mdm::Session]
-  belongs_to :session, :class_name => 'Mdm::Session'
+  belongs_to :session, class_name: 'Mdm::Session', inverse_of: :task_sessions
 
   # @!attribute [rw] task
   #   An {Mdm::Task} that found {#session}.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :task_sessions
 
   #
   # Attributes

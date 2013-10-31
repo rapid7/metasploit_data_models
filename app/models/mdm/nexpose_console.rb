@@ -8,7 +8,7 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   #   Details for vulnerabilities supplied by this Nexpose console.
   #
   #   @return [Array<Mdm::VulnDetail>]
-  has_many :vuln_details, :class_name => 'Mdm::VulnDetail', :foreign_key => :nx_console_id
+  has_many :vuln_details, class_name: 'Mdm::VulnDetail', foreign_key: :nx_console_id, inverse_of: :nexpose_console
 
   #
   # Attributes

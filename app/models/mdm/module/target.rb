@@ -24,7 +24,8 @@ class Mdm::Module::Target < ActiveRecord::Base
   has_many :target_architectures,
            class_name: 'Mdm::Module::Target::Architecture',
            dependent: :destroy,
-           foreign_key: :module_target_id
+           foreign_key: :module_target_id,
+           inverse_of: :module_target
 
   # @!attribute [rw] target_platforms
   #   Joins this target to its {#platforms}
@@ -33,7 +34,8 @@ class Mdm::Module::Target < ActiveRecord::Base
   has_many :target_platforms,
            class_name: 'Mdm::Module::Target::Platform',
            dependent: :destroy,
-           foreign_key: :module_target_id
+           foreign_key: :module_target_id,
+           inverse_of: :module_target
 
   #
   # through: :target_architectures

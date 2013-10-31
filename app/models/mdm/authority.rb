@@ -12,7 +12,7 @@ class Mdm::Authority < ActiveRecord::Base
   #   {Mdm::Reference References} that use this authority's scheme for either {Mdm::Reference#designation}.
   #
   #   @return [Array<Mdm::Reference>]
-  has_many :references, :class_name => 'Mdm::Reference', :dependent => :destroy
+  has_many :references, class_name: 'Mdm::Reference', dependent: :destroy, inverse_of: :authority
 
   #
   # :through => :references

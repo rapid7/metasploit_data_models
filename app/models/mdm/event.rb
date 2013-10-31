@@ -11,14 +11,14 @@ class Mdm::Event < ActiveRecord::Base
   #
   #   @return [Mdm::Host]
   #   @return [nil] if event did not occur on a host.
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :events
 
   # @!attribute [rw] workspace
   #   Workspace in which this event occured.  If {#host} is present, then this will match
   #   {Mdm::Host#workspace `host.workspace`}.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :events
 
   #
   # Attributes

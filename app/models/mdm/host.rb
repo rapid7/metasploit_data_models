@@ -34,81 +34,96 @@ class Mdm::Host < ActiveRecord::Base
   #   Ruby, PHP, and Java.
   #
   #   @return [Mdm::Architecture]
-  belongs_to :architecture, :class_name => 'Mdm::Architecture'
+  belongs_to :architecture, class_name: 'Mdm::Architecture', inverse_of: :hosts
 
   # @!attribute [rw] clients
   #   @deprecated New style SocialEngineering campaigns are Pro-only models.
   #   @todo https://www.pivotaltracker.com/story/show/52149851
   #   @return [Array<Mdm::Client>]
-  has_many :clients, :class_name => 'Mdm::Client', :dependent => :destroy
+  has_many :clients, class_name: 'Mdm::Client', dependent: :destroy, inverse_of: :host
+
+  # @!attribute [rw] events
+  #   Events that occurred on this host.
+  #
+  #   @return [Array<Mdm::Event>]
+  has_many :events, class_name: 'Mdm::Event', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] task_hosts
   #   Joins {#tasks} to this host.
   #
   #   @return [Array<Mdm::TaskHost>]
-  has_many :task_hosts, :class_name => 'Mdm::TaskHost', :dependent => :destroy
+  has_many :task_hosts, class_name: 'Mdm::TaskHost', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
   #
   #   @return [Array<Mdm::ExploitAttempt]
   has_many :exploit_attempts,
-           :class_name => 'Mdm::ExploitAttempt',
-           :dependent => :destroy
+           class_name: 'Mdm::ExploitAttempt',
+           dependent: :destroy,
+           inverse_of: :host
 
   # @!attribute [rw] exploited_hosts
   #   @todo https://www.pivotaltracker.com/story/show/48993731
   #   @return [Array<Mdm::ExploitedHost>]
-  has_many :exploited_hosts, :class_name => 'Mdm::ExploitedHost', :dependent => :destroy
+  has_many :exploited_hosts, class_name: 'Mdm::ExploitedHost', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] host_details
   #   @return [Array<Mdm::HostDetail>]
-  has_many :host_details, :class_name => 'Mdm::HostDetail', :dependent => :destroy
+  has_many :host_details, class_name: 'Mdm::HostDetail', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] hosts_tags
   #   A join model between {Mdm::Tag} and {Mdm::Host}.  Use {#tags} to get the actual {Mdm::Tag Mdm::Tags} on this host.
   #
   #   @return [Array<Mdm::HostTag>]
-  has_many :host_tags, :class_name => 'Mdm::HostTag', :dependent => :destroy
+  has_many :host_tags, class_name: 'Mdm::HostTag', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] loots
   #   Loot gathered from the host with {Mdm::Loot#created_at newest loot} first.
   #
   #   @todo https://www.pivotaltracker.com/story/show/48991525
   #   @return [Array<Mdm::Loot>]
-  has_many :loots, :class_name => 'Mdm::Loot', :dependent => :destroy, :order => 'loots.created_at DESC'
+  has_many :loots, class_name: 'Mdm::Loot', dependent: :destroy, inverse_of: :host, order: 'loots.created_at DESC'
 
   # @!attribute [rw] notes
   #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
   #   @return [Array<Mdm::Note>]
-  has_many :notes, :class_name => 'Mdm::Note', :dependent => :destroy, :order => 'notes.created_at'
+  has_many :notes, class_name: 'Mdm::Note', dependent: :destroy, inverse_of: :host, order: 'notes.created_at'
 
   # @!attribute [rw] services
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
   #   and {Mdm::Service#proto protocol}.
   #
   #   @return [Array<Mdm::Service>]
-  has_many :services, :class_name => 'Mdm::Service', :dependent => :destroy, :order => 'services.port, services.proto'
+  has_many :services,
+           class_name: 'Mdm::Service',
+           dependent: :destroy,
+           inverse_of: :host,
+           order: 'services.port, services.proto'
 
   # @!attribute [rw] sessions
   #   Sessions that are open or previously were open on the host ordered by {Mdm::Session#opened_at when the session was
   #   opened}
   #
   #   @return [Array<Mdm::Session]
-  has_many :sessions, :class_name => 'Mdm::Session', :dependent => :destroy, :order => 'sessions.opened_at'
+  has_many :sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           inverse_of: :host,
+           order: 'sessions.opened_at'
 
   # @!attribute [rw] vulns
   #   Vulnerabilities found on the host.
   #
   #   @return [Array<Mdm::Vuln>]
-  has_many :vulns, :class_name => 'Mdm::Vuln', :dependent => :destroy
+  has_many :vulns, class_name: 'Mdm::Vuln', dependent: :destroy, inverse_of: :host
 
   # @!attribute [rw] workspace
   #   The workspace in which this host was found.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :hosts
 
   #
   # :through => :host_tags

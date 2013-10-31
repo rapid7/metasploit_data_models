@@ -12,7 +12,7 @@ class Mdm::Author < ActiveRecord::Base
   #   Joins this to {#email_addresses} and {#module_instances}.
   #
   #   @return [Array<Mdm::Module::Author>]
-  has_many :module_authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy
+  has_many :module_authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy, inverse_of: :author
 
   #
   # :through => :module_authors

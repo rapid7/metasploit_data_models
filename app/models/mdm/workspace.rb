@@ -18,50 +18,60 @@ class Mdm::Workspace < ActiveRecord::Base
   #   Events that occurred in this workspace.
   #
   #   @return [Array<Mdm::Event>]
-  has_many :events, :class_name => 'Mdm::Event'
+  has_many :events, class_name: 'Mdm::Event', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] hosts
   #   Hosts in this workspace.
   #
   #   @return [Array<Mdm::Host>]
-  has_many :hosts, :class_name => 'Mdm::Host', :dependent => :destroy
+  has_many :hosts, class_name: 'Mdm::Host', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] listeners
   #   Listeners running for this workspace.
   #
   #   @return [Array<Mdm::Listener>]
-  has_many :listeners, :class_name => 'Mdm::Listener', :dependent => :destroy
+  has_many :listeners, class_name: 'Mdm::Listener', dependent: :destroy, inverse_of: :workspace
+
+  # @!attribute [rw] loots
+  #   Loot gathers from this workspace.
+  #
+  #   @return [Array<Mdm::Loot>]
+  has_many :loots, class_name: 'Mdm::Loot', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] notes
   #   Notes about this workspace.
   #
   #   @return [Array<Mdm::Note>]
-  has_many :notes, :class_name => 'Mdm::Note', :dependent => :destroy
+  has_many :notes, class_name: 'Mdm::Note', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] owner
   #   User that owns this workspace and has full permissions within this workspace even if they are not an
   #   {Mdm::User#admin administrator}.
   #
   #   @return [Mdm::User]
-  belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
+  belongs_to :owner, class_name: 'Mdm::User', foreign_key: 'owner_id', inverse_of: :owned_workspaces
 
   # @!attribute [rw] report_templates
   #   Templates for {#reports}.
   #
   #   @return [Array<Mdm::ReportTemplate>]
-  has_many :report_templates, :class_name => 'Mdm::ReportTemplate', :dependent => :destroy
+  has_many :report_templates, class_name: 'Mdm::ReportTemplate', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] reports
   #   Reports generated about data in this workspace.
   #
   #   @return [Array<Mdm::Report>]
-  has_many :reports, :class_name => 'Mdm::Report', :dependent => :destroy
+  has_many :reports, class_name: 'Mdm::Report', dependent: :destroy, inverse_of: :workspace
 
   # @!attribute [rw] tasks
   #   Tasks run inside this workspace.
   #
   #   @return [Array<Mdm::Task>]
-  has_many :tasks, :class_name => 'Mdm::Task', :dependent => :destroy, :order => 'created_at DESC'
+  has_many :tasks,
+           class_name: 'Mdm::Task',
+           dependent: :destroy,
+           inverse_of: :workspace,
+           order: 'created_at DESC'
 
   # @!attribute [rw] users
   #   Users that are allowed to use this workspace.  Does not necessarily include all users, as an {Mdm::User#admin
@@ -87,17 +97,17 @@ class Mdm::Workspace < ActiveRecord::Base
   #   @return [Array<Mdm::ExploitedHost>]
   has_many :exploited_hosts, :class_name => 'Mdm::ExploitedHost', :through => :hosts
 
+  # @!attribute [r] loots
+  #   Loot gathered from {#hosts} in this workspace.
+  #
+  #   @return [Array<Mdm::Loot>]
+  has_many :host_loots, class_name: 'Mdm::Loot', source: :loots, through: :hosts
+
   # @!attribute [r] host_tags
   #   Joins {#hosts} to {#tags}.
   #
   #   @return [Array<Mdm::HostTag>]
   has_many :host_tags, :class_name => 'Mdm::HostTag', :through => :hosts
-
-  # @!attribute [r] loots
-  #   Loot gathered from {#hosts} in this workspace.
-  #
-  #   @return [Array<Mdm::Loot>]
-  has_many :loots, :class_name => 'Mdm::Loot', :through => :hosts
 
   # @!attribute [r] services
   #   Services running on {#hosts} in this workspace.

@@ -13,19 +13,19 @@ class Mdm::Reference < ActiveRecord::Base
   #   The {Mdm::Authority authority} that assigned {#designation}.
   #
   #   @return [Mdm::Authority, nil]
-  belongs_to :authority, :class_name => 'Mdm::Authority'
+  belongs_to :authority, class_name: 'Mdm::Authority', inverse_of: :references
 
   # @!attribute [rw] module_references
   #   Joins this {Mdm::Reference} to {#module_instances}.
   #
   #   @return [Array<Mdm::Module::References>]
-  has_many :module_references, :class_name => 'Mdm::Module::Reference', :dependent => :destroy
+  has_many :module_references, class_name: 'Mdm::Module::Reference', dependent: :destroy, inverse_of: :reference
 
   # @!attribute [rw] vuln_references
   #   Joins this {Mdm::Reference} to {#vulns}.
   #
   #   @return [Array<Mdm::VulnReference>]
-  has_many :vuln_references, :class_name => 'Mdm::VulnReference', :dependent => :destroy
+  has_many :vuln_references, class_name: 'Mdm::VulnReference', dependent: :destroy, inverse_of: :reference
 
   #
   # :through => :module_references

@@ -13,13 +13,13 @@ class Mdm::Module::Platform < ActiveRecord::Base
   #   Module that supports {#platform}.
   #
   #   @return [Mdm::Module::Instance]
-  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
+  belongs_to :module_instance, class_name: 'Mdm::Module::Instance', inverse_of: :module_platforms
 
   # @!attribute [rw] platform
   #  Platform supported by {#module_instance}.
   #
   #  @return [Mdm::Platform]
-  belongs_to :platform, :class_name => 'Mdm::Platform'
+  belongs_to :platform, class_name: 'Mdm::Platform', inverse_of: :module_platforms
 
   #
   # Validations

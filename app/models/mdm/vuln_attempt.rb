@@ -9,20 +9,20 @@ class Mdm::VulnAttempt < ActiveRecord::Base
   #
   #   @return [Mdm::Loot] if {#exploited} is `true`.
   #   @return [nil] if {#exploited} is `false`.
-  belongs_to :loot, :class_name => 'Mdm::Loot'
+  belongs_to :loot, class_name: 'Mdm::Loot', inverse_of: :vuln_attempt
 
   # @!attribute [rw] session
   #   The session opened by this attempt.
   #
   #   @return [Mdm::Session] if {#exploited} is `true`.
   #   @return [nil] if {#exploited} is `false`.
-  belongs_to :session, :class_name => 'Mdm::Session'
+  belongs_to :session, class_name: 'Mdm::Session', inverse_of: :vuln_attempt
 
   # @!attribute [rw] vuln
   #   The {Mdm::Vuln vulnerability} that this attempt was exploiting.
   #
   #   @return [Mdm::Vuln]
-  belongs_to :vuln, :class_name => 'Mdm::Vuln', :counter_cache => :vuln_attempt_count
+  belongs_to :vuln, class_name: 'Mdm::Vuln', counter_cache: :vuln_attempt_count, inverse_of: :vuln_attempts
 
   #
   # Attributes

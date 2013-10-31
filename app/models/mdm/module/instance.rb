@@ -38,9 +38,10 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Architecture>]
   has_many :module_architectures,
-           :class_name => 'Mdm::Module::Architecture',
-           :dependent => :destroy,
-           :foreign_key => :module_instance_id
+           class_name: 'Mdm::Module::Architecture',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   # @!attribute [rw] module_authors
   #   Joins this with {#authors} and {#email_addresses} to model the name and email address used for an author entry in
@@ -48,33 +49,36 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Author>]
   has_many :module_authors,
-           :class_name => 'Mdm::Module::Author',
-           :dependent => :destroy,
-           :foreign_key => :module_instance_id
+           class_name: 'Mdm::Module::Author',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   # @!attribute [rw] module_class
   #   Class-derived metadata to go along with the instance-derived metadata in this model.
   #
   #   @return [Mdm::Module::Class]
-  belongs_to :module_class, :class_name => 'Mdm::Module::Class'
+  belongs_to :module_class, class_name: 'Mdm::Module::Class', inverse_of: :module_instance
 
   # @!attribute [rw] module_platform
   #   Joins this {Mdm::Module::Instance} to its supported {Mdm::Platform platforms}.
   #
   #   @return [Array<Mdm::Module::Platform>]
   has_many :module_platforms,
-           :class_name => 'Mdm::Module::Platform',
-           :dependent => :destroy,
-           :foreign_key => :module_instance_id
+           class_name: 'Mdm::Module::Platform',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   # @!attribute [rw] module_references
   #   Joins {#references} to this {Mdm::Module::Instance}.
   #
   #   @return [Array<Mdm::Module::Reference>]
   has_many :module_references,
-           :class_name => 'Mdm::Module::Reference',
-           :dependent => :destroy,
-           :foreign_key => :module_instance_id
+           class_name: 'Mdm::Module::Reference',
+           dependent: :destroy,
+           foreign_key: :module_instance_id,
+           inverse_of: :module_instance
 
   # @!attribute [rw] targets
   #   Names of targets with different configurations that can be exploited by this module.

@@ -9,14 +9,15 @@ class Mdm::Tag < ActiveRecord::Base
   #
   #  @return [Array<Mdm::HostTag>]
   has_many :host_tags,
-           :class_name => 'Mdm::HostTag',
-           :dependent => :destroy
+           class_name: 'Mdm::HostTag',
+           dependent: :destroy,
+           inverse_of: :tag
 
   # @!attribute [rw] user
   #   User that created this tag.
   #
   #   @return [Mdm::User]
-  belongs_to :user, :class_name => 'Mdm::User'
+  belongs_to :user, class_name: 'Mdm::User', inverse_of: :tags
 
   #
   # :through => :hosts_tags

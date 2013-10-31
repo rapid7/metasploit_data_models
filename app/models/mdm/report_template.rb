@@ -9,7 +9,7 @@ class Mdm::ReportTemplate < ActiveRecord::Base
   #   Workspace in which this report template was created.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :report_templates
 
   #
   # Attributes

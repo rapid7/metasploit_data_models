@@ -8,7 +8,7 @@ class Mdm::Route < ActiveRecord::Base
   #   The session over which this route traverses.
   #
   #   @return [Mdm::Session]
-  belongs_to :session, :class_name => 'Mdm::Session'
+  belongs_to :session, class_name: 'Mdm::Session', inverse_of: :routes
 
   #
   # Attributes

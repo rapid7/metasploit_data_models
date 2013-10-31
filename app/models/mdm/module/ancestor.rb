@@ -19,14 +19,14 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #   reference name path, `Metasploit::Model::Module::Ancestor#reference_path` exists.
   #
   #   @return [Mdm::Module::Path]
-  belongs_to :parent_path, :class_name => 'Mdm::Module::Path'
+  belongs_to :parent_path, class_name: 'Mdm::Module::Path', inverse_of: :module_ancestors
 
   # @!attribute [rw] relationships
   #   Relates this {Mdm::Module::Ancestor} to the {Mdm::Module::Class Mdm::Module::Classes} that
   #   {Mdm::Module::Relationship#descendant descend} from the {Mdm::Module::Ancestor}.
   #
   #   @return [Array<Mdm::Module::Relationship>]
-  has_many :relationships, :class_name => 'Mdm::Module::Relationship', :dependent => :destroy
+  has_many :relationships, class_name: 'Mdm::Module::Relationship', dependent: :destroy, inverse_of: :ancestor
 
   #
   # :through => :relationships

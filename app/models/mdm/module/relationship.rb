@@ -11,13 +11,13 @@ class Mdm::Module::Relationship < ActiveRecord::Base
   #   The {Mdm::Module::Ancestor} whose {Mdm::Module::Ancestor#real_path file} defined the ruby Class or ruby Module.
   #
   #   @return [Mdm::Module::Ancestor]
-  belongs_to :ancestor, :class_name => 'Mdm::Module::Ancestor'
+  belongs_to :ancestor, class_name: 'Mdm::Module::Ancestor', inverse_of: :relationships
 
   # @!attribute [rw] descendant
   #   The {Mdm::Module::Class} that either has the Module in {#ancestor} mixed in or is the Class in {#ancestor}.
   #
   #   @return [Mdm::Module::Class]
-  belongs_to :descendant, :class_name => 'Mdm::Module::Class'
+  belongs_to :descendant, class_name: 'Mdm::Module::Class', inverse_of: :relationships
 
   #
   # Validations

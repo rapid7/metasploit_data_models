@@ -8,7 +8,7 @@ class Mdm::VulnDetail < ActiveRecord::Base
   #   The vulnerability this detail is about.
   #
   #   @return [Mdm::Vuln]
-  belongs_to :vuln, :class_name => 'Mdm::Vuln', :counter_cache => :vuln_detail_count
+  belongs_to :vuln, class_name: 'Mdm::Vuln', counter_cache: :vuln_detail_count, inverse_of: :vuln_details
 
   #
   #
@@ -70,7 +70,10 @@ class Mdm::VulnDetail < ActiveRecord::Base
   #   The Nexpose console that supplied this information.
   #
   #   @return [Mdm::NexposeConsole]
-  belongs_to :nexpose_console, :class_name => 'Mdm::NexposeConsole', :foreign_key => :nx_console_id
+  belongs_to :nexpose_console,
+             class_name: 'Mdm::NexposeConsole',
+             foreign_key: :nx_console_id,
+             inverse_of: :vuln_details
 
   # @!attribute [rw] nx_added
   #   When this vulnerability was added in Nexpose.

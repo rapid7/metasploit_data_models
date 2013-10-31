@@ -8,13 +8,13 @@ class Mdm::HostTag < ActiveRecord::Base
   #   Host with {#tag}.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :host_tags
 
   # @!attribute [rw] tag
   #   Tag on {#host}.
   #
   #   @return [Mdm::Tag]
-  belongs_to :tag, :class_name => 'Mdm::Tag'
+  belongs_to :tag, class_name: 'Mdm::Tag', inverse_of: :host_tags
 
   #
   # Callbacks

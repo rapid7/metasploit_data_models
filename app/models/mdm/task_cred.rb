@@ -8,13 +8,13 @@ class Mdm::TaskCred < ActiveRecord::Base
   #   The {Mdm::Cred} found by {#task}.
   #
   #   @return [Mdm::Cred]
-  belongs_to :cred, :class_name => 'Mdm::Cred'
+  belongs_to :cred, class_name: 'Mdm::Cred', inverse_of: :task_creds
 
   # @!attribute [rw] task
   #   An {Mdm::Task} that found {#cred}.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :task_creds
 
   #
   # Attributes

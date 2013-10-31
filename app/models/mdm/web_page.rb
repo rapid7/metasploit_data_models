@@ -8,7 +8,7 @@ class Mdm::WebPage < ActiveRecord::Base
   #   {Mdm::WebSite Web site} from which this page was requested.
   #
   #   @return [Mdm::WebSite]
-  belongs_to :web_site, :class_name => 'Mdm::WebSite'
+  belongs_to :web_site, class_name: 'Mdm::WebSite', inverse_of: :web_pages
 
   #
   # Attributes

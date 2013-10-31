@@ -14,18 +14,20 @@ class Mdm::Architecture < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Host>]
   has_many :hosts,
-           :class_name => 'Mdm::Host',
+           class_name: 'Mdm::Host',
            # Mdm::Hosts are have architecture_id nullified instead of being destroyed because Mdm::Host allows a nil
            # Mdm::Host#architecture.
-           :dependent => :nullify
+           dependent: :nullify,
+           inverse_of: :architecture
 
   # @!attribute [rw] module_architectures
   #   Join models between this {Mdm::Architecture} and {Mdm::Module::Instance}.
   #
   #   @return [Array<Mdm::Module::Architecture>]
   has_many :module_architectures,
-           :class_name => 'Mdm::Module::Architecture',
-           :dependent => :destroy
+           class_name: 'Mdm::Module::Architecture',
+           dependent: :destroy,
+           inverse_of: :architecture
 
   # @!attribute [rw] target_architectures
   #   Join models between this and {Mdm::Module::Target}.
@@ -33,7 +35,8 @@ class Mdm::Architecture < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Target::Architecture>]
   has_many :target_architectures,
            class_name: 'Mdm::Module::Target::Architecture',
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :architecture
 
   #
   # :through => :module_architectures

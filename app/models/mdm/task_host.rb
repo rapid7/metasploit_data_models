@@ -8,13 +8,13 @@ class Mdm::TaskHost < ActiveRecord::Base
   #   The {Mdm::Host} found by {#task}.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :task_hosts
 
   # @!attribute [rw] task
   #   An {Mdm::Task} that found {#host}.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :task_hosts
 
   #
   # Attributes

@@ -8,13 +8,13 @@ class Mdm::Listener < ActiveRecord::Base
   #   Task that spawned this listener.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name => 'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :listeners
 
   # @!attribute [rw] workspace
   #   Workspace which controls this listener.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :listeners
 
   #
   # Attributes

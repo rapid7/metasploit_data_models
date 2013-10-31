@@ -2,38 +2,46 @@
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ActiveRecord::Base
   #
+  #
   # Associations
+  #
   #
 
   # @!attribute [rw] events
   #   Events that occurred when this session was open.
   #
   #   @return [Array<Mdm::Event>]
-  has_many :events, :class_name => 'Mdm::SessionEvent', :order => 'created_at', :dependent => :delete_all
+  has_many :events, class_name: 'Mdm::SessionEvent', dependent: :delete_all, inverse_of: :session, order: 'created_at'
 
   # @!attribute [rw] exploit_attempt
   #   Exploit attempt that created this session.
   #
   #   @return [Mdm::ExploitAttempt]
-  has_one :exploit_attempt, :class_name => 'Mdm::ExploitAttempt'
+  has_one :exploit_attempt, class_name: 'Mdm::ExploitAttempt', inverse_of: :session
 
   # @!attribute [rw] host
   #   {Mdm::Host Host} on which this session was opened.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :sessions
 
   # @!attribute [rw] routes
-  #   Routes tunneled throug this session.
+  #   Routes tunneled through this session.
   #
   #   @return [Array<Mdm::Route>]
-  has_many :routes, :class_name => 'Mdm::Route', :dependent => :delete_all
+  has_many :routes, class_name: 'Mdm::Route', dependent: :destroy, inverse_of: :session
+
+  # @!attribute [rw] task_sessions
+  #   Details about sessions this task touched
+  #
+  #   @return [Array<Mdm::TaskSession>]
+  has_many :task_sessions, class_name: 'Mdm::TaskSession', dependent: :destroy, inverse_of: :session
 
   # @!attribute [rw] vuln_attempt
   #   Vulnerability attempt that created this session.
   #
   #   @return [Mdm::VulnAttempt]
-  has_one :vuln_attempt, :class_name => 'Mdm::VulnAttempt'
+  has_one :vuln_attempt, :class_name => 'Mdm::VulnAttempt', inverse_of: :session
 
   #
   # Through :host
@@ -43,19 +51,17 @@ class Mdm::Session < ActiveRecord::Base
   #   The workspace in which this session exists.
   #
   #   @return [Mdm::Workspace]
-  has_one :workspace, :through => :host, :class_name => 'Mdm::Workspace'
+  has_one :workspace, class_name: 'Mdm::Workspace', through: :host
 
-  # @!attribute [rw] task_sessions
-  #   Details about sessions this task touched
   #
-  #   @return [Array<Mdm::TaskSession>]
-  has_many :task_sessions, :dependent => :destroy, :class_name => 'Mdm::TaskSession'
+  # through: :task_sessions
+  #
 
   # @!attribute [rw] task
   #   Session this task touched
   #
   #   @return [Mdm::Session]
-  has_many :tasks, :through => :task_sessions, :class_name => 'Mdm::Task'
+  has_many :tasks, class_name: 'Mdm::Task', through: :task_sessions
 
   #
   # Attributes

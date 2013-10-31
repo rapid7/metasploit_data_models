@@ -13,20 +13,20 @@ class Mdm::Module::Author < ActiveRecord::Base
   #   Author who wrote the {#module_instance module}.
   #
   #   @return [Mdm::Author]
-  belongs_to :author, :class_name => 'Mdm::Author'
+  belongs_to :author, :class_name => 'Mdm::Author', inverse_of: :module_authors
 
   # @!attribute [rw] email_address
   #   Email address {#author} used when writing {#module_instance module}.
   #
   #   @return [Mdm::EmailAddress] if {#author} gave an email address.
   #   @return [nil] if {#author} only gave a name.
-  belongs_to :email_address, :class_name => 'Mdm::EmailAddress'
+  belongs_to :email_address, class_name: 'Mdm::EmailAddress', inverse_of: :module_authors
 
   # @!attribute [rw] module_instance
   #   Module written by {#author}.
   #
   #   @return [Mdm::Module::Instance]
-  belongs_to :module_instance, :class_name => 'Mdm::Module::Instance'
+  belongs_to :module_instance, class_name: 'Mdm::Module::Instance', inverse_of: :module_authors
 
   #
   # Validations

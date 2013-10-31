@@ -8,7 +8,7 @@ class Mdm::HostDetail < ActiveRecord::Base
   #   Host that this detail is about.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host', :counter_cache => :host_detail_count
+  belongs_to :host, class_name: 'Mdm::Host', counter_cache: :host_detail_count, inverse_of: :host_details
 
   #
   # Attributes

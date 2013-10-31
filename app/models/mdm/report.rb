@@ -11,13 +11,13 @@ class Mdm::Report < ActiveRecord::Base
   #   Task that generated this report.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name => 'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :reports
 
   # @!attribute [rw] workspace
   #   Workspace from which this report was generated.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :workspace, :class_name => 'Mdm::Workspace', inverse_of: :reports
 
   #
   # Attributes

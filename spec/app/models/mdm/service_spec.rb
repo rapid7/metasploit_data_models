@@ -7,6 +7,7 @@ describe Mdm::Service do
     it { should have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
     it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
     it { should belong_to(:host).class_name('Mdm::Host') }
+    it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy) }
     it { should have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
     it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_services) }

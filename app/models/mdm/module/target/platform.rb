@@ -10,13 +10,13 @@ class Mdm::Module::Target::Platform < ActiveRecord::Base
   #   The module target that supports {#platform}.
   #
   #   @return [Mdm::Module::Target]
-  belongs_to :module_target, class_name: 'Mdm::Module::Target'
+  belongs_to :module_target, class_name: 'Mdm::Module::Target', inverse_of: :target_platforms
 
   # @!attribute [rw] platform
   #   The platform supported by the {#module_target}.
   #
   #   @return [Mdm::Platform]
-  belongs_to :platform, class_name: 'Mdm::Platform'
+  belongs_to :platform, class_name: 'Mdm::Platform', inverse_of: :target_platforms
 
   #
   # Validations

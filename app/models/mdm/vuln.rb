@@ -8,37 +8,37 @@ class Mdm::Vuln < ActiveRecord::Base
   #   Attempts to exploit this vulnerability.
   #
   #   @return [Array<Mdm::ExploitAttempt>]
-  has_many :exploit_attempts, :class_name => 'Mdm::ExploitAttempt'
+  has_many :exploit_attempts, class_name: 'Mdm::ExploitAttempt', inverse_of: :vuln
 
   # @!attribute [rw] host
   #   The host with this vulnerability.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host', :counter_cache => :vuln_count
+  belongs_to :host, class_name: 'Mdm::Host', counter_cache: :vuln_count, inverse_of: :vulns
 
   # @!attribute [rw] service
   #   The service with the vulnerability.
   #
   #   @return [Mdm::Service]
-  belongs_to :service, :class_name => 'Mdm::Service'
+  belongs_to :service, class_name: 'Mdm::Service', inverse_of: :vulns
 
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
   #
   #   @return [Array<Mdm::VulnAttempt>]
-  has_many :vuln_attempts, :class_name => 'Mdm::VulnAttempt', :dependent => :destroy
+  has_many :vuln_attempts, class_name: 'Mdm::VulnAttempt', dependent: :destroy, inverse_of: :vuln
 
   # @!attribute [rw] vuln_details
   #   Additional information about this vulnerability.
   #
   #   @return [Array<Mdm::VulnDetail>]
-  has_many :vuln_details, :class_name => 'Mdm::VulnDetail', :dependent => :destroy
+  has_many :vuln_details, class_name: 'Mdm::VulnDetail', dependent: :destroy, inverse_of: :vuln
 
   # @!attribute [rw] vuln_references
   #   Joins this {Mdm::Vuln} to its {#references}.
   #
   #   @return [Array<Mdm::VulnReference>]
-  has_many :vuln_references, :class_name => 'Mdm::VulnReference', :dependent => :destroy
+  has_many :vuln_references, class_name: 'Mdm::VulnReference', dependent: :destroy, inverse_of: :vuln
 
   #
   # :through  => :vuln_references

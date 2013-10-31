@@ -8,13 +8,13 @@ class Mdm::TaskService < ActiveRecord::Base
   #   The {Mdm::Service} found by {#task}.
   #
   #   @return [Mdm::Service]
-  belongs_to :service, :class_name => 'Mdm::Service'
+  belongs_to :service, class_name: 'Mdm::Service', inverse_of: :task_services
 
   # @!attribute [rw] task
   #   An {Mdm::Task} that found {#service}.
   #
   #   @return [Mdm::Task]
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :task, class_name: 'Mdm::Task', inverse_of: :task_services
 
   #
   # Attributes

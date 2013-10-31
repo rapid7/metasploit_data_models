@@ -21,9 +21,10 @@ class Mdm::Module::Path < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Ancestor>]
   has_many :module_ancestors,
-           :class_name => 'Mdm::Module::Ancestor',
-           :dependent => :destroy,
-           :foreign_key => :parent_path_id
+           class_name: 'Mdm::Module::Ancestor',
+           dependent: :destroy,
+           foreign_key: :parent_path_id,
+           inverse_of: :parent_path
 
   #
   # Attributes

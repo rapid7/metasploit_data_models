@@ -13,7 +13,7 @@ class Mdm::Module::Rank < ActiveRecord::Base
   #   {Mdm::Module::Class Module classes} assigned this rank.
   #
   #   @return [Array<Mdm::Module::Class>]
-  has_many :module_classes, :class_name => 'Mdm::Module::Class', :dependent => :destroy
+  has_many :module_classes, class_name: 'Mdm::Module::Class', dependent: :destroy, inverse_of: :rank
 
   #
   # Attributes

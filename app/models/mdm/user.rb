@@ -9,13 +9,13 @@ class Mdm::User < ActiveRecord::Base
   # @!attribute [rw] owned_workspaces
   #   {Mdm::Workspace Workspaces} owned by this user.  Owned workspaces allow user complete permissions without the need
   #   for the user to be an {#admin administrator}.
-  has_many :owned_workspaces, :class_name => 'Mdm::Workspace', :foreign_key => 'owner_id'
+  has_many :owned_workspaces, class_name: 'Mdm::Workspace', foreign_key: 'owner_id', inverse_of: :owner
 
   # @!attribute [rw] tags
   #   Tags created by the user.
   #
   #   @return [Array<Mdm::Tag>]
-  has_many :tags, :class_name => 'Mdm::Tag'
+  has_many :tags, class_name: 'Mdm::Tag', inverse_of: :user
 
   # @!attribute [rw] workspaces
   #   {Mdm::Workspace Workspace} where this user has access.  If a user is an {#admin administrator} they have access

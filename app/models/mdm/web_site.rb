@@ -8,25 +8,25 @@ class Mdm::WebSite < ActiveRecord::Base
   #   The service on which this web site is running.
   #
   #   @return [String]
-  belongs_to :service, :class_name => 'Mdm::Service', :foreign_key => 'service_id'
+  belongs_to :service, class_name: 'Mdm::Service', foreign_key: 'service_id', inverse_of: :web_sites
 
   # @!attribute [rw] web_forms
   #   Filled-in forms within this web site.
   #
   #   @return [Array<WebForm>]
-  has_many :web_forms, :class_name => 'Mdm::WebForm', :dependent => :destroy
+  has_many :web_forms, class_name: 'Mdm::WebForm', dependent: :destroy, inverse_of: :web_site
 
   # @!attribute [rw] web_pages
   #   Web pages found on this web site.
   #
   #   @return [Array<Mdm::WebPage>]
-  has_many :web_pages, :class_name => 'Mdm::WebPage', :dependent => :destroy
+  has_many :web_pages, class_name: 'Mdm::WebPage', dependent: :destroy, inverse_of: :web_site
 
   # @!attribute [rw] web_vulns
   #   Vulnerabilities found on this web site.
   #
   #   @return [Array<Mdm::WebVuln>]
-  has_many :web_vulns, :class_name => 'Mdm::WebVuln', :dependent => :destroy
+  has_many :web_vulns, class_name: 'Mdm::WebVuln', dependent: :destroy, inverse_of: :web_site
 
   #
   # Attributes

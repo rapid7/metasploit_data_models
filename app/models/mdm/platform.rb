@@ -17,13 +17,13 @@ class Mdm::Platform < ActiveRecord::Base
   #   Joins this {Mdm::Platform} to {Mdm::Module::Instance modules} that support the platform.
   #
   #   @return [Array<Mdm::Module::Platform>]
-  has_many :module_platforms, :class_name => 'Mdm::Module::Platform', :dependent => :destroy
+  has_many :module_platforms, class_name: 'Mdm::Module::Platform', dependent: :destroy, inverse_of: :platform
 
   # @!attribute [rw] target_platforms
   #   Joins this to {Mdm::Module::Target targets} that support this platform.
   #
   #   @return [Array<Mdm::Module::Target::Platform>]
-  has_many :target_platforms, class_name: 'Mdm::Module::Target::Platform', dependent: :destroy
+  has_many :target_platforms, class_name: 'Mdm::Module::Target::Platform', dependent: :destroy, inverse_of: :platform
 
   #
   # :through => :module_platforms

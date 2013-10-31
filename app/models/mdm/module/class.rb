@@ -17,16 +17,17 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
   #   @return [Mdm::Module::Instance]
   has_one :module_instance,
-          :class_name => 'Mdm::Module::Instance',
-          :dependent => :destroy,
-          :foreign_key => :module_class_id
+          class_name: 'Mdm::Module::Instance',
+          dependent: :destroy,
+          foreign_key: :module_class_id,
+          inverse_of: :module_class
 
   # @!attribute [rw] rank
   #   The reliability of the module and likelyhood that the module won't knock over the service or host being exploited.
   #   Bigger values is better.
   #
   #   @return [Mdm::Module::Rank]
-  belongs_to :rank, :class_name => 'Mdm::Module::Rank'
+  belongs_to :rank, class_name: 'Mdm::Module::Rank', inverse_of: :module_classes
 
   # @!attribute [rw] relationships
   #   Join model between {Mdm::Module::Class} and {Mdm::Module::Ancestor} that represents that the Class or Module in
@@ -34,9 +35,10 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Relationship>]
   has_many :relationships,
-           :class_name => 'Mdm::Module::Relationship',
-           :dependent => :destroy,
-           :foreign_key => :descendant_id
+           class_name: 'Mdm::Module::Relationship',
+           dependent: :destroy,
+           foreign_key: :descendant_id,
+           inverse_of: :descendant
 
   #
   # :through => :relationships

@@ -10,7 +10,7 @@ class Mdm::EmailAddress < ActiveRecord::Base
   #   Credits where {#authors} used this email address for {#module_instances modules}.
   #
   #   @return [Array<Mdm::Module::Author>]
-  has_many :module_authors, :class_name => 'Mdm::Module::Author', :dependent => :destroy
+  has_many :module_authors, class_name: 'Mdm::Module::Author', dependent: :destroy, inverse_of: :email_address
 
   #
   # :through => :module_authors

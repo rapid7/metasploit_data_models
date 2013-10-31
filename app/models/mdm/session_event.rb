@@ -8,7 +8,7 @@ class Mdm::SessionEvent < ActiveRecord::Base
   #   The session in which the event occured.
   #
   #   @return [Mdm::Session]
-  belongs_to :session, :class_name => 'Mdm::Session'
+  belongs_to :session, class_name: 'Mdm::Session', inverse_of: :events
 
   # @!attribute [rw] command
   #   The command that was run through the session that triggered this event.
