@@ -178,22 +178,9 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                             :attribute => :description
 
-      context 'with module type support for attribute' do
+      context 'with module type allows for attribute' do
         def attribute_module_types(attribute)
-          module_types = []
-          support_by_module_type = attribute_support_by_module_type(attribute)
-
-          support_by_module_type.each do |module_type, support|
-            if support
-              module_types << module_type
-            end
-          end
-
-          module_types
-        end
-
-        def attribute_support_by_module_type(attribute)
-          Metasploit::Model::Module::Instance::SUPPORT_BY_MODULE_TYPE_BY_ATTRIBUTE.fetch(attribute)
+          Metasploit::Model::Module::Instance.module_types_that_allow(attribute)
         end
 
         #
@@ -201,11 +188,11 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         #
 
         let(:module_types) do
-          attribute_module_types(supports)
+          attribute_module_types(allows)
         end
 
-        context 'with supports?(:actions)' do
-          let(:supports) do
+        context 'with allows?(:actions)' do
+          let(:allows) do
             :actions
           end
 
@@ -230,16 +217,14 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
-        context 'with supports?(:module_architectures)' do
-          let(:module_types) do
-            super().reject { |module_type|
-              # don't use exploit modules so target architectures don't need to be handled
-              module_type == 'exploit'
-            }
+        context 'with allows?(:module_architectures)' do
+          let(:allows) do
+            :module_architectures
           end
 
-          let(:supports) do
-            :module_architectures
+          let(:module_types) do
+            # exclude module types that support targets so target architectures don't need to be handled.
+            super() - attribute_module_types(:targets)
           end
 
           let(:matching_record) do
@@ -389,7 +374,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
-        context 'with supports?(:module_platforms)' do
+        context 'with allows?(:module_platforms)' do
           #
           # Methods
           #
@@ -408,6 +393,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           # lets
           #
 
+          let(:allows) do
+            :module_platforms
+          end
+
           let(:matching_record) do
             build_module_instance(matching_module_class)
           end
@@ -417,11 +406,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             build_module_instance(non_matching_module_class)
           end
 
-          let(:supports) do
-            :module_platforms
-          end
-
-          context 'with supports?(:targets)' do
+          context 'with allows?(:targets)' do
             #
             # Methods
             #
@@ -517,10 +502,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             end
 
             let(:module_types) do
-              super().reject { |module_type|
-                # disable exploit so that target platforms don't have to be considered
-                module_type == 'exploit'
-              }
+              # disable module types with targets so that target platforms don't have to be considered
+              super() - attribute_module_types(:targets)
             end
 
 
@@ -531,7 +514,11 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
-        context 'with supports?(:module_references)' do
+        context 'with allows?(:module_references)' do
+          let(:allows) do
+            :module_references
+          end
+
           let(:matching_record) do
             FactoryGirl.create(
                 :mdm_module_instance,
@@ -546,10 +533,6 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 module_class: non_matching_module_class,
                 module_references_length: 1
             )
-          end
-
-          let(:supports) do
-            :module_references
           end
 
           it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -783,37 +766,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
-        context 'with supports?(:stance)' do
-          let(:supports) do
-            :stance
-          end
-
-          context 'with app' do
-            let(:formatted) do
-              "app:#{value}"
-            end
-
-
-            let(:value) do
-              value_by_stance = {
-                  'aggressive' => 'server',
-                  'passive' => 'client'
-              }
-
-              value_by_stance.fetch(matching_record.stance)
-            end
-
-            it 'should find only matching record' do
-              expect(visit).to match_array([matching_record])
-            end
-          end
-
-          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                                :attribute => :stance
-        end
-
-        context 'with supports?(:targets)' do
-          let(:supports) do
+        context 'with allow?(:targets)' do
+          let(:allows) do
             :targets
           end
 
@@ -821,6 +775,34 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                 :association => :targets,
                                 :attribute => :name
         end
+      end
+
+      context 'with stanced' do
+        let(:module_types) do
+          Metasploit::Model::Module::Instance::STANCED_MODULE_TYPES
+        end
+
+        context 'with app' do
+          let(:formatted) do
+            "app:#{value}"
+          end
+
+          let(:value) do
+            value_by_stance = {
+                'aggressive' => 'server',
+                'passive' => 'client'
+            }
+
+            value_by_stance.fetch(matching_record.stance)
+          end
+
+          it 'should find only matching record' do
+            expect(visit).to match_array([matching_record])
+          end
+        end
+
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                              :attribute => :stance
       end
 
       it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',

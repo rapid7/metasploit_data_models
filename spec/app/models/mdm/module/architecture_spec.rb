@@ -68,8 +68,8 @@ describe Mdm::Module::Architecture do
       end
 
       let(:module_types) do
-        module_architectures_module_types = Metasploit::Model::Module::Instance.module_types_that_support(:module_architectures)
-        targets_module_types = Metasploit::Model::Module::Instance.module_types_that_support(:targets)
+        module_architectures_module_types = Metasploit::Model::Module::Instance.module_types_that_allow(:module_architectures)
+        targets_module_types = Metasploit::Model::Module::Instance.module_types_that_allow(:targets)
 
         # have to remove target module types so that target architectures don't interfere with module architectures
         module_architectures_module_types - targets_module_types

@@ -76,7 +76,7 @@ describe Mdm::Module::Instance do
       end
 
       let(:module_types) do
-        Metasploit::Model::Module::Instance.module_types_that_support(:targets)
+        Metasploit::Model::Module::Instance.module_types_that_allow(:targets)
       end
 
       context 'built without :module_instance' do
