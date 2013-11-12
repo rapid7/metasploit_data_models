@@ -49,7 +49,7 @@ describe Mdm::Module::Relationship do
         )
       end
 
-        context 'with same descendant_id' do
+      context 'with same descendant_id' do
         subject(:new_relationship) do
           FactoryGirl.build(
               :mdm_module_relationship,
@@ -58,12 +58,28 @@ describe Mdm::Module::Relationship do
           )
         end
 
-        it { should_not be_valid }
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
 
-        it 'should record error on ancestor_id' do
-          new_relationship.valid?
+          it 'should not add error on #ancestor_id' do
+            new_relationship.valid?
 
-          new_relationship.errors[:ancestor_id].should include('has already been taken')
+            new_relationship.errors[:ancestor_id].should_not include('has already been taken')
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_relationship.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should record error on ancestor_id' do
+            new_relationship.valid?
+
+            new_relationship.errors[:ancestor_id].should include('has already been taken')
+          end
         end
       end
 

@@ -25,25 +25,77 @@ describe Mdm::EmailAddress do
   end
 
   context 'validations' do
+    #
+    # lets
+    #
+
+    let(:error) do
+      I18n.translate!('metasploit.model.errors.messages.taken')
+    end
+
+    let(:existing_domain) do
+      FactoryGirl.generate :metasploit_model_email_address_domain
+    end
+
+    let(:existing_local) do
+      FactoryGirl.generate :metasploit_model_email_address_local
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:existing_email_address) do
+      FactoryGirl.create(
+          :mdm_email_address,
+          :domain => existing_domain,
+          :local => existing_local
+      )
+    end
+
+    context 'validate uniqueness of #full' do
+      context 'with same #full' do
+        subject(:new_email_address) do
+          FactoryGirl.build(
+              :mdm_email_address,
+              domain: nil,
+              local: nil
+          )
+        end
+
+        before(:each) do
+          new_email_address.full = existing_email_address.full
+        end
+
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
+
+          it 'should not add error on local' do
+            new_email_address.valid?
+
+            new_email_address.errors[:full].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_email_address.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should record error on local' do
+            new_email_address.valid?
+
+            new_email_address.errors[:full].should include(error)
+          end
+        end
+      end
+    end
+
     # Can't use validate_uniqueness_of(:local).scoped_to(:domain) because it will attempt to
     # INSERT with NULL domain, which is invalid.
     context 'validate uniqueness of domain scoped to local' do
-      let(:existing_domain) do
-        FactoryGirl.generate :metasploit_model_email_address_domain
-      end
-
-      let(:existing_local) do
-        FactoryGirl.generate :metasploit_model_email_address_local
-      end
-
-      let!(:existing_email_address) do
-        FactoryGirl.create(
-            :mdm_email_address,
-            :domain => existing_domain,
-            :local => existing_local
-        )
-      end
-
       context 'with same domain' do
         subject(:new_email_address) do
           FactoryGirl.build(
@@ -53,12 +105,28 @@ describe Mdm::EmailAddress do
           )
         end
 
-        it { should_not be_valid }
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
 
-        it 'should record error on local' do
-          new_email_address.valid?
+          it 'should not add error on local' do
+            new_email_address.valid?
 
-          new_email_address.errors[:local].should include('has already been taken')
+            new_email_address.errors[:local].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_email_address.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should record error on local' do
+            new_email_address.valid?
+
+            new_email_address.errors[:local].should include(error)
+          end
         end
       end
 

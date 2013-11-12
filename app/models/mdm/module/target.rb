@@ -2,6 +2,7 @@
 # to tune an exploit to work with different system libraries and versions.
 class Mdm::Module::Target < ActiveRecord::Base
   include Metasploit::Model::Module::Target
+  include MetasploitDataModels::Batch::Descendant
 
   self.table_name = 'module_targets'
 
@@ -67,6 +68,16 @@ class Mdm::Module::Target < ActiveRecord::Base
   #   The name of this target.
   #
   #   @return [String]
+
+  #
+  # Validations
+  #
+
+  validates :name,
+            uniqueness: {
+                scope: :module_instance_id,
+                unless: :batched?
+            }
 
   ActiveSupport.run_load_hooks(:mdm_module_target, self)
 end

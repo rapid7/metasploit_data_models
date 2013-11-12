@@ -1,6 +1,7 @@
 # An authority that supplies {Mdm::Reference references}, such as CVE.
 class Mdm::Authority < ActiveRecord::Base
   include Metasploit::Model::Authority
+  include MetasploitDataModels::Batch::Descendant
 
   #
   #
@@ -80,5 +81,17 @@ class Mdm::Authority < ActiveRecord::Base
   #
 
   validates :abbreviation,
-            :uniqueness => true
+            uniqueness: {
+                unless: :batched?
+            }
+  validates :summary,
+            uniqueness: {
+                allow_nil: true,
+                unless: :batched?
+            }
+  validates :url,
+            uniqueness: {
+                allow_nil: true,
+                unless: :batched?
+            }
 end

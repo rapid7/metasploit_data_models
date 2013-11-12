@@ -3,6 +3,7 @@
 #    for payloads.
 class Mdm::Module::Class < ActiveRecord::Base
   include Metasploit::Model::Module::Class
+  include MetasploitDataModels::Batch::Root
 
   self.table_name = 'module_classes'
 
@@ -81,6 +82,20 @@ class Mdm::Module::Class < ActiveRecord::Base
   #   element {#ancestors} or an alias defined in those Modules.
   #
   #   @return [String]
+
+  #
+  # Validations
+  #
+
+  validates :full_name,
+            uniqueness: {
+                unless: :batched?
+            }
+  validates :reference_name,
+            uniqueness: {
+                scope: :module_type,
+                unless: :batched?
+            }
 
   ActiveSupport.run_load_hooks(:mdm_module_class, self)
 end

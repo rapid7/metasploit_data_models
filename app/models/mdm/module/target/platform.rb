@@ -1,6 +1,7 @@
 # {#platform} supported by {#module_target}.
 class Mdm::Module::Target::Platform < ActiveRecord::Base
   include Metasploit::Model::Module::Target::Platform
+  include MetasploitDataModels::Batch::Descendant
 
   #
   # Associations
@@ -24,6 +25,7 @@ class Mdm::Module::Target::Platform < ActiveRecord::Base
 
   validates :platform_id,
             uniqueness: {
-                scope: :module_target_id
+                scope: :module_target_id,
+                unless: :batched?
             }
 end

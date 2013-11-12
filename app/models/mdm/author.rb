@@ -3,6 +3,7 @@
 # personal email for different code.
 class Mdm::Author < ActiveRecord::Base
   include Metasploit::Model::Author
+  include MetasploitDataModels::Batch::Descendant
 
   #
   # Associations
@@ -43,7 +44,10 @@ class Mdm::Author < ActiveRecord::Base
   # Validations
   #
 
-  validates :name, :uniqueness => true
+  validates :name,
+            uniqueness: {
+                unless: :batched?
+            }
 
   ActiveSupport.run_load_hooks(:mdm_author, self)
 end

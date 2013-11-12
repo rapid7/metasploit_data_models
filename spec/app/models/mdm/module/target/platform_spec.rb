@@ -26,11 +26,34 @@ describe Mdm::Module::Target::Platform do
       # lets
       #
 
+      let(:error) do
+        I18n.translate!('metasploit.model.errors.messages.taken')
+      end
+
+      let(:module_target) do
+        existing_module_target_platform.module_target
+      end
+
+      let(:platform) do
+        existing_module_target_platform.platform
+      end
+
       let(:new_module_target_platform) do
-        FactoryGirl.build(
+        module_target.target_platforms.build(
+            new_module_target_platform_attributes
+        ).tap { |target_platform|
+          target_platform.platform = platform
+        }
+      end
+
+      let(:new_module_target_platform_attributes) do
+        FactoryGirl.attributes_for(
             :mdm_module_target_platform,
-            platform: existing_module_target_platform.platform,
-            module_target: existing_module_target_platform.module_target
+            module_target: nil,
+            platform: nil
+        ).except(
+            :module_target,
+            :platform
         )
       end
 
@@ -42,10 +65,28 @@ describe Mdm::Module::Target::Platform do
         FactoryGirl.create(:mdm_module_target_platform)
       end
 
-      it 'should include error' do
-        new_module_target_platform.valid?
+      context 'with batched' do
+        include_context 'MetasploitDataModels::Batch.batch'
 
-        new_module_target_platform.errors[:platform_id].should include('has already been taken')
+        it 'should include error' do
+          new_module_target_platform.valid?
+
+          new_module_target_platform.errors[:platform_id].should_not include(error)
+        end
+
+        it 'should raise ActiveRecord::RecordNotUnique when saved' do
+          expect {
+            new_module_target_platform.save
+          }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+      end
+
+      context 'with batched' do
+        it 'should include error' do
+          new_module_target_platform.valid?
+
+          new_module_target_platform.errors[:platform_id].should include('has already been taken')
+        end
       end
     end
   end

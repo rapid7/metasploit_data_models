@@ -1,6 +1,8 @@
 # Associates an {Mdm::Module::Ancestor} with an {Mdm::Module::Class}. Shows that the ruby Class represented by
 # {Mdm::Module::Class} is descended from one of more {Mdm::Module::Ancestor Mdm::Module::Ancestors}.
 class Mdm::Module::Relationship < ActiveRecord::Base
+  include MetasploitDataModels::Batch::Descendant
+
   self.table_name = 'module_relationships'
 
   #
@@ -26,8 +28,9 @@ class Mdm::Module::Relationship < ActiveRecord::Base
   validates :ancestor,
             :presence => true
   validates :ancestor_id,
-            :uniqueness => {
-                :scope => :descendant_id
+            uniqueness: {
+                scope: :descendant_id,
+                unless: :batched?
             }
   validates :descendant,
             :presence => true

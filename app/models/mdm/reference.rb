@@ -2,6 +2,7 @@
 # vulnerability on a {#hosts host} or that is exploited by a {#module_instances module}.
 class Mdm::Reference < ActiveRecord::Base
   include Metasploit::Model::Reference
+  include MetasploitDataModels::Batch::Descendant
 
   #
   #
@@ -77,4 +78,20 @@ class Mdm::Reference < ActiveRecord::Base
   #   URL to web page with information about referenced exploit.
   #
   #   @return [String, nil]
+
+  #
+  # Validations
+  #
+
+  validates :designation,
+            uniqueness: {
+                allow_nil: true,
+                scope: :authority_id,
+                unless: :batched?
+            }
+  validates :url,
+            uniqueness: {
+                allow_nil: true,
+                unless: :batched?
+            }
 end

@@ -32,6 +32,125 @@ describe Mdm::Authority do
   end
 
   context 'validations' do
-    it { should validate_uniqueness_of(:abbreviation) }
+    #
+    # lets
+    #
+
+    let(:error) do
+      I18n.translate!('metasploit.model.errors.messages.taken')
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:existing_authority) do
+      FactoryGirl.create(:full_mdm_authority)
+    end
+
+    context 'validates uniqueness of abbreviation' do
+      context 'with same #abbreviation' do
+        let(:new_authority) do
+          FactoryGirl.build(
+              :mdm_authority,
+              abbreviation: existing_authority.abbreviation
+          )
+        end
+
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
+
+          it 'should not add error on #abbreviation' do
+            new_authority.valid?
+
+            new_authority.errors[:abbreviation].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_authority.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should add error on #abbreviation' do
+            new_authority.valid?
+
+            new_authority.errors[:abbreviation].should include(error)
+          end
+        end
+      end
+    end
+
+    context 'validates uniqueness of summary' do
+      context 'with same #summary' do
+        let(:new_authority) do
+          FactoryGirl.build(
+              :mdm_authority,
+              summary: existing_authority.summary
+          )
+        end
+
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
+
+          it 'should not add error on #summary' do
+            new_authority.valid?
+
+            new_authority.errors[:summary].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_authority.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should add error on #summary' do
+            new_authority.valid?
+
+            new_authority.errors[:summary].should include(error)
+          end
+        end
+      end
+    end
+
+    context 'validates uniqueness of url' do
+      context 'with same #url' do
+        let(:new_authority) do
+          FactoryGirl.build(
+              :mdm_authority,
+              url: existing_authority.url
+          )
+        end
+
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
+
+          it 'should not add error on #url' do
+            new_authority.valid?
+
+            new_authority.errors[:url].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_authority.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should add error on #url' do
+            new_authority.valid?
+
+            new_authority.errors[:url].should include(error)
+          end
+        end
+      end
+    end
   end
 end
