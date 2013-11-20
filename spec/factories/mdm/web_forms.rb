@@ -6,7 +6,7 @@ FactoryGirl.define do
     association :web_site, :factory => :mdm_web_site
 
     trait :exported do
-      method { generate :mdm_web_form_method }
+      add_attribute(:method) { generate :mdm_web_form_method }
       params { generate :mdm_web_form_params }
       path { generate :mdm_web_form_path }
     end
@@ -20,10 +20,10 @@ FactoryGirl.define do
 
   sequence :mdm_web_form_params do |n|
     [
-        [
-            "name#{n}",
-            "value#{n}"
-        ]
+      [
+        "name#{n}",
+        "value#{n}"
+      ]
     ]
   end
 
