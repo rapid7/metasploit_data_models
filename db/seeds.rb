@@ -78,11 +78,13 @@ end
 Metasploit::Model::Platform.each_seed_attributes do |attributes|
   parent = attributes.fetch(:parent)
   relative_name = attributes.fetch(:relative_name)
-  child = nil
+  parent_id = nil
 
   if parent
-    child = Mdm::Platform.where(parent_id: parent.id, relative_name: relative_name).first
+    parent_id = parent.id
   end
+
+  child = Mdm::Platform.where(parent_id: parent_id, relative_name: relative_name).first
 
   unless child
     child = Mdm::Platform.new
