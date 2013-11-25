@@ -75,19 +75,33 @@ describe Mdm::Module::Platform do
 
       context 'with same platform_id' do
         subject(:new_module_platform) do
-          FactoryGirl.build(
-              :mdm_module_platform,
-              :module_instance => module_instance,
-              :platform => existing_platform
-          )
+          module_instance.module_platforms.build.tap { |module_platform|
+            module_platform.platform = existing_platform
+          }
         end
 
-        it { should_not be_valid }
+        context 'with batched' do
+          include_context 'MetasploitDataModels::Batch.batch'
 
-        it 'should record error on platform_id' do
-          new_module_platform.valid?
+          it 'should not add error on #platform_id' do
+            new_module_platform.valid?
 
-          new_module_platform.errors[:platform_id].should include('has already been taken')
+            new_module_platform.errors[:platform_id].should_not include('has already been taken')
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_module_platform.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+
+        context 'without batched' do
+          it 'should record error on platform_id' do
+            new_module_platform.valid?
+
+            new_module_platform.errors[:platform_id].should include('has already been taken')
+          end
         end
       end
 

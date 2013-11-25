@@ -334,4 +334,74 @@ describe Mdm::Module::Class do
       end
     end
   end
+
+  context 'validations' do
+    #
+    # lets
+    #
+
+    let(:error) do
+      I18n.translate!('metasploit.model.errors.messages.taken')
+    end
+
+    let(:existing_module_ancestors) do
+      existing_module_class.ancestors
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:existing_module_class) do
+      FactoryGirl.create(
+          :mdm_module_class
+      )
+    end
+
+    context 'validates uniqueness of #full_name' do
+      context 'with batched' do
+        include_context 'MetasploitDataModels::Batch.batch'
+
+        context 'with same #full_name' do
+          let(:new_module_class) do
+            FactoryGirl.build(
+                :mdm_module_class,
+                ancestors: existing_module_ancestors
+            )
+          end
+
+          it 'should not add error on #full_name' do
+            new_module_class.valid?
+
+            new_module_class.errors[:full_name].should_not include(error)
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_module_class.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
+        end
+      end
+
+      context 'without batched' do
+        context 'with same #full_name' do
+          let(:new_module_class) do
+            FactoryGirl.build(
+                :mdm_module_class,
+                ancestors: existing_module_ancestors
+            )
+          end
+
+          it 'adds error on #full_name' do
+            new_module_class.valid?
+
+            new_module_class.errors[:full_name].should include(error)
+          end
+        end
+      end
+    end
+
+    context 'validates uniqueness of #reference_name scoped to #module_type'
+  end
 end

@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     category { generate :mdm_web_vuln_category }
     confidence { generate :mdm_web_vuln_confidence }
-    method { generate :mdm_web_vuln_method }
+    add_attribute(:method) { generate :mdm_web_vuln_method }
     name { generate :mdm_web_vuln_name }
     path { generate :mdm_web_vuln_path }
     params { generate :mdm_web_vuln_params }

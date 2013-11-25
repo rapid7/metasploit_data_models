@@ -2,6 +2,7 @@
 # a given module.
 class Mdm::Module::Author < ActiveRecord::Base
   include Metasploit::Model::Module::Author
+  include MetasploitDataModels::Batch::Descendant
 
   self.table_name = 'module_authors'
 
@@ -33,8 +34,9 @@ class Mdm::Module::Author < ActiveRecord::Base
   #
 
   validates :author_id,
-            :uniqueness => {
-                :scope => :module_instance_id
+            uniqueness: {
+                scope: :module_instance_id,
+                unless: :batched?
             }
 
   ActiveSupport.run_load_hooks(:mdm_module_author, self)

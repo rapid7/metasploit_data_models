@@ -5,6 +5,8 @@ require 'digest/sha1'
 # (for payloads) or a ruby Class (for all non-payloads).
 class Mdm::Module::Ancestor < ActiveRecord::Base
   include Metasploit::Model::Module::Ancestor
+  include MetasploitDataModels::Batch::Descendant
+  include MetasploitDataModels::Batch::Root
 
   self.table_name = 'module_ancestors'
 
@@ -95,6 +97,36 @@ class Mdm::Module::Ancestor < ActiveRecord::Base
   #
 
   # parent_path_id is NOT accessible since it should be supplied from context
+
+  #
+  # Validations
+  #
+
+  validates :full_name,
+            uniqueness: {
+                unless: :batched?
+            }
+  validates :real_path,
+            uniqueness: {
+                unless: :batched?
+            }
+  validates :real_path_sha1_hex_digest,
+            uniqueness: {
+                unless: :batched?
+            }
+  validates :reference_name,
+            uniqueness: {
+                scope: :module_type,
+                unless: :batched?
+            }
+
+  #
+  # Methods
+  #
+
+  def batched?
+    super || loading_context?
+  end
 
   ActiveSupport.run_load_hooks(:mdm_module_ancestor, self)
 end

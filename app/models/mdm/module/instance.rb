@@ -2,6 +2,7 @@
 # {Mdm::Module} namespace.
 class Mdm::Module::Instance < ActiveRecord::Base
   include Metasploit::Model::Module::Instance
+  include MetasploitDataModels::Batch::Root
 
   self.table_name = 'module_instances'
 
@@ -224,6 +225,25 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
   #   @return ['active', 'passive', nil]
   #   @see Metasploit::Model::Module::Instance#supports_stance?
+
+  #
+  # Validations
+  #
+
+  validates :default_action_id,
+            uniqueness: {
+                allow_nil: true,
+                unless: :batched?
+            }
+  validates :default_target_id,
+            uniqueness: {
+                allow_nil: true,
+                unless: :batched?
+            }
+  validates :module_class_id,
+            uniqueness: {
+                unless: :batched?
+            }
 
   ActiveSupport.run_load_hooks(:mdm_module_instance, self)
 end

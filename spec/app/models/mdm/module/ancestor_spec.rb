@@ -60,6 +60,10 @@ describe Mdm::Module::Ancestor do
   end
 
   context 'validations' do
+    let(:taken_error) do
+      I18n.translate!('metasploit.model.errors.messages.taken')
+    end
+
     context 'full_name' do
       # can't use validate_uniqueness_of(:full_name) because of null value in module_type
       context 'validates uniqueness' do
@@ -77,7 +81,29 @@ describe Mdm::Module::Ancestor do
             )
           end
 
-          it_should_behave_like 'defer to unique index'
+          context 'with batched' do
+            include_context 'MetasploitDataModels::Batch.batch'
+
+            it 'should not add error on #full_name' do
+              same_full_name_ancestor.valid?
+
+              same_full_name_ancestor.errors[:full_name].should_not include(taken_error)
+            end
+
+            it 'should raise ActiveRecord::RecordNotUnique when saved' do
+              expect {
+                same_full_name_ancestor.save
+              }.to raise_error(ActiveRecord::RecordNotUnique)
+            end
+          end
+
+          context 'without batched' do
+            it 'should add error on #full_name' do
+              same_full_name_ancestor.valid?
+
+              same_full_name_ancestor.errors[:full_name].should include(taken_error)
+            end
+          end
         end
       end
     end
@@ -92,11 +118,35 @@ describe Mdm::Module::Ancestor do
           subject(:same_real_path_ancestor) do
             # Don't use factory as it will try to write real_path, which cause a path collision
             original_ancestor.parent_path.module_ancestors.new(
+                # if a payload, then handler_type needs to be set or it won't save
+                handler_type: original_ancestor.handler_type,
                 real_path: original_ancestor.real_path
             )
           end
 
-          it_should_behave_like 'defer to unique index'
+          context 'with batched' do
+            include_context 'MetasploitDataModels::Batch.batch'
+
+            it 'should not add error on #real_path' do
+              same_real_path_ancestor.valid?
+
+              same_real_path_ancestor.errors[:real_path].should_not include(taken_error)
+            end
+
+            it 'should raise ActiveRecord::RecordNotUnique when saved' do
+              expect {
+                same_real_path_ancestor.save
+              }.to raise_error(ActiveRecord::RecordNotUnique)
+            end
+          end
+
+          context 'without batched' do
+            it 'should add error on #real_path' do
+              same_real_path_ancestor.valid?
+
+              same_real_path_ancestor.errors[:real_path].should include(taken_error)
+            end
+          end
         end
       end
     end
@@ -117,7 +167,29 @@ describe Mdm::Module::Ancestor do
             )
           end
 
-          it_should_behave_like 'defer to unique index'
+          context 'with batched' do
+            include_context 'MetasploitDataModels::Batch.batch'
+
+            it 'should not add error on #real_path_sha1_hex_digest' do
+              same_real_path_sha1_hex_digest_ancestor.valid?
+
+              same_real_path_sha1_hex_digest_ancestor.errors[:real_path_sha1_hex_digest].should_not include(taken_error)
+            end
+
+            it 'should raise ActiveRecord::RecordNotUnique when saved' do
+              expect {
+                same_real_path_sha1_hex_digest_ancestor.save
+              }.to raise_error(ActiveRecord::RecordNotUnique)
+            end
+          end
+
+          context 'without batched' do
+            it 'should add error on #real_path_sha1_hex_digest' do
+              same_real_path_sha1_hex_digest_ancestor.valid?
+
+              same_real_path_sha1_hex_digest_ancestor.errors[:real_path_sha1_hex_digest].should include(taken_error)
+            end
+          end
         end
       end
     end
@@ -159,7 +231,29 @@ describe Mdm::Module::Ancestor do
               original_reference_name
             end
 
-            it_should_behave_like 'defer to unique index'
+            context 'with batched' do
+              include_context 'MetasploitDataModels::Batch.batch'
+
+              it 'should not add error on #reference_name' do
+                new_ancestor.valid?
+
+                new_ancestor.errors[:reference_name].should_not include(taken_error)
+              end
+
+              it 'should raise ActiveRecord::RecordNotUnique when saved' do
+                expect {
+                  new_ancestor.save
+                }.to raise_error(ActiveRecord::RecordNotUnique)
+              end
+            end
+
+            context 'without batched' do
+              it 'should add error on #reference_name' do
+                new_ancestor.valid?
+
+                new_ancestor.errors[:reference_name].should include(taken_error)
+              end
+            end
           end
         end
 
@@ -174,10 +268,22 @@ describe Mdm::Module::Ancestor do
               original_reference_name
             end
 
-            it 'should not record error on reference_name' do
-              new_ancestor.valid?
+            context 'with batched' do
+              include_context 'MetasploitDataModels::Batch.batch'
 
-              new_ancestor.errors[:reference_name].should be_empty
+              it 'should not record error on reference_name' do
+                new_ancestor.valid?
+
+                new_ancestor.errors[:reference_name].should be_empty
+              end
+            end
+
+            context 'without batched' do
+              it 'should not record error on reference_name' do
+                new_ancestor.valid?
+
+                new_ancestor.errors[:reference_name].should be_empty
+              end
             end
           end
         end

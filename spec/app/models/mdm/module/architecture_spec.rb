@@ -79,46 +79,92 @@ describe Mdm::Module::Architecture do
         existing_module_instance.save!
       end
 
-      context 'with same architecture_id' do
-        subject(:new_module_architecture) do
-          FactoryGirl.build(
-              :mdm_module_architecture,
-              :architecture => existing_architecture,
-              :module_instance => existing_module_instance
-          )
+      context 'with batched' do
+        include_context 'MetasploitDataModels::Batch.batch'
+
+        context 'with same architecture_id' do
+          subject(:new_module_architecture) do
+            existing_module_instance.module_architectures.build.tap { |module_architecture|
+              module_architecture.architecture = existing_architecture
+            }
+          end
+
+          it 'does not record error on architecture_id' do
+            new_module_architecture.valid?
+
+            new_module_architecture.errors[:architecture_id].should_not include('has already been taken')
+          end
+
+          it 'should raise ActiveRecord::RecordNotUnique when saved' do
+            expect {
+              new_module_architecture.save
+            }.to raise_error(ActiveRecord::RecordNotUnique)
+          end
         end
 
-        before(:each) do
-          existing_module_instance.module_architectures << new_module_architecture
-        end
+        context 'without same architecture_id' do
+          subject(:new_module_architecture) do
+            FactoryGirl.build(
+                :mdm_module_architecture,
+                :architecture => new_architecture,
+                :module_instance => existing_module_instance
+            )
+          end
 
-        it { should_not be_valid }
+          let(:new_architecture) do
+            FactoryGirl.generate :mdm_architecture
+          end
 
-        it 'should record error on architecture_id' do
-          new_module_architecture.valid?
+          before(:each) do
+            existing_module_instance.module_architectures << new_module_architecture
+          end
 
-          new_module_architecture.errors[:architecture_id].should include('has already been taken')
+          it { should be_valid }
         end
       end
 
-      context 'without same architecture_id' do
-        subject(:new_module_architecture) do
-          FactoryGirl.build(
-              :mdm_module_architecture,
-              :architecture => new_architecture,
-              :module_instance => existing_module_instance
-          )
+      context 'without batched' do
+        context 'with same architecture_id' do
+          subject(:new_module_architecture) do
+            FactoryGirl.build(
+                :mdm_module_architecture,
+                :architecture => existing_architecture,
+                :module_instance => existing_module_instance
+            )
+          end
+
+          before(:each) do
+            existing_module_instance.module_architectures << new_module_architecture
+          end
+
+          it { should_not be_valid }
+
+          it 'should record error on architecture_id' do
+            new_module_architecture.valid?
+
+            new_module_architecture.errors[:architecture_id].should include('has already been taken')
+          end
         end
 
-        let(:new_architecture) do
-          FactoryGirl.generate :mdm_architecture
-        end
+        context 'without same architecture_id' do
+          subject(:new_module_architecture) do
+            FactoryGirl.build(
+                :mdm_module_architecture,
+                :architecture => new_architecture,
+                :module_instance => existing_module_instance
+            )
+          end
 
-        before(:each) do
-          existing_module_instance.module_architectures << new_module_architecture
-        end
+          let(:new_architecture) do
+            FactoryGirl.generate :mdm_architecture
+          end
 
-        it { should be_valid }
+          before(:each) do
+            existing_module_instance.module_architectures << new_module_architecture
+          end
+
+          it { should be_valid }
+        end
       end
     end
 

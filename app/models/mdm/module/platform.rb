@@ -2,6 +2,7 @@
 # supports.
 class Mdm::Module::Platform < ActiveRecord::Base
   include Metasploit::Model::Module::Platform
+  include MetasploitDataModels::Batch::Descendant
 
   self.table_name = 'module_platforms'
 
@@ -26,8 +27,9 @@ class Mdm::Module::Platform < ActiveRecord::Base
   #
 
   validates :platform_id,
-            :uniqueness => {
-                :scope => :module_instance_id
+            uniqueness: {
+                scope: :module_instance_id,
+                unless: :batched?
             }
 
   ActiveSupport.run_load_hooks(:mdm_module_platform, self)

@@ -35,4 +35,75 @@ describe Mdm::Module::Author do
     it { should_not allow_mass_assignment_of(:email_address_id) }
     it { should_not allow_mass_assignment_of(:module_instance_id) }
   end
+
+  context 'validations' do
+    context 'validates uniqueness of #author_id scoped to #module_instance_id' do
+      let(:error) do
+        I18n.translate!('metasploit.model.errors.messages.taken')
+      end
+
+      let(:existing_author) do
+        existing_module_author.author
+      end
+
+      let(:existing_module_author) do
+        existing_module_instance.module_authors.first
+      end
+
+      let(:existing_module_instance) do
+        FactoryGirl.create(
+            :mdm_module_instance,
+            module_authors_length: 1
+        )
+      end
+
+      before(:each) do
+        existing_module_instance.save
+      end
+
+      context 'with batched' do
+        include_context 'MetasploitDataModels::Batch.batch'
+
+        context 'with same #module_instance_id' do
+          context 'with same #author_id' do
+            let(:new_module_author) do
+              existing_module_instance.module_authors.build.tap { |module_author|
+                module_author.author = existing_author
+              }
+            end
+
+            it 'should not add error on #author_id' do
+              new_module_author.valid?
+
+              new_module_author.errors[:author_id].should_not include(error)
+            end
+
+            it 'should raise ActiveRecord::RecordNotUnique when saved' do
+              expect {
+                new_module_author.save
+              }.to raise_error(ActiveRecord::RecordNotUnique)
+            end
+          end
+        end
+      end
+
+      context 'without batched' do
+        context 'with same #module_instance_id' do
+          context 'with same #author_id' do
+            let(:new_module_author) do
+              existing_module_instance.module_authors.build.tap { |module_author|
+                module_author.author = existing_author
+              }
+            end
+
+            it 'should add error on #author_id' do
+              new_module_author.valid?
+
+              new_module_author.errors[:author_id].should include(error)
+            end
+          end
+        end
+      end
+    end
+  end
 end

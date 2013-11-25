@@ -1,6 +1,7 @@
 # {#architecture} supported by {#module_target}.
 class Mdm::Module::Target::Architecture < ActiveRecord::Base
   include Metasploit::Model::Module::Target::Architecture
+  include MetasploitDataModels::Batch::Descendant
 
   #
   # Associations
@@ -24,6 +25,7 @@ class Mdm::Module::Target::Architecture < ActiveRecord::Base
 
   validates :architecture_id,
             uniqueness: {
-                scope: :module_target_id
+                scope: :module_target_id,
+                unless: :batched?
             }
 end

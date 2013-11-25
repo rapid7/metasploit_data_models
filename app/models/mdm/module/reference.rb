@@ -2,6 +2,7 @@
 # modules.
 class Mdm::Module::Reference < ActiveRecord::Base
   include Metasploit::Model::Module::Reference
+  include MetasploitDataModels::Batch::Descendant
 
   self.table_name = 'module_references'
 
@@ -26,7 +27,8 @@ class Mdm::Module::Reference < ActiveRecord::Base
   #
 
   validates :reference_id,
-            :uniqueness => {
-                :scope => :module_instance_id
+            uniqueness: {
+                scope: :module_instance_id,
+                unless: :batched?
             }
 end

@@ -1,6 +1,7 @@
 # Email address for used by an {Mdm::Author} for {Mdm::Module::Author credit} on a given {Mdm::Module::Instance module}.
 class Mdm::EmailAddress < ActiveRecord::Base
   include Metasploit::Model::EmailAddress
+  include MetasploitDataModels::Batch::Descendant
 
   #
   # Associations
@@ -46,9 +47,14 @@ class Mdm::EmailAddress < ActiveRecord::Base
   # Validations
   #
 
+  validates :full,
+            uniqueness: {
+                unless: :batched?
+            }
   validates :local,
-            :uniqueness => {
-                :scope => :domain
+            uniqueness: {
+                scope: :domain,
+                unless: :batched?
             }
 
   ActiveSupport.run_load_hooks(:mdm_email_address, self)

@@ -4,6 +4,7 @@
 # similarity should be assumed between those two {Mdm::Module::Action actions} or {Mdm::Module::Instance modules}.
 class Mdm::Module::Action < ActiveRecord::Base
   include Metasploit::Model::Module::Action
+  include MetasploitDataModels::Batch::Descendant
 
   self.table_name = 'module_actions'
 
@@ -31,8 +32,9 @@ class Mdm::Module::Action < ActiveRecord::Base
   #
 
   validates :name,
-            :uniqueness => {
-                :scope => :module_instance_id
+            uniqueness: {
+                scope: :module_instance_id,
+                unless: :batched?
             }
 
   ActiveSupport.run_load_hooks(:mdm_module_action, self)
