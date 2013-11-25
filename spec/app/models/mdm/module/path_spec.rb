@@ -224,9 +224,9 @@ describe Mdm::Module::Path do
         each_changed_module_ancestor
       end
 
-      it 'should only fetch :changed option once as a loop optimization' do
+      it 'should only fetch :changed and get :progress_bar option once as a loop optimization' do
         options.should_receive(:fetch).with(:changed, false)
-        options.should_not_receive(:[])
+        options.should_receive(:[]).with(:progress_bar)
 
         each_changed_module_ancestor
       end
@@ -347,6 +347,159 @@ describe Mdm::Module::Path do
                   changed_module_ancestors.should_not include(existing_module_ancestor)
                 end
               end
+            end
+          end
+        end
+      end
+
+      context ':progress_bar option' do
+        context 'with ruby ProgressBar' do
+          #
+          # lets
+          #
+
+          let(:options) do
+            {
+                progress_bar: progress_bar
+            }
+          end
+
+          let(:output) do
+            # adapted from https://github.com/jfelchner/ruby-progressbar/blob/5483cf834a74018e8a0c2091e1939d1981de9a2b/spec/lib/ruby-progressbar/base_spec.rb
+            StringIO.new('', 'w+').tap { |string_io|
+              string_io.stub(:tty?).and_return(true)
+            }
+          end
+
+          let(:progress_bar) do
+            ProgressBar::Base.new(
+                output: output,
+                throttle_rate: 0.0
+            )
+          end
+
+          it 'should set #total to #module_ancestor_real_paths #length' do
+            expected_total = path.module_ancestor_real_paths.length
+
+            progress_bar.should_receive(:total=).with(expected_total).and_call_original
+
+            each_changed_module_ancestor
+          end
+
+          context 'updatable module ancestors' do
+            let(:new_module_ancestors) do
+              []
+            end
+
+            context 'with changed' do
+              let(:options) do
+                super().merge(
+                    changed: true
+                )
+              end
+
+              it 'should increment progress bar with yielding' do
+                actual_real_paths = []
+
+                path.each_changed_module_ancestor(options) { |module_ancestor|
+                  actual_real_paths << module_ancestor.real_path
+                }
+
+                expect(actual_real_paths).to match_array(existing_module_ancestor_real_paths)
+                progress_bar.should be_finished
+              end
+            end
+
+            context 'without changed' do
+              let(:options) do
+                super().merge(
+                    changed: false
+                )
+              end
+
+              it 'should increment progress bar without yielding' do
+                expect { |b|
+                  path.each_changed_module_ancestor(options, &b)
+                }.not_to yield_control
+
+                progress_bar.should be_finished
+              end
+            end
+          end
+
+          context 'new module ancestors' do
+            let(:existing_module_ancestors) do
+              []
+            end
+
+            it 'should #increment progress bar' do
+              each_changed_module_ancestor
+
+              progress_bar.should be_finished
+            end
+          end
+        end
+
+        context 'without progress bar' do
+          it 'should set #total to #module_ancestor_real_paths #length' do
+            expected_total = path.module_ancestor_real_paths.length
+
+            MetasploitDataModels::NullProgressBar.any_instance.should_receive(:total=).with(expected_total)
+
+            each_changed_module_ancestor
+          end
+
+          context 'updatable module ancestors' do
+            let(:new_module_ancestors) do
+              []
+            end
+
+            context 'with changed' do
+              let(:options) do
+                super().merge(
+                    changed: true
+                )
+              end
+
+              it 'should increment progress bar with yielding' do
+                MetasploitDataModels::NullProgressBar.any_instance.should_receive(:increment).exactly(existing_module_ancestors.length).times
+
+                actual_real_paths = []
+
+                path.each_changed_module_ancestor(options) { |module_ancestor|
+                  actual_real_paths << module_ancestor.real_path
+                }
+
+                expect(actual_real_paths).to match_array(existing_module_ancestor_real_paths)
+              end
+            end
+
+            context 'without changed' do
+              let(:options) do
+                super().merge(
+                    changed: false
+                )
+              end
+
+              it 'should increment progress bar without yielding' do
+                MetasploitDataModels::NullProgressBar.any_instance.should_receive(:increment).exactly(existing_module_ancestors.length).times
+
+                expect { |b|
+                  path.each_changed_module_ancestor(options, &b)
+                }.not_to yield_control
+              end
+            end
+          end
+
+          context 'new module ancestors' do
+            let(:existing_module_ancestors) do
+              []
+            end
+
+            it 'should #increment progress bar' do
+              MetasploitDataModels::NullProgressBar.any_instance.should_receive(:increment).exactly(new_module_ancestor_real_paths.length).times
+
+              each_changed_module_ancestor
             end
           end
         end

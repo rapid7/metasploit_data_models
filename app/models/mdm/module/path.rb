@@ -103,12 +103,25 @@ class Mdm::Module::Path < ActiveRecord::Base
   #   {Mdm::Module::Ancestor#real_path_modified_at} and
   #   {Mdm::Module::Ancestor#real_path_sha1_hex_digest} have changed and that
   #   {Mdm::Module::Ancestor} should be returned.
+  # @option options [ProgressBar, #total=, #increment] :progress_bar a ruby `ProgressBar` or similar object that
+  #   supports the `#total=` and `#increment` API for monitoring the progress of the enumerator.  `#total` will be set
+  #   to total number of {#module_ancestor_real_paths real paths} under this module path, not just the number of changed
+  #   (updated or new) real paths.  `#increment` will be called whenever a real path is visited, which means it can be
+  #   called when there is no yielded module ancestor because that module ancestor was unchanged.  When
+  #   {#each_changed_module_ancestor} returns, `#increment` will have been called the same number of times as the value
+  #   passed to `#total=` and `#finished?` will be `true`.
+  #
   # @see #changed_module_ancestor_from_real_path
   def each_changed_module_ancestor(options={})
+    options.assert_valid_keys(:changed, :progress_bar)
+
     unless block_given?
       to_enum(__method__, options)
     else
       real_paths = module_ancestor_real_paths
+
+      progress_bar = options[:progress_bar] || MetasploitDataModels::NullProgressBar.new
+      progress_bar.total = real_paths.length
 
       # ensure the connection doesn't stay checked out for thread in metasploit-framework.
       ActiveRecord::Base.connection_pool.with_connection do
@@ -135,7 +148,11 @@ class Mdm::Module::Path < ActiveRecord::Base
           end
 
           if changed
+            progress_bar.increment
             yield updatable_module_ancestor
+          else
+            # increment even when no yield so that increment occurs for each path and matches totally without jumps
+            progress_bar.increment
           end
         end
 
@@ -144,6 +161,7 @@ class Mdm::Module::Path < ActiveRecord::Base
         new_real_path_set.each do |real_path|
           new_module_ancestor = module_ancestors.new(real_path: real_path)
 
+          progress_bar.increment
           yield new_module_ancestor
         end
       end
