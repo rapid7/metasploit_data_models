@@ -408,6 +408,16 @@ describe Mdm::Module::Path do
                 expect(actual_real_paths).to match_array(existing_module_ancestor_real_paths)
                 progress_bar.should be_finished
               end
+
+              it 'should increment progress bar after yieldreturn' do
+                expected_progress = 0
+
+                path.each_changed_module_ancestor(options) { |_|
+                  progress_bar.progress.should == expected_progress
+                  expected_progress += 1
+                }
+                progress_bar.progress.should == expected_progress
+              end
             end
 
             context 'without changed' do
@@ -424,6 +434,14 @@ describe Mdm::Module::Path do
 
                 progress_bar.should be_finished
               end
+
+              it 'should finish progress bar only after return' do
+                path.each_changed_module_ancestor(options) { |_|
+                  progress_bar.should_not be_finished
+                }
+
+                progress_bar.should be_finished
+              end
             end
           end
 
@@ -434,6 +452,25 @@ describe Mdm::Module::Path do
 
             it 'should #increment progress bar' do
               each_changed_module_ancestor
+
+              progress_bar.should be_finished
+            end
+
+            it 'should increment progress bar after yieldreturn' do
+              expected_progress = 0
+
+              path.each_changed_module_ancestor(options) { |_|
+                progress_bar.progress.should == expected_progress
+                expected_progress += 1
+              }
+
+              progress_bar.progress.should == expected_progress
+            end
+
+            it 'should finish progress bar only after return' do
+              path.each_changed_module_ancestor(options) { |_|
+                progress_bar.should_not be_finished
+              }
 
               progress_bar.should be_finished
             end

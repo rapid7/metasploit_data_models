@@ -148,8 +148,8 @@ class Mdm::Module::Path < ActiveRecord::Base
           end
 
           if changed
-            progress_bar.increment
             yield updatable_module_ancestor
+            progress_bar.increment
           else
             # increment even when no yield so that increment occurs for each path and matches totally without jumps
             progress_bar.increment
@@ -161,8 +161,8 @@ class Mdm::Module::Path < ActiveRecord::Base
         new_real_path_set.each do |real_path|
           new_module_ancestor = module_ancestors.new(real_path: real_path)
 
-          progress_bar.increment
           yield new_module_ancestor
+          progress_bar.increment
         end
       end
     end
