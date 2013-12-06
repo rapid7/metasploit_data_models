@@ -7,7 +7,7 @@ unless ENV['RM_INFO']
 end
 
 SimpleCov.configure do
-  load_adapter('rails')
+  load_profile('rails')
 
   # ignore this file
 	add_filter '.simplecov'
