@@ -7,6 +7,7 @@ class MetasploitDataModels::Search::Visitor::Relation < Metasploit::Model::Base
   # `ActiveRecord::Relation` methods that can compute their argument with a visitor under the
   # {MetasploitDataModels::Search::Visitor} namespace.
   RELATION_METHODS = [
+      :joins,
       :includes,
       :where
   ]
