@@ -131,6 +131,15 @@ class Mdm::Service < ActiveRecord::Base
           ])
   }
 
+  #
+  # Validations
+  #
+  validates :port,
+            numericality: {
+                only_integer: true
+            }
+  validates :proto, presence: true
+
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} whenever {#info} has
   # changed.
   #
