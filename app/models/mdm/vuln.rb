@@ -128,6 +128,7 @@ class Mdm::Vuln < ActiveRecord::Base
   #
 
   validates :name, :presence => true
+  validates :name, length: {maximum: 255}
   validates_associated :refs
 
   private

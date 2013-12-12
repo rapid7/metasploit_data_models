@@ -258,5 +258,18 @@ describe Mdm::Vuln do
 
   context 'validations' do
     it { should validate_presence_of :name }
+
+    context "invalid" do
+      let(:mdm_vuln) do
+        FactoryGirl.build(:mdm_vuln)
+      end
+
+      it "should not allow :name over 255 characters" do
+        str = Faker::Lorem.characters(256)
+        mdm_vuln.name = str
+        mdm_vuln.valid?
+        mdm_vuln.errors[:name][0].should include "is too long"
+      end
+    end
   end
 end
