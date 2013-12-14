@@ -20,10 +20,10 @@ FactoryGirl.define do
 
   sequence :mdm_web_form_params do |n|
     [
-        [
-            "name#{n}",
-            "value#{n}"
-        ]
+      [
+        "name#{n}",
+        "value#{n}"
+      ]
     ]
   end
 

@@ -124,7 +124,11 @@ class Mdm::Vuln < ActiveRecord::Base
   # Validations
   #
 
-  validates :name, :presence => true
+  validates :name,
+            length: {
+                maximum: 255
+            },
+            presence: true
 
   ActiveSupport.run_load_hooks(:mdm_vuln, self)
 end
