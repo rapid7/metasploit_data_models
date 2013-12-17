@@ -97,4 +97,45 @@ describe Mdm::Service do
     end
   end
 
+  context "validations" do
+    let(:mdm_service) do
+      mdm_service = FactoryGirl.build(:mdm_service)
+      mdm_service.valid?
+      mdm_service
+    end
+
+    context "invalid" do
+      it "should validate presence of :port" do
+        mdm_service.port = nil
+        mdm_service.valid?
+        mdm_service.errors[:port][0].should include "is not a number"
+      end
+
+      it "should validate presence of :proto" do
+        mdm_service.proto = nil
+        mdm_service.valid?
+        mdm_service.errors[:proto][0].should include "can't be blank"
+      end
+
+      it "should not allow non-numeric value for port" do
+        mdm_service.port = Faker::Lorem.characters(4)
+        mdm_service.valid?
+        mdm_service.errors[:port][0].should include "is not a number"
+      end
+    end
+
+    context "valid" do
+      it "should allow numeric value for port" do
+        mdm_service.port = Faker::Number.number(4)
+        mdm_service.valid?
+        mdm_service.should have(0).errors_on(:port)
+      end
+
+      it "should allow proto" do
+        mdm_service.proto = "tcp"
+        mdm_service.valid?
+        mdm_service.should have(0).errors_on(:proto)
+      end
+    end
+  end
 end
