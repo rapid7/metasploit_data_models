@@ -103,6 +103,27 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
     end
 
+    context 'MetasploitDataModels::Search::Visitor::Joins' do
+      subject(:joins_visitor) do
+        visitor.visitor_by_relation_method[:joins]
+      end
+
+      it 'should visit Metasploit::Model::Search::Query#tree' do
+        joins_visitor.should_receive(:visit).with(query.tree)
+
+        visit
+      end
+
+      it 'should pass visited to ActiveRecord::Relation#joins' do
+        visited = double('Visited')
+        joins_visitor.stub(:visit).with(query.tree).and_return(visited)
+
+        ActiveRecord::Relation.any_instance.should_receive(:joins).with(visited).and_return(query.klass.scoped)
+
+        visit
+      end
+    end
+
     context 'MetasploitDataModels::Search::Visitor::Where' do
       subject(:where_visitor) do
         visitor.visitor_by_relation_method[:where]
@@ -1340,6 +1361,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       visitor.visitor_by_relation_method
     end
 
+    its([:joins]) { should be_a MetasploitDataModels::Search::Visitor::Joins }
     its([:includes]) { should be_a MetasploitDataModels::Search::Visitor::Includes }
     its([:where]) { should be_a MetasploitDataModels::Search::Visitor::Where }
   end
@@ -1349,6 +1371,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       described_class.visitor_class_by_relation_method
     end
 
+    its([:joins]) { should == MetasploitDataModels::Search::Visitor::Joins }
     its([:includes]) { should == MetasploitDataModels::Search::Visitor::Includes }
     its([:where]) { should == MetasploitDataModels::Search::Visitor::Where }
   end

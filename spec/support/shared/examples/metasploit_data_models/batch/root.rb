@@ -69,7 +69,7 @@ shared_examples_for 'MetasploitDataModels::Batch::Root' do
             rescue ActiveRecord::RecordNotUnique
               expect {
                 Mdm::Architecture.count
-              }.should_not raise_error
+              }.not_to raise_error
             end
           end
         end
