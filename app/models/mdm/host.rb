@@ -53,6 +53,12 @@ class Mdm::Host < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] clients
+  #   Users connected to this host
+  #
+  #   @return [Array<Mdm::Client>]
+  has_many :clients, class_name: 'Mdm::Client', dependent: :destroy
+
   # @!attribute [rw] task_hosts
   #   Details about what Tasks touched this host
   #
@@ -64,12 +70,6 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Task>]
   has_many :tasks, :through => :task_hosts, :class_name => 'Mdm::Task'
-
-  # @!attribute [rw] clients
-  #   Users connected to this host
-  #
-  #   @return [Array<Mdm::Client>]
-  has_many :clients, :dependent => :delete_all, :class_name => 'Mdm::Client'
 
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.

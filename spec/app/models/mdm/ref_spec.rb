@@ -20,7 +20,7 @@ describe Mdm::Ref do
           end
 
           it 'should have module_refs in assocation' do
-            ref.module_refs.should =~ [module_ref]
+            expect(ref.module_refs).to match_array([module_ref])
           end
         end
       end
