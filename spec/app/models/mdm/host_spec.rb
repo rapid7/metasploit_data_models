@@ -96,8 +96,9 @@ describe Mdm::Host do
 
 	context 'associations' do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
-		it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
-		it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
+    it { should have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
+    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
+    it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
     it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
     it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
     it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
@@ -149,7 +150,7 @@ describe Mdm::Host do
                 end
 
                 it 'should list unique Mdm::Module::Detail' do
-                  host.module_details.should =~ [module_detail]
+                  expect(host.module_details).to match_array([module_detail])
                 end
 
                 it 'should have duplicate Mdm::Module::Details if collected through chain' do
