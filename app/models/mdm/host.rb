@@ -53,6 +53,12 @@ class Mdm::Host < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] clients
+  #   Users connected to this host
+  #
+  #   @return [Array<Mdm::Client>]
+  has_many :clients, class_name: 'Mdm::Client', dependent: :destroy
+
   # @!attribute [rw] task_hosts
   #   Details about what Tasks touched this host
   #

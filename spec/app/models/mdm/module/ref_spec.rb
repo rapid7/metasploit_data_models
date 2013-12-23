@@ -22,7 +22,7 @@ describe Mdm::Module::Ref do
           end
 
           it 'should have refs in association' do
-            module_ref.refs.should =~ [ref]
+            expect(module_ref.refs).to match_array([ref])
           end
         end
       end

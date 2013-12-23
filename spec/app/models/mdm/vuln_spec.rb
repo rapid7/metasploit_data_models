@@ -89,7 +89,7 @@ describe Mdm::Vuln do
               end
 
               it 'should list unique Mdm::Module::Detail' do
-                vuln.module_details.should =~ [module_detail]
+                expect(vuln.module_details).to match_array([module_detail])
               end
 
               it 'should have duplicate Mdm::Module::Details if collected through chain' do
