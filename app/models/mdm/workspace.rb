@@ -21,8 +21,6 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :listeners, :dependent => :destroy, :class_name => 'Mdm::Listener'
   has_many :notes, :class_name => 'Mdm::Note'
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
-  has_many :report_templates, :dependent => :destroy, :class_name => 'Mdm::ReportTemplate'
-  has_many :reports, :dependent => :destroy, :class_name => 'Mdm::Report'
   has_many :tasks, :dependent => :destroy, :class_name => 'Mdm::Task', :order => 'created_at DESC'
   has_and_belongs_to_many :users, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::User'
 

@@ -20,8 +20,6 @@ describe Mdm::Workspace do
     it 'should successfully destroy the object and dependent objects' do
       workspace = FactoryGirl.create(:mdm_workspace)
       listener = FactoryGirl.create(:mdm_listener, :workspace => workspace)
-      report_template = FactoryGirl.create(:mdm_report_template, :workspace => workspace)
-      report = FactoryGirl.create(:mdm_report, :workspace => workspace)
       task = FactoryGirl.create(:mdm_task, :workspace => workspace)
 
       expect {
@@ -32,12 +30,6 @@ describe Mdm::Workspace do
       }.to raise_error(ActiveRecord::RecordNotFound)
       expect {
         listener.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        report_template.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        report.reload
       }.to raise_error(ActiveRecord::RecordNotFound)
       expect {
         task.reload
@@ -55,8 +47,6 @@ describe Mdm::Workspace do
     it { should have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
     it { should have_many(:notes).class_name('Mdm::Note') }
     it { should belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
-    it { should have_many(:report_templates).class_name('Mdm::ReportTemplate').dependent(:destroy) }
-    it { should have_many(:reports).class_name('Mdm::Report').dependent(:destroy) }
     it { should have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
     it { should have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
     it { should have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
