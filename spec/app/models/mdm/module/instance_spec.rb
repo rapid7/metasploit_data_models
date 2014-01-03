@@ -51,6 +51,477 @@ describe Mdm::Module::Instance do
     end
   end
 
+  context 'scopes' do
+    context 'compatible_privilege_with' do
+      subject(:compatible_privilege_with) do
+        described_class.compatible_privilege_with(module_instance)
+      end
+
+      #
+      # let!s
+      #
+
+      let!(:module_instance) do
+        FactoryGirl.create(
+            :mdm_module_instance,
+            privileged: privilege
+        )
+      end
+
+      let!(:privileged) do
+        FactoryGirl.create(
+            :mdm_module_instance,
+            privileged: true
+        )
+      end
+
+      let!(:unprivileged) do
+        FactoryGirl.create(
+            :mdm_module_instance,
+            privileged: false
+        )
+      end
+
+      context 'with privileged' do
+        let(:privilege) do
+          true
+        end
+
+        it 'includes privileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).to include(privileged)
+        end
+
+        it 'does not include unprivileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).not_to include(unprivileged)
+        end
+      end
+
+      context 'without privileged' do
+        let(:privilege) do
+          false
+        end
+
+        it 'includes privileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).to include(privileged)
+        end
+
+        it 'includes unprivileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).to include(unprivileged)
+        end
+      end
+    end
+
+    context 'intersecting_architectures_with' do
+      subject(:intersecting_architectures_with) do
+        described_class.intersecting_architectures_with(module_target)
+      end
+
+      #
+      # lets
+      #
+
+      let(:architecture) do
+        FactoryGirl.generate :mdm_architecture
+      end
+
+      let(:module_target) do
+        FactoryGirl.build(
+            :mdm_module_target,
+            target_architectures_length: 0
+        ).tap { |module_target|
+          module_target.target_architectures.build(
+              {
+                architecture: architecture
+              },
+              {
+                  without_protection: true
+              }
+          )
+
+          module_target.module_instance.module_architectures.build(
+              {
+                  architecture: architecture
+              },
+              {
+                  without_protection: true
+              }
+          )
+        }
+      end
+
+      let(:other_module_class) do
+        FactoryGirl.create(
+            :mdm_module_class,
+            module_type: other_module_type
+        )
+      end
+
+      let(:other_module_type) do
+        'payload'
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        module_target.save!
+      end
+
+      context 'with intersection' do
+        #
+        # lets
+        #
+
+        let(:other_module_instance) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              module_class: other_module_class,
+              module_architectures_length: 0
+          ).tap { |module_instance|
+            module_instance.module_architectures.build(
+                {
+                    architecture: architecture
+                },
+                {
+                    without_protection: true
+                }
+            )
+          }
+        end
+
+        #
+        # Callbacks
+        #
+
+        before(:each) do
+          other_module_instance.save!
+        end
+
+        it 'includes Mdm::Module::Instance with same Mdm::Architecture' do
+          expect(intersecting_architectures_with).to include(other_module_instance)
+        end
+      end
+
+      context 'without intersection' do
+        #
+        # lets
+        #
+
+        let(:other_architecture) do
+          FactoryGirl.generate :mdm_architecture
+        end
+
+        let(:other_module_instance) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              module_class: other_module_class,
+              module_architectures_length: 0
+          ).tap { |module_instance|
+            module_instance.module_architectures.build(
+                {
+                    architecture: other_architecture
+                },
+                {
+                    without_protection: true
+                }
+            )
+          }
+        end
+
+        #
+        # Callbacks
+        #
+
+        before(:each) do
+          other_module_instance.save!
+        end
+
+        it 'does include Mdm::Module::Instance without same Mdm::Architecture' do
+          expect(intersecting_architectures_with).not_to include(other_module_instance)
+        end
+      end
+    end
+
+    context 'intersecting_platforms_with' do
+      subject(:intersecting_platforms_with) do
+        described_class.intersecting_platforms_with(module_target)
+      end
+
+      #
+      # lets
+      #
+
+      let(:platform) do
+        Mdm::Platform.where(fully_qualified_name: platform_fully_qualified_name).first
+      end
+
+      let(:platform_fully_qualified_name) do
+        'Windows XP'
+      end
+
+      let(:module_target) do
+        FactoryGirl.build(
+            :mdm_module_target,
+            target_platforms_length: 0
+        ).tap { |module_target|
+          module_target.target_platforms.build(
+              {
+                  platform: platform
+              },
+              {
+                  without_protection: true
+              }
+          )
+
+          module_target.module_instance.module_platforms.build(
+              {
+                  platform: platform
+              },
+              {
+                  without_protection: true
+              }
+          )
+        }
+      end
+
+      let(:other_module_class) do
+        FactoryGirl.create(
+            :mdm_module_class,
+            module_type: other_module_type
+        )
+      end
+
+      let(:other_module_instance) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_class: other_module_class,
+            module_platforms_length: 0
+        ).tap { |module_instance|
+          module_instance.module_platforms.build(
+              {
+                  platform: other_platform
+              },
+              {
+                  without_protection: true
+              }
+          )
+        }
+      end
+
+      let(:other_module_type) do
+        'payload'
+      end
+
+      let(:other_platform) do
+        Mdm::Platform.where(fully_qualified_name: other_platform_fully_qualified_name).first
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        module_target.save!
+        other_module_instance.save!
+      end
+
+      context 'with same platform' do
+        let(:other_platform) do
+          platform
+        end
+
+        it 'includes the Mdm::Module::Instance' do
+          expect(intersecting_platforms_with).to include(other_module_instance)
+        end
+      end
+
+      context 'with ancestor platform' do
+        let(:other_platform_fully_qualified_name) do
+          'Windows'
+        end
+
+        it 'includes the Mdm::Module::Instance' do
+          expect(intersecting_platforms_with).to include(other_module_instance)
+        end
+      end
+
+      context 'with descendant platform' do
+         let(:other_platform_fully_qualified_name) do
+          'Windows XP SP1'
+        end
+
+        it 'includes the Mdm::Module::Instance' do
+          expect(intersecting_platforms_with).to include(other_module_instance)
+        end
+      end
+
+      context 'with cousin platform' do
+        let(:other_platform_fully_qualified_name) do
+          'Windows XP SP1'
+        end
+
+        let(:platform_fully_qualified_name) do
+          'Windows 2000 SP1'
+        end
+
+        it 'does not include Mdm::Module::Instance' do
+          expect(intersecting_platforms_with).not_to include(other_module_instance)
+        end
+      end
+
+      context 'with unrelated platform' do
+        let(:other_platform_fully_qualified_name) do
+          'UNIX'
+        end
+
+        it 'does not include Mdm::Module::Instance' do
+          expect(intersecting_platforms_with).not_to include(other_module_instance)
+        end
+      end
+    end
+
+    context 'payloads' do
+      subject(:payloads) do
+        described_class.payloads
+      end
+
+      #
+      # let!s
+      #
+
+      let!(:module_class_by_module_type) do
+        Metasploit::Model::Module::Type::ALL.each_with_object({}) { |module_type, module_class_by_module_type|
+          module_class = FactoryGirl.create(
+              :mdm_module_class,
+              module_type: module_type
+          )
+
+          module_class_by_module_type[module_type] = module_class
+        }
+      end
+
+      let!(:module_instance_by_module_type) do
+        module_class_by_module_type.each_with_object({}) { |(module_type, module_class), module_instance_by_module_type|
+          module_instance = FactoryGirl.create(
+              :mdm_module_instance,
+              module_class: module_class
+          )
+
+          module_instance_by_module_type[module_type] = module_instance
+        }
+      end
+
+      it 'includes payload' do
+        expect(payloads).to include(module_instance_by_module_type['payload'])
+      end
+
+      Metasploit::Model::Module::Type::NON_PAYLOAD.each do |module_type|
+        it "does not include #{module_type}" do
+          expect(payloads).not_to include(module_instance_by_module_type[module_type])
+        end
+      end
+    end
+
+    context 'payloads_compatible_with' do
+      subject(:payloads_compatible_with) do
+        described_class.payloads_compatible_with(module_target)
+      end
+
+      #
+      # lets
+      #
+
+      let(:architecture) do
+        FactoryGirl.generate :mdm_architecture
+      end
+
+      let(:module_target) do
+        FactoryGirl.build(
+            :mdm_module_target,
+            target_architectures_length: 0,
+            target_platforms_length: 0
+        ).tap { |module_target|
+          module_target.target_architectures.build(
+              {
+                  architecture: architecture
+              },
+              {
+                  without_protection: true
+              }
+          )
+
+          module_target.module_instance.module_architectures.build(
+              {
+                  architecture: architecture
+              },
+              {
+                  without_protection: true
+              }
+          )
+
+          module_target.target_platforms.build(
+              {
+                  platform: platform
+              },
+              {
+                  without_protection: true
+              }
+          )
+
+          module_target.module_instance.module_platforms.build(
+              {
+                  platform: platform
+              },
+              {
+                  without_protection: true
+              }
+          )
+        }
+      end
+
+      let(:platform) do
+        Mdm::Platform.where(fully_qualified_name: platform_fully_qualified_name).first
+      end
+
+      let(:platform_fully_qualified_name) do
+        'Windows XP'
+      end
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        module_target.save!
+      end
+
+      it 'calls payloads' do
+        expect(described_class).to receive(:payloads).and_call_original
+
+        payloads_compatible_with
+      end
+
+      it 'calls compatible_privilege_with on the module_target.module_instance' do
+        expect(described_class).to receive(:compatible_privilege_with).with(module_target.module_instance).and_call_original
+
+        payloads_compatible_with
+      end
+
+      it 'calls intersecting_architectures_with on the module_target' do
+        expect(described_class).to receive(:intersecting_architectures_with).with(module_target).and_call_original
+
+        payloads_compatible_with
+      end
+
+      it 'calls intersecting_paltforms_with on the module_target' do
+        expect(described_class).to receive(:intersecting_platforms_with).with(module_target).and_call_original
+
+        payloads_compatible_with
+      end
+    end
+  end
+
   context '#targets' do
     subject(:targets) do
       module_instance.targets
