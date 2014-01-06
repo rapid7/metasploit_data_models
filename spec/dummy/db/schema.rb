@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131030182452) do
+ActiveRecord::Schema.define(:version => 20140106022804) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -109,7 +109,10 @@ ActiveRecord::Schema.define(:version => 20131030182452) do
     t.integer  "port"
     t.string   "proto"
     t.text     "fail_detail"
+    t.integer  "module_class_id"
   end
+
+  add_index "exploit_attempts", ["module_class_id"], :name => "index_exploit_attempts_on_module_class_id"
 
   create_table "exploited_hosts", :force => true do |t|
     t.integer  "host_id",                      :null => false

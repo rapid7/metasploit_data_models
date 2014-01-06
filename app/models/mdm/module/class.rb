@@ -13,6 +13,16 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
   #
 
+  # @!attribute [rw] exploit_attempts
+  #   Attempts to run this exploit against a {Mdm::ExploitAttempt#host} or {Mdm::ExploitAttemp#service}.
+  #
+  #   @return [Array<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts,
+           class_name: 'Mdm::ExploitAttempt',
+           dependent: :destroy,
+           foreign_key: :module_class_id,
+           inverse_of: :module_class
+
   # @!attribute [rw] module_instance
   #   Instance-derived metadata to go along with the class-derived metadata from this model.
   #

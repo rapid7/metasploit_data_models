@@ -16,6 +16,7 @@ describe Mdm::Module::Class do
 
   context 'associations' do
     it { should have_many(:ancestors).class_name('Mdm::Module::Ancestor').through(:relationships) }
+    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
     it { should have_one(:module_instance).class_name('Mdm::Module::Instance').dependent(:destroy) }
     it { should belong_to(:rank).class_name('Mdm::Module::Rank') }
     it { should have_many(:relationships).class_name('Mdm::Module::Relationship').dependent(:destroy).with_foreign_key(:descendant_id) }
