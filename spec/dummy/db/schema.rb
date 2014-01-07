@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106022804) do
+ActiveRecord::Schema.define(:version => 20140106180149) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -467,14 +467,18 @@ ActiveRecord::Schema.define(:version => 20140106022804) do
     t.string   "via_payload"
     t.string   "desc"
     t.integer  "port"
-    t.string   "platform"
     t.text     "datastore"
-    t.datetime "opened_at",    :null => false
+    t.datetime "opened_at",       :null => false
     t.datetime "closed_at"
     t.string   "close_reason"
     t.integer  "local_id"
     t.datetime "last_seen"
+    t.integer  "architecture_id"
+    t.integer  "platform_id"
   end
+
+  add_index "sessions", ["architecture_id"], :name => "index_sessions_on_architecture_id"
+  add_index "sessions", ["platform_id"], :name => "index_sessions_on_platform_id"
 
   create_table "tags", :force => true do |t|
     t.integer  "user_id"
