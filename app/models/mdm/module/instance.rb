@@ -243,8 +243,8 @@ class Mdm::Module::Instance < ActiveRecord::Base
         }
 
   # @!method intersecting_platforms_with(module_target)
-  #   List of {Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given `module_target`'s
-  #   {Mdm::Module::Target#architectures}.
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
+  #   `module_target`'s {Mdm::Module::Target#architectures}.
   #
   #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#architectures} need to have at least
   #     1 {Mdm::Architecture} shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
@@ -262,8 +262,8 @@ class Mdm::Module::Instance < ActiveRecord::Base
         }
 
   # @!method intersecting_platforms_with(module_target)
-  #   List of {Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with the given
-  #   `module_target`'s {Mdm::Module::Target#platforms}.
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with
+  #   the given `module_target`'s {Mdm::Module::Target#platforms}.
   #
   #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#platforms} need to have at least 1
   #     {Mdm::Platform} or its descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
@@ -321,7 +321,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   {Mdm::Architecture} shared between the {Mdm::Module::Instance#architectures} and this target's {#architectures};
   #   (3) at least one shared platform or platform descendant between {Mdm::Module::Instance#platforms} and this
   #   target's {#platforms} or their descendants; and, optionally, (4) that are NOT {Mdm::Module::Instance#privileged?}
-  #   if and only if {#module_instance} is NOT {Mdm::Module::Instance#privileged?}.
+  #   if and only if {Mdm::Module::Target#module_instance} is NOT {Mdm::Module::Instance#privileged?}.
   #
   #   @param module_target [Mdm::Module::Target] target with {Mdm::Module::Target#architectures} and
   #     {Mdm::Module::Target#platforms} that need to be compatible with the returned payload

@@ -10,7 +10,7 @@ class MetasploitDataModels::NullProgressBar
 
   end
 
-  # Increment progress toward {#total}, but is a no-op because this is a NullObject.
+  # Increment progress toward total, but is a no-op because this is a NullObject.
   #
   # @return [void]
   def increment
