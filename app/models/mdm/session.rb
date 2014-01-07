@@ -117,11 +117,6 @@ class Mdm::Session < ActiveRecord::Base
   #
   #   @return [DateTime]
 
-  # @!attribute [rw] platform
-  #   The {#host} platform.
-  #
-  #   @return [String]
-
   # @!attribute [rw] port
   #   The remote port on which this session is running on {#host}.
   #
