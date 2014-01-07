@@ -27,6 +27,18 @@ class Mdm::Session < ActiveRecord::Base
   #   @return [Mdm::ExploitAttempt]
   has_one :exploit_attempt, class_name: 'Mdm::ExploitAttempt', inverse_of: :session
 
+  # @!attribute [rw] exploit_class
+  #   Exploit class that opened this session.
+  #
+  #   @return [Mdm::Module::Class]
+  belongs_to :exploit_class, class_name: 'Mdm::Module::Class', inverse_of: :exploit_sessions
+
+  # @!attribute [rw] payload_class
+  #   Payload class that was sent for this session.
+  #
+  #   @return [Mdm::Module::Class]
+  belongs_to :payload_class, class_name: 'Mdm::Module::Class', inverse_of: :payload_sessions
+
   # @!attribute [rw] host
   #   {Mdm::Host Host} on which this session was opened.
   #
@@ -181,10 +193,26 @@ class Mdm::Session < ActiveRecord::Base
   serialize :datastore, ::MetasploitDataModels::Base64Serializer.new
 
   #
+  #
   # Validations
+  #
+  #
+
+  #
+  # Method validations
+  #
+
+  validate :module_class_types
+
+  #
+  # Attribute validations
   #
 
   validates :architecture,
+            presence: true
+  validates :exploit_class,
+            presence: true
+  validates :payload_class,
             presence: true
   validates :platform,
             presence: true
@@ -211,7 +239,81 @@ class Mdm::Session < ActiveRecord::Base
     upgradeable
   end
 
+  # @deprecated Use {#exploit_class} to get the {Mdm::Module::Class} and then access {Mdm::Module::Class#full_name}.
+  #
+  # The full name of the exploit class that opened this session.
+  #
+  # @return [String] an {Mdm::Module::Class#full_name}
+  # @todo Remove obsolete Mdm::Session#via_exploit and Mdm::Session#via_payload (MSP-9287)
+  def via_exploit
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}#via_exploit is deprecated.  " \
+        "Use #{self.class}#exploit_class to get the Mdm::Module::Class and then access Mdm::Module::Class#full_name."
+    )
+    super
+  end
+
+  # @deprecated Set {#exploit_class} association.
+  #
+  # Sets the full name of the exploit class that opened this session.
+  #
+  # @param full_name [String] an {Mdm::Module::Class#full_name}
+  # @return [void]
+  # @todo Remove obsolete Mdm::Session#via_exploit and Mdm::Session#via_payload (MSP-9287)
+  def via_exploit=(full_name)
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}#via_exploit= is deprecated.  " \
+        "Set #{self.class}#via_exploit association instead."
+    )
+    super
+  end
+
+  # @deprecated Use {#payload_class} to get the {Mdm::Module::Class} and then access {Mdm::Module::Class#full_name}.
+  #
+  # The full name of the payload class that opened this session.
+  #
+  # @return [String] an {Mdm::Module::Class#full_name}
+  # @todo Remove obsolete Mdm::Session#via_payload and Mdm::Session#via_payload (MSP-9287)
+  def via_payload
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}#via_payload is deprecated.  " \
+        "Use #{self.class}#payload_class to get the Mdm::Module::Class and then access Mdm::Module::Class#full_name."
+    )
+    super
+  end
+
+  # @deprecated Set {#payload_class} association.
+  #
+  # Sets the full name of the payload class that opened this session.
+  #
+  # @param full_name [String] an {Mdm::Module::Class#full_name}
+  # @return [void]
+  # @todo Remove obsolete Mdm::Session#via_payload and Mdm::Session#via_payload (MSP-9287)
+  def via_payload=(full_name)
+    ActiveSupport::Deprecation.warn(
+        "#{self.class}#via_payload= is deprecated.  " \
+        "Set #{self.class}#via_payload association instead."
+    )
+    super
+  end
+
   private
+
+  # Validates that exploit_class is an exploit and payload_class is a payload
+  #
+  # @return [void]
+  def module_class_types
+    ['exploit', 'payload'].each do |module_type|
+      attribute = "#{module_type}_class".to_sym
+      module_class = send(attribute)
+
+      # presence validator will handle module_class being nil
+      if module_class && module_class.module_type != module_type
+        errors.add(attribute, :invalid)
+        module_class.errors.add(:module_type, "is not #{module_type}")
+      end
+    end
+  end
 
   # Stops and closes the session.
   #

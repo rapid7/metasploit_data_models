@@ -23,6 +23,16 @@ class Mdm::Module::Class < ActiveRecord::Base
            foreign_key: :module_class_id,
            inverse_of: :module_class
 
+  # @!attribute [rw] exploit_sessions
+  #   Sessions where this module class was the exploit.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :exploit_sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           foreign_key: :exploit_class_id,
+           inverse_of: :exploit_class
+
   # @!attribute [rw] module_instance
   #   Instance-derived metadata to go along with the class-derived metadata from this model.
   #
@@ -32,6 +42,16 @@ class Mdm::Module::Class < ActiveRecord::Base
           dependent: :destroy,
           foreign_key: :module_class_id,
           inverse_of: :module_class
+
+  # @!attribute [rw] payload_sessions
+  #   Sessions where this module class was the payload.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :payload_sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           foreign_key: :payload_class_id,
+           inverse_of: :payload_class
 
   # @!attribute [rw] rank
   #   The reliability of the module and likelyhood that the module won't knock over the service or host being exploited.

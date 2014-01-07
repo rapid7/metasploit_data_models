@@ -3,8 +3,20 @@ FactoryGirl.define do
     #
     # Associations
     #
-    association :host, :factory => :mdm_host
+    exploit_class {
+      FactoryGirl.create(
+          :mdm_module_class,
+          module_type: 'exploit'
+      )
+    }
     architecture { generate :mdm_architecture }
+    association :host, :factory => :mdm_host
+    payload_class {
+      FactoryGirl.create(
+          :mdm_module_class,
+          module_type: 'payload'
+      )
+    }
     platform { generate :mdm_platform }
 
     #

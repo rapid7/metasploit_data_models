@@ -26,8 +26,10 @@ describe Mdm::Session do
       it { should have_db_column(:architecture_id).of_type(:integer) }
       it { should have_db_column(:datastore).of_type(:text) }
       it { should have_db_column(:desc).of_type(:string) }
+      it { should have_db_column(:exploit_class_id).of_type(:integer).with_options(null: true) }
       it { should have_db_column(:host_id).of_type(:integer) }
       it { should have_db_column(:local_id).of_type(:integer) }
+      it { should have_db_column(:payload_class_id).of_type(:integer).with_options(null: true) }
       it { should have_db_column(:platform_id).of_type(:integer) }
       it { should have_db_column(:port).of_type(:integer) }
       it { should have_db_column(:stype).of_type(:string) }
@@ -43,7 +45,9 @@ describe Mdm::Session do
 
     context 'indices' do
       it { should have_db_index(:architecture_id) }
+      it { should have_db_index(:exploit_class_id) }
       it { should have_db_index(:platform_id) }
+      it { should have_db_index(:payload_class_id) }
     end
   end
 
@@ -51,7 +55,9 @@ describe Mdm::Session do
     it { should belong_to(:architecture).class_name('Mdm::Architecture') }
     it { should have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }
     it { should have_one(:exploit_attempt).class_name('Mdm::ExploitAttempt') }
+    it { should belong_to(:exploit_class).class_name('Mdm::Module::Class') }
     it { should belong_to(:host).class_name('Mdm::Host') }
+    it { should belong_to(:payload_class).class_name('Mdm::Module::Class') }
     it { should belong_to(:platform).class_name('Mdm::Platform') }
     it { should have_many(:routes).class_name('Mdm::Route').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_sessions) }
