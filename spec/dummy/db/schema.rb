@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140107170605) do
+ActiveRecord::Schema.define(:version => 20140108154835) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -574,7 +574,10 @@ ActiveRecord::Schema.define(:version => 20140107170605) do
     t.integer  "session_id"
     t.integer  "loot_id"
     t.text     "fail_detail"
+    t.integer  "module_class_id"
   end
+
+  add_index "vuln_attempts", ["module_class_id"], :name => "index_vuln_attempts_on_module_class_id"
 
   create_table "vuln_details", :force => true do |t|
     t.integer  "vuln_id"

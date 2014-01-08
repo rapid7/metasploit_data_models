@@ -14,7 +14,7 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
 
   # @!attribute [rw] exploit_attempts
-  #   Attempts to run this exploit against a {Mdm::ExploitAttempt#host} or {Mdm::ExploitAttemp#service}.
+  #   Attempts to run this exploit against a {Mdm::ExploitAttempt#host} or {Mdm::ExploitAttempt#service}.
   #
   #   @return [Array<Mdm::ExploitAttempt>]
   has_many :exploit_attempts,
@@ -70,6 +70,16 @@ class Mdm::Module::Class < ActiveRecord::Base
            dependent: :destroy,
            foreign_key: :descendant_id,
            inverse_of: :descendant
+  
+  # @!attribute [rw] vuln_attempts
+  #   Attempts to run this vuln against a {Mdm::VulnAttempt#host} or {Mdm::VulnAttempt#service}.
+  #
+  #   @return [Array<Mdm::VulnAttempt>]
+  has_many :vuln_attempts,
+           class_name: 'Mdm::VulnAttempt',
+           dependent: :destroy,
+           foreign_key: :module_class_id,
+           inverse_of: :module_class
 
   #
   # :through => :relationships

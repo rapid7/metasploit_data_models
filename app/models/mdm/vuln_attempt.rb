@@ -1,5 +1,7 @@
 # An attempt to exploit a {#vuln}.
 class Mdm::VulnAttempt < ActiveRecord::Base
+  include MetasploitDataModels::Attempt
+
   #
   # Associations
   #
@@ -10,6 +12,12 @@ class Mdm::VulnAttempt < ActiveRecord::Base
   #   @return [Mdm::Loot] if {#exploited} is `true`.
   #   @return [nil] if {#exploited} is `false`.
   belongs_to :loot, class_name: 'Mdm::Loot', inverse_of: :vuln_attempt
+
+  # @!attribute [rw] module_class
+  #   The module class that attempted the exploit.
+  #
+  #   @return [Mdm::Module::Class, nil]
+  belongs_to :module_class, class_name: 'Mdm::Module::Class', inverse_of: :vuln_attempts
 
   # @!attribute [rw] session
   #   The session opened by this attempt.
