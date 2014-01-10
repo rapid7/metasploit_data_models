@@ -1,5 +1,4 @@
 require 'file/find'
-require 'rails_erd/domain'
 
 module MetasploitDataModels
   # Generate Entity-Relationship Diagrams (ERD) {domain domains} for models under {Mdm}.
@@ -95,6 +94,7 @@ module MetasploitDataModels
       diagram_options = options.except(:domain)
       merged_diagram_options = DEFAULT_OPTIONS.merge(diagram_options)
 
+      require 'rails_erd/domain'
       diagram = RailsERD::Diagram::Graphviz.new(domain, merged_diagram_options)
       path = diagram.create
 
@@ -107,6 +107,7 @@ module MetasploitDataModels
     def self.domain
       require_models
 
+      require 'rails_erd/domain'
       RailsERD::Domain.generate
     end
 

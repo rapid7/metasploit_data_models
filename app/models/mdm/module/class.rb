@@ -13,6 +13,26 @@ class Mdm::Module::Class < ActiveRecord::Base
   #
   #
 
+  # @!attribute [rw] exploit_attempts
+  #   Attempts to run this exploit against a {Mdm::ExploitAttempt#host} or {Mdm::ExploitAttempt#service}.
+  #
+  #   @return [Array<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts,
+           class_name: 'Mdm::ExploitAttempt',
+           dependent: :destroy,
+           foreign_key: :module_class_id,
+           inverse_of: :module_class
+
+  # @!attribute [rw] exploit_sessions
+  #   Sessions where this module class was the exploit.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :exploit_sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           foreign_key: :exploit_class_id,
+           inverse_of: :exploit_class
+
   # @!attribute [rw] module_instance
   #   Instance-derived metadata to go along with the class-derived metadata from this model.
   #
@@ -22,6 +42,16 @@ class Mdm::Module::Class < ActiveRecord::Base
           dependent: :destroy,
           foreign_key: :module_class_id,
           inverse_of: :module_class
+
+  # @!attribute [rw] payload_sessions
+  #   Sessions where this module class was the payload.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :payload_sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           foreign_key: :payload_class_id,
+           inverse_of: :payload_class
 
   # @!attribute [rw] rank
   #   The reliability of the module and likelyhood that the module won't knock over the service or host being exploited.
@@ -40,6 +70,16 @@ class Mdm::Module::Class < ActiveRecord::Base
            dependent: :destroy,
            foreign_key: :descendant_id,
            inverse_of: :descendant
+  
+  # @!attribute [rw] vuln_attempts
+  #   Attempts to run this vuln against a {Mdm::VulnAttempt#host} or {Mdm::VulnAttempt#service}.
+  #
+  #   @return [Array<Mdm::VulnAttempt>]
+  has_many :vuln_attempts,
+           class_name: 'Mdm::VulnAttempt',
+           dependent: :destroy,
+           foreign_key: :module_class_id,
+           inverse_of: :module_class
 
   #
   # :through => :relationships

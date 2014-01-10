@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131030182452) do
+ActiveRecord::Schema.define(:version => 20140110145947) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -96,20 +96,23 @@ ActiveRecord::Schema.define(:version => 20131030182452) do
   end
 
   create_table "exploit_attempts", :force => true do |t|
-    t.integer  "host_id"
+    t.integer  "host_id",         :null => false
     t.integer  "service_id"
-    t.integer  "vuln_id"
-    t.datetime "attempted_at"
-    t.boolean  "exploited"
+    t.integer  "vuln_id",         :null => false
+    t.datetime "attempted_at",    :null => false
+    t.boolean  "exploited",       :null => false
     t.string   "fail_reason"
-    t.string   "username"
+    t.string   "username",        :null => false
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"
     t.integer  "port"
     t.string   "proto"
     t.text     "fail_detail"
+    t.integer  "module_class_id"
   end
+
+  add_index "exploit_attempts", ["module_class_id"], :name => "index_exploit_attempts_on_module_class_id"
 
   create_table "exploited_hosts", :force => true do |t|
     t.integer  "host_id",                      :null => false
@@ -464,14 +467,22 @@ ActiveRecord::Schema.define(:version => 20131030182452) do
     t.string   "via_payload"
     t.string   "desc"
     t.integer  "port"
-    t.string   "platform"
     t.text     "datastore"
-    t.datetime "opened_at",    :null => false
+    t.datetime "opened_at",        :null => false
     t.datetime "closed_at"
     t.string   "close_reason"
     t.integer  "local_id"
     t.datetime "last_seen"
+    t.integer  "architecture_id"
+    t.integer  "platform_id"
+    t.integer  "exploit_class_id"
+    t.integer  "payload_class_id"
   end
+
+  add_index "sessions", ["architecture_id"], :name => "index_sessions_on_architecture_id"
+  add_index "sessions", ["exploit_class_id"], :name => "index_sessions_on_exploit_class_id"
+  add_index "sessions", ["payload_class_id"], :name => "index_sessions_on_payload_class_id"
+  add_index "sessions", ["platform_id"], :name => "index_sessions_on_platform_id"
 
   create_table "tags", :force => true do |t|
     t.integer  "user_id"
@@ -554,16 +565,19 @@ ActiveRecord::Schema.define(:version => 20131030182452) do
   end
 
   create_table "vuln_attempts", :force => true do |t|
-    t.integer  "vuln_id"
-    t.datetime "attempted_at"
-    t.boolean  "exploited"
+    t.integer  "vuln_id",         :null => false
+    t.datetime "attempted_at",    :null => false
+    t.boolean  "exploited",       :null => false
     t.string   "fail_reason"
-    t.string   "username"
+    t.string   "username",        :null => false
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"
     t.text     "fail_detail"
+    t.integer  "module_class_id"
   end
+
+  add_index "vuln_attempts", ["module_class_id"], :name => "index_vuln_attempts_on_module_class_id"
 
   create_table "vuln_details", :force => true do |t|
     t.integer  "vuln_id"
