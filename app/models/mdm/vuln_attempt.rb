@@ -71,11 +71,5 @@ class Mdm::VulnAttempt < ActiveRecord::Base
   #   @return [String]
   #   @todo https://www.pivotaltracker.com/story/show/52595635
 
-  #
-  # Validations
-  #
-
-  validates :vuln_id, :presence => true
-
   ActiveSupport.run_load_hooks(:mdm_vuln_attempt, self)
 end

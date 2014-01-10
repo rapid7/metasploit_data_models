@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140108154835) do
+ActiveRecord::Schema.define(:version => 20140110145947) do
 
   create_table "api_keys", :force => true do |t|
     t.text     "token",      :null => false
@@ -96,13 +96,13 @@ ActiveRecord::Schema.define(:version => 20140108154835) do
   end
 
   create_table "exploit_attempts", :force => true do |t|
-    t.integer  "host_id"
+    t.integer  "host_id",         :null => false
     t.integer  "service_id"
-    t.integer  "vuln_id"
-    t.datetime "attempted_at"
-    t.boolean  "exploited"
+    t.integer  "vuln_id",         :null => false
+    t.datetime "attempted_at",    :null => false
+    t.boolean  "exploited",       :null => false
     t.string   "fail_reason"
-    t.string   "username"
+    t.string   "username",        :null => false
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"
@@ -565,11 +565,11 @@ ActiveRecord::Schema.define(:version => 20140108154835) do
   end
 
   create_table "vuln_attempts", :force => true do |t|
-    t.integer  "vuln_id"
-    t.datetime "attempted_at"
-    t.boolean  "exploited"
+    t.integer  "vuln_id",         :null => false
+    t.datetime "attempted_at",    :null => false
+    t.boolean  "exploited",       :null => false
     t.string   "fail_reason"
-    t.string   "username"
+    t.string   "username",        :null => false
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"

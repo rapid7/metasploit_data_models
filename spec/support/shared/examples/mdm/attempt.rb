@@ -9,23 +9,30 @@ shared_examples_for 'Mdm::Attempt' do
   context 'database' do
     context 'columns' do
       context 'timestamps' do
-        it { should have_db_column(:attempted_at).of_type(:datetime) }
+        it { should have_db_column(:attempted_at).of_type(:datetime).with_options(null: false) }
       end
 
-      it { should have_db_column(:exploited).of_type(:boolean) }
+      it { should have_db_column(:exploited).of_type(:boolean).with_options(null: false) }
       it { should have_db_column(:fail_detail).of_type(:text) }
       it { should have_db_column(:fail_reason).of_type(:string) }
       it { should have_db_column(:loot_id).of_type(:integer) }
       it { should have_db_column(:module).of_type(:text) }
       it { should have_db_column(:module_class_id).of_type(:integer) }
       it { should have_db_column(:session_id).of_type(:integer) }
-      it { should have_db_column(:username).of_type(:string) }
-      it { should have_db_column(:vuln_id).of_type(:integer) }
+      it { should have_db_column(:username).of_type(:string).with_options(null: false) }
+      it { should have_db_column(:vuln_id).of_type(:integer).with_options(null: false) }
     end
 
     context 'indices' do
       it { should have_db_index(:module_class_id) }
     end
+  end
+
+  context 'validations' do
+    it { should validate_presence_of :attempted_at }
+    it { should validate_presence_of :module_class }
+    it { should validate_presence_of :vuln }
+    it { should validate_presence_of :username }
   end
 
   context '#module' do

@@ -11,14 +11,6 @@ describe Mdm::VulnAttempt do
     end
   end
 
-  context 'validations' do
-    it 'should require a vuln_id' do
-      orphan_detail = FactoryGirl.build(:mdm_vuln_detail, :vuln => nil)
-      orphan_detail.should_not be_valid
-      orphan_detail.errors[:vuln_id].should include("can't be blank")
-    end
-  end
-
   context 'factory' do
     it 'should be valid' do
       vuln_attempt = FactoryGirl.build(:mdm_vuln_attempt)

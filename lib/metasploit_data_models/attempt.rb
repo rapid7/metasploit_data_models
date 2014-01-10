@@ -1,5 +1,29 @@
 # Code common to {Mdm::ExploitAttempt} and {Mdm::VulnAttempt}.
 module MetasploitDataModels::Attempt
+  extend ActiveSupport::Concern
+
+  included do
+    #
+    # Validations
+    #
+
+    validates :attempted_at,
+              presence: true
+    validates :exploited,
+              inclusion: {
+                  in: [
+                      false,
+                      true
+                  ]
+              }
+    validates :module_class,
+              presence: true
+    validates :vuln,
+              presence: true
+    validates :username,
+              presence: true
+  end
+
   #
   # Methods
   #
