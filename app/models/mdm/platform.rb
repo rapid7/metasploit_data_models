@@ -19,6 +19,12 @@ class Mdm::Platform < ActiveRecord::Base
   #   @return [Array<Mdm::Module::Platform>]
   has_many :module_platforms, class_name: 'Mdm::Module::Platform', dependent: :destroy, inverse_of: :platform
 
+  # @!attribute [rw] sessions
+  #   Sessions targeting this platform.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :sessions, class_name: 'Mdm::Session', dependent: :destroy, inverse_of: :platform
+
   # @!attribute [rw] target_platforms
   #   Joins this to {Mdm::Module::Target targets} that support this platform.
   #

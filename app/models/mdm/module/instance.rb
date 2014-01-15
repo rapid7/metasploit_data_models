@@ -227,6 +227,119 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @see Metasploit::Model::Module::Instance#supports_stance?
 
   #
+  # Scopes
+  #
+
+  # @!method compatible_privilege_with(module_instance)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that are privileged if `module_instance` {#privileged} is
+  #   `true` or all {Mdm::Module::Instance Mdm::Module::Instances} if `module_instance` {#privileged} is `false`.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :compatible_privilege_with,
+        ->(module_instance){
+          if module_instance.privileged?
+            where(privileged: true)
+          end
+        }
+
+  # @!method intersecting_platforms_with(module_target)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
+  #   `module_target`'s {Mdm::Module::Target#architectures}.
+  #
+  #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#architectures} need to have at least
+  #     1 {Mdm::Architecture} shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::Instance#platforms}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_architectures_with,
+        ->(module_target){
+          includes(
+              :architectures
+          ).where(
+              Mdm::Architecture.arel_table[:abbreviation].in(
+                  module_target.architectures.pluck(:abbreviation)
+              )
+          )
+        }
+
+  # @!method intersecting_platforms_with(module_target)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with
+  #   the given `module_target`'s {Mdm::Module::Target#platforms}.
+  #
+  #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#platforms} need to have at least 1
+  #     {Mdm::Platform} or its descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::Instance#platforms}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platforms_with,
+        ->(module_target){
+          platforms_arel_table = Mdm::Platform.arel_table
+          platforms_left = platforms_arel_table[:left]
+          platforms_right = platforms_arel_table[:right]
+
+          platform_intersection_conditions = module_target.platforms.collect { |platform|
+            platform_left = platform.left
+            platform_right = platform.right
+
+            # the payload's platform is an ancestor or equal to the target `platform`
+            platforms_left.lteq(platform_left).and(
+                platforms_right.gteq(platform_right)
+            ).or(
+                # the payload's platform is a descendant or qual to the target 'platform``
+                platforms_left.gteq(platform_left).and(
+                    platforms_right.lteq(platform_right)
+                )
+            )
+          }
+          platform_intersection_union = platform_intersection_conditions.reduce(:or)
+
+          includes(
+              :platforms
+          ).where(
+              platform_intersection_union
+          )
+        }
+
+  # @!method payloads
+  #   {Mdm::Module::Instance} that have {#module_class} {Mdm::Module::Class#module_type} of `'payload'`.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :payloads,
+        ->{
+          joins(
+              :module_class
+          ).where(
+              Mdm::Module::Class.arel_table[:module_type].eq('payload')
+          )
+        }
+
+  # @!method payloads_compatible_with(module_target)
+  #   @note In addition to the compatibility checks down using the module cache: (1) the actual `Msf::Payload`
+  #     referenced by the {Mdm::Module::Instance} must be checked that it's `Msf::Payload#size` fits the size
+  #     restrictions of the `Msf::Exploit#payload_space`; and (2) the compatibility checks performed by
+  #     `Msf::Module#compatible?` all pass.
+  #
+  #   {Mdm::Module::Instance} that have (1) 'payload' for {Mdm::Module::Instance#module_type}; (2) a least 1
+  #   {Mdm::Architecture} shared between the {Mdm::Module::Instance#architectures} and this target's {#architectures};
+  #   (3) at least one shared platform or platform descendant between {Mdm::Module::Instance#platforms} and this
+  #   target's {#platforms} or their descendants; and, optionally, (4) that are NOT {Mdm::Module::Instance#privileged?}
+  #   if and only if {Mdm::Module::Target#module_instance} is NOT {Mdm::Module::Instance#privileged?}.
+  #
+  #   @param module_target [Mdm::Module::Target] target with {Mdm::Module::Target#architectures} and
+  #     {Mdm::Module::Target#platforms} that need to be compatible with the returned payload
+  #     {Mdm::Module::Instance Mdm::Module::Instances}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :payloads_compatible_with,
+        ->(module_target){
+          payloads.compatible_privilege_with(
+              module_target.module_instance
+          ).intersecting_architectures_with(
+              module_target
+          ).intersecting_platforms_with(
+              module_target
+          )
+        }
+
+
+  #
   # Validations
   #
 
