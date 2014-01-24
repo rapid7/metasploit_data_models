@@ -381,48 +381,6 @@ describe Mdm::Module::Instance do
       end
     end
 
-    context 'payloads' do
-      subject(:payloads) do
-        described_class.payloads
-      end
-
-      #
-      # let!s
-      #
-
-      let!(:module_class_by_module_type) do
-        Metasploit::Model::Module::Type::ALL.each_with_object({}) { |module_type, module_class_by_module_type|
-          module_class = FactoryGirl.create(
-              :mdm_module_class,
-              module_type: module_type
-          )
-
-          module_class_by_module_type[module_type] = module_class
-        }
-      end
-
-      let!(:module_instance_by_module_type) do
-        module_class_by_module_type.each_with_object({}) { |(module_type, module_class), module_instance_by_module_type|
-          module_instance = FactoryGirl.create(
-              :mdm_module_instance,
-              module_class: module_class
-          )
-
-          module_instance_by_module_type[module_type] = module_instance
-        }
-      end
-
-      it 'includes payload' do
-        expect(payloads).to include(module_instance_by_module_type['payload'])
-      end
-
-      Metasploit::Model::Module::Type::NON_PAYLOAD.each do |module_type|
-        it "does not include #{module_type}" do
-          expect(payloads).not_to include(module_instance_by_module_type[module_type])
-        end
-      end
-    end
-
     context 'payloads_compatible_with' do
       subject(:payloads_compatible_with) do
         described_class.payloads_compatible_with(module_target)
@@ -496,8 +454,8 @@ describe Mdm::Module::Instance do
         module_target.save!
       end
 
-      it 'calls payloads' do
-        expect(described_class).to receive(:payloads).and_call_original
+      it "calls with_module_type('payload')" do
+        expect(described_class).to receive(:with_module_type).with('payload').and_call_original
 
         payloads_compatible_with
       end
