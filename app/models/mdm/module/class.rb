@@ -124,6 +124,22 @@ class Mdm::Module::Class < ActiveRecord::Base
   #   @return [String]
 
   #
+  # Scopes
+  #
+
+  # @!method non_generic_payloads
+  #   Excludes generic payloads.
+  #
+  scope :non_generic_payloads,
+        ->{
+          where(
+              module_type: 'payload'
+          ).where(
+              Mdm::Module::Class.arel_table[:reference_name].does_not_match('generic/%')
+          )
+        }
+
+  #
   # Validations
   #
 

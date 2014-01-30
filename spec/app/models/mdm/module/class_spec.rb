@@ -339,6 +339,96 @@ describe Mdm::Module::Class do
     end
   end
 
+  context 'scopes' do
+    context 'non_generic_payloads' do
+      subject(:non_generic_payloads) do
+        described_class.non_generic_payloads
+      end
+
+      context 'with payload' do
+        #
+        # lets
+        #
+
+        let(:ancestors) do
+          [
+              module_ancestor
+          ]
+        end
+
+        let(:module_ancestor) do
+          FactoryGirl.create(
+              :mdm_module_ancestor,
+              module_type: 'payload',
+              # only test with single as single or stage/stager shouldn't matter since generic are only single.
+              payload_type: payload_type,
+              reference_name: "#{payload_type.pluralize}/#{payload_name}"
+          )
+        end
+
+        let(:payload_type) do
+          'single'
+        end
+
+        #
+        # let!s
+        #
+
+        let!(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              ancestors: ancestors
+          )
+        end
+
+        context 'with generic' do
+          let(:payload_name) do
+            'generic/handler_type'
+          end
+
+          it 'does includes Mdm::Module::Class' do
+            expect(non_generic_payloads).not_to include(module_class)
+          end
+        end
+
+        context 'without generic' do
+          let(:payload_name) do
+            'non_generic'
+          end
+
+          it 'does include Mdm::Module::Class' do
+            expect(non_generic_payloads).to include(module_class)
+          end
+        end
+      end
+
+      context 'without payload' do
+        #
+        # let
+        #
+
+        let(:module_type) do
+          FactoryGirl.generate :metasploit_model_non_payload_module_type
+        end
+
+        #
+        # let!
+        #
+
+        let!(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: module_type
+          )
+        end
+
+        it 'does not include Mdm::Module::Class' do
+          expect(non_generic_payloads).not_to include(module_class)
+        end
+      end
+    end
+  end
+
   context 'validations' do
     #
     # lets
