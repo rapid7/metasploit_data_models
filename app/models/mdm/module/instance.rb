@@ -260,6 +260,21 @@ class Mdm::Module::Instance < ActiveRecord::Base
           ).ranked
         }
 
+  # @!method intersecting_architecture_abbreviations
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture#abbreviation} with
+  #   the given `architecture_abbreviations`.
+  #
+  #   @param architecture_abbreviations [Array<String>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_architecture_abbreviations,
+        ->(architecture_abbreviations){
+          joins(
+              :architectures
+          ).where(
+              Mdm::Architecture.arel_table[:abbreviation].in(architecture_abbreviations)
+          )
+        }
+
   # @!method intersecting_platforms_with(architectured)
   #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
   #   architectured record's `#architectures`.
@@ -270,12 +285,8 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
   scope :intersecting_architectures_with,
         ->(architectured){
-          includes(
-              :architectures
-          ).where(
-              Mdm::Architecture.arel_table[:abbreviation].in(
-                  architectured.architectures.pluck(:abbreviation)
-              )
+          intersecting_architecture_abbreviations(
+              architectured.architectures.select(:abbreviation)
           )
         }
 

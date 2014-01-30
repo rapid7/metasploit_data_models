@@ -111,61 +111,41 @@ describe Mdm::Module::Instance do
       end
     end
 
-    context 'intersecting_architectures_with' do
-      subject(:intersecting_architectures_with) do
-        described_class.intersecting_architectures_with(module_target)
+    context 'intersecting_architecture_abbreviations' do
+      subject(:intersecting_architecture_abbreviations) do
+        described_class.intersecting_architecture_abbreviations(architecture_abbreviation)
       end
 
-      #
-      # lets
-      #
-
-      let(:architecture) do
-        FactoryGirl.generate :mdm_architecture
+      let(:other_architecture) do
+        Mdm::Architecture.where(abbreviation: other_architecture_abbreviation).first
       end
 
-      let(:module_target) do
-        FactoryGirl.build(
-            :mdm_module_target,
-            target_architectures_length: 0
-        ).tap { |module_target|
-          module_target.target_architectures.build(
-              {
-                architecture: architecture
-              },
-              {
-                  without_protection: true
-              }
-          )
-
-          module_target.module_instance.module_architectures.build(
-              {
-                  architecture: architecture
-              },
-              {
-                  without_protection: true
-              }
-          )
-        }
+      let(:architecture_abbreviation) do
+        FactoryGirl.generate :metasploit_model_architecture_abbreviation
       end
 
       let(:other_module_class) do
         FactoryGirl.create(
             :mdm_module_class,
-            module_type: other_module_type
+            module_type: 'payload'
         )
       end
 
-      let(:other_module_type) do
-        'payload'
-      end
-
       #
-      # Callbacks
+      # let!s
       #
 
-      before(:each) do
-        module_target.save!
+      let!(:other_module_instance) do
+        FactoryGirl.build(
+            :mdm_module_instance,
+            module_architectures_length: 0,
+            module_class: other_module_class
+        ).tap { |module_instance|
+          module_architecture = module_instance.module_architectures.build
+          module_architecture.architecture = other_architecture
+
+          module_instance.save!
+        }
       end
 
       context 'with intersection' do
@@ -173,72 +153,78 @@ describe Mdm::Module::Instance do
         # lets
         #
 
-        let(:other_module_instance) do
-          FactoryGirl.build(
-              :mdm_module_instance,
-              module_class: other_module_class,
-              module_architectures_length: 0
-          ).tap { |module_instance|
-            module_instance.module_architectures.build(
-                {
-                    architecture: architecture
-                },
-                {
-                    without_protection: true
-                }
-            )
-          }
+        let(:other_architecture_abbreviation) do
+          architecture_abbreviation
         end
 
-        #
-        # Callbacks
-        #
-
-        before(:each) do
-          other_module_instance.save!
-        end
-
-        it 'includes Mdm::Module::Instance with same Mdm::Architecture' do
-          expect(intersecting_architectures_with).to include(other_module_instance)
+        it 'includes the Mdm::Module::Instance' do
+          expect(intersecting_architecture_abbreviations).to include(other_module_instance)
         end
       end
 
       context 'without intersection' do
-        #
-        # lets
-        #
-
-        let(:other_architecture) do
-          FactoryGirl.generate :mdm_architecture
+        let(:other_architecture_abbreviation) do
+          FactoryGirl.generate :metasploit_model_architecture_abbreviation
         end
 
-        let(:other_module_instance) do
-          FactoryGirl.build(
+        it 'does not include the Mdm::Module::Instance' do
+          expect(intersecting_architecture_abbreviations).not_to include(other_module_instance)
+        end
+      end
+    end
+
+    context 'intersecting_architectures_with' do
+      subject(:intersecting_architectures_with) do
+        described_class.intersecting_architectures_with(architectured)
+      end
+
+      context 'with Mdm::Module::Instance' do
+        let(:architectured) do
+          FactoryGirl.create(
               :mdm_module_instance,
-              module_class: other_module_class,
-              module_architectures_length: 0
-          ).tap { |module_instance|
-            module_instance.module_architectures.build(
-                {
-                    architecture: other_architecture
-                },
-                {
-                    without_protection: true
-                }
-            )
-          }
+              module_class: module_class
+          )
         end
 
-        #
-        # Callbacks
-        #
-
-        before(:each) do
-          other_module_instance.save!
+        let(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: 'payload'
+          )
         end
 
-        it 'does include Mdm::Module::Instance without same Mdm::Architecture' do
-          expect(intersecting_architectures_with).not_to include(other_module_instance)
+        it 'selects abbreviation from Mdm::Module::Instance#architectures' do
+          expect(architectured.architectures).to receive(:select).with(:abbreviation).and_call_original
+
+          intersecting_architectures_with
+        end
+
+        it 'calls intersecting_architecture_abbreviations with ActiveRecord::Relation to perform a subselect' do
+          expect(described_class).to receive(:intersecting_architecture_abbreviations).with(
+                                         an_instance_of(ActiveRecord::Relation)
+                                     )
+
+          intersecting_architectures_with
+        end
+      end
+
+      context 'with Mdm::Module::Target' do
+        let(:architectured) do
+          FactoryGirl.create(:mdm_module_target)
+        end
+
+        it 'selects abbreviation from Mdm::Module::Target#architectures' do
+          expect(architectured.architectures).to receive(:select).with(:abbreviation).and_call_original
+
+          intersecting_architectures_with
+        end
+
+        it 'calls intersecting_architecture_abbreviations with ActiveRecord::Relation to perform a subselect' do
+          expect(described_class).to receive(:intersecting_architecture_abbreviations).with(
+                                         an_instance_of(ActiveRecord::Relation)
+                                     )
+
+          intersecting_architectures_with
         end
       end
     end
