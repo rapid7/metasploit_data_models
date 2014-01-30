@@ -199,9 +199,9 @@ describe Mdm::Module::Instance do
           intersecting_architectures_with
         end
 
-        it 'calls intersecting_architecture_abbreviations with ActiveRecord::Relation to perform a subselect' do
+        it 'calls intersecting_architecture_abbreviations with Arel::SelectManager' do
           expect(described_class).to receive(:intersecting_architecture_abbreviations).with(
-                                         an_instance_of(ActiveRecord::Relation)
+                                         an_instance_of(Arel::SelectManager)
                                      )
 
           intersecting_architectures_with
@@ -209,8 +209,56 @@ describe Mdm::Module::Instance do
       end
 
       context 'with Mdm::Module::Target' do
-        let(:architectured) do
-          FactoryGirl.create(:mdm_module_target)
+        #
+        # lets
+        #
+
+        let(:architecture) do
+          FactoryGirl.generate :mdm_architecture
+        end
+
+        let(:other_module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: 'payload'
+          )
+        end
+
+        let(:other_architecture) do
+          FactoryGirl.generate :mdm_architecture
+        end
+
+        #
+        # let!s
+        #
+
+        let!(:architectured) do
+          FactoryGirl.build(
+              :mdm_module_target,
+              target_architectures_length: 0
+          ).tap { |module_target|
+            target_architecture = module_target.target_architectures.build
+            target_architecture.architecture = architecture
+
+            module_instance = module_target.module_instance
+            module_architecture = module_instance.module_architectures.build
+            module_architecture.architecture = architecture
+
+            module_target.save!
+          }
+        end
+
+        let!(:other_module_instance) do
+          FactoryGirl.build(
+              :mdm_module_instance,
+              module_architectures_length: 0,
+              module_class: other_module_class
+          ).tap { |module_instance|
+            module_architecture = module_instance.module_architectures.build
+            module_architecture.architecture = other_architecture
+
+            module_instance.save!
+          }
         end
 
         it 'selects abbreviation from Mdm::Module::Target#architectures' do
@@ -219,12 +267,32 @@ describe Mdm::Module::Instance do
           intersecting_architectures_with
         end
 
-        it 'calls intersecting_architecture_abbreviations with ActiveRecord::Relation to perform a subselect' do
+        it 'calls intersecting_architecture_abbreviations with Arel::SelectManager to perform a subselect' do
           expect(described_class).to receive(:intersecting_architecture_abbreviations).with(
-                                         an_instance_of(ActiveRecord::Relation)
-                                     )
+                                         an_instance_of(Arel::SelectManager)
+                                     ).and_call_original
 
           intersecting_architectures_with
+        end
+
+        context 'with intersection' do
+          let(:other_architecture) do
+            architecture
+          end
+
+          it 'includes the Mdm::Module::Instance' do
+            expect(intersecting_architectures_with).to include(other_module_instance)
+          end
+        end
+
+        context 'without intersection' do
+          let(:other_architecture) do
+            FactoryGirl.generate :mdm_architecture
+          end
+
+          it 'does not include the Mdm::Module::Instance' do
+            expect(intersecting_architectures_with).not_to include(other_module_instance)
+          end
         end
       end
     end

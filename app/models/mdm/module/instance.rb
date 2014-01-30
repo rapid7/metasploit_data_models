@@ -286,7 +286,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   scope :intersecting_architectures_with,
         ->(architectured){
           intersecting_architecture_abbreviations(
-              architectured.architectures.select(:abbreviation)
+              architectured.architectures.select(:abbreviation).build_arel
           )
         }
 
