@@ -1,6 +1,121 @@
 require 'spec_helper'
 
 describe Mdm::Module::Instance do
+  #
+  # Shared contexts
+  #
+
+  shared_context 'platforms' do
+    #
+    # lets
+    #
+
+    let(:platform) do
+      Mdm::Platform.where(fully_qualified_name: platform_fully_qualified_name).first
+    end
+
+    let(:platform_fully_qualified_name) do
+      'Windows XP'
+    end
+
+    let(:other_module_class) do
+      FactoryGirl.create(
+          :mdm_module_class,
+          module_type: other_module_type
+      )
+    end
+
+    let(:other_module_type) do
+      'payload'
+    end
+
+    let(:other_platform) do
+      Mdm::Platform.where(fully_qualified_name: other_platform_fully_qualified_name).first
+    end
+
+    #
+    # let!s
+    #
+
+    let!(:other_module_instance) do
+      FactoryGirl.build(
+          :mdm_module_instance,
+          module_class: other_module_class,
+          module_platforms_length: 0
+      ).tap { |module_instance|
+        module_instance.module_platforms.build(
+            {
+                platform: other_platform
+            },
+            {
+                without_protection: true
+            }
+        )
+        module_instance.save!
+      }
+    end
+  end
+
+  #
+  # Shared Examples
+  #
+
+  shared_examples_for 'intersecting platforms' do
+    context 'with same platform' do
+      let(:other_platform) do
+        platform
+      end
+
+      it 'includes the Mdm::Module::Instance' do
+        expect(subject).to include(other_module_instance)
+      end
+    end
+
+    context 'with ancestor platform' do
+      let(:other_platform_fully_qualified_name) do
+        'Windows'
+      end
+
+      it 'includes the Mdm::Module::Instance' do
+        expect(subject).to include(other_module_instance)
+      end
+    end
+
+    context 'with descendant platform' do
+      let(:other_platform_fully_qualified_name) do
+        'Windows XP SP1'
+      end
+
+      it 'includes the Mdm::Module::Instance' do
+        expect(subject).to include(other_module_instance)
+      end
+    end
+
+    context 'with cousin platform' do
+      let(:other_platform_fully_qualified_name) do
+        'Windows XP SP1'
+      end
+
+      let(:platform_fully_qualified_name) do
+        'Windows 2000 SP1'
+      end
+
+      it 'does not include Mdm::Module::Instance' do
+        expect(subject).not_to include(other_module_instance)
+      end
+    end
+
+    context 'with unrelated platform' do
+      let(:other_platform_fully_qualified_name) do
+        'UNIX'
+      end
+
+      it 'does not include Mdm::Module::Instance' do
+        expect(subject).not_to include(other_module_instance)
+      end
+    end
+  end
+
   subject(:module_instance) do
     FactoryGirl.build(:mdm_module_instance)
   end
@@ -297,21 +412,59 @@ describe Mdm::Module::Instance do
       end
     end
 
+    context 'intersecting_platforms' do
+      include_context 'platforms'
+
+      subject(:intersecting_platforms) do
+        described_class.intersecting_platforms(platforms)
+      end
+
+      let(:platforms) do
+        [
+            platform
+        ]
+      end
+
+      it_should_behave_like 'intersecting platforms'
+    end
+
+    context 'intersecting_platform_fully_qualified_names' do
+      include_context 'platforms'
+
+      subject(:intersecting_platform_fully_qualified_names) do
+        described_class.intersecting_platform_fully_qualified_names(platform_fully_qualified_names)
+      end
+
+      let(:other_platform_fully_qualified_name) do
+        platform_fully_qualified_name
+      end
+
+      let(:platform_fully_qualified_names) do
+        platform_fully_qualified_name
+      end
+
+      it_should_behave_like 'intersecting platforms'
+
+      it 'calls intersecting_platforms with ActiveRecord::Relation<Mdm::Platform>' do
+        expect(described_class).to receive(:intersecting_platforms).with(an_instance_of(ActiveRecord::Relation))
+
+        intersecting_platform_fully_qualified_names
+      end
+
+      it 'calls intersecting_platforms with Mdm::Platforms with platform_fully_qualified_names' do
+        expect(described_class).to receive(:intersecting_platforms) { |platforms|
+          expect(platforms).to match_array([platform])
+        }.and_call_original
+
+        intersecting_platform_fully_qualified_names
+      end
+    end
+
     context 'intersecting_platforms_with' do
+      include_context 'platforms'
+
       subject(:intersecting_platforms_with) do
         described_class.intersecting_platforms_with(module_target)
-      end
-
-      #
-      # lets
-      #
-
-      let(:platform) do
-        Mdm::Platform.where(fully_qualified_name: platform_fully_qualified_name).first
-      end
-
-      let(:platform_fully_qualified_name) do
-        'Windows XP'
       end
 
       let(:module_target) do
@@ -336,102 +489,23 @@ describe Mdm::Module::Instance do
                   without_protection: true
               }
           )
+
+          module_target.save!
         }
       end
 
-      let(:other_module_class) do
-        FactoryGirl.create(
-            :mdm_module_class,
-            module_type: other_module_type
-        )
+      let(:other_platform_fully_qualified_name) do
+        platform_fully_qualified_name
       end
 
-      let(:other_module_instance) do
-        FactoryGirl.build(
-            :mdm_module_instance,
-            module_class: other_module_class,
-            module_platforms_length: 0
-        ).tap { |module_instance|
-          module_instance.module_platforms.build(
-              {
-                  platform: other_platform
-              },
-              {
-                  without_protection: true
-              }
-          )
-        }
-      end
+      it_should_behave_like 'intersecting platforms'
 
-      let(:other_module_type) do
-        'payload'
-      end
+      it 'calls #intersecting_platforms with module_target.platforms' do
+        expect(described_class).to receive(:intersecting_platforms) { |platforms|
+          expect(platforms).to match_array(module_target.platforms)
+        }.and_call_original
 
-      let(:other_platform) do
-        Mdm::Platform.where(fully_qualified_name: other_platform_fully_qualified_name).first
-      end
-
-      #
-      # Callbacks
-      #
-
-      before(:each) do
-        module_target.save!
-        other_module_instance.save!
-      end
-
-      context 'with same platform' do
-        let(:other_platform) do
-          platform
-        end
-
-        it 'includes the Mdm::Module::Instance' do
-          expect(intersecting_platforms_with).to include(other_module_instance)
-        end
-      end
-
-      context 'with ancestor platform' do
-        let(:other_platform_fully_qualified_name) do
-          'Windows'
-        end
-
-        it 'includes the Mdm::Module::Instance' do
-          expect(intersecting_platforms_with).to include(other_module_instance)
-        end
-      end
-
-      context 'with descendant platform' do
-         let(:other_platform_fully_qualified_name) do
-          'Windows XP SP1'
-        end
-
-        it 'includes the Mdm::Module::Instance' do
-          expect(intersecting_platforms_with).to include(other_module_instance)
-        end
-      end
-
-      context 'with cousin platform' do
-        let(:other_platform_fully_qualified_name) do
-          'Windows XP SP1'
-        end
-
-        let(:platform_fully_qualified_name) do
-          'Windows 2000 SP1'
-        end
-
-        it 'does not include Mdm::Module::Instance' do
-          expect(intersecting_platforms_with).not_to include(other_module_instance)
-        end
-      end
-
-      context 'with unrelated platform' do
-        let(:other_platform_fully_qualified_name) do
-          'UNIX'
-        end
-
-        it 'does not include Mdm::Module::Instance' do
-          expect(intersecting_platforms_with).not_to include(other_module_instance)
-        end
+        intersecting_platforms_with
       end
     end
 

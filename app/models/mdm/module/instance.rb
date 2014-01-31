@@ -290,21 +290,20 @@ class Mdm::Module::Instance < ActiveRecord::Base
           )
         }
 
-  # @!method intersecting_platforms_with(module_target)
-  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with
-  #   the given `module_target`'s {Mdm::Module::Target#platforms}.
+  # @!method self.intersecting_platforms(platforms)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that has at least 1 {Mdm::Platform} from `platforms`.
   #
-  #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#platforms} need to have at least 1
-  #     {Mdm::Platform} or its descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #   @param platforms [Enumerable<Mdm::Platform>, #collect] list of {Mdm::Platform Mdm::Platforms} need to themselves
+  #     or their descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
   #     {Mdm::Module::Instance#platforms}.
   #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
-  scope :intersecting_platforms_with,
-        ->(module_target){
+  scope :intersecting_platforms,
+        ->(platforms){
           platforms_arel_table = Mdm::Platform.arel_table
           platforms_left = platforms_arel_table[:left]
           platforms_right = platforms_arel_table[:right]
 
-          platform_intersection_conditions = module_target.platforms.collect { |platform|
+          platform_intersection_conditions = platforms.collect { |platform|
             platform_left = platform.left
             platform_right = platform.right
 
@@ -320,11 +319,40 @@ class Mdm::Module::Instance < ActiveRecord::Base
           }
           platform_intersection_union = platform_intersection_conditions.reduce(:or)
 
-          includes(
+          joins(
               :platforms
           ).where(
               platform_intersection_union
           )
+        }
+
+  # @!method self.intersecting_platform_fully_qualified_names(platform_fully_qualified_names)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that has at least 1 {Mdm::Platform}
+  #   that either has a {Mdm::Platform#fully_qualified_name} from `platform_fully_qualified_names` or that has an
+  #   descendant with a {Mdm::Platform#fully_qualified_name} from `platform_fully_qualified_names`.
+  #
+  #   @param platform_fully_qualified_names [Array<String>] `Array` of {Mdm::Platform#fully_qualified_name}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platform_fully_qualified_names,
+        ->(platform_fully_qualified_names){
+          intersecting_platforms(
+              Mdm::Platform.where(
+                  fully_qualified_name: platform_fully_qualified_names
+              )
+          )
+        }
+
+  # @!method self.intersecting_platforms_with(module_target)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with
+  #   the given `module_target`'s {Mdm::Module::Target#platforms}.
+  #
+  #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#platforms} need to have at least 1
+  #     {Mdm::Platform} or its descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::Instance#platforms}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platforms_with,
+        ->(module_target){
+          intersecting_platforms(module_target.platforms)
         }
 
   # @!method nops_compatible_with(module_instance)
