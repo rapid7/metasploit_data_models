@@ -230,7 +230,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   # Scopes
   #
 
-  # @!method compatible_privilege_with(module_instance)
+  # @!method self.compatible_privilege_with(module_instance)
   #   List of {Mdm::Module::Instance Mdm::Module::Instances} that are privileged if `module_instance` {#privileged} is
   #   `true` or all {Mdm::Module::Instance Mdm::Module::Instances} if `module_instance` {#privileged} is `false`.
   #
@@ -242,7 +242,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           end
         }
 
-  # @!method encoders_compatible_with(module_instance)
+  # @!method self.encoders_compatible_with(module_instance)
   #   {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
   #   `module_instance`'s {Mdm::Module::Instance#archtiectures} and have {#module_class}
   #   {Mdm::Module::Class#module_type} of `'encoder'`.
@@ -260,7 +260,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           ).ranked
         }
 
-  # @!method intersecting_architecture_abbreviations
+  # @!method self.intersecting_architecture_abbreviations
   #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture#abbreviation} with
   #   the given `architecture_abbreviations`.
   #
@@ -275,7 +275,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           )
         }
 
-  # @!method intersecting_platforms_with(architectured)
+  # @!method self.intersecting_platforms_with(architectured)
   #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
   #   architectured record's `#architectures`.
   #
@@ -355,7 +355,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           intersecting_platforms(module_target.platforms)
         }
 
-  # @!method nops_compatible_with(module_instance)
+  # @!method self.nops_compatible_with(module_instance)
   #   {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
   #   `module_instance`'s {Mdm::Module::Instance#archtiectures} and have {#module_class}
   #   {Mdm::Module::Class#module_type} of `'nop'`.
@@ -373,7 +373,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           ).ranked
         }
 
-  # @!method ranked
+  # @!method self.ranked
   #   Orders {Mdm::Module::Instance Mdm::Module::Instances} by their {#module_class} {Mdm::Module::Class#rank}
   #   {Mdm::Module::Rank#number} in descending order so better, more reliable modules are first.
   #
@@ -388,7 +388,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
         }
 
 
-  # @!method with_module_type(module_type)
+  # @!method self.with_module_type(module_type)
   #   {Mdm::Module::Instance} that have {#module_class} {Mdm::Module::Class#module_type} of `module_type`.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
@@ -401,7 +401,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
           )
         }
 
-  # @!method payloads_compatible_with(module_target)
+  # @!method self.payloads_compatible_with(module_target)
   #   @note In addition to the compatibility checks down using the module cache: (1) the actual `Msf::Payload`
   #     referenced by the {Mdm::Module::Instance} must be checked that it's `Msf::Payload#size` fits the size
   #     restrictions of the `Msf::Exploit#payload_space`; and (2) the compatibility checks performed by
