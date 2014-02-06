@@ -231,14 +231,15 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #
 
   # @!method self.compatible_privilege_with(module_instance)
-  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that are privileged if `module_instance` {#privileged} is
-  #   `true` or all {Mdm::Module::Instance Mdm::Module::Instances} if `module_instance` {#privileged} is `false`.
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that are unprivileged if `module_instance` {#privileged} is
+  #   `false` or all {Mdm::Module::Instance Mdm::Module::Instances} if `module_instance` {#privileged} is `true` because
+  #   a privileged payload can only run if the exploit gives it privileged access.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
   scope :compatible_privilege_with,
         ->(module_instance){
-          if module_instance.privileged?
-            where(privileged: true)
+          unless module_instance.privileged?
+            where(privileged: false)
           end
         }
 

@@ -206,8 +206,8 @@ describe Mdm::Module::Instance do
           expect(compatible_privilege_with).to include(privileged)
         end
 
-        it 'does not include unprivileged Mdm::Module::Instances' do
-          expect(compatible_privilege_with).not_to include(unprivileged)
+        it 'includes unprivileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).to include(unprivileged)
         end
       end
 
@@ -216,8 +216,8 @@ describe Mdm::Module::Instance do
           false
         end
 
-        it 'includes privileged Mdm::Module::Instances' do
-          expect(compatible_privilege_with).to include(privileged)
+        it 'does not include privileged Mdm::Module::Instances' do
+          expect(compatible_privilege_with).not_to include(privileged)
         end
 
         it 'includes unprivileged Mdm::Module::Instances' do
