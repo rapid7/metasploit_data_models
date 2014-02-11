@@ -127,9 +127,10 @@ class Mdm::Module::Class < ActiveRecord::Base
   # Scopes
   #
 
-  # @!method non_generic_payloads
+  # @!method self.non_generic_payloads
   #   Excludes generic payloads.
   #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Class>]
   scope :non_generic_payloads,
         ->{
           where(
