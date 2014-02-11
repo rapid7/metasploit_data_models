@@ -379,6 +379,7 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   {Mdm::Module::Rank#number} in descending order so better, more reliable modules are first.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  #   @see Mdm::Module::Class.ranked
   scope :ranked,
         ->{
           joins(

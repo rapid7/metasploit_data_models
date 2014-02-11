@@ -140,6 +140,22 @@ class Mdm::Module::Class < ActiveRecord::Base
           )
         }
 
+  # @!method self.ranked
+  #   Orders {Mdm::Module::Class Mdm::Module::Classes} by their {#rank} {Mdm::Module::Rank#number} in descending order,
+  #   so better, more reliable modules are first.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Class>]
+  #   @see Mdm::Module::Instance.ranked
+  scope :ranked,
+        ->{
+          joins(
+              :rank
+          ).order(
+              Mdm::Module::Rank.arel_table[:number].desc
+          )
+        }
+
+
   #
   # Validations
   #
