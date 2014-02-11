@@ -155,6 +155,17 @@ class Mdm::Module::Class < ActiveRecord::Base
           )
         }
 
+  # @!method self.with_module_instances(module_instances)
+  #   {Mdm::Module::Class Mdm::Module::Classes} associated with the `module_instances`.  Allows converting queries using
+  #   {Mdm::Module::Instance} scopes to {Mdm::Module::Class} scopes.
+  #
+  #   @param module_instances [ActiveRecord::Relation<Mdm::Module::Class>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Class>]
+  scope :with_module_instances,
+        ->(module_instances){
+          module_class_ids = module_instances.joins(:module_class).select(Mdm::Module::Class.arel_table[:id])
+          where(id: module_class_ids)
+        }
 
   #
   # Validations

@@ -427,6 +427,58 @@ describe Mdm::Module::Class do
         end
       end
     end
+
+    context 'with_module_instances' do
+      subject(:with_module_instances) do
+        described_class.with_module_instances(module_instance_scope)
+      end
+
+      #
+      # lets
+      #
+
+      let(:module_instance_module_classes) do
+        module_instances.map(&:module_class)
+      end
+
+      #
+      # let!s
+      #
+
+      let!(:module_classes_without_module_instances) do
+        FactoryGirl.create_list(:mdm_module_class, 2)
+      end
+
+      let!(:module_instances) do
+        FactoryGirl.create_list(:mdm_module_instance, 2)
+      end
+
+      context 'on Mdm::Module::Instance scope' do
+        let(:module_instance_scope) do
+          Mdm::Module::Instance.joins(:module_class).where(
+              Mdm::Module::Class.arel_table[:full_name].eq(scope_module_class.full_name)
+          )
+        end
+
+        let(:scope_module_class) do
+          module_instance_module_classes.sample
+        end
+
+        it 'includes only the Mdm::Module::Classes in the chained scope' do
+          expect(with_module_instances).to match_array([scope_module_class])
+        end
+      end
+
+      context 'on Mdm::Module::Class' do
+        let(:module_instance_scope) do
+          Mdm::Module::Instance
+        end
+
+        it 'includes all Mdm::Module::Classes with Mdm::Module::Instances' do
+          expect(with_module_instances).to match_array(module_instance_module_classes)
+        end
+      end
+    end
   end
 
   context 'validations' do
