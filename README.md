@@ -1,4 +1,4 @@
-#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)[![Code Climate](https://codeclimate.com/github/rapid7/metasploit_data_models.png)](https://codeclimate.com/github/rapid7/metasploit_data_models)[![Dependency Status](https://gemnasium.com/rapid7/metasploit_data_models.png)](https://gemnasium.com/rapid7/metasploit_data_models)
+#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)[![Code Climate](https://codeclimate.com/github/rapid7/metasploit_data_models.png)](https://codeclimate.com/github/rapid7/metasploit_data_models)[![Dependency Status](https://gemnasium.com/rapid7/metasploit_data_models.png)](https://gemnasium.com/rapid7/metasploit_data_models)[![Gem Version](https://badge.fury.io/rb/metasploit_data_models.png)](http://badge.fury.io/rb/metasploit_data_models)
 
 The database layer for Metasploit
 
