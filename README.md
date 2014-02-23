@@ -1,4 +1,4 @@
-#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)
+#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)[![Coverage Status](https://coveralls.io/repos/rapid7/metasploit_data_models/badge.png?branch=feature%2Fcoveralls)](https://coveralls.io/r/rapid7/metasploit_data_models?branch=feature%2Fcoveralls)
 
 The database layer for Metasploit
 
