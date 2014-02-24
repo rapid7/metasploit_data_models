@@ -14,7 +14,7 @@ group :development, :test do
   gem 'faker'
   # Needs to be defined here because runtime dependencies from gemspec will not load for rspec environment
   # @todo Change back to `gem 'metasploi-model', '~> <X>.<Y>.<Z>'` once metasploit-model version X.Y.Z is released to rubygems.
-  gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.20.2.zdi-authority'
+  gem 'metasploit-model', :git => 'git://github.com/rapid7/metasploit-model.git', :tag => 'v0.20.2.module-cache-construction'
   # rails is only used for the dummy application in spec/dummy
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
   # @see https://www.pivotaltracker.com/story/show/52309083
