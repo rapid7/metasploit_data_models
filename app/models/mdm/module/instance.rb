@@ -227,6 +227,213 @@ class Mdm::Module::Instance < ActiveRecord::Base
   #   @see Metasploit::Model::Module::Instance#supports_stance?
 
   #
+  # Scopes
+  #
+
+  # @!method self.compatible_privilege_with(module_instance)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that are unprivileged if `module_instance` {#privileged} is
+  #   `false` or all {Mdm::Module::Instance Mdm::Module::Instances} if `module_instance` {#privileged} is `true` because
+  #   a privileged payload can only run if the exploit gives it privileged access.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :compatible_privilege_with,
+        ->(module_instance){
+          unless module_instance.privileged?
+            where(privileged: false)
+          end
+        }
+
+  # @!method self.encoders_compatible_with(module_instance)
+  #   {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
+  #   `module_instance`'s {Mdm::Module::Instance#archtiectures} and have {#module_class}
+  #   {Mdm::Module::Class#module_type} of `'encoder'`.
+  #
+  #   @param module_instance [Mdm::Module::Instance] module instance whose {Mdm::Module::Instance#architectures} need to
+  #     have at least 1 {Mdm::Architecture} shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::instance#architectures}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :encoders_compatible_with,
+        ->(module_instance){
+          with_module_type(
+              'encoder'
+          ).intersecting_architectures_with(
+              module_instance
+          ).ranked
+        }
+
+  # @!method self.intersecting_architecture_abbreviations
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture#abbreviation} with
+  #   the given `architecture_abbreviations`.
+  #
+  #   @param architecture_abbreviations [Array<String>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_architecture_abbreviations,
+        ->(architecture_abbreviations){
+          joins(
+              :architectures
+          ).where(
+              Mdm::Architecture.arel_table[:abbreviation].in(architecture_abbreviations)
+          )
+        }
+
+  # @!method self.intersecting_platforms_with(architectured)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
+  #   architectured record's `#architectures`.
+  #
+  #   @param architectured [Mdm::Module::Instance, Mdm::Module::Target, #architectures] target whose `#architectures`
+  #     need to have at least 1 {Mdm::Architecture} shared with the returned
+  #     {Mdm::Module::Instance Mdm::Module::Instances'} {Mdm::Module::Instance#architectures}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_architectures_with,
+        ->(architectured){
+          intersecting_architecture_abbreviations(
+              architectured.architectures.select(:abbreviation).build_arel
+          )
+        }
+
+  # @!method self.intersecting_platforms(platforms)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that has at least 1 {Mdm::Platform} from `platforms`.
+  #
+  #   @param platforms [Enumerable<Mdm::Platform>, #collect] list of {Mdm::Platform Mdm::Platforms} need to themselves
+  #     or their descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::Instance#platforms}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platforms,
+        ->(platforms){
+          platforms_arel_table = Mdm::Platform.arel_table
+          platforms_left = platforms_arel_table[:left]
+          platforms_right = platforms_arel_table[:right]
+
+          platform_intersection_conditions = platforms.collect { |platform|
+            platform_left = platform.left
+            platform_right = platform.right
+
+            # the payload's platform is an ancestor or equal to the target `platform`
+            platforms_left.lteq(platform_left).and(
+                platforms_right.gteq(platform_right)
+            ).or(
+                # the payload's platform is a descendant or equal to the target 'platform``
+                platforms_left.gteq(platform_left).and(
+                    platforms_right.lteq(platform_right)
+                )
+            )
+          }
+          platform_intersection_union = platform_intersection_conditions.reduce(:or)
+
+          joins(
+              :platforms
+          ).where(
+              platform_intersection_union
+          )
+        }
+
+  # @!method self.intersecting_platform_fully_qualified_names(platform_fully_qualified_names)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that has at least 1 {Mdm::Platform}
+  #   that either has a {Mdm::Platform#fully_qualified_name} from `platform_fully_qualified_names` or that has an
+  #   descendant with a {Mdm::Platform#fully_qualified_name} from `platform_fully_qualified_names`.
+  #
+  #   @param platform_fully_qualified_names [Array<String>] `Array` of {Mdm::Platform#fully_qualified_name}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platform_fully_qualified_names,
+        ->(platform_fully_qualified_names){
+          intersecting_platforms(
+              Mdm::Platform.where(
+                  fully_qualified_name: platform_fully_qualified_names
+              )
+          )
+        }
+
+  # @!method self.intersecting_platforms_with(module_target)
+  #   List of {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Platform} or descendant with
+  #   the given `module_target`'s {Mdm::Module::Target#platforms}.
+  #
+  #   @param module_target [Mdm::Module::Target] target whose {Mdm::Module::Target#platforms} need to have at least 1
+  #     {Mdm::Platform} or its descendants shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::Instance#platforms}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :intersecting_platforms_with,
+        ->(module_target){
+          intersecting_platforms(module_target.platforms)
+        }
+
+  # @!method self.nops_compatible_with(module_instance)
+  #   {Mdm::Module::Instance Mdm::Module::Instances} that share at least 1 {Mdm::Architecture} with the given
+  #   `module_instance`'s {Mdm::Module::Instance#archtiectures} and have {#module_class}
+  #   {Mdm::Module::Class#module_type} of `'nop'`.
+  #
+  #   @param module_instance [Mdm::Module::Instance] module instance whose {Mdm::Module::Instance#architectures} need to
+  #     have at least 1 {Mdm::Architecture} shared with the returned {Mdm::Module::Instance Mdm::Module::Instances'}
+  #     {Mdm::Module::instance#architectures}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :nops_compatible_with,
+        ->(module_instance){
+          with_module_type(
+              'nop'
+          ).intersecting_architectures_with(
+              module_instance
+          ).ranked
+        }
+
+  # @!method self.ranked
+  #   Orders {Mdm::Module::Instance Mdm::Module::Instances} by their {#module_class} {Mdm::Module::Class#rank}
+  #   {Mdm::Module::Rank#number} in descending order so better, more reliable modules are first.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  #   @see Mdm::Module::Class.ranked
+  scope :ranked,
+        ->{
+          joins(
+              module_class: :rank
+          ).order(
+              Mdm::Module::Rank.arel_table[:number].desc
+          )
+        }
+
+
+  # @!method self.with_module_type(module_type)
+  #   {Mdm::Module::Instance} that have {#module_class} {Mdm::Module::Class#module_type} of `module_type`.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :with_module_type,
+        ->(module_type){
+          joins(
+              :module_class
+          ).where(
+              Mdm::Module::Class.arel_table[:module_type].eq(module_type)
+          )
+        }
+
+  # @!method self.payloads_compatible_with(module_target)
+  #   @note In addition to the compatibility checks down using the module cache: (1) the actual `Msf::Payload`
+  #     referenced by the {Mdm::Module::Instance} must be checked that it's `Msf::Payload#size` fits the size
+  #     restrictions of the `Msf::Exploit#payload_space`; and (2) the compatibility checks performed by
+  #     `Msf::Module#compatible?` all pass.
+  #
+  #   {Mdm::Module::Instance} that have (1) 'payload' for {Mdm::Module::Instance#module_type}; (2) a least 1
+  #   {Mdm::Architecture} shared between the {Mdm::Module::Instance#architectures} and this target's {#architectures};
+  #   (3) at least one shared platform or platform descendant between {Mdm::Module::Instance#platforms} and this
+  #   target's {#platforms} or their descendants; and, optionally, (4) that are NOT {Mdm::Module::Instance#privileged?}
+  #   if and only if {Mdm::Module::Target#module_instance} is NOT {Mdm::Module::Instance#privileged?}.
+  #
+  #   @param module_target [Mdm::Module::Target] target with {Mdm::Module::Target#architectures} and
+  #     {Mdm::Module::Target#platforms} that need to be compatible with the returned payload
+  #     {Mdm::Module::Instance Mdm::Module::Instances}.
+  #   @return [ActiveRecord::Relation<Mdm::Module::Instance>]
+  scope :payloads_compatible_with,
+        ->(module_target){
+          with_module_type(
+              'payload'
+          ).compatible_privilege_with(
+              module_target.module_instance
+          ).intersecting_architectures_with(
+              module_target
+          ).intersecting_platforms_with(
+              module_target
+          ).ranked
+        }
+
+
+  #
   # Validations
   #
 

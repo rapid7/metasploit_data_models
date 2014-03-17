@@ -16,9 +16,13 @@ describe Mdm::Module::Class do
 
   context 'associations' do
     it { should have_many(:ancestors).class_name('Mdm::Module::Ancestor').through(:relationships) }
+    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy).with_foreign_key(:module_class_id) }
+    it { should have_many(:exploit_sessions).class_name('Mdm::Session').dependent(:destroy).with_foreign_key(:exploit_class_id) }
     it { should have_one(:module_instance).class_name('Mdm::Module::Instance').dependent(:destroy) }
+    it { should have_many(:payload_sessions).class_name('Mdm::Session').dependent(:destroy).with_foreign_key(:payload_class_id) }
     it { should belong_to(:rank).class_name('Mdm::Module::Rank') }
     it { should have_many(:relationships).class_name('Mdm::Module::Relationship').dependent(:destroy).with_foreign_key(:descendant_id) }
+    it { should have_many(:vuln_attempts).class_name('Mdm::VulnAttempt').dependent(:destroy).with_foreign_key(:module_class_id) }
   end
 
   context 'database' do
@@ -330,6 +334,148 @@ describe Mdm::Module::Class do
               mdm_module_class
             }.to_not change(Mdm::Module::Ancestor, :count)
           end
+        end
+      end
+    end
+  end
+
+  context 'scopes' do
+    context 'non_generic_payloads' do
+      subject(:non_generic_payloads) do
+        described_class.non_generic_payloads
+      end
+
+      context 'with payload' do
+        #
+        # lets
+        #
+
+        let(:ancestors) do
+          [
+              module_ancestor
+          ]
+        end
+
+        let(:module_ancestor) do
+          FactoryGirl.create(
+              :mdm_module_ancestor,
+              module_type: 'payload',
+              # only test with single as single or stage/stager shouldn't matter since generic are only single.
+              payload_type: payload_type,
+              reference_name: "#{payload_type.pluralize}/#{payload_name}"
+          )
+        end
+
+        let(:payload_type) do
+          'single'
+        end
+
+        #
+        # let!s
+        #
+
+        let!(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              ancestors: ancestors
+          )
+        end
+
+        context 'with generic' do
+          let(:payload_name) do
+            'generic/handler_type'
+          end
+
+          it 'does includes Mdm::Module::Class' do
+            expect(non_generic_payloads).not_to include(module_class)
+          end
+        end
+
+        context 'without generic' do
+          let(:payload_name) do
+            'non_generic'
+          end
+
+          it 'does include Mdm::Module::Class' do
+            expect(non_generic_payloads).to include(module_class)
+          end
+        end
+      end
+
+      context 'without payload' do
+        #
+        # let
+        #
+
+        let(:module_type) do
+          FactoryGirl.generate :metasploit_model_non_payload_module_type
+        end
+
+        #
+        # let!
+        #
+
+        let!(:module_class) do
+          FactoryGirl.create(
+              :mdm_module_class,
+              module_type: module_type
+          )
+        end
+
+        it 'does not include Mdm::Module::Class' do
+          expect(non_generic_payloads).not_to include(module_class)
+        end
+      end
+    end
+
+    context 'with_module_instances' do
+      subject(:with_module_instances) do
+        described_class.with_module_instances(module_instance_scope)
+      end
+
+      #
+      # lets
+      #
+
+      let(:module_instance_module_classes) do
+        module_instances.map(&:module_class)
+      end
+
+      #
+      # let!s
+      #
+
+      let!(:module_classes_without_module_instances) do
+        FactoryGirl.create_list(:mdm_module_class, 2)
+      end
+
+      let!(:module_instances) do
+        FactoryGirl.create_list(:mdm_module_instance, 2)
+      end
+
+      context 'on Mdm::Module::Instance scope' do
+        let(:module_instance_scope) do
+          Mdm::Module::Instance.joins(:module_class).where(
+              Mdm::Module::Class.arel_table[:full_name].eq(scope_module_class.full_name)
+          )
+        end
+
+        let(:scope_module_class) do
+          module_instance_module_classes.sample
+        end
+
+        it 'includes only the Mdm::Module::Classes in the chained scope' do
+          expect(with_module_instances).to match_array([scope_module_class])
+        end
+      end
+
+      context 'on Mdm::Module::Class' do
+        let(:module_instance_scope) do
+          Mdm::Module::Instance
+        end
+
+        it 'includes all Mdm::Module::Classes with Mdm::Module::Instances' do
+          expect(with_module_instances).to match_array(module_instance_module_classes)
         end
       end
     end

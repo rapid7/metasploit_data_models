@@ -7,8 +7,9 @@ describe Mdm::Platform do
   end
 
   context 'associations' do
-    it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
     it { should have_many(:module_instances).class_name('Mdm::Module::Instance').through(:module_platforms) }
+    it { should have_many(:module_platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
+    it { should have_many(:sessions).class_name('Mdm::Session').dependent(:destroy) }
     it { should have_many(:target_platforms).class_name('Mdm::Module::Target::Platform').dependent(:destroy) }
   end
 

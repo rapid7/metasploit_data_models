@@ -29,6 +29,15 @@ class Mdm::Architecture < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :architecture
 
+  # @!attribute [rw] sessions
+  #   Sessions targeting this architecture.
+  #
+  #   @return [Array<Mdm::Session>]
+  has_many :sessions,
+           class_name: 'Mdm::Session',
+           dependent: :destroy,
+           inverse_of: :architecture
+
   # @!attribute [rw] target_architectures
   #   Join models between this and {Mdm::Module::Target}.
   #
