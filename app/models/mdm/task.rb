@@ -64,8 +64,6 @@ class Mdm::Task < ActiveRecord::Base
   has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
 
 
-  has_many :reports, :class_name => 'Mdm::Report'
-
   #
   # Scopes
   #

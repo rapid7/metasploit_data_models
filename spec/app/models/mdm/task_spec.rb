@@ -55,7 +55,6 @@ describe Mdm::Task do
     it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
     it { should have_many(:services).class_name('Mdm::Service').through(:task_services) }
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
-    it { should have_many(:reports).class_name('Mdm::Report')}
 
   end
 
