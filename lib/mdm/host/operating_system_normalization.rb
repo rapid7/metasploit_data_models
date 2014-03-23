@@ -184,7 +184,7 @@ module Mdm::Host::OperatingSystemNormalization
           if fp.data.has_key?(k)
             rdbs.each do |rdb|
               res = Recog::Nizer.match(rdb, fp.data[k])
-              matches << m if res
+              matches << res if res
             end
           end
         end
