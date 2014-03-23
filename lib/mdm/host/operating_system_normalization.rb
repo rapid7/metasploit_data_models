@@ -533,7 +533,7 @@ module Mdm::Host::OperatingSystemNormalization
       end
 
       # Extract the edition string if it is present 
-      if data[:product] =~ /(XP|\d+) (\w+|\w+ \w+|\w+ \w+ \w+) Edition/
+      if data[:product] =~ /(XP|Vista|\d+) (\w+|\w+ \w+|\w+ \w+ \w+) Edition/
         ret['os.edition'] = $2
       end
 
