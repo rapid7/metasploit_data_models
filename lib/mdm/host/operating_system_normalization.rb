@@ -139,8 +139,6 @@ module Mdm::Host::OperatingSystemNormalization
     host   = self
     matches = []
 
-    $stderr.puts "XXX: normalize_os() has been entered!!!"
-
     #
     # The goal is to infer as much as we can about the OS of the device and
     # the various services offered using the Recog gem and some glue logic 
@@ -232,18 +230,11 @@ module Mdm::Host::OperatingSystemNormalization
        end
     end
 
-
-    $stderr.puts "BEFORE: #{matches.inspect}"
-
     # Normalize matches for consistency during the ranking phase
     matches = matches.map{ |m| normalize_match(m) }
 
-    $stderr.puts "AFTER: #{matches.inspect}"
-
     # Calculate the best OS match based on fingerprint hits
     match = Recog::Nizer.best_os_match(matches)
-
-    $stderr.puts "WIN: #{match.inspect}"
 
     # Merge and normalize the best match to the host object
     apply_match_to_host(match) if match 
