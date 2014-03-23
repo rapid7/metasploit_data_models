@@ -139,6 +139,8 @@ module Mdm::Host::OperatingSystemNormalization
     host   = self
     matches = []
 
+    $stderr.puts "XXX: normalize_os() has been entered!!!"
+
     #
     # The goal is to infer as much as we can about the OS of the device and
     # the various services offered using the Recog gem and some glue logic 
@@ -153,14 +155,17 @@ module Mdm::Host::OperatingSystemNormalization
     # not match a rule are passed to the generic matcher.
     #
     fingerprint_note_match_keys = {
-      'smb.fingerprint' => {
-        'native_os' => 'smb_native_os',
+      'smb.fingerprint'  => {
+        :native_os               => [ 'smb_native_os' ],
       },
-      # XXX: Implement http.fingerprint
       'http.fingerprint' => {
-        'server'  => 'http_header.server',
-        'cookie'  => 'http_header.cookie',
-        'wwwauth' => 'http_header.wwwauth'
+        :header_server           => [ 'http_header.server', 'apache_os' ],
+        :header_set_cookie       => [ 'http_header.cookie' ],
+        :header_www_authenticate => [ 'http_header.wwwauth' ],
+      # TODO: Candidates for future Recog support
+      # :content                 => 'http_body'
+      # :code                    => 'http_response_code'
+      # :message                 => 'http_response_message'
       }
     }
 
@@ -175,10 +180,12 @@ module Mdm::Host::OperatingSystemNormalization
 
       # Look for a specific Recog database for this type and data key
       if fingerprint_note_match_keys.has_key?( fp.ntype )
-        fingerprint_note_match_keys[ fp.ntype ].each_pair do |k,v|
-          if fp.data.has_key?(k.intern)
-            res = Recog::Nizer.match(v, fp.data[k.intern])
-            matches << m if res
+        fingerprint_note_match_keys[ fp.ntype ].each_pair do |k,rdbs|
+          if fp.data.has_key?(k)
+            rdbs.each do |rdb|
+              res = Recog::Nizer.match(rdb, fp.data[k])
+              matches << m if res
+            end
           end
         end
       else 
@@ -212,11 +219,6 @@ module Mdm::Host::OperatingSystemNormalization
       'nntp'    => [ 'nntp.banner' ],
       'ftp'     => [ 'ftp.banner' ],
       'ssdp'    => [ 'ssdp_header.server' ]
-      # TODO: 
-      # 'dns'     => [ '' ]
-      # 'ntp'
-      # 'http_cookies' ( part of http.fingerprint? )
-      # 'http_servers' ( part of http.fingerprint? )
     }
 
 
@@ -230,11 +232,18 @@ module Mdm::Host::OperatingSystemNormalization
        end
     end
 
+
+    $stderr.puts "BEFORE: #{matches.inspect}"
+
     # Normalize matches for consistency during the ranking phase
     matches = matches.map{ |m| normalize_match(m) }
 
+    $stderr.puts "AFTER: #{matches.inspect}"
+
     # Calculate the best OS match based on fingerprint hits
     match = Recog::Nizer.best_os_match(matches)
+
+    $stderr.puts "WIN: #{match.inspect}"
 
     # Merge and normalize the best match to the host object
     apply_match_to_host(match) if match 
