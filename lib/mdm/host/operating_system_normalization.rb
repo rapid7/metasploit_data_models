@@ -149,7 +149,7 @@ module Mdm::Host::OperatingSystemNormalization
     #
     fingerprint_note_match_keys = {
       'smb.fingerprint'  => {
-        :native_os               => [ 'smb_native_os' ],
+        :native_os               => [ 'smb.native_os' ],
       },
       'http.fingerprint' => {
         :header_server           => [ 'http_header.server', 'apache_os' ],
