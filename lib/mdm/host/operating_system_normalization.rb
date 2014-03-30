@@ -112,12 +112,12 @@ module Mdm::Host::OperatingSystemNormalization
   #
   # TODO: Determine how smb.fingerprint will report version & language information
   # TODO: Implement rspec coverage for normalize_os()
-  # TODO: Implement smb.generic fingerprint database (replace parse_windows_os_str)
+  # TODO: Implement smb.generic fingerprint database (replace parse_windows_os_str?)
   # TODO: Implement smb.fingerprint changes ( data[:native_os] )
-  # TODO: Implement http.fingerprint changes ( data[:server], etc )
   # TODO: Correct inconsistencies in os_name use by removing the vendor string (Microsoft Windows -> Windows)
   #       This applies to MSF core and a handful of modules, not to mention some Recog fingerprints.
   # TODO: Rename host.os_sp to host.os_version
+  # TODO: Add host.os_vendor
   # TODO: Add host.os_confidence
   # TODO: Add host.domain
   #
@@ -199,8 +199,10 @@ module Mdm::Host::OperatingSystemNormalization
     #
 
     service_match_keys = {
-      'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
-      'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
+      # TODO: Implement smb.generic fingerprint database
+      # 'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
+      # 'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
+      
       'ssh'     => [ 'ssh.banner' ],
       'http'    => [ 'http_header.server', 'apache_os'], # The 'Apache' fingerprints try to infer OS/distribution from the extra information in the Server header
       'https'   => [ 'http_header.server', 'apache_os'], # XXX: verify vmware esx(i) case on https (TODO: normalize https to http, track SSL elsewhere, such as a new set of fields)
@@ -237,7 +239,7 @@ module Mdm::Host::OperatingSystemNormalization
     # Handle cases where the flavor contains the base name (legacy parsing, etc)
     # TODO: Remove this once we are sure it is no longer needed
     if host.os_name and host.os_flavor and host.os_flavor.index(host.os_name)
-      host.os_flavor = host.os_flavor.gsub(host.os_name, '')
+      host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip
     end
 
     # Set some sane defaults if needed
