@@ -6,11 +6,6 @@ module Mdm::Host::OperatingSystemNormalization
   require 'recog'
 
   #
-  # Leverage Rex for string sanitization and processing
-  #
-  require 'rex/text'
-
-  #
   # Rules for operating system fingerprinting in Metasploit
   #
   # The os.product key identifies the common-name of a specific operating system

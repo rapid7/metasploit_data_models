@@ -707,7 +707,15 @@ describe Mdm::Host do
 
 
     context '#apply_match_to_host' do
-   
+
+      before(:each) do
+        stub_const('Rex::Text', Module.new)
+        allow(Rex::Text).to receive(:ascii_safe_hex) do |unsanitized|
+          # Pass back the sanitized value for the stub
+          unsanitized.gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xFF])/n){ |x| "\\x%.2x" % x.unpack("C*")[0]}
+        end
+      end
+
       it 'should set host.mac when host.mac is present' do
         match = { 'host.mac' => '00:11:22:33:44:55' }
         host.send(:apply_match_to_host, match)
