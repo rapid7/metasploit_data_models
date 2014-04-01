@@ -24,8 +24,8 @@ group :development, :test do
   gem 'rails', '>= 3.2', '< 4.0.0'
   # Used to create fake data
   gem "faker"
-  # Assume Rex is in-process during production use, but require it for development/test
-  gem 'librex'
+  # Coveralls?
+  gem "coveralls"
 end
 
 group :test do
