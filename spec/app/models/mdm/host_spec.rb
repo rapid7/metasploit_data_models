@@ -694,7 +694,7 @@ describe Mdm::Host do
         host.validate_fingerprint_data(fingerprint).should == false
       end
 
-      it 'should return false for postgressql fingerprints' do
+      it 'should return false for postgresql fingerprints' do
         fingerprint= FactoryGirl.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
         host.validate_fingerprint_data(fingerprint).should == false
       end
