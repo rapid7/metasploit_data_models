@@ -760,16 +760,11 @@ module Mdm::Host::OperatingSystemNormalization
   def parse_windows_os_str(str)
     ret = {}
 
+    # Set some reasonable defaults for Windows
     ret['os.product'] = 'Windows'
     ret['os.vendor'] = 'Microsoft'
-    arch = get_arch_from_string(str)
-    ret['os.arch'] = arch if arch
 
-    if str =~ /(Service Pack|SP) ?(\d+)/
-      ret['os.version']  = "SP#{$2}"
-    end
-
-    # Flavor
+    # Determine the actual Windows product name
     case str
       when /\.NET Server|2003/
         ret['os.product'] << ' Server 2003'
@@ -785,8 +780,27 @@ module Mdm::Host::OperatingSystemNormalization
         # If we couldn't pull out anything specific for the flavor, just cut
         # off the stuff we know for sure isn't it and hope for the best
         ret['os.product'] = (ret['os.product'] + ' ' + str.gsub(/(Microsoft )|(Windows )|(Service Pack|SP) ?(\d+)/, '').strip).strip
+
+        # Make sure the product name doesn't include any non-alphanumeric stuff
+        # This fixes cases where the above code leaves 'Windows XX (Build 3333,)...'
+        ret['os.product'] = ret['os.product'].split(/[a-zA-Z0-9 ]/).first.strip
     end
 
+    # Take a guess at the architecture
+    arch = get_arch_from_string(str)
+    ret['os.arch'] = arch || 'x86'
+
+    # Extract any service pack value in the string
+    if str =~ /(Service Pack|SP) ?(\d+)/
+      ret['os.version']  = "SP#{$2}"
+    end
+
+    # Extract any build ID found in the string
+    if str =~ /build (\d+)/i
+      ret['os.build'] = $1
+    end
+
+    # Extract the OS edition if available
     if str =~ /(\d+|\d+\.\d+) (\w+|\w+ \w+|\w+ \w+ \w+) Edition/
       ret['os.edition'] = $2
     else
