@@ -434,9 +434,20 @@ module Mdm::Host::OperatingSystemNormalization
     case data[:os]
       when /Windows/
         ret.update(parse_windows_os_str(data[:os]))
+    # Switch to this code block once the multi-meterpreter code review is complete
+=begin
+
+      when /^(Windows \w+)\s*\(Build (\d+)(.*)\)/
+        ret['os.product'] = $1
+        ret['os.build'] = $2
+        ret['os.vendor'] = 'Microsoft'
+        possible_sp = $3
+        if possible_sp =~ /Service Pack (\d+)/
+          ret['os.version'] = 'SP' + $1
+        end
+=end        
       when /Linux (\d+\.\d+\.\d+\S*)\s* \((\w*)\)/
         ret['os.product'] = "Linux"
-        ret['host.name']  = data[:name]
         ret['os.version'] = $1
         ret['os.arch']    = get_arch_from_string($2)
       else
@@ -749,7 +760,8 @@ module Mdm::Host::OperatingSystemNormalization
   def parse_windows_os_str(str)
     ret = {}
 
-    ret['os.product'] = "Windows"
+    ret['os.product'] = 'Windows'
+    ret['os.vendor'] = 'Microsoft'
     arch = get_arch_from_string(str)
     ret['os.arch'] = arch if arch
 
@@ -765,7 +777,9 @@ module Mdm::Host::OperatingSystemNormalization
         ret['os.product'] << ' Server ' + $1
       when /(2000)/
         ret['os.product'] << ' Server ' + $1
-      when /(Vista|7|8\.1|8)/
+      when /(NT 3\.\d+|4\.0)/
+        ret['os.product'] << $1
+      when /(95|98|ME|XP|Vista|7|8\.1|8)/
         ret['os.product'] << ' ' + $1
       else
         # If we couldn't pull out anything specific for the flavor, just cut
