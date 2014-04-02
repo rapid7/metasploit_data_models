@@ -231,7 +231,7 @@ module Mdm::Host::OperatingSystemNormalization
     generated_matches = self.notes.where("ntype like 'fingerprint.match'")
     generated_matches.each do |m|
       next unless (m.data and m.data.kind_of?(::Hash))
-      matches << m.dup
+      matches << m.data.dup
     end
 
     # Normalize matches for consistency during the ranking phase
