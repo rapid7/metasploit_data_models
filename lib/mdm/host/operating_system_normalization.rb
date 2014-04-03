@@ -295,6 +295,12 @@ module Mdm::Host::OperatingSystemNormalization
         m['os.vendor'] ||= 'Apple'
       end
 
+      # Normalize Sun Solaris/Sun SunOS to just Solaris/SunOS
+      if m['os.product'] =~ /^Sun (Solaris|SunOS)/
+        m['os.product']  = m['os.product'].gsub(/^Sun /, '')
+        m['os.vendor'] ||= 'Oracle'
+      end
+
       # Normalize Microsoft Windows to just Windows to catch any stragglers
       if m['os.product'] =~ /^Microsoft Windows/
         m['os.product']  = m['os.product'].gsub(/Microsoft Windows/, 'Windows')
@@ -540,7 +546,8 @@ module Mdm::Host::OperatingSystemNormalization
 
       # No version means the version is part of the product already
       when nil, ''
-        ret['os.product'] = data[:product]
+        # Trim any 'Server' suffix and use as it is
+        ret['os.product'] = data[:product].sub(/ Server$/, '')
 
       # Otherwise, we assume a Server version of Windows
       else
@@ -612,20 +619,32 @@ module Mdm::Host::OperatingSystemNormalization
     # Since there is no confidence associated with them, the best we
     # can do is just take the first one.
     case oses.first
-      when /Windows/
+      when /^(Microsoft |)Windows/
         ret.update(parse_windows_os_str(data[:os]))
 
       when /(2\.[46]\.\d+[-a-zA-Z0-9]+)/
-        # Linux kernel version
+        # Look for older Linux kernel versions
         ret['os.product'] = "Linux"
         ret['os.version'] = $1
-      when /(.*)?((\d+\.)+\d+)$/
-        # Then we don't necessarily know what the os is, but this
-        # fingerprint has some version information at the end, pull it
-        # off.
-        # When Nessus doesn't know what kind of linux it has, it gives an os like
-        #  "Linux Kernel 2.6"
-        # The "Kernel" string is useless, so cut it off.
+
+      when /^Linux Kernel ([\d\.]+)(.*)/
+        # Look for strings like "Linux Kernel 2.6 on Ubuntu 9.10 (karmic)"
+        # Ex: Linux Kernel 2.2 on Red Hat Linux release 6.2 (Zoot) 
+        # Ex: Linux Kernel 2.6 on Ubuntu Linux 8.04 (hardy)
+        ret['os.product'] = "Linux"
+        ret['os.version'] = $1
+
+        vendor = $2.to_s
+
+        # Try to snag the vendor name as well
+        if vendor =~ /on (\w+|\w+ \w+|\w+ \w+ \w+) (Linux|\d)/
+          ret['os.vendor'] = $1
+        end
+
+      when /(.*) ([0-9\.]+)$/
+        # Then we don't necessarily know what the os is, but this fingerprint has
+        # some version information at the end, pull it off, treat the first part
+        # as the OS, and the rest as the version.
         ret['os.product'] = $1.gsub("Kernel", '').strip
         ret['os.version'] = $2
       else
@@ -773,7 +792,7 @@ module Mdm::Host::OperatingSystemNormalization
       when /(2000)/
         ret['os.product'] << ' Server ' + $1
       when /(NT 3\.\d+|4\.0)/
-        ret['os.product'] << $1
+        ret['os.product'] << ' ' + $1
       when /(95|98|ME|XP|Vista|7|8\.1|8)/
         ret['os.product'] << ' ' + $1
       else
