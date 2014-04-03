@@ -793,7 +793,7 @@ module Mdm::Host::OperatingSystemNormalization
         ret['os.product'] << ' Server ' + $1
       when /(NT 3\.\d+|4\.0)/
         ret['os.product'] << ' ' + $1
-      when /(95|98|ME|XP|Vista|7|8\.1|8)/
+      when /(95|98|ME|XP|Vista|[\d\.]+)/
         ret['os.product'] << ' ' + $1
       else
         # If we couldn't pull out anything specific for the flavor, just cut
