@@ -615,6 +615,32 @@ describe Mdm::Host do
       end
 
       context 'os product' do
+
+         it "should appear as Windows 95 for 'Windows 95" do
+          result = host.send(:parse_windows_os_str, 'Windows 95')
+          result['os.product'].should == 'Windows 95'
+        end
+
+        it "should appear as Windows NT 3.51 for 'Windows NT 3.51" do
+          result = host.send(:parse_windows_os_str, 'Windows NT 3.51')
+          result['os.product'].should == 'Windows NT 3.51'
+        end
+
+        it "should appear as Windows NT 4.0 for 'Windows NT 4.0" do
+          result = host.send(:parse_windows_os_str, 'Windows NT 4.0')
+          result['os.product'].should == 'Windows NT 4.0'
+        end
+
+        it "should appear as Windows 98 for 'Windows 98" do
+          result = host.send(:parse_windows_os_str, 'Windows 98')
+          result['os.product'].should == 'Windows 98'
+        end
+
+        it "should appear as Windows ME for 'Windows ME" do
+          result = host.send(:parse_windows_os_str, 'Windows ME')
+          result['os.product'].should == 'Windows ME'
+        end
+
         it "should appear as Windows 2003 for '.NET Server'" do
           result = host.send(:parse_windows_os_str, 'Windows .NET Server')
           result['os.product'].should == 'Windows Server 2003'
@@ -660,7 +686,7 @@ describe Mdm::Host do
           result['os.product'].should == 'Windows 7'
         end
 
-        it 'should be recognized for Windows 7 X Edition' do
+        it 'should be recognized for Windows 7 Ultimate Edition' do
           result = host.send(:parse_windows_os_str, 'Windows 7 Ultimate Edition')
           result['os.product'].should == 'Windows 7'
           result['os.edition'].should == 'Ultimate'
@@ -676,7 +702,32 @@ describe Mdm::Host do
           result['os.product'].should == 'Windows 8.1'
         end
 
-        it 'should default to Windows if all else fails' do
+        it 'should be recognized for Windows 8.2' do
+          result = host.send(:parse_windows_os_str, 'Windows 8.2')
+          result['os.product'].should == 'Windows 8.2'
+        end
+
+        it 'should be recognized as Windows XP, Build 2600, SP3' do
+          result = host.send(:parse_windows_os_str, 'Windows XP (Build 2600, Service Pack 3).')
+          result['os.product'].should == 'Windows XP'
+          result['os.build'].should == '2600'
+          result['os.version'].should == 'SP3'
+        end
+
+        it 'should be recognized as Windows Server 2003, Build 3790' do
+          result = host.send(:parse_windows_os_str, 'Windows .NET Server (Build 3790).')
+          result['os.product'].should == 'Windows Server 2003'
+          result['os.build'].should == '3790'
+        end
+
+        it 'should be recognized as Windows Server 2008, Build 6001, SP1' do
+          result = host.send(:parse_windows_os_str, 'Windows 2008 (Build 6001, Service Pack 1).')
+          result['os.product'].should == 'Windows Server 2008'
+          result['os.build'].should == '6001'
+          result['os.version'].should == 'SP1'
+        end
+         
+        it 'should default to Windows <name> if all else fails' do
             result = host.send(:parse_windows_os_str, 'Windows Foobar Service Pack 3')
             result['os.product'].should == 'Windows Foobar'
             result['os.version'].should == 'SP3'

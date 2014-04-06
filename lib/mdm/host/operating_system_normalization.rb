@@ -780,37 +780,36 @@ module Mdm::Host::OperatingSystemNormalization
     ret = {}
 
     # Set some reasonable defaults for Windows
+    ret['os.vendor']  = 'Microsoft'    
     ret['os.product'] = 'Windows'
-    ret['os.vendor'] = 'Microsoft'
 
     # Determine the actual Windows product name
     case str
-      when /\.NET Server|2003/
+      when /\.NET Server/
         ret['os.product'] << ' Server 2003'
-      when /(2008|2012)/
+      when / (2000|2003|2008|2012)/
         ret['os.product'] << ' Server ' + $1
-      when /(2000)/
-        ret['os.product'] << ' Server ' + $1
-      when /(NT 3\.\d+|4\.0)/
+      when / (NT (?:3\.51|4\.0))/
         ret['os.product'] << ' ' + $1
-      when /(95|98|ME|XP|Vista|[\d\.]+)/
+      when /Windows (95|98|ME|XP|Vista|[\d\.]+)/
         ret['os.product'] << ' ' + $1
       else
         # If we couldn't pull out anything specific for the flavor, just cut
         # off the stuff we know for sure isn't it and hope for the best
-        ret['os.product'] = (ret['os.product'] + ' ' + str.gsub(/(Microsoft )|(Windows )|(Service Pack|SP) ?(\d+)/, '').strip).strip
-
+        ret['os.product'] = (ret['os.product'] + ' ' + str.gsub(/(Microsoft )|(Windows )|(Service Pack|SP) ?(\d+)/i, '').strip).strip
+        
         # Make sure the product name doesn't include any non-alphanumeric stuff
         # This fixes cases where the above code leaves 'Windows XX (Build 3333,)...'
-        ret['os.product'] = ret['os.product'].split(/[a-zA-Z0-9 ]/).first.strip
+        ret['os.product'] = ret['os.product'].split(/[^a-zA-Z0-9 ]/).first.strip
+        
     end
 
     # Take a guess at the architecture
     arch = get_arch_from_string(str)
-    ret['os.arch'] = arch || 'x86'
+    ret['os.arch'] = arch if arch
 
     # Extract any service pack value in the string
-    if str =~ /(Service Pack|SP) ?(\d+)/
+    if str =~ /(Service Pack|SP) ?(\d+)/i
       ret['os.version']  = "SP#{$2}"
     end
 
