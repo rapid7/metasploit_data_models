@@ -12,6 +12,9 @@ if defined? YARD
       }
     end
 
+    # need environment so that yard templates can load ActiveRecord::Base subclasses for Entity-Relationship Diagrams
+    task :doc => :eager_load
+
     desc "Shows stats for YARD Documentation including listing undocumented modules, classes, constants, and methods"
     task :stats => :environment do
       stats = YARD::CLI::Stats.new
@@ -23,4 +26,8 @@ if defined? YARD
   desc "Generate YARD documentation"
   # allow calling namespace to as a task that goes to default task for namespace
   task :yard => ['yard:doc']
+end
+
+task eager_load: :environment do
+  Rails.application.eager_load!
 end
