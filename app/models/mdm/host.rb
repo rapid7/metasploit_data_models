@@ -164,7 +164,7 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Array<Mdm::Vuln>]
   has_many :vulns,
            class_name: 'Mdm::Vuln',
-           dependent: :destroy,
+           dependent: :delete_all,
            inverse_of: :host
 
   # @!attribute [rw] workspace
