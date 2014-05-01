@@ -3,8 +3,13 @@ class Mdm::Event < ActiveRecord::Base
   # Relations
   #
 
-  belongs_to :host, :class_name => 'Mdm::Host'
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             inverse_of: :events
+
+  belongs_to :workspace,
+             class_name: 'Mdm::Workspace',
+             inverse_of: :events
 
   #
   # Scopes

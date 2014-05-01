@@ -9,8 +9,14 @@ class Mdm::Tag < ActiveRecord::Base
   # Relations
   #
 
-  has_many :hosts_tags, :class_name => 'Mdm::HostTag'
-  belongs_to :user, :class_name => 'Mdm::User'
+  has_many :hosts_tags,
+           class_name: 'Mdm::HostTag',
+           dependent: :destroy,
+           inverse_of: :tag
+
+  belongs_to :user,
+             class_name: 'Mdm::User',
+             inverse_of: :tags
 
   #
   # Through :hosts_tags

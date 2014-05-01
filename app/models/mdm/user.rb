@@ -5,8 +5,15 @@ class Mdm::User < ActiveRecord::Base
   # Relations
   #
 
-  has_many :owned_workspaces, :foreign_key => 'owner_id', :class_name => 'Mdm::Workspace'
-  has_many :tags, :class_name => 'Mdm::Tag'
+  has_many :owned_workspaces,
+           class_name: 'Mdm::Workspace',
+           foreign_key: 'owner_id',
+           inverse_of: :owner
+
+  has_many :tags,
+           class_name: 'Mdm::Tag',
+           inverse_of: :user
+
   has_and_belongs_to_many :workspaces, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::Workspace'
 
   #

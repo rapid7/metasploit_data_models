@@ -1,7 +1,11 @@
 class Mdm::TaskService < ActiveRecord::Base
-  # attr_accessible :title, :body
-  belongs_to :service, :class_name => 'Mdm::Service'
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :service,
+             class_name: 'Mdm::Service',
+             inverse_of: :task_services
+
+  belongs_to :task,
+             class_name: 'Mdm::Task',
+             inverse_of: :task_services
 
   validates :service_id,
             :uniqueness => {
