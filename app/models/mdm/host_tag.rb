@@ -2,7 +2,7 @@ class Mdm::HostTag < ActiveRecord::Base
   self.table_name = "hosts_tags"
 
   #
-  # Relations
+  # Associations
   #
 
   # @!attribute host
@@ -22,6 +22,29 @@ class Mdm::HostTag < ActiveRecord::Base
   belongs_to :tag,
              class_name: 'Mdm::Tag',
              inverse_of: :hosts_tags
+
+  #
+  # Callbacks
+  #
+
+  # @see http://stackoverflow.com/a/11694704
+  after_destroy :destroy_orphan_tag
+
+  #
+  # Instance Methods
+  #
+
+  private
+
+  # Destroys {#tag} if it is orphaned
+  #
+  # @see http://stackoverflow.com/a/11694704
+  # @return [void]
+  def destroy_orphan_tag
+    tag.destroy_if_orphaned
+  end
+
+  public
 
   ActiveSupport.run_load_hooks(:mdm_host_tag, self)
 end

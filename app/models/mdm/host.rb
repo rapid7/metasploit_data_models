@@ -106,7 +106,6 @@ class Mdm::Host < ActiveRecord::Base
 
   # @!attribute hosts_tags
   #   A join model between {Mdm::Tag} and {Mdm::Host}.  Use {#tags} to get the actual {Mdm::Tag Mdm::Tags} on this host.
-  #   {#hosts_tags} are cleaned up in a before_destroy: {#cleanup_tags}.
   #
   #   @todo MSP-2723
   #   @return [ActiveRecord::Relation<Mdm::HostTag>]
@@ -407,12 +406,6 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Integer]
 
   #
-  # Callbacks
-  #
-
-  before_destroy :cleanup_tags
-
-  #
   # Nested Attributes
   # @note Must be declared after relations being referenced.
   #
@@ -476,18 +469,6 @@ class Mdm::Host < ActiveRecord::Base
   def attribute_locked?(attr)
     n = notes.find_by_ntype("host.updated.#{attr}")
     n && n.data[:locked]
-  end
-
-  # Destroys any {Mdm::Tag Mdm::Tags} that will have no {Mdm::Tag#hosts} left after this host is deleted.
-  #
-  # @return [void]
-  def cleanup_tags
-    # No need to keep tags with no hosts
-    tags.each do |tag|
-      tag.destroy if tag.hosts == [self]
-    end
-    # Clean up association table records
-    Mdm::HostTag.delete_all("host_id = #{self.id}")
   end
 
   # This is replicated by the IpAddressValidator class. Had to put it here as well to avoid
