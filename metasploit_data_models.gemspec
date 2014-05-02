@@ -34,7 +34,9 @@ Gem::Specification.new do |s|
   # debugging
   s.add_development_dependency 'pry'
 
-  s.add_runtime_dependency 'activerecord', '>= 3.2.13'
+  # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
+  # @see MSP-2971
+  s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
   
   if RUBY_PLATFORM =~ /java/

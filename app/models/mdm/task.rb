@@ -9,17 +9,62 @@ class Mdm::Task < ActiveRecord::Base
   # Relations
   #
 
+  # @!attribute listeners
+  #   Listeners spawned by this task
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Listener>]
+  has_many :listeners,
+           class_name: 'Mdm::Listener',
+           dependent: :destroy,
+           inverse_of: :task
+
+  # @!attribute [rw] task_creds
+  #   Joins this to {#creds}.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::TaskCred>]
+  has_many :task_creds,
+           class_name: 'Mdm::TaskCred',
+           dependent: :destroy,
+           inverse_of: :task
+
+  # @!attribute task_hosts
+  #   Joins this to {#hosts}.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::TaskHost>]
+  has_many :task_hosts,
+           class_name: 'Mdm::TaskHost',
+           dependent: :destroy,
+           inverse_of: :task
+
+  # @!attribute task_services
+  #   Joins this to {#services}.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::TaskService>]
+  has_many :task_services,
+           class_name: 'Mdm::TaskService',
+           dependent: :destroy,
+           inverse_of: :task
+
+  # @!attribute task_sessions
+  #   Joins this to {#sessions}.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::TaskSession>]
+  has_many :task_sessions,
+           class_name: 'Mdm::TaskSession',
+           dependent: :destroy,
+           inverse_of: :task
+
   # @!attribute [rw] workspace
   #   The Workspace the Task belongs to
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace,  :class_name => "Mdm::Workspace"
+  belongs_to :workspace,
+             class_name: 'Mdm::Workspace',
+             inverse_of: :tasks
 
-  # @!attribute [rw] task_creds
-  #   Details about creds this task touched
   #
-  #   @return [Array<Mdm::TaskCred>]
-  has_many :task_creds, :dependent => :destroy, :class_name => 'Mdm::TaskCred'
+  # through: :task_creds
+  #
 
   # @!attribute [rw] creds
   #   Creds this task touched
@@ -27,11 +72,9 @@ class Mdm::Task < ActiveRecord::Base
   #   @return [Array<Mdm::Cred>]
   has_many :creds, :through => :task_creds, :class_name => 'Mdm::Cred'
 
-  # @!attribute [rw] task_hosts
-  #   Details about hosts this task touched
   #
-  #   @return [Array<Mdm::TaskHost>]
-  has_many :task_hosts, :dependent => :destroy, :class_name => 'Mdm::TaskHost'
+  # through: :task_hosts
+  #
 
   # @!attribute [rw] hosts
   #   Hosts this task touched
@@ -39,11 +82,9 @@ class Mdm::Task < ActiveRecord::Base
   #   @return [Array<Mdm::Host>
   has_many :hosts, :through => :task_hosts, :class_name => 'Mdm::Host'
 
-  # @!attribute [rw] task_services
-  #   Details about services this task touched
   #
-  #   @return [Array<Mdm::TaskService>]
-  has_many :task_services, :dependent => :destroy, :class_name => 'Mdm::TaskService'
+  # through: :task_services
+  #
 
   # @!attribute [rw] services
   #   Services this task touched
@@ -51,11 +92,9 @@ class Mdm::Task < ActiveRecord::Base
   #   @return [Array<Mdm::Service>
   has_many :services, :through => :task_services, :class_name => 'Mdm::Service'
 
-  # @!attribute [rw] task_sessions
-  #   Details about sessions this task touched
   #
-  #   @return [Array<Mdm::TaskSession>]
-  has_many :task_sessions, :dependent => :destroy, :class_name => 'Mdm::TaskSession'
+  # through: :task_sessions
+  #
 
   # @!attribute [rw] sessions
   #   Session this task touched

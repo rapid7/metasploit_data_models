@@ -18,9 +18,11 @@ class Mdm::Ref < ActiveRecord::Base
   # @!attribute [rw] vulns_refs
   #   Join model to {Mdm::Vuln Mdm::Vulns}.  Use {#vulns} to get the actual {Mdm::Vuln Mdm::Vulns}.
   #
-	#   @todo https://www.pivotaltracker.com/story/show/48915453
+	#   @todo MSP-3066
   #   @return [Array<Mdm::VulnRef>]
-  has_many :vulns_refs, :class_name => 'Mdm::VulnRef'
+  has_many :vulns_refs,
+           :class_name => 'Mdm::VulnRef',
+           inverse_of: :ref
 
   #
   # Through :vuln_refs

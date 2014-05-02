@@ -4,36 +4,57 @@ class Mdm::Vuln < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute exploit_attempts
+  #   Attempts to exploit this vulnerability.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts,
+           class_name: 'Mdm::ExploitAttempt',
+           inverse_of: :vuln
+
   # @!attribute [rw] host
   #   The host with this vulnerability.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host', :counter_cache => :vuln_count
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             counter_cache: :vuln_count,
+             inverse_of: :vulns
 
   # @!attribute [rw] service
   #   The service with the vulnerability.
   #
   #   @return [Mdm::Service]
-  belongs_to :service, :class_name => 'Mdm::Service'
+  belongs_to :service,
+             class_name: 'Mdm::Service',
+             inverse_of: :vulns
 
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
   #
   #   @return [Array<Mdm::VulnAttempt>]
-  has_many :vuln_attempts, :class_name => 'Mdm::VulnAttempt', :dependent => :destroy
+  has_many :vuln_attempts,
+           class_name: 'Mdm::VulnAttempt',
+           dependent: :destroy,
+           inverse_of: :vuln
 
   # @!attribute [rw] vuln_details
   #   Additional information about this vulnerability.
   #
   #   @return [Array<Mdm::VulnDetail>]
-  has_many :vuln_details, :class_name => 'Mdm::VulnDetail', :dependent => :destroy
+  has_many :vuln_details,
+           class_name: 'Mdm::VulnDetail',
+           dependent: :destroy,
+           inverse_of: :vuln
 
   # @!attribute [rw] vulns_refs
   #   Join model that joins this vuln to its {Mdm::Ref external references}.
   #
-  #   @todo https://www.pivotaltracker.com/story/show/49004623
   #   @return [Array<Mdm::VulnRef>]
-  has_many :vulns_refs, :class_name => 'Mdm::VulnRef', :dependent => :destroy
+  has_many :vulns_refs,
+           class_name: 'Mdm::VulnRef',
+           dependent: :destroy,
+           inverse_of: :vuln
 
   #
   # Through :vuln_refs
@@ -42,7 +63,6 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [r] refs
   #   External references to this vulnerability.
   #
-  #   @todo https://www.pivotaltracker.com/story/show/49004623
   #   @return [Array<Mdm::Ref>]
   has_many :refs, :class_name => 'Mdm::Ref', :through => :vulns_refs
 

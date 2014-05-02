@@ -3,7 +3,9 @@ class Mdm::WebForm < ActiveRecord::Base
   # Relations
   #
 
-  belongs_to :web_site, :class_name => 'Mdm::WebSite'
+  belongs_to :web_site,
+             class_name: 'Mdm::WebSite',
+             inverse_of: :web_forms
 
   #
   # Serializations

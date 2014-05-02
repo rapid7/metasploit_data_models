@@ -3,6 +3,11 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
+group :development do
+  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  gem 'yard-metasploit-erd', '~> 0.0.2'
+end
+
 # used by dummy application
 group :development, :test do
   # supplies factories for producing model instance for specs
@@ -12,7 +17,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   # rails is only used for the dummy application in spec/dummy
   # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
-  # @see https://www.pivotaltracker.com/story/show/52309083
+  # @see MSP-2971
   gem 'rails', '>= 3.2', '< 4.0.0'
   # Used to create fake data
   gem "faker"

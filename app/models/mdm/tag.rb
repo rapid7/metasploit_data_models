@@ -1,20 +1,29 @@
 class Mdm::Tag < ActiveRecord::Base
   #
-  # Callbacks
-  #
-
-  before_destroy :cleanup_hosts
-
-  #
   # Relations
   #
 
-  has_many :hosts_tags, :class_name => 'Mdm::HostTag'
-  belongs_to :user, :class_name => 'Mdm::User'
+  # @!attribute hosts_tags
+  #  Joins {#hosts} to this tag.
+  #
+  #  @return [ActiveRecord::Relation<Mdm::HostTag>]
+  has_many :hosts_tags,
+           class_name: 'Mdm::HostTag',
+           dependent: :destroy,
+           inverse_of: :tag
+
+  belongs_to :user,
+             class_name: 'Mdm::User',
+             inverse_of: :tags
 
   #
   # Through :hosts_tags
   #
+
+  # @!attribute [r] hosts
+  #   Host that are tagged with this tag.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Host>]
   has_many :hosts, :through => :hosts_tags, :class_name => 'Mdm::Host'
 
 
@@ -33,9 +42,19 @@ class Mdm::Tag < ActiveRecord::Base
             },
             :presence => true
 
-  def cleanup_hosts
-    # Clean up association table records
-    Mdm::HostTag.delete_all("tag_id = #{self.id}")
+  #
+  # Instance Methods
+  #
+
+  # Destroy this tag if it has no {#hosts_tags}
+  #
+  # @return [void]
+  def destroy_if_orphaned
+    self.class.transaction do
+      if hosts_tags.empty?
+        destroy
+      end
+    end
   end
 
   def to_s
