@@ -1,15 +1,10 @@
-
-# XXX: Development (offline installation)
-source "http://127.0.0.1:9292"
-
-# Uncomment once I have internet access =)
-# source "http://rubygems.org"
+source "https://rubygems.org"
 
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-# XXX: Development (not yet published)
-gem 'recog', :git => '/work/recog'
+# Service fingerprinting and OS detection
+gem 'recog'
 
 # used by dummy application
 group :development, :test do
