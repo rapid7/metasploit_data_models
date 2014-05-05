@@ -3,8 +3,13 @@ class Mdm::Listener < ActiveRecord::Base
   # Relations
   #
 
-  belongs_to :task, :class_name => 'Mdm::Task'
-  belongs_to :workspace, :class_name => 'Mdm::Workspace'
+  belongs_to :task,
+             class_name: 'Mdm::Task',
+             inverse_of: :listeners
+
+  belongs_to :workspace,
+             class_name: 'Mdm::Workspace',
+             inverse_of: :listeners
 
   #
   # Serializations

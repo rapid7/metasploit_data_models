@@ -66,23 +66,6 @@ describe Mdm::Tag do
     end
   end
 
-  context 'callbacks' do
-    context 'before_destroy' do
-      it 'should call #cleanup_hosts' do
-        mytag = FactoryGirl.create(:mdm_tag)
-        mytag.should_receive(:cleanup_hosts)
-        mytag.destroy
-      end
-
-      it 'should destroy the host_tag joins' do
-        mytag = FactoryGirl.create(:mdm_tag)
-        FactoryGirl.create(:mdm_host_tag, :tag => mytag)
-        Mdm::HostTag.should_receive(:delete_all).with("tag_id = #{mytag.id}")
-        mytag.destroy
-      end
-    end
-  end
-
   context 'instance methods' do
     context '#to_s' do
       it 'should return the name of the tag as a string' do
@@ -103,15 +86,14 @@ describe Mdm::Tag do
   end
 
   context '#destroy' do
+    let!(:tag) do
+      FactoryGirl.create(:mdm_tag)
+    end
+
     it 'should successfully destroy the object' do
-      tag = FactoryGirl.create(:mdm_tag)
       expect {
         tag.destroy
-      }.to_not raise_error
-      expect {
-        tag.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      }.to change(Mdm::Tag, :count).by(-1)
     end
   end
-
 end

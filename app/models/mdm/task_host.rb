@@ -1,7 +1,11 @@
 class Mdm::TaskHost < ActiveRecord::Base
-  # attr_accessible :title, :body
-  belongs_to :host, :class_name => 'Mdm::Host'
-  belongs_to :task, :class_name =>  'Mdm::Task'
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             inverse_of: :task_hosts
+
+  belongs_to :task,
+             class_name: 'Mdm::Task',
+             inverse_of: :task_hosts
 
   validates :host_id,
             :uniqueness => {

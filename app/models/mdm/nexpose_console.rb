@@ -1,5 +1,18 @@
 class Mdm::NexposeConsole < ActiveRecord::Base
   #
+  # Associations
+  #
+
+  # @!attribute vuln_details
+  #   Details for vulnerabilities supplied by this Nexpose console.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::VulnDetail>]
+  has_many :vuln_details,
+           class_name: 'Mdm::VulnDetail',
+           foreign_key: :nx_console_id,
+           inverse_of: :nexpose_console
+
+  #
   # Serializations
   #
 

@@ -19,13 +19,18 @@ class Mdm::Cred < ActiveRecord::Base
   #   The service this cred is for
   #
   #   @return [Mdm::Service]
-  belongs_to :service, :class_name => "Mdm::Service"
+  belongs_to :service,
+             class_name: 'Mdm::Service',
+             inverse_of: :creds
 
   # @!attribute [rw] task_creds
   #   Details about what Tasks touched this cred
   #
   #   @return [Array<Mdm::TaskCred>]
-  has_many :task_creds, :dependent => :destroy, :class_name => "Mdm::TaskCred"
+  has_many :task_creds,
+           class_name: 'Mdm::TaskCred',
+           dependent: :destroy,
+           inverse_of: :cred
 
   # @!attribute [rw] tasks
   #   Tasks that touched this service
