@@ -201,7 +201,7 @@ module Mdm::Host::OperatingSystemNormalization
       # 'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
       # 'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
       
-      'ssh'     => [ 'ssh.banner' ],
+      'ssh'     => [ 'ssh.banner' ], # Recog expects just the vendor string, not the protocol version
       'http'    => [ 'http_header.server', 'apache_os'], # The 'Apache' fingerprints try to infer OS/distribution from the extra information in the Server header
       'https'   => [ 'http_header.server', 'apache_os'], # XXX: verify vmware esx(i) case on https (TODO: normalize https to http, track SSL elsewhere, such as a new set of fields)
       'snmp'    => [ 'snmp.sys_description' ],
@@ -220,8 +220,8 @@ module Mdm::Host::OperatingSystemNormalization
       next unless service_match_keys.has_key?(s.name)
       service_match_keys[s.name].each do |rdb|
         banner = s.info
-        if self.respond_to?("service_banner_filter_#{s.name}")
-          banner = self.send("service_banner_filter_#{s.name}", banner)
+        if self.respond_to?("service_banner_recog_filter_#{s.name}")
+          banner = self.send("service_banner_recog_filter_#{s.name}", banner)
         end
         res = Recog::Nizer.match(rdb, banner)
         matches << res if res 
@@ -323,7 +323,7 @@ module Mdm::Host::OperatingSystemNormalization
   # 
   # Recog assumes that the protocol version of the SSH banner has been removed
   # 
-  def service_banner_filter_ssh(banner)
+  def service_banner_recog_filter_ssh(banner)
     if banner =~ /^SSH-\d+\.\d+-(.*)/
       $1
     else
