@@ -219,7 +219,11 @@ module Mdm::Host::OperatingSystemNormalization
     fingerprintable_services.each do |s|
       next unless service_match_keys.has_key?(s.name)
       service_match_keys[s.name].each do |rdb|
-        res = Recog::Nizer.match(rdb, s.info)
+        banner = s.info
+        if self.respond_to?("service_banner_filter_#{s.name}")
+          banner = self.send("service_banner_filter_#{s.name}", banner)
+        end
+        res = Recog::Nizer.match(rdb, banner)
         matches << res if res 
        end
     end
@@ -311,9 +315,20 @@ module Mdm::Host::OperatingSystemNormalization
       if m['os.product'] =~ /^Windows Server/
         m['os.product'] = m['os.product'].gsub(/Windows Server/, 'Windows')
       end
-    end 
+    end
 
     m
+  end
+
+  # 
+  # Recog assumes that the protocol version of the SSH banner has been removed
+  # 
+  def service_banner_filter_ssh(banner)
+    if banner =~ /^SSH-\d+\.\d+-(.*)/
+      $1
+    else
+      banner
+    end
   end
 
   #
@@ -396,6 +411,14 @@ module Mdm::Host::OperatingSystemNormalization
       host.os_lang = sanitize(match['os.language'])
     end
 
+    # Normalize MAC addresses to lower-case colon-delimited format
+    if host.mac and ! host.attribute_locked?(:mac)
+      host.mac = host.mac.downcase
+      if host.mac =~ /^[a-f0-9]{12}$/
+        host.mac = host.mac.scan(/../).join(':')
+      end
+    end
+
   end
 
   #
@@ -469,6 +492,7 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def normalize_nmap_fingerprint(data)
     ret = {}
+
     # :os_vendor=>"Microsoft" :os_family=>"Windows" :os_version=>"2000" :os_accuracy=>"94"
     ret['os.certainty'] = ( data[:os_accuracy].to_f / 100.0 ).to_s if data[:os_accuracy]
     if (data[:os_vendor] == data[:os_family])
@@ -487,6 +511,14 @@ module Mdm::Host::OperatingSystemNormalization
 
     ret['host.name'] = data[:hostname] if data[:hostname]
 
+    # Cap nmap certainty at 0.84 until we update it more frequently
+    # XXX: Without this, Nmap will beat the default certainty of recog
+    #      matches and its less-confident guesses will take precedence
+    #      over service-based fingerprints.
+    if ret['os.certainty']
+      ret['os.certainty'] = [ ret['os.certainty'].to_f, 0.84 ].min.to_s
+    end
+  
     [ ret ]  
   end
 
