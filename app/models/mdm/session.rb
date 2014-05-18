@@ -9,19 +9,44 @@ class Mdm::Session < ActiveRecord::Base
   #   Events that occurred when this session was open.
   #
   #   @return [Array<Mdm::Event>]
-  has_many :events, :class_name => 'Mdm::SessionEvent', :order => 'created_at', :dependent => :delete_all
+  has_many :events,
+           class_name: 'Mdm::SessionEvent',
+           dependent: :delete_all,
+           inverse_of: :session,
+           order: 'created_at'
+
+  # @!attribute exploit_attempt
+  #   Exploit attempt that created this session.
+  #
+  #   @return [Mdm::ExploitAttempt]
+  has_one :exploit_attempt,
+          class_name: 'Mdm::ExploitAttempt',
+          inverse_of: :session
 
   # @!attribute [rw] host
   #   {Mdm::Host Host} on which this session was opened.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host'
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             inverse_of: :sessions
 
   # @!attribute [rw] routes
   #   Routes tunneled throug this session.
   #
   #   @return [Array<Mdm::Route>]
-  has_many :routes, :class_name => 'Mdm::Route', :dependent => :delete_all
+  has_many :routes,
+           class_name: 'Mdm::Route',
+           dependent: :delete_all,
+           inverse_of: :session
+
+  # @!attribute vuln_attempt
+  #   Vulnerability attempt that created this session.
+  #
+  #   @return [Mdm::VulnAttempt]
+  has_one :vuln_attempt,
+          class_name: 'Mdm::VulnAttempt',
+          inverse_of: :session
 
   #
   # Through :host

@@ -11,52 +11,95 @@ class Mdm::Service < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute creds
+  #   Credentials gathered from this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Cred>]
+  has_many :creds,
+           class_name: 'Mdm::Cred',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute exploit_attempts
+  #   Exploit attempts against this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts,
+           class_name: 'Mdm::ExploitAttempt',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute exploited_hosts
+  #   @todo MSP-2732
+  #   @return [Array<Mdm::ExploitHost>]
+  has_many :exploited_hosts,
+           class_name: 'Mdm::ExploitedHost',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute host
+  #   The host on which this service runs.
+  #
+  #   @return [Mdm::Host]
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             counter_cache: :service_count,
+             inverse_of: :services
+
+  # @!attribute loots
+  #   Loot gathers from this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Loot>]
+  has_many :loots,
+           class_name: 'Mdm::Loot',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute notes
+  #   Notes about this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Note>]
+  has_many :notes,
+           class_name: 'Mdm::Note',
+           dependent: :destroy,
+           inverse_of: :service
+
   # @!attribute [rw] task_services
   #   Details about what Tasks touched this service
   #
   #   @return [Array<Mdm::TaskService>]
-  has_many :task_services, :dependent => :destroy, :class_name => 'Mdm::TaskService'
+  has_many :task_services,
+           class_name: 'Mdm::TaskService',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute vulns
+  #   Vulnerabilities found in this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Vuln>]
+  has_many :vulns,
+           class_name: 'Mdm::Vuln',
+           dependent: :destroy,
+           inverse_of: :service
+
+  # @!attribute web_sites
+  #   Web sites running on top of this service.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::WebSite>]
+  has_many :web_sites,
+           class_name: 'Mdm::WebSite',
+           dependent: :destroy,
+           inverse_of: :service
+
+  #
+  # through: :task_services
+  #
 
   # @!attribute [rw] tasks
   #   Tasks that touched this service
   #
   #   @return [Array<Mdm::Task>]
   has_many :tasks, :through => :task_services, :class_name => 'Mdm::Task'
-
-  # @!attribute [rw] creds
-  #   Credentials gathered from this service.
-  #
-  #   @return [Array<Mdm::Cred>]
-  has_many :creds, :dependent => :destroy, :class_name => 'Mdm::Cred'
-
-  # @!attribute [rw] exploited_hosts
-  #   @todo https://www.pivotaltracker.com/story/show/48993731
-  #   @return [Array<Mdm::ExploitHost>]
-  has_many :exploited_hosts, :dependent => :destroy, :class_name => 'Mdm::ExploitedHost'
-
-  # @!attribute [rw] host
-  #   The host on which this service runs.
-  #
-  #   @return [Mdm::Host]
-  belongs_to :host, :class_name => 'Mdm::Host', :counter_cache => :service_count
-
-  # @!attribute [rw] notes
-  #   Notes about this service.
-  #
-  #   @return [Array<Mdm::Note>]
-  has_many :notes, :dependent => :destroy, :class_name => 'Mdm::Note'
-
-  # @!attribute [rw] vulns
-  #   Vulnerabilities found in this service.
-  #
-  #   @return [Array<Mdm::Vuln>]
-  has_many :vulns, :dependent => :destroy, :class_name => 'Mdm::Vuln'
-
-  # @!attribute [rw] web_sites
-  #   Web sites running on top of this service.
-  #
-  #   @return [Array<Mdm::WebSite>]
-  has_many :web_sites, :dependent => :destroy, :class_name => 'Mdm::WebSite'
 
   #
   # Through :web_sites

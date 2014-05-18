@@ -5,8 +5,13 @@ class Mdm::VulnRef < ActiveRecord::Base
   # Relations
   #
 
-  belongs_to :ref, :class_name => 'Mdm::Ref'
-  belongs_to :vuln, :class_name => 'Mdm::Vuln'
+  belongs_to :ref,
+             class_name: 'Mdm::Ref',
+             inverse_of: :vulns_refs
+
+  belongs_to :vuln,
+             class_name: 'Mdm::Vuln',
+             inverse_of: :vulns_refs
 
   ActiveSupport.run_load_hooks(:mdm_vuln_ref, self)
 end

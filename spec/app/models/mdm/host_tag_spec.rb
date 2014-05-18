@@ -25,15 +25,46 @@ describe Mdm::HostTag do
   end
 
   context '#destroy' do
-    it 'should successfully destroy the object' do
-      host_tag = FactoryGirl.create(:mdm_host_tag)
+    let(:tag) do
+      FactoryGirl.create(
+          :mdm_tag
+      )
+    end
+
+    let!(:host_tag) do
+      FactoryGirl.create(
+          :mdm_host_tag,
+          :tag => tag
+      )
+    end
+
+    it 'should delete 1 Mdm::HostTag' do
       expect {
         host_tag.destroy
-      }.to_not raise_error
-      expect {
-        host_tag.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      }.to change(Mdm::HostTag, :count).by(-1)
+    end
+
+    context 'with multiple Mdm::HostTags using same Mdm::Tag' do
+      let!(:other_host_tag) do
+        FactoryGirl.create(
+            :mdm_host_tag,
+            :tag => tag
+        )
+      end
+
+      it 'should not delete Mdm::Tag' do
+        expect {
+          host_tag.destroy
+        }.to_not change(Mdm::Tag, :count)
+      end
+    end
+
+    context 'with only one Mdm::HostTag using Mdm::Tag' do
+      it 'should delete Mdm::Tag' do
+        expect {
+          host_tag.destroy
+        }.to change(Mdm::Tag, :count).by(-1)
+      end
     end
   end
-
 end
