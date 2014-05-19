@@ -10,6 +10,8 @@ end
 
 # used by dummy application
 group :development, :test do
+  # Upload coverage reports to coveralls.io
+  gem 'coveralls', require: false  
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryGirl.' in factory definitions syntax.
   gem 'factory_girl', '>= 4.1.0'
@@ -24,8 +26,6 @@ group :development, :test do
 end
 
 group :test do
-  # Upload coverage reports to coveralls.io
-  gem 'coveralls', require: false
   # In a full rails project, factory_girl_rails would be in both the :development, and :test group, but since we only
   # want rails in :test, factory_girl_rails must also only be in :test.
   # add matchers from shoulda, such as validates_presence_of, which are useful for testing validations
