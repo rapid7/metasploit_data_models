@@ -1,149 +1,110 @@
-# Creates sessions and session_events and migrates sessions and session_events data out of events table.
 class AddSessionTable < ActiveRecord::Migration
-  # Model to help with extracting data from events table.
-  class Event < ActiveRecord::Base
-    #
-    # Serializations
-    #
 
-    # @!attribute [rw] info
-    #   @return [Hash]
-    serialize :info
-  end
+	class Event < ActiveRecord::Base
+		serialize :info
+	end
 
-  # Model to help with importing data into sessions table.
-  class Session < ActiveRecord::Base
-    #
-    # Associations
-    #
+	class SessionEvent < ActiveRecord::Base
+		belongs_to :session
+	end
 
-    # @!attribute [rw] events
-    #   Events that occurred in this session.
-    #
-    #   @return [Array<AddSessionTable::SessionEvent>]
-    has_many :events, :class_name => 'AddSessionTable::SessionEvent'
+	class Session < ActiveRecord::Base
+		has_many :events, :class_name => 'AddSessionTable::SessionEvent'
+		serialize :datastore
+	end
 
-    #
-    # Serializations
-    #
+	def self.up
 
-    # @!attribute [rw] datastore
-    #   Datastore inherited from module used to gain session.
-    #
-    #   @return [Hash]
-    serialize :datastore
-  end
+ 		create_table :sessions do |t|
+ 			t.integer :host_id
 
-  # Model to help with importing data into session_events table.
-  class SessionEvent < ActiveRecord::Base
-    #
-    # Associtations
-    #
+ 			t.string  :stype       # session type: meterpreter, shell, etc
+ 			t.string  :via_exploit # module name 
+ 			t.string  :via_payload # payload name
+ 			t.string  :desc        # session description
+ 			t.integer :port
+ 			t.string  :platform    # platform type of the remote system
+ 			t.string  :routes
 
-    # @!attribute [rw] session
-    #   Session in which this event occurred.
-    #
-    #   @return [AddSessionTable::Session]
-    belongs_to :session
-  end
+ 			t.text    :datastore   # module's datastore
 
-  # Drops sessions and session_events.
-  #
-  # @return [void]
-  def self.down
-    drop_table :sessions
-    drop_table :session_events
-  end
+ 			t.timestamp :opened_at, :null => false
+ 			t.timestamp :closed_at
 
-  # Creates sessions and session_events and migrates sessions and session_events data out of events table.
-  #
-  # @return [void]
-  def up
-    create_table :sessions do |t|
-      t.integer :host_id
+ 			t.string :close_reason
+ 		end
 
-      t.string  :stype       # session type: meterpreter, shell, etc
-      t.string  :via_exploit # module name
-      t.string  :via_payload # payload name
-      t.string  :desc        # session description
-      t.integer :port
-      t.string  :platform    # platform type of the remote system
-      t.string  :routes
+ 		create_table :session_events do |t|
+ 			t.integer :session_id
 
-      t.text    :datastore   # module's datastore
+ 			t.string  :etype # event type: command, output, upload, download, filedelete
+ 			t.binary  :command
+ 			t.binary  :output
+ 			t.string  :remote_path
+ 			t.string  :local_path
 
-      t.timestamp :opened_at, :null => false
-      t.timestamp :closed_at
+ 			t.timestamp :created_at
+ 		end
 
-      t.string :close_reason
-    end
+ 		#
+ 		# Migrate session data from events table
+ 		#
 
-    create_table :session_events do |t|
-      t.integer :session_id
+ 		close_events = Event.find_all_by_name("session_close")
+ 		open_events  = Event.find_all_by_name("session_open")
 
-      t.string  :etype # event type: command, output, upload, download, filedelete
-      t.binary  :command
-      t.binary  :output
-      t.string  :remote_path
-      t.string  :local_path
+ 		command_events  = Event.find_all_by_name("session_command")
+ 		output_events   = Event.find_all_by_name("session_output")
+ 		upload_events   = Event.find_all_by_name("session_upload")
+ 		download_events = Event.find_all_by_name("session_download")
 
-      t.timestamp :created_at
-    end
+ 		open_events.each do |o|
+ 			c = close_events.find { |e| e.info[:session_uuid] == o.info[:session_uuid] }
 
-    #
-    # Migrate session data from events table
-    #
+ 			s = Session.new(
+ 				:host_id => o.host_id,
+ 				:stype => o.info[:session_type],
+ 				:via_exploit => o.info[:via_exploit],
+ 				:via_payload => o.info[:via_payload],
+ 				:datastore => o.info[:datastore],
+ 				:opened_at => o.created_at
+ 			)
 
-    close_events = Event.find_all_by_name("session_close")
-    open_events  = Event.find_all_by_name("session_open")
+			if c
+	 			s.closed_at = c.created_at
+ 				s.desc = c.info[:session_info]
+ 			else
+ 				# couldn't find the corresponding close event
+ 				s.closed_at = s.opened_at
+ 				s.desc = "?"
+ 			end
 
-    command_events  = Event.find_all_by_name("session_command")
-    output_events   = Event.find_all_by_name("session_output")
-    upload_events   = Event.find_all_by_name("session_upload")
-    download_events = Event.find_all_by_name("session_download")
+ 			uuid = o.info[:session_uuid]
 
-    open_events.each do |o|
-      c = close_events.find { |e| e.info[:session_uuid] == o.info[:session_uuid] }
+ 			command_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
+ 				s.events.build(:created_at => e.created_at, :etype => "command", :command => e.info[:command] )
+ 			end
 
-      s = Session.new(
-          :host_id => o.host_id,
-          :stype => o.info[:session_type],
-          :via_exploit => o.info[:via_exploit],
-          :via_payload => o.info[:via_payload],
-          :datastore => o.info[:datastore],
-          :opened_at => o.created_at
-      )
+ 			output_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
+ 				s.events.build(:created_at => e.created_at, :etype => "output", :output => e.info[:output] )
+ 			end
 
-      if c
-        s.closed_at = c.created_at
-        s.desc = c.info[:session_info]
-      else
-        # couldn't find the corresponding close event
-        s.closed_at = s.opened_at
-        s.desc = "?"
-      end
+ 			upload_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
+ 				s.events.build(:created_at => e.created_at, :etype => "upload", :local_path => e.info[:local_path], :remote_path  => e.info[:remote_path] )
+ 			end
 
-      uuid = o.info[:session_uuid]
+ 			download_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
+ 				s.events.build(:created_at => e.created_at, :etype => "download", :local_path => e.info[:local_path], :remote_path  => e.info[:remote_path] )
+ 			end
 
-      command_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
-        s.events.build(:created_at => e.created_at, :etype => "command", :command => e.info[:command] )
-      end
+ 			s.events.sort_by(&:created_at)
 
-      output_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
-        s.events.build(:created_at => e.created_at, :etype => "output", :output => e.info[:output] )
-      end
+ 			s.save!
+ 		end
+	end
 
-      upload_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
-        s.events.build(:created_at => e.created_at, :etype => "upload", :local_path => e.info[:local_path], :remote_path  => e.info[:remote_path] )
-      end
-
-      download_events.select { |e| e.info[:session_uuid] == uuid }.each do |e|
-        s.events.build(:created_at => e.created_at, :etype => "download", :local_path => e.info[:local_path], :remote_path  => e.info[:remote_path] )
-      end
-
-      s.events.sort_by(&:created_at)
-
-      s.save!
-    end
-  end
+	def self.down
+		drop_table :sessions
+		drop_table :session_events
+	end
 end

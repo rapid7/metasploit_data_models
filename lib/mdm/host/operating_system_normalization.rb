@@ -1,5 +1,3 @@
-# Isolates {#normalize_os} from {Mdm::Host} as {#normalize_os} was taking up a large fraction of {Mdm::Host}'s
-# definition and obscuring other parts of {Mdm::Host}.
 module Mdm::Host::OperatingSystemNormalization
   #
   # Normalize the operating system fingerprints provided by various scanners

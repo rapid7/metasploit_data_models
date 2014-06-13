@@ -1,20 +1,27 @@
-# Join model between {Mdm::Host} and {Mdm::Tag}.
 class Mdm::HostTag < ActiveRecord::Base
+  self.table_name = "hosts_tags"
+
   #
   # Associations
   #
 
-  # @!attribute [rw] host
+  # @!attribute host
   #   Host with {#tag}.
   #
+  #   @todo MSP-2723
   #   @return [Mdm::Host]
-  belongs_to :host, class_name: 'Mdm::Host', inverse_of: :host_tags
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             inverse_of: :hosts_tags
 
-  # @!attribute [rw] tag
+  # @!attribute tag
   #   Tag on {#host}.
   #
+  #   @todo MSP-2723
   #   @return [Mdm::Tag]
-  belongs_to :tag, class_name: 'Mdm::Tag', inverse_of: :host_tags
+  belongs_to :tag,
+             class_name: 'Mdm::Tag',
+             inverse_of: :hosts_tags
 
   #
   # Callbacks
@@ -24,17 +31,8 @@ class Mdm::HostTag < ActiveRecord::Base
   after_destroy :destroy_orphan_tag
 
   #
-  # Validations
+  # Instance Methods
   #
-
-  validates :host,
-            :presence => true
-  validates :tag,
-            :presence => true
-  validates :tag_id,
-            :uniqueness => {
-                :scope => :host_id
-            }
 
   private
 
@@ -46,7 +44,6 @@ class Mdm::HostTag < ActiveRecord::Base
     tag.destroy_if_orphaned
   end
 
-  # switch back to public for load hooks
   public
 
   ActiveSupport.run_load_hooks(:mdm_host_tag, self)

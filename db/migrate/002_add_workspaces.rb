@@ -1,31 +1,36 @@
-# Creates workspaces and adds workspace_id foreign key on hosts.  Also removes unique index on hosts.address.
 class AddWorkspaces < ActiveRecord::Migration
-  # Drops workspaces and removes workspace_id foreign key on hosts.  Restores unique index on hosts.address.
-  #
-  # @return [void]
-  def down
-    drop_table :workspaces
 
-    change_table :hosts do |t|
-      t.remove   :workspace_id
-    end
+	def self.up
+		create_table :workspaces do |t|
+			t.string    :name
+			t.timestamps
+		end
 
-    add_index :hosts, :address, :unique => true
-  end
+		change_table :hosts do |t|
+			t.integer   :workspace_id, :required => true
+		end
 
-  # Creates workspaces and adds workspace_id foreign key on hosts.  Also removes unique index on hosts.address.
-  #
-  # @return [void]
-  def up
-    create_table :workspaces do |t|
-      t.string    :name
-      t.timestamps
-    end
+		remove_index :hosts, :column => :address
 
-    change_table :hosts do |t|
-      t.integer   :workspace_id, :required => true
-    end
+		#
+		# This was broken after 018_add_workspace_user_info was introduced
+		# because of the new boundary column.  For some reason, the
+		# find_or_create_by_name that .default eventually calls here tries to
+		# create a record with the boundary field that doesn't exist yet.  
+		# See #1724
+		#
+		#w = Msf::DBManager::Workspace.default
+		#Msf::DBManager::Host.update_all ["workspace_id = ?", w.id]
+	end
 
-    remove_index :hosts, :column => :address
-  end
+	def self.down
+		drop_table :workspaces
+
+		change_table :hosts do |t|
+			t.remove   :workspace_id
+		end
+
+		add_index :hosts, :address, :unique => true
+	end
+
 end

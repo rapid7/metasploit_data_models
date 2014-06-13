@@ -1,4 +1,3 @@
-# Changes any Mdm::WebVuln#params with value `''` to value `[]`.
 class ValidMdmWebVulnParams < ActiveRecord::Migration
   # Don't put back the bad format because there's not way to figure our which of the [] were '' before {#up} and
   # which were `[]` before {#up}.

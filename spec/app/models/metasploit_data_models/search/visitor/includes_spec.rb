@@ -84,316 +84,40 @@ describe MetasploitDataModels::Search::Visitor::Includes do
       let(:query) do
         Metasploit::Model::Search::Query.new(
             :formatted => formatted,
-            :klass => Mdm::Module::Instance
+            :klass => klass
         )
       end
 
-      context 'with description' do
-        let(:description) do
-          FactoryGirl.generate :metasploit_model_module_instance_description
+      context 'Metasploit::Model::Search::Query#klass' do
+        context 'with Mdm::Host' do
+          let(:klass) {
+            Mdm::Host
+          }
+
+          context 'with name' do
+            let(:name) do
+              FactoryGirl.generate :mdm_host_name
+            end
+
+            let(:formatted) do
+              "name:\"#{name}\""
+            end
+
+            it { should be_empty }
+          end
+
+          context 'with services.name' do
+            let(:name) do
+              FactoryGirl.generate :mdm_service_name
+            end
+
+            let(:formatted) do
+              "services.name:\"#{name}\""
+            end
+
+            it { should include :services }
+          end
         end
-
-        let(:formatted) do
-          "description:\"#{description}\""
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with disclosed_on' do
-        let(:disclosed_on) do
-          FactoryGirl.generate :metasploit_model_module_instance_disclosed_on
-        end
-
-        let(:formatted) do
-          "disclosed_on:\"#{disclosed_on}\""
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with license' do
-        let(:license) do
-          FactoryGirl.generate :metasploit_model_module_instance_license
-        end
-
-        let(:formatted) do
-          "license:\"#{license}\""
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with name' do
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_module_instance_name
-        end
-
-        let(:formatted) do
-          "name:\"#{name}\""
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with privileged' do
-        let(:privileged) do
-          FactoryGirl.generate :metasploit_model_module_instance_privileged
-        end
-
-        let(:formatted) do
-          "privileged:#{privileged}"
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with stance' do
-        let(:stance) do
-          FactoryGirl.generate :metasploit_model_module_stance
-        end
-
-        let(:formatted) do
-          "stance:#{stance}"
-        end
-
-        it { should be_empty }
-      end
-
-      context 'with actions.name' do
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_module_action_name
-        end
-
-        let(:formatted) do
-          "actions.name:\"#{name}\""
-        end
-
-        it { should include :actions }
-      end
-
-      context 'with architectures.abbreviation' do
-        let(:abbreviation) do
-          FactoryGirl.generate :metasploit_model_architecture_abbreviation
-        end
-
-        let(:formatted) do
-          "architectures.abbreviation:#{abbreviation}"
-        end
-
-        it { should include :architectures }
-      end
-
-      context 'with architectures.bits' do
-        let(:bits) do
-          FactoryGirl.generate :metasploit_model_architecture_bits
-        end
-
-        let(:formatted) do
-          "architectures.bits:#{bits}"
-        end
-
-        it { should include :architectures }
-      end
-
-      context 'with architectures.endianness' do
-        let(:endianness) do
-          FactoryGirl.generate :metasploit_model_architecture_endianness
-        end
-
-        let(:formatted) do
-          "architectures.endianness:#{endianness}"
-        end
-
-        it { should include :architectures }
-      end
-
-      context 'with architectures.family' do
-        let(:family) do
-          FactoryGirl.generate :metasploit_model_architecture_family
-        end
-
-        let(:formatted) do
-          "architectures.family:#{family}"
-        end
-
-        it { should include :architectures }
-      end
-
-      context 'with authorities.abbreviation' do
-        let(:abbreviation) do
-          FactoryGirl.generate :metasploit_model_authority_abbreviation
-        end
-
-        let(:formatted) do
-          "authorities.abbreviation:#{abbreviation}"
-        end
-
-        it { should include :authorities }
-      end
-
-      context 'with authors.name' do
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_author_name
-        end
-
-        let(:formatted) do
-          "authors.name:\"#{name}\""
-        end
-
-        it { should include :authors }
-      end
-
-      context 'with email_addresses.domain' do
-        let(:domain) do
-          FactoryGirl.generate :metasploit_model_email_address_domain
-        end
-
-        let(:formatted) do
-          "email_addresses.domain:#{domain}"
-        end
-
-        it { should include :email_addresses }
-      end
-
-      context 'with email_addresses.local' do
-        let(:local) do
-          FactoryGirl.generate :metasploit_model_email_address_local
-        end
-
-        let(:formatted) do
-          "email_addresses.local:#{local}"
-        end
-
-        it { should include :email_addresses }
-      end
-
-      context 'with module_class.full_name' do
-        let(:full_name) do
-          "#{module_type}/#{reference_name}"
-        end
-
-        let(:formatted) do
-          "module_class.full_name:#{full_name}"
-        end
-
-        let(:module_type) do
-          FactoryGirl.generate :metasploit_model_non_payload_module_type
-        end
-
-        let(:reference_name) do
-          FactoryGirl.generate :metasploit_model_module_ancestor_non_payload_reference_name
-        end
-
-        it { should include :module_class }
-      end
-
-      context 'with module_class.module_type' do
-        let(:formatted) do
-          "module_class.module_type:#{module_type}"
-        end
-
-        let(:module_type) do
-          FactoryGirl.generate :metasploit_model_module_type
-        end
-
-        it { should include :module_class }
-      end
-
-      context 'with module_class.payload_type' do
-        let(:formatted) do
-          "module_class.payload_type:#{payload_type}"
-        end
-
-        let(:payload_type) do
-          FactoryGirl.generate :metasploit_model_module_class_payload_type
-        end
-
-        it { should include :module_class }
-      end
-
-      context 'with module_class.reference_name' do
-        let(:formatted) do
-          "module_class.reference_name:#{reference_name}"
-        end
-
-        let(:reference_name) do
-          FactoryGirl.generate :metasploit_model_module_ancestor_reference_name
-        end
-
-        it { should include :module_class }
-      end
-
-      context 'with platforms.fully_qualified_name' do
-        let(:formatted) do
-          "platforms.fully_qualified_name:\"#{fully_qualified_name}\""
-        end
-
-        let(:fully_qualified_name) do
-          Metasploit::Model::Platform.fully_qualified_name_set.to_a.sample
-        end
-
-        it { should include :platforms }
-      end
-
-      context 'with rank.name' do
-        let(:formatted) do
-          "rank.name:#{name}"
-        end
-
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_module_rank_name
-        end
-
-        it { should include :rank }
-      end
-
-      context 'with rank.number' do
-        let(:formatted) do
-          "rank.number:#{number}"
-        end
-
-        let(:number) do
-          FactoryGirl.generate :metasploit_model_module_rank_number
-        end
-
-        it { should include :rank }
-      end
-
-      context 'with references.designation' do
-        let(:designation) do
-          FactoryGirl.generate :metasploit_model_reference_designation
-        end
-
-        let(:formatted) do
-          "references.designation:#{designation}"
-        end
-
-        it { should include :references }
-      end
-
-      context 'with references.url' do
-        let(:formatted) do
-          "references.url:#{url}"
-        end
-
-        let(:url) do
-          FactoryGirl.generate :metasploit_model_reference_url
-        end
-
-        it { should include :references }
-      end
-
-      context 'with targets.name' do
-        let(:formatted) do
-          "targets.name:\"#{name}\""
-        end
-
-        let(:name) do
-          FactoryGirl.generate :metasploit_model_module_target_name
-        end
-
-        it { should include :targets }
       end
     end
   end

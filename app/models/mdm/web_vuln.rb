@@ -36,7 +36,9 @@ class Mdm::WebVuln < ActiveRecord::Base
   # Associations
   #
 
-  belongs_to :web_site, class_name: 'Mdm::WebSite', inverse_of: :web_vulns
+  belongs_to :web_site,
+             class_name: 'Mdm::WebSite',
+             inverse_of: :web_vulns
 
   #
   # Attributes

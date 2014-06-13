@@ -1,44 +1,33 @@
 # @note All options not specific to any given rake task should go in the .yardopts file so they are available to both
 #   the below rake tasks and when invoking `yard` from the command line
 
-load Metasploit::Model.root.join('lib', 'tasks', 'yard.rake')
-
 if defined? YARD
   namespace :yard do
-    begin
-      require 'rails_erd/diagram/graphviz'
-    rescue LoadError
-      puts "Won't be able to generate Mdm Entity-Relationship Diagram"
-    else
-      namespace :erd do
-        images_directory = 'docs/images'
+    YARD::Rake::YardocTask.new(:doc) do |t|
+      # --no-stats here as 'stats' task called after will print fuller stats
+      t.options = ['--no-stats']
 
-        namespace :mdm do
-          task :module => [:environment] do
-            MetasploitDataModels::EntityRelationshipDiagram.create(
-                :domain => MetasploitDataModels::EntityRelationshipDiagram::Module.domain,
-                :filename => File.join(images_directory, 'mdm-module.erd'),
-                :filetype => :png,
-                :title => 'Mdm::Module (Direct) Entity-Relationship Diagram'
-            )
-          end
-        end
+      t.after = Proc.new {
+        Rake::Task['yard:stats'].execute
+      }
+    end
 
-        task :mdm => [:environment] do
-          MetasploitDataModels::EntityRelationshipDiagram.create(
-              :filename => File.join(images_directory, 'mdm.erd'),
-              :filetype => :png,
-              :title => 'Mdm (Direct) Entity-Relationship Diagram'
-          )
-        end
-      end
+    # need environment so that yard templates can load ActiveRecord::Base subclasses for Entity-Relationship Diagrams
+    task :doc => :eager_load
 
-      task :erd => ['erd:mdm', 'erd:mdm:module']
-      task :doc => :erd
+    desc "Shows stats for YARD Documentation including listing undocumented modules, classes, constants, and methods"
+    task :stats => :environment do
+      stats = YARD::CLI::Stats.new
+      stats.run('--compact', '--list-undoc')
     end
   end
 
-  task :default => :yard
-else
-  puts 'YARD not defined, so yard tasks cannot be setup.'
+  # @todo Figure out how to just clone description from yard:doc
+  desc "Generate YARD documentation"
+  # allow calling namespace to as a task that goes to default task for namespace
+  task :yard => ['yard:doc']
+end
+
+task eager_load: :environment do
+  Rails.application.eager_load!
 end

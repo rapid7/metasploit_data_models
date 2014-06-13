@@ -1,8 +1,8 @@
-# Drops imported_creds.
 class DropTableImportedCreds < ActiveRecord::Migration
-  # Recreates imported_creds.
-  #
-  # @return [void]
+  def up
+    drop_table :imported_creds
+  end
+
   def down
     create_table :imported_creds do |t|
       t.integer   :workspace_id, :null => false, :default => 1
@@ -10,12 +10,5 @@ class DropTableImportedCreds < ActiveRecord::Migration
       t.string    :pass, :limit  => 512
       t.string    :ptype, :limit  => 16, :default => "password"
     end
-  end
-
-  # Drops imported_creds.
-  #
-  # @return [void]
-  def up
-    drop_table :imported_creds
   end
 end

@@ -4,73 +4,90 @@ class Mdm::Vuln < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] exploit_attempts
+  # @!attribute exploit_attempts
   #   Attempts to exploit this vulnerability.
   #
-  #   @return [Array<Mdm::ExploitAttempt>]
-  has_many :exploit_attempts, class_name: 'Mdm::ExploitAttempt', inverse_of: :vuln
+  #   @return [ActiveRecord::Relation<Mdm::ExploitAttempt>]
+  has_many :exploit_attempts,
+           class_name: 'Mdm::ExploitAttempt',
+           inverse_of: :vuln
 
   # @!attribute [rw] host
   #   The host with this vulnerability.
   #
   #   @return [Mdm::Host]
-  belongs_to :host, class_name: 'Mdm::Host', counter_cache: :vuln_count, inverse_of: :vulns
+  belongs_to :host,
+             class_name: 'Mdm::Host',
+             counter_cache: :vuln_count,
+             inverse_of: :vulns
 
   # @!attribute [rw] service
   #   The service with the vulnerability.
   #
   #   @return [Mdm::Service]
-  belongs_to :service, class_name: 'Mdm::Service', inverse_of: :vulns
+  belongs_to :service,
+             class_name: 'Mdm::Service',
+             inverse_of: :vulns
 
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
   #
   #   @return [Array<Mdm::VulnAttempt>]
-  has_many :vuln_attempts, class_name: 'Mdm::VulnAttempt', dependent: :destroy, inverse_of: :vuln
+  has_many :vuln_attempts,
+           class_name: 'Mdm::VulnAttempt',
+           dependent: :destroy,
+           inverse_of: :vuln
 
   # @!attribute [rw] vuln_details
   #   Additional information about this vulnerability.
   #
   #   @return [Array<Mdm::VulnDetail>]
-  has_many :vuln_details, class_name: 'Mdm::VulnDetail', dependent: :destroy, inverse_of: :vuln
+  has_many :vuln_details,
+           class_name: 'Mdm::VulnDetail',
+           dependent: :destroy,
+           inverse_of: :vuln
 
-  # @!attribute [rw] vuln_references
-  #   Joins this {Mdm::Vuln} to its {#references}.
+  # @!attribute [rw] vulns_refs
+  #   Join model that joins this vuln to its {Mdm::Ref external references}.
   #
-  #   @return [Array<Mdm::VulnReference>]
-  has_many :vuln_references, class_name: 'Mdm::VulnReference', dependent: :destroy, inverse_of: :vuln
+  #   @return [Array<Mdm::VulnRef>]
+  has_many :vulns_refs,
+           class_name: 'Mdm::VulnRef',
+           dependent: :destroy,
+           inverse_of: :vuln
 
   #
-  # :through  => :vuln_references
+  # Through :vuln_refs
   #
 
-  # @!attribute [r] references
+  # @!attribute [r] refs
   #   External references to this vulnerability.
   #
-  #   @return [Array<Mdm::Referefence>]
-  has_many :references, :class_name => 'Mdm::Reference', :through => :vuln_references
+  #   @return [Array<Mdm::Ref>]
+  has_many :refs, :class_name => 'Mdm::Ref', :through => :vulns_refs
 
   #
-  # :through => :references
+  #  Through refs
   #
 
-  # @!attribute [r] module_references
-  #   Joins {#references} and {#module_instances}.
+  # @!attribute [r] module_refs
+  #   References in module that match {Mdm::Ref#name names} in {#refs}.
   #
-  #   @return [Array<Mdm::Module::Reference>]
-  has_many :module_references, :class_name => 'Mdm::Module::Reference', :through => :references
+  #   @return [Array<Mdm::Module::Ref>]
+  has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
 
   #
-  # :through  => module_references
+  # Through module_refs
   #
 
-  # @!attribute [r] module_instances
-  #   {Mdm::Module::Instance Modules} that share the same external references as this vuln.
+  # @!attribute [r] module_details
+  #   {Mdm::Module::Detail Modules} that share the same external references as this vuln.
   #
-  #   @return [Array<Mdm::Module::Instance>]
-  has_many :module_instances,
-           :class_name => 'Mdm::Module::Instance',
-           :through => :module_references,
+  #   @return [Array<Mdm::Module::Detail>]
+  has_many :module_details,
+           :class_name => 'Mdm::Module::Detail',
+           :source => :detail,
+           :through => :module_refs,
            :uniq => true
 
   #
@@ -103,6 +120,12 @@ class Mdm::Vuln < ActiveRecord::Base
   #   @return [Integer]
 
   #
+  # Callbacks
+  #
+
+  after_update :save_refs
+
+  #
   # Scopes
   #
 
@@ -113,10 +136,10 @@ class Mdm::Vuln < ActiveRecord::Base
         arel_table[:name].matches(formatted_query).or(
             arel_table[:info].matches(formatted_query)
         ).or(
-            Mdm::Reference.arel_table[:designation].matches(formatted_query)
+            Mdm::Ref.arel_table[:name].matches(formatted_query)
         )
     ).includes(
-        :references
+        :refs
     )
   }
 
@@ -124,11 +147,15 @@ class Mdm::Vuln < ActiveRecord::Base
   # Validations
   #
 
-  validates :name,
-            length: {
-                maximum: 255
-            },
-            presence: true
+  validates :name, :presence => true
+  validates :name, length: {maximum: 255}
+  validates_associated :refs
+
+  private
+
+  def save_refs
+    refs.each { |ref| ref.save(:validate => false) }
+  end
 
   ActiveSupport.run_load_hooks(:mdm_vuln, self)
 end

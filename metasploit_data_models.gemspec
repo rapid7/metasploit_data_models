@@ -29,21 +29,29 @@ Gem::Specification.new do |s|
   # ---- Dependencies ----
   s.add_development_dependency 'rake'
 
+  # documentation
+  s.add_development_dependency 'yard'
   # debugging
   s.add_development_dependency 'pry'
 
-  s.add_runtime_dependency 'activerecord', '>= 3.2.13'
+  # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
+  # @see MSP-2971
+  s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'awesome_nested_set'
-  s.add_runtime_dependency 'file-find'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.24.0'
-
+  s.add_runtime_dependency 'metasploit-model', '>= 0.24.1.pre.semantic.pre.versioning.pre.2.pre.0', '< 0.25'
+  
   if RUBY_PLATFORM =~ /java/
+    # markdown formatting for yard
+    s.add_development_dependency 'kramdown'
+
     s.add_runtime_dependency 'jdbc-postgres'
     s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
     
     s.platform = Gem::Platform::JAVA
   else
+    # markdown formatting for yard
+    s.add_development_dependency 'redcarpet'
+
     s.add_runtime_dependency 'pg'
     
     s.platform = Gem::Platform::RUBY

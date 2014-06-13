@@ -1,38 +1,24 @@
-# Adds reports.name by deriving it from reports.rtype.
 class AddDisplayNameToReportsTable < ActiveRecord::Migration
-  # Model to help set {#name} from {#rtype}.
-  class Report < ActiveRecord::Base
-    # @!attribute [rw] name
-    #   Name of the report.
-    #
-    #   @return [String]
 
-    # @!attribute [rw] rtype
-    #   Type of this report.
-    #
-    #   @return [String]
-  end
+	class Report < ActiveRecord::Base
+	end
 
-  # Removes reports.name.
-  #
-  # @return [void]
-  def down
-    remove_column :reports, :name
-  end
+	def self.up
 
-  # Adds reports.name by deriving it from reports.rtype.
-  #
-  # @return [void]
-  def up
-    add_column :reports, :name, :string, :limit => 63
+		add_column :reports, :name, :string, :limit => 63
 
-    # Migrate to have a default name.
+		# Migrate to have a default name.
+		
+		Report.find(:all).each do |report|
+			rtype = report.rtype.to_s =~ /^([A-Z0-9]+)\x2d/i ? $1 : "AUDIT"
+			default_name = rtype[0,57].downcase.capitalize + "-" + report.id.to_s[0,5]
+			report.name = default_name
+			report.save
+		end
+	end
 
-    Report.find(:all).each do |report|
-      rtype = report.rtype.to_s =~ /^([A-Z0-9]+)\x2d/i ? $1 : "AUDIT"
-      default_name = rtype[0,57].downcase.capitalize + "-" + report.id.to_s[0,5]
-      report.name = default_name
-      report.save
-    end
-  end
+	def self.down
+		remove_column :reports, :name
+	end
+
 end

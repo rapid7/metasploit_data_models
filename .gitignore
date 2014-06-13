@@ -2,8 +2,6 @@
 .bundle
 # Mac OS X folder attributes
 .DS_Store
-# Entity-Relationship diagrams created by rake erd*
-*.erd.pdf
 # built gems
 *.gem
 # Rubymine project configuration
@@ -21,8 +19,6 @@
 coverage
 # generated yardocs
 doc
-# generated images for yardocs
-docs/images
 # Installed gem versions.  Not stored for the same reasons as .rvmrc
 Gemfile.lock
 # Packaging directory for builds

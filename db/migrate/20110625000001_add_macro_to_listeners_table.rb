@@ -1,17 +1,12 @@
-# Adds listeners.macro.
 class AddMacroToListenersTable < ActiveRecord::Migration
-  # Removes listeners.macro.
-  #
-  # @return [void]
-	def down
-		remove_column :listeners, :macro
-  end
 
-  # Adds listeners.macro.
-  #
-  # @return [void]
-  def up
+	def self.up
 		add_column :listeners, :macro, :text
 	end
+
+	def self.down
+		remove_column :listeners, :macro
+	end
+
 end
 

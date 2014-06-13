@@ -1,31 +1,22 @@
 # Changes index on address so it scoped to workspace_id and is unique to match the validation in {Mdm::Host} on
 # {Mdm::Host#address}.
 class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
-  #
-  # CONSTANTS
-  #
-
-  # Table being chaned.
   TABLE_NAME = :hosts
 
   # maps Table -> Association Column for models that "belong to" a Host
   HOST_ASSOCIATION_MAP = {
-      'clients'          => 'host_id',
-      'events'           => 'host_id',
-      'exploit_attempts' => 'host_id',
-      'exploited_hosts'  => 'host_id',
-      'host_details'     => 'host_id',
-      'hosts_tags'       => 'host_id',
-      'loots'            => 'host_id',
-      'notes'            => 'host_id',
-      'sessions'         => 'host_id',
-      'services'         => 'host_id',
-      'vulns'            => 'host_id'
+    'clients'          => 'host_id',
+    'events'           => 'host_id',
+    'exploit_attempts' => 'host_id',
+    'exploited_hosts'  => 'host_id',
+    'host_details'     => 'host_id',
+    'hosts_tags'       => 'host_id',
+    'loots'            => 'host_id',
+    'notes'            => 'host_id',
+    'sessions'         => 'host_id',
+    'services'         => 'host_id',
+    'vulns'            => 'host_id'
   }
-
-  #
-  # Methods
-  #
 
   # Historically there a few scenarios where a user could end up with Hosts
   #  in the same workspace with the same IP. Primarily, if you run a Nexpose Scan
@@ -53,7 +44,7 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
     })
 
     if dupe_addresses_and_workspaces.present? and
-        not dupe_addresses_and_workspaces.num_tuples.zero?
+       not dupe_addresses_and_workspaces.num_tuples.zero?
       puts "Duplicate hosts in workspace found. Merging host references."
       # iterate through the duped IPs
       dupe_addresses_and_workspaces.each do |result|
@@ -91,24 +82,19 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
     end
   end
 
-  # Restores old index on address.
-  #
-  # @return [void]
+  # Restores old index on address
   def down
     change_table TABLE_NAME do |t|
       t.remove_index [:workspace_id, :address]
-
       t.index :address
     end
   end
 
-  # Make index on address scope to workspace_id and be unique.
-  #
-  # @return [void]
+  # Make index on address scope to workspace_id and be unique
   def up
+    find_and_merge_duplicate_hosts!
     change_table TABLE_NAME do |t|
       t.remove_index :address
-
       t.index [:workspace_id, :address], :unique => true
     end
   end

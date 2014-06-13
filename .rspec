@@ -1,4 +1,3 @@
---backtrace
+--format nested
 --colour
 --drb
---format nested

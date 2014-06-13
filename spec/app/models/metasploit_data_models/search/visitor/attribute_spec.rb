@@ -42,9 +42,9 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
       let(:node) do
         Metasploit::Model::Search::Operator::Attribute.new(
             # needs to be a real column so look up on AREL table works
-            :attribute => :module_type,
+            :attribute => :name,
             # needs to be a real class so Class#arel_table works
-            :klass => Mdm::Module::Instance
+            :klass => Mdm::Host
         )
       end
 

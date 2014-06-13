@@ -20,8 +20,6 @@ describe Mdm::Workspace do
     it 'should successfully destroy the object and dependent objects' do
       workspace = FactoryGirl.create(:mdm_workspace)
       listener = FactoryGirl.create(:mdm_listener, :workspace => workspace)
-      report_template = FactoryGirl.create(:mdm_report_template, :workspace => workspace)
-      report = FactoryGirl.create(:mdm_report, :workspace => workspace)
       task = FactoryGirl.create(:mdm_task, :workspace => workspace)
 
       expect {
@@ -34,12 +32,6 @@ describe Mdm::Workspace do
         listener.reload
       }.to raise_error(ActiveRecord::RecordNotFound)
       expect {
-        report_template.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
-        report.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
-      expect {
         task.reload
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
@@ -50,14 +42,11 @@ describe Mdm::Workspace do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
     it { should have_many(:events).class_name('Mdm::Event') }
     it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
-    it { should have_many(:host_loots).class_name('Mdm::Loot').through(:hosts) }
     it { should have_many(:hosts).class_name('Mdm::Host') }
     it { should have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
-    it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy) }
+    it { should have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
     it { should have_many(:notes).class_name('Mdm::Note') }
     it { should belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
-    it { should have_many(:report_templates).class_name('Mdm::ReportTemplate').dependent(:destroy) }
-    it { should have_many(:reports).class_name('Mdm::Report').dependent(:destroy) }
     it { should have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
     it { should have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
     it { should have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
@@ -196,6 +185,55 @@ describe Mdm::Workspace do
       }
     end
 
+    context '#creds' do
+      #
+      # Let!s (let + before(:each))
+      #
+
+      let!(:creds) do
+        services.collect do |service|
+          FactoryGirl.create(:mdm_cred, :service => service)
+        end
+      end
+
+      let!(:other_creds) do
+        other_services.collect do |service|
+          FactoryGirl.create(:mdm_cred, :service => service)
+        end
+      end
+
+      it 'should be an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
+        should be_a ActiveRecord::Relation
+      end
+
+      it 'should include services' do
+        # to_a to make query return instances
+        found_creds = workspace.creds.to_a
+
+        found_creds.length.should > 0
+        found_cred = found_creds.first
+
+      end
+
+      it 'should include hosts' do
+        found_creds = workspace.creds.to_a
+
+        found_creds.length.should > 0
+        found_cred = found_creds.first
+        service = found_cred.service
+      end
+
+      it 'should return only Mdm::Creds from hosts in workspace' do
+        found_creds = workspace.creds
+
+        found_creds.length.should == creds.length
+
+        found_creds.all? { |cred|
+          cred.service.host.workspace == workspace
+        }.should be_true
+      end
+    end
+
     context 'default' do
       context 'with default workspace' do
         before(:each) do
@@ -246,6 +284,100 @@ describe Mdm::Workspace do
 
       context 'without DEFAULT name' do
         it { should be_false }
+      end
+    end
+
+    context '#each_cred' do
+      it 'should pass each of the #creds to the block' do
+        creds = FactoryGirl.create_list(:mdm_cred, 2)
+        workspace.stub(:creds => creds)
+
+        expect { |block|
+          workspace.each_cred(&block)
+        }.to yield_successive_args(*creds)
+      end
+    end
+
+    context '#each_host_tag' do
+      it 'should pass each of the #host_tags to the block' do
+        tags = FactoryGirl.create_list(:mdm_tag, 2)
+        workspace.stub(:host_tags => tags)
+
+        expect { |block|
+          workspace.each_host_tag(&block)
+        }.to yield_successive_args(*tags)
+      end
+    end
+
+    context '#host_tags' do
+      let(:other_tags) do
+        FactoryGirl.create_list(
+            :mdm_tag,
+            2
+        )
+      end
+
+      let(:tags) do
+        FactoryGirl.create_list(
+            :mdm_tag,
+            2
+        )
+      end
+
+      subject(:host_tags) do
+        workspace.host_tags
+      end
+
+      #
+      # Let!s (let + before(:each))
+      #
+
+      let!(:host_tags) do
+        host_tags = []
+
+        hosts.zip(tags) do |host, tag|
+          host_tag = FactoryGirl.create(:mdm_host_tag, :host => host, :tag => tag)
+
+          host_tags << host_tag
+        end
+
+        host_tags
+      end
+
+      let!(:other_host_tags) do
+        host_tags = []
+
+        other_hosts.zip(other_tags) do |host, tag|
+          host_tag = FactoryGirl.create(:mdm_host_tag, :host => host, :tag => tag)
+
+          host_tags << host_tag
+        end
+
+        host_tags
+      end
+
+      it 'should return an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
+        should be_a ActiveRecord::Relation
+      end
+
+      it 'should include hosts' do
+        found_tags = workspace.host_tags.to_a
+
+        found_tags.length.should > 0
+
+        tag = found_tags.first
+      end
+
+      it 'should return only Mdm::Tags from hosts in the workspace' do
+        found_tags = workspace.host_tags
+
+        found_tags.length.should == tags.length
+
+        found_tags.all? { |tag|
+          tag.hosts.any? { |host|
+            host.workspace == workspace
+          }
+        }.should be_true
       end
     end
 

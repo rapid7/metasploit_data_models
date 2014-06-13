@@ -10,18 +10,15 @@ describe Mdm::TaskService do
   end
 
   context 'database' do
+
+    context 'timestamps'do
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+    end
+
     context 'columns' do
       it { should have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
       it { should have_db_column(:service_id).of_type(:integer).with_options(:null => false) }
-
-      context 'timestamps'do
-        it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-        it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
-      end
-    end
-
-    context 'indices' do
-      it { should have_db_index([:task_id, :service_id]).unique(true) }
     end
   end
 
@@ -43,8 +40,6 @@ describe Mdm::TaskService do
   end
 
   context "validations" do
-    it { should validate_presence_of :service }
-
     it "should not allow duplicate associations" do
       task = FactoryGirl.build(:mdm_task)
       service = FactoryGirl.build(:mdm_service)
@@ -52,7 +47,5 @@ describe Mdm::TaskService do
       task_service2 = FactoryGirl.build(:mdm_task_service, :task => task, :service => service)
       task_service2.should_not be_valid
     end
-
-    it { should validate_presence_of :task }
   end
 end

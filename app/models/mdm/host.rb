@@ -1,10 +1,35 @@
 # A system with an {#address IP address} on the network that has been discovered in some way.
 class Mdm::Host < ActiveRecord::Base
   include Mdm::Host::OperatingSystemNormalization
+  include Metasploit::Model::Search
 
   #
   # CONSTANTS
   #
+
+  # Either the CPU architecture for native code or the programming language name for exploits that run code in the
+  # programming language's  virtual machine.
+  ARCHITECTURES = [
+      'armbe',
+      'armle',
+      'cbea',
+      'cbea64',
+      'cmd',
+      'java',
+      'mips',
+      'mipsbe',
+      'mipsle',
+      'php',
+      'ppc',
+      'ppc64',
+      'ruby',
+      'sparc',
+      'tty',
+      # To be used for compatability with 'X86_64'
+      'x64',
+      'x86',
+      'x86_64'
+  ]
 
   # Fields searched for the search scope
   SEARCH_FIELDS = [
@@ -29,30 +54,32 @@ class Mdm::Host < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] architecture
-  #   The architecture of the host's CPU OR the programming language for virtual machine programming language like
-  #   Ruby, PHP, and Java.
-  #
-  #   @return [Mdm::Architecture]
-  belongs_to :architecture, class_name: 'Mdm::Architecture', inverse_of: :hosts
-
   # @!attribute [rw] clients
-  #   @deprecated New style SocialEngineering campaigns are Pro-only models.
-  #   @todo https://www.pivotaltracker.com/story/show/52149851
+  #   Users connected to this host
+  #
   #   @return [Array<Mdm::Client>]
-  has_many :clients, class_name: 'Mdm::Client', dependent: :destroy, inverse_of: :host
+  has_many :clients,
+           class_name: 'Mdm::Client',
+           dependent: :destroy,
+           inverse_of: :host
 
-  # @!attribute [rw] events
+  # @!attribute events
   #   Events that occurred on this host.
   #
-  #   @return [Array<Mdm::Event>]
-  has_many :events, class_name: 'Mdm::Event', dependent: :destroy, inverse_of: :host
+  #   @return [ActiveRecord::Relation<Mdm::Event>]
+  has_many :events,
+           class_name: 'Mdm::Event',
+           dependent: :destroy,
+           inverse_of: :host
 
   # @!attribute [rw] task_hosts
-  #   Joins {#tasks} to this host.
+  #   Details about what Tasks touched this host
   #
   #   @return [Array<Mdm::TaskHost>]
-  has_many :task_hosts, class_name: 'Mdm::TaskHost', dependent: :destroy, inverse_of: :host
+  has_many :task_hosts,
+           class_name: 'Mdm::TaskHost',
+           dependent: :destroy,
+           inverse_of: :host
 
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
@@ -63,33 +90,51 @@ class Mdm::Host < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :host
 
-  # @!attribute [rw] exploited_hosts
-  #   @todo https://www.pivotaltracker.com/story/show/48993731
-  #   @return [Array<Mdm::ExploitedHost>]
-  has_many :exploited_hosts, class_name: 'Mdm::ExploitedHost', dependent: :destroy, inverse_of: :host
+  # @!attribute exploited_hosts
+  #   @todo MSP-2732
+  #   @return [ActiveRecord::Relation<Mdm::ExploitedHost>]
+  has_many :exploited_hosts,
+           class_name: 'Mdm::ExploitedHost',
+           dependent: :destroy,
+           inverse_of: :host
 
   # @!attribute [rw] host_details
   #   @return [Array<Mdm::HostDetail>]
-  has_many :host_details, class_name: 'Mdm::HostDetail', dependent: :destroy, inverse_of: :host
+  has_many :host_details,
+           class_name: 'Mdm::HostDetail',
+           dependent: :destroy,
+           inverse_of: :host
 
-  # @!attribute [rw] hosts_tags
+  # @!attribute hosts_tags
   #   A join model between {Mdm::Tag} and {Mdm::Host}.  Use {#tags} to get the actual {Mdm::Tag Mdm::Tags} on this host.
   #
-  #   @return [Array<Mdm::HostTag>]
-  has_many :host_tags, class_name: 'Mdm::HostTag', dependent: :destroy, inverse_of: :host
+  #   @todo MSP-2723
+  #   @return [ActiveRecord::Relation<Mdm::HostTag>]
+  has_many :hosts_tags,
+           class_name: 'Mdm::HostTag',
+           dependent: :destroy,
+           inverse_of: :host
 
-  # @!attribute [rw] loots
+  # @!attribute loots
   #   Loot gathered from the host with {Mdm::Loot#created_at newest loot} first.
   #
-  #   @todo https://www.pivotaltracker.com/story/show/48991525
-  #   @return [Array<Mdm::Loot>]
-  has_many :loots, class_name: 'Mdm::Loot', dependent: :destroy, inverse_of: :host, order: 'loots.created_at DESC'
+  #   @todo MSP-3065
+  #   @return [ActiveRecord::Relation<Mdm::Loot>]
+  has_many :loots,
+           class_name: 'Mdm::Loot',
+           dependent: :destroy,
+           inverse_of: :host,
+           order: 'loots.created_at DESC'
 
   # @!attribute [rw] notes
   #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
   #   @return [Array<Mdm::Note>]
-  has_many :notes, class_name: 'Mdm::Note', dependent: :destroy, inverse_of: :host, order: 'notes.created_at'
+  has_many :notes,
+           class_name: 'Mdm::Note',
+           inverse_of: :host,
+           dependent: :delete_all,
+           order: 'notes.created_at'
 
   # @!attribute [rw] services
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
@@ -117,16 +162,21 @@ class Mdm::Host < ActiveRecord::Base
   #   Vulnerabilities found on the host.
   #
   #   @return [Array<Mdm::Vuln>]
-  has_many :vulns, class_name: 'Mdm::Vuln', dependent: :destroy, inverse_of: :host
+  has_many :vulns,
+           class_name: 'Mdm::Vuln',
+           dependent: :delete_all,
+           inverse_of: :host
 
   # @!attribute [rw] workspace
   #   The workspace in which this host was found.
   #
   #   @return [Mdm::Workspace]
-  belongs_to :workspace, class_name: 'Mdm::Workspace', inverse_of: :hosts
+  belongs_to :workspace,
+             class_name: 'Mdm::Workspace',
+             inverse_of: :hosts
 
   #
-  # :through => :host_tags
+  # Through host_tags
   #
 
   # @!attribute [r] tags
@@ -134,10 +184,10 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Tag>]
   #   @see #hosts_tags
-  has_many :tags, :class_name => 'Mdm::Tag', :through => :host_tags
+  has_many :tags, :class_name => 'Mdm::Tag', :through => :hosts_tags
 
   #
-  # :through => :services
+  # Through services
   #
 
   # @!attribute [r] creds
@@ -152,7 +202,10 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Note>]
   #   @see #services
-  has_many :service_notes, :class_name => 'Mdm::Note', :source => :notes, :through => :services
+  has_many :service_notes,
+           class_name: 'Mdm::Note',
+           source: :notes,
+           through: :services
 
   # @!attribute [r] web_sites
   #   {Mdm::WebSite Web sites} running on top of {#services} on this host.
@@ -162,59 +215,63 @@ class Mdm::Host < ActiveRecord::Base
   has_many :web_sites, :class_name => 'Mdm::WebSite', :through => :services
 
   #
-  # :through => :task_hosts
+  # through: :task_hosts
   #
 
-  # @!attribute [rw] tasks
+  # @!attribute tasks
   #   Tasks that touched this service
   #
-  #   @return [Array<Mdm::Task>]
-  has_many :tasks, :class_name => 'Mdm::Task', :through => :task_hosts
+  #   @return [ActiveRecord::Relation<Mdm::Task>]
+  has_many :tasks,
+           class_name: 'Mdm::Task',
+           through: :task_hosts
 
 	#
-	# :through => :vulns
+	# Through vulns
 	#
 
-  # @!attribute [r] vuln_references
-  #   Join model between {#vulns} and {#references}.  Use either of those associations instead of this join model.
+  # @!attribute [r] vuln_refs
+  #   Join model between {#vulns} and {#refs}.  Use either of those asssociations instead of this join model.
   #
-  #   @return [Array<Mdm::VulnReference>]
-  #   @see #references
+  #   @todo https://www.pivotaltracker.com/story/show/49004623
+  #   @return [Array<Mdm::VulnRef>]
+  #   @see #refs
   #   @see #vulns
-	has_many :vuln_references, :class_name => 'Mdm::VulnReference', :through => :vulns
+	has_many :vuln_refs, :class_name => 'Mdm::VulnRef', :source => :vulns_refs, :through => :vulns
 
 	#
-	# :through => :vuln_references
+	# Through vuln_refs
 	#
 
-  # @!attribute [r] references
+  # @!attribute [r] refs
   #   External references, such as CVE, to vulnerabilities found on this host.
   #
-  #   @return [Array<Mdm::Reference>]
-  #   @see #vuln_references
-	has_many :references, :class_name => 'Mdm::Reference', :through => :vuln_references
+  #   @return [Array<Mdm::Ref>]
+  #   @see #vuln_refs
+	has_many :refs, :class_name => 'Mdm::Ref', :through => :vuln_refs
 
 	#
-	# :through => :references
+	# Through refs
 	#
 
-  # @!attribute [r] module_references
-  #   Joins {#module_instances} to {#references}
+  # @!attribute [r] module_refs
+  #   {Mdm::Module::Ref References for modules} for {Mdm::Ref references for vulnerabilities}.
   #
-  #   @return [Array<Mdm::Module::Reference>]
-	has_many :module_references, :class_name => 'Mdm::Module::Reference', :through => :references
+  #   @return [Array<Mdm::Module::Ref>]
+	has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
 
 	#
-	# :through => :module_references
+	# Through module_refs
 	#
 
-  # @!attribute [r] module_instances
-  #   {Mdm::Module::Instance Modules} that were used to find {#vulns vulnerabilities} on this host.
+  # @!attribute [r] module_details
+  #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
-  #   @return [Array<Mdm::Module::Instance>]
-	has_many :module_instances,
-           :class_name => 'Mdm::Module::Instance',
-           :through => :module_references,
+  #   @return [Array<Mdm::Module::Detail]
+	has_many :module_details,
+           :class_name => 'Mdm::Module::Detail',
+           :source =>:detail,
+           :through => :module_refs,
            :uniq => true
 
   #
@@ -225,6 +282,12 @@ class Mdm::Host < ActiveRecord::Base
   #   The IP address of this host.
   #
   #   @return [String]
+
+  # @!attribute [rw] arch
+  #   The architecture of the host's CPU OR the programming language for virtual machine programming language like
+  #   Ruby, PHP, and Java.
+  #
+  #   @return [String] an element of {ARCHITECTURES}
 
   # @!attribute [rw] comm
   #   @todo https://www.pivotaltracker.com/story/show/49722411
@@ -364,6 +427,11 @@ class Mdm::Host < ActiveRecord::Base
                 :scope => :workspace_id,
                 :unless => :ip_address_invalid?
             }
+  validates :arch,
+            :allow_blank => true,
+            :inclusion => {
+                :in => ARCHITECTURES
+            }
   validates :state,
             :allow_nil => true,
             :inclusion => {
@@ -379,7 +447,7 @@ class Mdm::Host < ActiveRecord::Base
   scope :flagged, where('notes.critical = true AND notes.seen = false').includes(:notes)
   scope :search,
         lambda { |*args|
-          # @todo https://www.pivotaltracker.com/story/show/52582651
+          # @todo replace with AREL
           terms = SEARCH_FIELDS.collect { |field|
             "#{self.table_name}.#{field} ILIKE ?"
           }
@@ -394,6 +462,29 @@ class Mdm::Host < ActiveRecord::Base
         }
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
+
+  #
+  #
+  # Search
+  #
+  #
+
+  #
+  # Search Associations
+  #
+
+  search_association :services
+
+  #
+  # Search Attributes
+  #
+
+  search_attribute :name,
+                   type: :string
+
+  #
+  # Instance Methods
+  #
 
   # Returns whether 'host.updated.<attr>' {#notes note} is {Mdm::Note#data locked}.
   #

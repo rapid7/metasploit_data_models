@@ -1,14 +1,14 @@
+# Provides ActiveRecord 3.1x-friendly serialization for descendants of
+# ActiveRecord::Base. Backwards compatible with older YAML methods and
+# will fall back to string decoding in the worst case
+#
+# @example Using default default of {}
+#   serialize :foo, MetasploitDataModels::Base64Serializer.new
+#
+# @example Overriding default to []
+#   serialize :bar, MetasploitDataModels::Base64Serializer.new(:default => [])
+#
 module MetasploitDataModels
-  # Provides ActiveRecord 3.1x-friendly serialization for descendants of
-  # ActiveRecord::Base. Backwards compatible with older YAML methods and
-  # will fall back to string decoding in the worst case
-  #
-  # @example Using default default of {}
-  #   serialize :foo, MetasploitDataModels::Base64Serializer.new
-  #
-  # @example Overriding default to []
-  #   serialize :bar, MetasploitDataModels::Base64Serializer.new(:default => [])
-  #
   class Base64Serializer
     #
     # CONSTANTS

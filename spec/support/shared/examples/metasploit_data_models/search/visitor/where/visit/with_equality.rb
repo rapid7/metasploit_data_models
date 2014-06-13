@@ -9,7 +9,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equ
   let(:operator) do
     Metasploit::Model::Search::Operator::Attribute.new(
         # any class that responds to arel_table
-        :klass => Mdm::Module::Instance
+        :klass => Mdm::Host
     )
   end
 

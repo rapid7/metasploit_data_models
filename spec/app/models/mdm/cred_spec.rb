@@ -3,14 +3,9 @@ require 'spec_helper'
 describe Mdm::Cred do
 
   context "Associations" do
-    it { should have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
-    it { should have_many(:workspace_creds).class_name('Mdm::Cred').through(:workspace_services) }
-    it { should have_many(:workspace_hosts).class_name('Mdm::Host').through(:workspace) }
-    it { should have_many(:workspace_services).class_name('Mdm::Service').through(:workspace_hosts) }
-    it { should have_one(:host).class_name('Mdm::Host').through(:service) }
-    it { should belong_to(:service).class_name('Mdm::Service') }
     it { should have_many(:task_creds).class_name('Mdm::TaskCred').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_creds) }
+    it { should belong_to(:service).class_name('Mdm::Service') }
   end
 
   context 'database' do
@@ -72,42 +67,22 @@ describe Mdm::Cred do
 
   context 'constants' do
     it 'should define the key_id regex' do
-      described_class::SSH_KEY_ID_REGEXP.should == /(?<ssh_key_id>[0-9a-fA-F:]{47})/
+      described_class::KEY_ID_REGEX.should == /([0-9a-fA-F:]{47})/
     end
 
     it 'should define ptypes to humanize' do
-      described_class::HUMAN_PTYPE_BY_PTYPE.should == {
-          'password_ro' => 'read-only password',
-          'password_rw' => 'read/write password',
-          'smb_hash' => 'SMB hash',
-          'ssh_key' => 'SSH private key',
-          'ssh_pubkey' => 'SSH public key'
+      described_class::PTYPES.should == {
+          'read/write password' => 'password_rw',
+          'read-only password' => 'password_ro',
+          'SMB hash' => 'smb_hash',
+          'SSH private key' => 'ssh_key',
+          'SSH public key' => 'ssh_pubkey'
       }
-    end
-
-    context 'SSH_PTYPES' do
-      subject(:ssh_ptypes) do
-        described_class::SSH_PTYPES
-      end
-
-      it 'should include all ptypes starting with ssh' do
-        ssh_ptypes.all? { |ptype|
-          ptype.starts_with? 'ssh'
-        }.should be_true
-      end
-
-      it 'should include SSH private key' do
-        ssh_ptypes.should include('ssh_key')
-      end
-
-      it 'should include SSH public key' do
-        ssh_ptypes.should include('ssh_pubkey')
-      end
     end
   end
 
   context 'methods' do
-    before(:each) do
+    before(:all) do
       Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
       workspace =  FactoryGirl.create(:mdm_workspace)
       host = FactoryGirl.create(:mdm_host, :workspace => workspace)
@@ -197,7 +172,7 @@ describe Mdm::Cred do
     end
 
     context '#ssh_keys' do
-      before(:each) do
+      before(:all) do
         @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
       end
       it 'should return all ssh private keys with a matching id' do
@@ -210,7 +185,7 @@ describe Mdm::Cred do
     end
 
     context '#ssh_private_keys' do
-      before(:each) do
+      before(:all) do
         @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
       end
 
@@ -224,7 +199,7 @@ describe Mdm::Cred do
     end
 
     context '#ssh_public_keys' do
-      before(:each) do
+      before(:all) do
         @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
       end
 
@@ -239,26 +214,11 @@ describe Mdm::Cred do
 
   end
 
-  context 'factories' do
-    context 'full_mdm_cred' do
-      subject(:full_mdm_cred) do
-        FactoryGirl.build(:full_mdm_cred)
-      end
-
-      it { should be_valid }
-
-      its(:pass) { should_not be_nil }
-      its(:proof) { should_not be_nil }
-      its(:ptype) { should_not be_nil }
-      its(:user) { should_not be_nil }
-    end
-
-    context 'mdm_cred' do
-      subject(:mdm_cred) do
-        FactoryGirl.build(:mdm_cred)
-      end
-
-      it { should be_valid }
+  context 'factory' do
+    it 'should be valid' do
+      cred = FactoryGirl.build(:mdm_cred)
+      cred.should be_valid
     end
   end
+
 end

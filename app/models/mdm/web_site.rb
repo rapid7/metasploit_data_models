@@ -1,85 +1,42 @@
-# A Web Site running on a {#service}.
 class Mdm::WebSite < ActiveRecord::Base
   #
-  # Associations
+  # Relations
   #
 
-  # @!attribute [rw] service
-  #   The service on which this web site is running.
-  #
-  #   @return [String]
-  belongs_to :service, class_name: 'Mdm::Service', foreign_key: 'service_id', inverse_of: :web_sites
+  belongs_to :service,
+             class_name: 'Mdm::Service',
+             foreign_key: 'service_id',
+             inverse_of: :web_sites
 
-  # @!attribute [rw] web_forms
-  #   Filled-in forms within this web site.
-  #
-  #   @return [Array<WebForm>]
-  has_many :web_forms, class_name: 'Mdm::WebForm', dependent: :destroy, inverse_of: :web_site
+  has_many :web_forms,
+           class_name: 'Mdm::WebForm',
+           dependent: :destroy,
+           inverse_of: :web_site
 
-  # @!attribute [rw] web_pages
-  #   Web pages found on this web site.
-  #
-  #   @return [Array<Mdm::WebPage>]
-  has_many :web_pages, class_name: 'Mdm::WebPage', dependent: :destroy, inverse_of: :web_site
+  has_many :web_pages,
+           class_name: 'Mdm::WebPage',
+           dependent: :destroy,
+           inverse_of: :web_site
 
-  # @!attribute [rw] web_vulns
-  #   Vulnerabilities found on this web site.
-  #
-  #   @return [Array<Mdm::WebVuln>]
-  has_many :web_vulns, class_name: 'Mdm::WebVuln', dependent: :destroy, inverse_of: :web_site
-
-  #
-  # Attributes
-  #
-
-  # @!attribute [rw] comments
-  #   User entered comments about this web site.
-  #
-  #   @return [String]
-
-  # @!attribute [rw] created_at
-  #   When this web site was created.
-  #
-  #   @return [DateTime]
-
-  # @!attribute [rw] updated_at
-  #   The last time this web site was updated.
-  #
-  #   @return [DateTime]
-
-  # @!attribute [rw] vhost
-  #   The virtual host for the web site in case `service.host.name` or `service.host.address` is no the host for this
-  #   web site.
-  #
-  #   @return [String]
+  has_many :web_vulns,
+           class_name: 'Mdm::WebVuln',
+           dependent: :destroy,
+           inverse_of: :web_site
 
   #
   # Serializations
   #
 
-  # @!attribute [rw] options
-  #   @todo Determine format and purpose of Mdm::WebSite#options.
   serialize :options, ::MetasploitDataModels::Base64Serializer.new
 
-  # Number of {#web_forms}.
-  #
-  # @return [Integer]
   def form_count
     web_forms.size
   end
 
-  # Number of {#web_pages}.
-  #
-  # @return [Integer]
   def page_count
     web_pages.size
   end
 
-  # Converts this web site to its URL, including scheme, host and port.
-  #
-  # @param ignore_vhost [Boolean] if `false` use {#vhost} for host portion of URL.  If `true` use {Mdm::Host#address} of
-  #   {Mdm::Service#host} of {#service} for host portion of URL.
-  # @return [String] <scheme>://<host>[:<port>]
   def to_url(ignore_vhost=false)
     proto = self.service.name == "https" ? "https" : "http"
     host = ignore_vhost ? self.service.host.address : self.vhost
@@ -96,9 +53,6 @@ class Mdm::WebSite < ActiveRecord::Base
     url
   end
 
-  # Number of {#web_vulns}.
-  #
-  # @return [Integer]
   def vuln_count
     web_vulns.size
   end

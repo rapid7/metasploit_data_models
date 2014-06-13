@@ -1,4 +1,4 @@
-#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)
+#MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)[![Code Climate](https://codeclimate.com/github/rapid7/metasploit_data_models.png)](https://codeclimate.com/github/rapid7/metasploit_data_models)[![Coverage Status](https://coveralls.io/repos/rapid7/metasploit_data_models/badge.png)](https://coveralls.io/r/rapid7/metasploit_data_models)[![Dependency Status](https://gemnasium.com/rapid7/metasploit_data_models.png)](https://gemnasium.com/rapid7/metasploit_data_models)[![Gem Version](https://badge.fury.io/rb/metasploit_data_models.png)](http://badge.fury.io/rb/metasploit_data_models)
 
 The database layer for Metasploit
 
@@ -37,6 +37,15 @@ different on_load name, which is just the class name converted to an underscored
           token[0..3] + "****************************"
         end
     end
+
+### Metasploit Framework
+
+In Metasploit Framework, `MetasploitDataModels.require_models` is called by the `Msf::DbManager` to use the data models
+only if the user wants to use the database.
+
+### Elsewhere
+
+In Metasploit Pro, MDM is loaded via the metasploit_data_models gem: https://rubygems.org/gems/metasploit_data_models
 
 An MRI and JRuby implementation is generated for all substantial updates.
 

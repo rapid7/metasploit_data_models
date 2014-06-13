@@ -11,44 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140110145947) do
+ActiveRecord::Schema.define(:version => 20130717150737) do
 
   create_table "api_keys", :force => true do |t|
-    t.text     "token",      :null => false
+    t.text     "token"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  add_index "api_keys", ["token"], :name => "index_api_keys_on_token", :unique => true
-
-  create_table "architectures", :force => true do |t|
-    t.integer "bits"
-    t.string  "abbreviation", :null => false
-    t.string  "endianness"
-    t.string  "family"
-    t.string  "summary",      :null => false
-  end
-
-  add_index "architectures", ["abbreviation"], :name => "index_architectures_on_abbreviation", :unique => true
-  add_index "architectures", ["family", "bits", "endianness"], :name => "index_architectures_on_family_and_bits_and_endianness", :unique => true
-  add_index "architectures", ["summary"], :name => "index_architectures_on_summary", :unique => true
-
-  create_table "authorities", :force => true do |t|
-    t.string  "abbreviation",                    :null => false
-    t.boolean "obsolete",     :default => false, :null => false
-    t.string  "summary"
-    t.text    "url"
-  end
-
-  add_index "authorities", ["abbreviation"], :name => "index_authorities_on_abbreviation", :unique => true
-  add_index "authorities", ["summary"], :name => "index_authorities_on_summary", :unique => true
-  add_index "authorities", ["url"], :name => "index_authorities_on_url", :unique => true
-
-  create_table "authors", :force => true do |t|
-    t.string "name", :null => false
-  end
-
-  add_index "authors", ["name"], :name => "index_authors_on_name", :unique => true
 
   create_table "clients", :force => true do |t|
     t.integer  "host_id"
@@ -72,17 +41,6 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.string   "source_type"
   end
 
-  create_table "email_addresses", :force => true do |t|
-    t.string "domain", :null => false
-    t.string "local",  :null => false
-    t.string "full",   :null => false
-  end
-
-  add_index "email_addresses", ["domain", "local"], :name => "index_email_addresses_on_domain_and_local", :unique => true
-  add_index "email_addresses", ["domain"], :name => "index_email_addresses_on_domain"
-  add_index "email_addresses", ["full"], :name => "index_email_addresses_on_full", :unique => true
-  add_index "email_addresses", ["local"], :name => "index_email_addresses_on_local"
-
   create_table "events", :force => true do |t|
     t.integer  "workspace_id"
     t.integer  "host_id"
@@ -96,23 +54,20 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
   end
 
   create_table "exploit_attempts", :force => true do |t|
-    t.integer  "host_id",         :null => false
+    t.integer  "host_id"
     t.integer  "service_id"
-    t.integer  "vuln_id",         :null => false
-    t.datetime "attempted_at",    :null => false
-    t.boolean  "exploited",       :null => false
+    t.integer  "vuln_id"
+    t.datetime "attempted_at"
+    t.boolean  "exploited"
     t.string   "fail_reason"
-    t.string   "username",        :null => false
+    t.string   "username"
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"
     t.integer  "port"
     t.string   "proto"
     t.text     "fail_detail"
-    t.integer  "module_class_id"
   end
-
-  add_index "exploit_attempts", ["module_class_id"], :name => "index_exploit_attempts_on_module_class_id"
 
   create_table "exploited_hosts", :force => true do |t|
     t.integer  "host_id",                      :null => false
@@ -135,15 +90,6 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.float   "nx_risk_score"
   end
 
-  create_table "host_tags", :force => true do |t|
-    t.integer "host_id", :null => false
-    t.integer "tag_id",  :null => false
-  end
-
-  add_index "host_tags", ["host_id", "tag_id"], :name => "index_host_tags_on_host_id_and_tag_id", :unique => true
-  add_index "host_tags", ["host_id"], :name => "index_host_tags_on_host_id"
-  add_index "host_tags", ["tag_id"], :name => "index_host_tags_on_tag_id"
-
   create_table "hosts", :force => true do |t|
     t.datetime "created_at"
     t.string   "address",               :limit => nil,                  :null => false
@@ -155,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.string   "os_flavor"
     t.string   "os_sp"
     t.string   "os_lang"
+    t.string   "arch"
     t.integer  "workspace_id",                                          :null => false
     t.datetime "updated_at"
     t.text     "purpose"
@@ -168,16 +115,19 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.integer  "host_detail_count",                      :default => 0
     t.integer  "exploit_attempt_count",                  :default => 0
     t.integer  "cred_count",                             :default => 0
-    t.integer  "architecture_id"
   end
 
-  add_index "hosts", ["architecture_id"], :name => "index_hosts_on_architecture_id"
   add_index "hosts", ["name"], :name => "index_hosts_on_name"
   add_index "hosts", ["os_flavor"], :name => "index_hosts_on_os_flavor"
   add_index "hosts", ["os_name"], :name => "index_hosts_on_os_name"
   add_index "hosts", ["purpose"], :name => "index_hosts_on_purpose"
   add_index "hosts", ["state"], :name => "index_hosts_on_state"
   add_index "hosts", ["workspace_id", "address"], :name => "index_hosts_on_workspace_id_and_address", :unique => true
+
+  create_table "hosts_tags", :force => true do |t|
+    t.integer "host_id"
+    t.integer "tag_id"
+  end
 
   create_table "listeners", :force => true do |t|
     t.datetime "created_at",                     :null => false
@@ -217,135 +167,86 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.binary   "prefs"
   end
 
+  create_table "mod_refs", :force => true do |t|
+    t.string "module", :limit => 1024
+    t.string "mtype",  :limit => 128
+    t.text   "ref"
+  end
+
   create_table "module_actions", :force => true do |t|
-    t.text    "name",               :null => false
-    t.integer "module_instance_id", :null => false
+    t.integer "detail_id"
+    t.text    "name"
   end
 
-  add_index "module_actions", ["module_instance_id", "name"], :name => "index_module_actions_on_module_instance_id_and_name", :unique => true
+  add_index "module_actions", ["detail_id"], :name => "index_module_actions_on_module_detail_id"
 
-  create_table "module_ancestors", :force => true do |t|
-    t.text     "full_name",                               :null => false
-    t.string   "handler_type"
-    t.string   "module_type",                             :null => false
-    t.string   "payload_type"
-    t.text     "reference_name",                          :null => false
-    t.text     "real_path",                               :null => false
-    t.datetime "real_path_modified_at",                   :null => false
-    t.string   "real_path_sha1_hex_digest", :limit => 40, :null => false
-    t.integer  "parent_path_id",                          :null => false
+  create_table "module_archs", :force => true do |t|
+    t.integer "detail_id"
+    t.text    "name"
   end
 
-  add_index "module_ancestors", ["full_name"], :name => "index_module_ancestors_on_full_name", :unique => true
-  add_index "module_ancestors", ["module_type", "reference_name"], :name => "index_module_ancestors_on_module_type_and_reference_name", :unique => true
-  add_index "module_ancestors", ["parent_path_id"], :name => "index_module_ancestors_on_parent_path_id"
-  add_index "module_ancestors", ["real_path"], :name => "index_module_ancestors_on_real_path", :unique => true
-  add_index "module_ancestors", ["real_path_sha1_hex_digest"], :name => "index_module_ancestors_on_real_path_sha1_hex_digest", :unique => true
-
-  create_table "module_architectures", :force => true do |t|
-    t.integer "architecture_id",    :null => false
-    t.integer "module_instance_id", :null => false
-  end
-
-  add_index "module_architectures", ["module_instance_id", "architecture_id"], :name => "index_unique_module_architectures", :unique => true
+  add_index "module_archs", ["detail_id"], :name => "index_module_archs_on_module_detail_id"
 
   create_table "module_authors", :force => true do |t|
-    t.integer "author_id",          :null => false
-    t.integer "email_address_id"
-    t.integer "module_instance_id", :null => false
+    t.integer "detail_id"
+    t.text    "name"
+    t.text    "email"
   end
 
-  add_index "module_authors", ["author_id"], :name => "index_module_authors_on_author_id"
-  add_index "module_authors", ["email_address_id"], :name => "index_module_authors_on_email_address_id"
-  add_index "module_authors", ["module_instance_id", "author_id"], :name => "index_module_authors_on_module_instance_id_and_author_id", :unique => true
-  add_index "module_authors", ["module_instance_id"], :name => "index_module_authors_on_module_instance_id"
+  add_index "module_authors", ["detail_id"], :name => "index_module_authors_on_module_detail_id"
 
-  create_table "module_classes", :force => true do |t|
-    t.text    "full_name",      :null => false
-    t.string  "module_type",    :null => false
-    t.string  "payload_type"
-    t.text    "reference_name", :null => false
-    t.integer "rank_id",        :null => false
+  create_table "module_details", :force => true do |t|
+    t.datetime "mtime"
+    t.text     "file"
+    t.string   "mtype"
+    t.text     "refname"
+    t.text     "fullname"
+    t.text     "name"
+    t.integer  "rank"
+    t.text     "description"
+    t.string   "license"
+    t.boolean  "privileged"
+    t.datetime "disclosure_date"
+    t.integer  "default_target"
+    t.text     "default_action"
+    t.string   "stance"
+    t.boolean  "ready"
   end
 
-  add_index "module_classes", ["full_name"], :name => "index_module_classes_on_full_name", :unique => true
-  add_index "module_classes", ["module_type", "reference_name"], :name => "index_module_classes_on_module_type_and_reference_name", :unique => true
-  add_index "module_classes", ["rank_id"], :name => "index_module_classes_on_rank_id"
+  add_index "module_details", ["description"], :name => "index_module_details_on_description"
+  add_index "module_details", ["mtype"], :name => "index_module_details_on_mtype"
+  add_index "module_details", ["name"], :name => "index_module_details_on_name"
+  add_index "module_details", ["refname"], :name => "index_module_details_on_refname"
 
-  create_table "module_instances", :force => true do |t|
-    t.text    "description",       :null => false
-    t.date    "disclosed_on"
-    t.string  "license",           :null => false
-    t.text    "name",              :null => false
-    t.boolean "privileged",        :null => false
-    t.string  "stance"
-    t.integer "default_action_id"
-    t.integer "default_target_id"
-    t.integer "module_class_id",   :null => false
+  create_table "module_mixins", :force => true do |t|
+    t.integer "detail_id"
+    t.text    "name"
   end
 
-  add_index "module_instances", ["default_action_id"], :name => "index_module_instances_on_default_action_id", :unique => true
-  add_index "module_instances", ["default_target_id"], :name => "index_module_instances_on_default_target_id", :unique => true
-  add_index "module_instances", ["module_class_id"], :name => "index_module_instances_on_module_class_id", :unique => true
-
-  create_table "module_paths", :force => true do |t|
-    t.string "gem"
-    t.string "name"
-    t.text   "real_path", :null => false
-  end
-
-  add_index "module_paths", ["gem", "name"], :name => "index_module_paths_on_gem_and_name", :unique => true
-  add_index "module_paths", ["real_path"], :name => "index_module_paths_on_real_path", :unique => true
+  add_index "module_mixins", ["detail_id"], :name => "index_module_mixins_on_module_detail_id"
 
   create_table "module_platforms", :force => true do |t|
-    t.integer "module_instance_id", :null => false
-    t.integer "platform_id",        :null => false
+    t.integer "detail_id"
+    t.text    "name"
   end
 
-  add_index "module_platforms", ["module_instance_id", "platform_id"], :name => "index_module_platforms_on_module_instance_id_and_platform_id", :unique => true
+  add_index "module_platforms", ["detail_id"], :name => "index_module_platforms_on_module_detail_id"
 
-  create_table "module_ranks", :force => true do |t|
-    t.string  "name",   :null => false
-    t.integer "number", :null => false
+  create_table "module_refs", :force => true do |t|
+    t.integer "detail_id"
+    t.text    "name"
   end
 
-  add_index "module_ranks", ["name"], :name => "index_module_ranks_on_name", :unique => true
-  add_index "module_ranks", ["number"], :name => "index_module_ranks_on_number", :unique => true
-
-  create_table "module_references", :force => true do |t|
-    t.integer "module_instance_id", :null => false
-    t.integer "reference_id",       :null => false
-  end
-
-  add_index "module_references", ["module_instance_id", "reference_id"], :name => "index_module_references_on_module_instance_id_and_reference_id", :unique => true
-
-  create_table "module_relationships", :force => true do |t|
-    t.integer "ancestor_id",   :null => false
-    t.integer "descendant_id", :null => false
-  end
-
-  add_index "module_relationships", ["descendant_id", "ancestor_id"], :name => "index_module_relationships_on_descendant_id_and_ancestor_id", :unique => true
-
-  create_table "module_target_architectures", :force => true do |t|
-    t.integer "architecture_id",  :null => false
-    t.integer "module_target_id", :null => false
-  end
-
-  add_index "module_target_architectures", ["module_target_id", "architecture_id"], :name => "unique_module_target_architectures", :unique => true
-
-  create_table "module_target_platforms", :force => true do |t|
-    t.integer "module_target_id", :null => false
-    t.integer "platform_id",      :null => false
-  end
-
-  add_index "module_target_platforms", ["module_target_id", "platform_id"], :name => "unique_module_target_platforms", :unique => true
+  add_index "module_refs", ["detail_id"], :name => "index_module_refs_on_module_detail_id"
+  add_index "module_refs", ["name"], :name => "index_module_refs_on_name"
 
   create_table "module_targets", :force => true do |t|
-    t.text    "name",               :null => false
-    t.integer "module_instance_id", :null => false
+    t.integer "detail_id"
+    t.integer "index"
+    t.text    "name"
   end
 
-  add_index "module_targets", ["module_instance_id", "name"], :name => "index_module_targets_on_module_instance_id_and_name", :unique => true
+  add_index "module_targets", ["detail_id"], :name => "index_module_targets_on_module_detail_id"
 
   create_table "nexpose_consoles", :force => true do |t|
     t.datetime "created_at",                     :null => false
@@ -377,17 +278,6 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
 
   add_index "notes", ["ntype"], :name => "index_notes_on_ntype"
 
-  create_table "platforms", :force => true do |t|
-    t.text    "fully_qualified_name", :null => false
-    t.text    "relative_name",        :null => false
-    t.integer "parent_id"
-    t.integer "right",                :null => false
-    t.integer "left",                 :null => false
-  end
-
-  add_index "platforms", ["fully_qualified_name"], :name => "index_platforms_on_fully_qualified_name", :unique => true
-  add_index "platforms", ["parent_id", "relative_name"], :name => "index_platforms_on_parent_id_and_relative_name", :unique => true
-
   create_table "profiles", :force => true do |t|
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
@@ -397,14 +287,14 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.binary   "settings"
   end
 
-  create_table "references", :force => true do |t|
-    t.string  "designation"
-    t.text    "url"
-    t.integer "authority_id"
+  create_table "refs", :force => true do |t|
+    t.integer  "ref_id"
+    t.datetime "created_at"
+    t.string   "name",       :limit => 512
+    t.datetime "updated_at"
   end
 
-  add_index "references", ["authority_id", "designation"], :name => "index_references_on_authority_id_and_designation", :unique => true
-  add_index "references", ["url"], :name => "index_references_on_url", :unique => true
+  add_index "refs", ["name"], :name => "index_refs_on_name"
 
   create_table "report_templates", :force => true do |t|
     t.integer  "workspace_id",                 :default => 1, :null => false
@@ -467,22 +357,14 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.string   "via_payload"
     t.string   "desc"
     t.integer  "port"
+    t.string   "platform"
     t.text     "datastore"
-    t.datetime "opened_at",        :null => false
+    t.datetime "opened_at",    :null => false
     t.datetime "closed_at"
     t.string   "close_reason"
     t.integer  "local_id"
     t.datetime "last_seen"
-    t.integer  "architecture_id"
-    t.integer  "platform_id"
-    t.integer  "exploit_class_id"
-    t.integer  "payload_class_id"
   end
-
-  add_index "sessions", ["architecture_id"], :name => "index_sessions_on_architecture_id"
-  add_index "sessions", ["exploit_class_id"], :name => "index_sessions_on_exploit_class_id"
-  add_index "sessions", ["payload_class_id"], :name => "index_sessions_on_payload_class_id"
-  add_index "sessions", ["platform_id"], :name => "index_sessions_on_platform_id"
 
   create_table "tags", :force => true do |t|
     t.integer  "user_id"
@@ -502,16 +384,12 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "task_creds", ["task_id", "cred_id"], :name => "index_task_creds_on_task_id_and_cred_id", :unique => true
-
   create_table "task_hosts", :force => true do |t|
     t.integer  "task_id",    :null => false
     t.integer  "host_id",    :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  add_index "task_hosts", ["task_id", "host_id"], :name => "index_task_hosts_on_task_id_and_host_id", :unique => true
 
   create_table "task_services", :force => true do |t|
     t.integer  "task_id",    :null => false
@@ -520,16 +398,12 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "task_services", ["task_id", "service_id"], :name => "index_task_services_on_task_id_and_service_id", :unique => true
-
   create_table "task_sessions", :force => true do |t|
     t.integer  "task_id",    :null => false
     t.integer  "session_id", :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  add_index "task_sessions", ["task_id", "session_id"], :name => "index_task_sessions_on_task_id_and_session_id", :unique => true
 
   create_table "tasks", :force => true do |t|
     t.integer  "workspace_id",                 :default => 1, :null => false
@@ -565,19 +439,16 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
   end
 
   create_table "vuln_attempts", :force => true do |t|
-    t.integer  "vuln_id",         :null => false
-    t.datetime "attempted_at",    :null => false
-    t.boolean  "exploited",       :null => false
+    t.integer  "vuln_id"
+    t.datetime "attempted_at"
+    t.boolean  "exploited"
     t.string   "fail_reason"
-    t.string   "username",        :null => false
+    t.string   "username"
     t.text     "module"
     t.integer  "session_id"
     t.integer  "loot_id"
     t.text     "fail_detail"
-    t.integer  "module_class_id"
   end
-
-  add_index "vuln_attempts", ["module_class_id"], :name => "index_vuln_attempts_on_module_class_id"
 
   create_table "vuln_details", :force => true do |t|
     t.integer  "vuln_id"
@@ -604,13 +475,6 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
     t.string   "nx_pci_compliance_status"
   end
 
-  create_table "vuln_references", :force => true do |t|
-    t.integer "reference_id", :null => false
-    t.integer "vuln_id",      :null => false
-  end
-
-  add_index "vuln_references", ["vuln_id", "reference_id"], :name => "index_vuln_references_on_vuln_id_and_reference_id", :unique => true
-
   create_table "vulns", :force => true do |t|
     t.integer  "host_id"
     t.integer  "service_id"
@@ -624,6 +488,11 @@ ActiveRecord::Schema.define(:version => 20140110145947) do
   end
 
   add_index "vulns", ["name"], :name => "index_vulns_on_name"
+
+  create_table "vulns_refs", :force => true do |t|
+    t.integer "ref_id"
+    t.integer "vuln_id"
+  end
 
   create_table "web_forms", :force => true do |t|
     t.integer  "web_site_id",                 :null => false

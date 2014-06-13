@@ -4,8 +4,8 @@ require 'securerandom'
 describe Mdm::Tag do
 
   context 'associations' do
-    it { should have_many(:host_tags).class_name('Mdm::HostTag').dependent(:destroy) }
-    it { should have_many(:hosts).class_name('Mdm::Host').through(:host_tags) }
+    it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
+    it { should have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
     it { should belong_to(:user).class_name('Mdm::User') }
   end
 
@@ -66,6 +66,15 @@ describe Mdm::Tag do
     end
   end
 
+  context 'instance methods' do
+    context '#to_s' do
+      it 'should return the name of the tag as a string' do
+        mytag = FactoryGirl.build(:mdm_tag, :name => 'mytag')
+        mytag.to_s.should == 'mytag'
+      end
+    end
+  end
+
   context 'factories' do
     context 'mdm_tag' do
       subject(:mdm_tag) do
@@ -73,13 +82,6 @@ describe Mdm::Tag do
       end
 
       it { should be_valid }
-    end
-  end
-
-  context '#to_s' do
-    it 'should return the name of the tag as a string' do
-      mytag = FactoryGirl.build(:mdm_tag, :name => 'mytag')
-      mytag.to_s.should == 'mytag'
     end
   end
 
@@ -94,5 +96,4 @@ describe Mdm::Tag do
       }.to change(Mdm::Tag, :count).by(-1)
     end
   end
-
 end
