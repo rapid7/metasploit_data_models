@@ -1,6 +1,7 @@
 # A system with an {#address IP address} on the network that has been discovered in some way.
 class Mdm::Host < ActiveRecord::Base
   include Mdm::Host::OperatingSystemNormalization
+  include Metasploit::Model::Search
 
   #
   # CONSTANTS
@@ -461,6 +462,29 @@ class Mdm::Host < ActiveRecord::Base
         }
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
+
+  #
+  #
+  # Search
+  #
+  #
+
+  #
+  # Search Associations
+  #
+
+  search_association :services
+
+  #
+  # Search Attributes
+  #
+
+  search_attribute :name,
+                   type: :string
+
+  #
+  # Instance Methods
+  #
 
   # Returns whether 'host.updated.<attr>' {#notes note} is {Mdm::Note#data locked}.
   #

@@ -1,5 +1,7 @@
 # A service, such as an ssh server or web server, running on a {#host}.
 class Mdm::Service < ActiveRecord::Base
+  include Metasploit::Model::Search
+
   #
   # CONSTANTS
   #
@@ -173,6 +175,13 @@ class Mdm::Service < ActiveRecord::Base
               "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", (args[0].to_i > 0) ? args[0].to_i : 99999
           ])
   }
+
+  #
+  # Search Attributes
+  #
+
+  search_attribute :name,
+                   type: :string
 
   #
   # Validations
