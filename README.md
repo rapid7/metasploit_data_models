@@ -58,3 +58,7 @@ Give it a path to a working MSF database.yml file for full
 ActiveRecord-based access to your data.
 
 __Note:__ "development" mode is hardcoded into the console currently.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
