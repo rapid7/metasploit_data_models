@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::SessionEvent do
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'associations' do
     it { should belong_to(:session).class_name('Mdm::Session') }
   end

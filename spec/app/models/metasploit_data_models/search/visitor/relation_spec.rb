@@ -23,6 +23,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     FactoryGirl.generate :mdm_host_name
   }
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'validations' do
     context 'query' do
       it { should validate_presence_of(:query) }

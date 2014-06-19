@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Mdm::Module::Platform do
+
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'associations' do
     it { should belong_to(:detail).class_name('Mdm::Module::Detail') }
   end

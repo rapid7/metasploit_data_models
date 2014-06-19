@@ -5,6 +5,8 @@ describe MetasploitDataModels::Search::Visitor::Where do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#attribute_visitor' do
     subject(:attribute_visitor) do
       visitor.attribute_visitor
