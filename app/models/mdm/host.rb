@@ -516,6 +516,6 @@ class Mdm::Host < ActiveRecord::Base
     !!self.virtual_host
   end
 
-  ActiveSupport.run_load_hooks(:mdm_host, self)
+  Metasploit::Concern.run(self)
 end
 

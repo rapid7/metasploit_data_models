@@ -4,6 +4,6 @@ class Mdm::Profile < ActiveRecord::Base
   #
   serialize :settings, MetasploitDataModels::Base64Serializer.new
 
-  ActiveSupport.run_load_hooks(:mdm_profile, self)
+  Metasploit::Concern.run(self)
 end
 

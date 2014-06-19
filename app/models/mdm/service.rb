@@ -202,6 +202,6 @@ class Mdm::Service < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_service, self)
+  Metasploit::Concern.run(self)
 end
 
