@@ -10,4 +10,6 @@ class MetasploitDataModels::Search::Visitor::Method
         'Metasploit::Model::Search::Operation::Union' do
     :or
   end
+
+  Metasploit::Concern.run(self)
 end

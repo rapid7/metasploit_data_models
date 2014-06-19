@@ -25,4 +25,6 @@ class MetasploitDataModels::Search::Visitor::Includes
   visit 'Metasploit::Model::Search::Operator::Attribute' do |_operator|
     []
   end
+
+  Metasploit::Concern.run(self)
 end
