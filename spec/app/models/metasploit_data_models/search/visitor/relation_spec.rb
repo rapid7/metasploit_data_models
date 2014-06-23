@@ -12,10 +12,14 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     "name:\"#{value}\""
   end
 
+  let(:klass) {
+    Mdm::Host
+  }
+
   let(:query) do
     Metasploit::Model::Search::Query.new(
         :formatted => formatted,
-        :klass => Mdm::Host
+        :klass => klass
     )
   end
 
@@ -150,81 +154,183 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     end
 
     context 'matching record' do
-      context 'with Mdm::Host' do
-        #
-        # lets
-        #
-        # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
-        #
-
-        let(:matching_record_name) {
-          'mdm_host_name_a'
-        }
-
-        let(:matching_service_name) {
-          'mdm_service_name_a'
-        }
-
-        let(:non_matching_record_name) {
-          'mdm_host_name_b'
-        }
-
-        let(:non_matching_service_name) {
-          'mdm_service_name_b'
-        }
-
-        #
-        # let!s
-        #
-
-        let!(:matching_record) do
-          FactoryGirl.build(
-              :mdm_host,
-              name: matching_record_name
-          )
-        end
-
-        let!(:matching_service) do
-          FactoryGirl.create(
-              :mdm_service,
-              host: matching_record,
-              name: matching_service_name
-          )
-        end
-
-        let!(:non_matching_record) do
-          FactoryGirl.build(
-              :mdm_host,
-              name: non_matching_record_name
-          )
-        end
-
-        let!(:non_matching_service) do
-          FactoryGirl.create(
-              :mdm_service,
-              host: non_matching_record,
-              name: non_matching_service_name
-          )
-        end
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              :attribute => :name
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                              association: :services,
-                              attribute: :name
-
-        context 'with all operators' do
-          let(:formatted) {
-            %Q{name:"#{matching_record_name}" services.name:"#{matching_service_name}"}
+      context 'Metasploit::Model::Search::Query#klass' do
+        context 'with Mdm::Service' do
+          let(:klass) {
+            Mdm::Service
           }
 
-          it 'should find only matching record' do
-            if visit.to_a != [matching_record]
-              true
+          let(:matching_ports) {
+            [
+                1,
+                2
+            ]
+          }
+
+          let(:non_matching_port) {
+            3
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record_by_port) {
+            matching_ports.each_with_object({}) { |matching_port, matching_record_by_port|
+              matching_record_by_port[matching_port] = FactoryGirl.create(
+                  :mdm_service,
+                  port: matching_port
+              )
+            }
+          }
+
+          let!(:non_matching_record) {
+            FactoryGirl.create(:mdm_service)
+          }
+
+          context 'with port' do
+            context 'with single port number' do
+              let(:formatted) {
+                "port:#{matching_port}"
+              }
+
+              let(:matching_port) {
+                matching_ports.sample
+              }
+
+              let(:matching_record) {
+                matching_record_by_port[matching_port]
+              }
+
+              it 'should find only record with that port number' do
+                expect(visit).to match_array([matching_record])
+              end
             end
 
-            expect(visit).to match_array([matching_record])
+            context 'with port range' do
+              let(:formatted) {
+                "port:#{matching_ports.min}-#{matching_ports.max}"
+              }
+
+              it 'should find all records with port numbers within the range' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+
+            context 'with comma separated port numbers' do
+              let(:formatted) {
+                "port:#{matching_ports.join(',')}"
+              }
+
+              it 'should find all records with the port numbers' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+
+            context 'with overlapping comma separated port number and range' do
+              let(:matching_port) {
+                matching_ports.sample
+              }
+
+              let(:formatted) {
+                %Q{port:#{matching_port},#{matching_ports.min}-#{matching_ports.max}}
+              }
+
+              it 'should find all records with the matching ports once' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+          end
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{port:#{matching_port}}
+            }
+          end
+        end
+
+        context 'with Mdm::Host' do
+          #
+          # lets
+          #
+
+          let(:klass) {
+            Mdm::Host
+          }
+
+          #
+          # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
+          #
+
+          let(:matching_record_name) {
+            'mdm_host_name_a'
+          }
+
+          let(:matching_service_name) {
+            'mdm_service_name_a'
+          }
+
+          let(:non_matching_record_name) {
+            'mdm_host_name_b'
+          }
+
+          let(:non_matching_service_name) {
+            'mdm_service_name_b'
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record) do
+            FactoryGirl.build(
+                :mdm_host,
+                name: matching_record_name
+            )
+          end
+
+          let!(:matching_service) do
+            FactoryGirl.create(
+                :mdm_service,
+                host: matching_record,
+                name: matching_service_name
+            )
+          end
+
+          let!(:non_matching_record) do
+            FactoryGirl.build(
+                :mdm_host,
+                name: non_matching_record_name
+            )
+          end
+
+          let!(:non_matching_service) do
+            FactoryGirl.create(
+                :mdm_service,
+                host: non_matching_record,
+                name: non_matching_service_name
+            )
+          end
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                :attribute => :name
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                association: :services,
+                                attribute: :name
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{name:"#{matching_record_name}" services.name:"#{matching_service_name}"}
+            }
+
+            it 'should find only matching record' do
+              if visit.to_a != [matching_record]
+                true
+              end
+
+              expect(visit).to match_array([matching_record])
+            end
           end
         end
       end
