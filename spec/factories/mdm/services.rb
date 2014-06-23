@@ -9,14 +9,13 @@ FactoryGirl.define do
     # Attributes
     #
     name { generate :mdm_service_name }
-    port 4567
+    port { generate :port }
     proto 'snmp'
     state 'open'
 
     factory :web_service do
       proto 'tcp'
       name { FactoryGirl.generate(:web_service_name) }
-      port { FactoryGirl.generate(:port) }
     end
   end
 
