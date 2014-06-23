@@ -44,5 +44,5 @@ class Mdm::Module::Ref < ActiveRecord::Base
   validates :detail, :presence => true
   validates :name, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_module_ref, self)
+  Metasploit::Concern.run(self)
 end

@@ -62,4 +62,6 @@ class MetasploitDataModels::Search::Visitor::Where
   def method_visitor
     @method_visitor ||= MetasploitDataModels::Search::Visitor::Method.new
   end
+
+  Metasploit::Concern.run(self)
 end

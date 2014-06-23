@@ -179,5 +179,7 @@ class Mdm::Session < ActiveRecord::Base
     c.session_stop(self.local_id) rescue nil
   end
 
-  ActiveSupport.run_load_hooks(:mdm_session, self)
+  public
+
+  Metasploit::Concern.run(self)
 end

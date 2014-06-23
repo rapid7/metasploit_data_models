@@ -50,5 +50,5 @@ class Mdm::Ref < ActiveRecord::Base
 
   attr_accessible :name
 
-  ActiveSupport.run_load_hooks(:mdm_ref, self)
+  Metasploit::Concern.run(self)
 end

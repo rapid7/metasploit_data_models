@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
   # @see MSP-2971
   s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
+  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
   s.add_runtime_dependency 'metasploit-model', '>= 0.24.1.pre.semantic.pre.versioning.pre.2.pre.0', '< 0.25'
   
   if RUBY_PLATFORM =~ /java/

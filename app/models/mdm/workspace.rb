@@ -188,6 +188,8 @@ class Mdm::Workspace < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_workspace, self)
+  public
+
+  Metasploit::Concern.run(self)
 end
 

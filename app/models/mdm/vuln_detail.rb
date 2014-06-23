@@ -18,5 +18,5 @@ class Mdm::VulnDetail < ActiveRecord::Base
 
   validates :vuln_id, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_vuln_detail, self)
+  Metasploit::Concern.run(self)
 end

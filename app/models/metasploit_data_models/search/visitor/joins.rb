@@ -44,4 +44,6 @@ class MetasploitDataModels::Search::Visitor::Joins
   visit 'Metasploit::Model::Search::Operator::Attribute' do |_|
     []
   end
+
+  Metasploit::Concern.run(self)
 end

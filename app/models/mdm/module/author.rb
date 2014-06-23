@@ -21,5 +21,5 @@ class Mdm::Module::Author < ActiveRecord::Base
   validates :detail, :presence => true
   validates :name, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_module_author, self)
+  Metasploit::Concern.run(self)
 end

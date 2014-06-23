@@ -20,5 +20,5 @@ class Mdm::Module::Arch < ActiveRecord::Base
   validates :detail, :presence => true
   validates :name, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_module_arch, self)
+  Metasploit::Concern.run(self)
 end

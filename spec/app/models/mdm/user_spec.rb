@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Mdm::User do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
     it { should have_many(:owned_workspaces).class_name('Mdm::Workspace') }

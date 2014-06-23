@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'securerandom'
 
 describe Mdm::Tag do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
     it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }

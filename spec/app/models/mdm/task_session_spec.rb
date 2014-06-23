@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Mdm::TaskSession do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do
     it 'should be valid' do
