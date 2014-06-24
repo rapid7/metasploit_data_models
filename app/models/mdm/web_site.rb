@@ -57,6 +57,6 @@ class Mdm::WebSite < ActiveRecord::Base
     web_vulns.size
   end
 
-  ActiveSupport.run_load_hooks(:mdm_web_site, self)
+  Metasploit::Concern.run(self)
 end
 

@@ -47,6 +47,8 @@ describe Mdm::Module::Detail do
     ]
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'associations' do
     it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
     it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }

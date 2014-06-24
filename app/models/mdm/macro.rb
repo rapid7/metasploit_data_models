@@ -15,6 +15,6 @@ class Mdm::Macro < ActiveRecord::Base
 
   validates :name, :presence => true, :format => /^[^'|"]+$/
 
-  ActiveSupport.run_load_hooks(:mdm_macro, self)
+  Metasploit::Concern.run(self)
 end
 

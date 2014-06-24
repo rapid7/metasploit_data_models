@@ -84,4 +84,8 @@ class MetasploitDataModels::Search::Visitor::Relation < Metasploit::Model::Base
       errors.add(:query, :invalid)
     end
   end
+
+  private
+
+  Metasploit::Concern.run(self)
 end

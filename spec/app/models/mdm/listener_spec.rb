@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Mdm::Listener do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }

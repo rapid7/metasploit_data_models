@@ -26,4 +26,6 @@ class MetasploitDataModels::Search::Visitor::Includes
         'MetasploitDataModels::Search::Operator::Port::List' do |_operator|
     []
   end
+
+  Metasploit::Concern.run(self)
 end

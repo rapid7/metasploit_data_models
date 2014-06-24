@@ -29,10 +29,18 @@ Rails.backtrace_cleaner.remove_silencers!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-support_glob = MetasploitDataModels.root.join('spec', 'support', '**', '*.rb')
 
-Dir.glob(support_glob) do |path|
-  require path
+engines = [
+    Metasploit::Concern::Engine,
+    MetasploitDataModels::Engine
+]
+
+engines.each do |engine|
+  support_glob = engine.root.join('spec', 'support', '**', '*.rb')
+
+  Dir.glob(support_glob) do |path|
+    require path
+  end
 end
 
 RSpec.configure do |config|

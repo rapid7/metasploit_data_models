@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Mdm::Service do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context "Associations" do
 

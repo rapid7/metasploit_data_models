@@ -11,4 +11,6 @@ class MetasploitDataModels::Search::Visitor::Attribute
     table = operator.klass.arel_table
     table[operator.attribute]
   end
+
+  Metasploit::Concern.run(self)
 end
