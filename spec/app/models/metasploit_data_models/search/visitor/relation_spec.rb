@@ -167,6 +167,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             ]
           }
 
+          let(:matching_records) {
+            matching_record_by_port.values
+          }
+
           let(:non_matching_port) {
             3
           }
@@ -185,7 +189,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           }
 
           let!(:non_matching_record) {
-            FactoryGirl.create(:mdm_service)
+            FactoryGirl.create(
+                :mdm_service,
+                port: non_matching_port
+            )
           }
 
           context 'with port' do
