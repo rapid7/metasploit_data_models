@@ -76,6 +76,14 @@ describe MetasploitDataModels::Search::Visitor::Includes do
       it { should == [] }
     end
 
+    context 'with MetasploitDataModels::Search::Operator::Port::List' do
+      let(:node) do
+        MetasploitDataModels::Search::Operator::Port::List.new
+      end
+
+      it { should == [] }
+    end
+
     context 'with Metasploit::Model::Search::Query#tree' do
       let(:node) do
         query.tree

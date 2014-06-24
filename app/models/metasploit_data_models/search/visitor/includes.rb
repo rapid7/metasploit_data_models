@@ -22,7 +22,8 @@ class MetasploitDataModels::Search::Visitor::Includes
     [operator.association]
   end
 
-  visit 'Metasploit::Model::Search::Operator::Attribute' do |_operator|
+  visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::Port::List' do |_operator|
     []
   end
 end
