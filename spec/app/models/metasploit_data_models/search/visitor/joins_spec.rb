@@ -235,7 +235,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
       end
     end
 
-    context "with Metasploit::Model::Search::Operator::Attribute" do
+    context 'with Metasploit::Model::Search::Operator::Attribute' do
       let(:node) do
         Metasploit::Model::Search::Operator::Attribute.new
       end
@@ -243,7 +243,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
       it { should == [] }
     end
 
-    context "with MetasploitDataModels::Search::Operator::Port::List" do
+    context 'with MetasploitDataModels::Search::Operator::Port::List' do
       let(:node) do
         MetasploitDataModels::Search::Operator::Port::List.new
       end
