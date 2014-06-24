@@ -269,7 +269,6 @@ describe MetasploitDataModels::Search::Visitor::Joins do
             Mdm::Host
           }
 
-
           context 'with name' do
             let(:name) do
               FactoryGirl.generate :mdm_host_name

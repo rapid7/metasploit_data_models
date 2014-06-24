@@ -14,7 +14,7 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
     # Shared examples
     #
 
-    shared_examples_for 'operator.klass.arel_table[operator.attribute]' do |options={}|
+    shared_examples_for 'operator.klass.arel_table[operator.attribute]' do |options = {}|
       options.assert_valid_keys(:node_class)
 
       node_class = options.fetch(:node_class)

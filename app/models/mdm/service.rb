@@ -189,7 +189,6 @@ class Mdm::Service < ActiveRecord::Base
   search_attribute :name,
                    type: :string
 
-
   #
   # Search Withs
   #
@@ -217,4 +216,3 @@ class Mdm::Service < ActiveRecord::Base
 
   ActiveSupport.run_load_hooks(:mdm_service, self)
 end
-
