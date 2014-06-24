@@ -43,7 +43,13 @@ class MetasploitDataModels::Search::Visitor::Where
     match_value = "%#{operation.value}%"
 
     attribute.matches(match_value)
-	end
+  end
+
+  visit 'MetasploitDataModels::Search::Operation::Port::Range' do |range_operation|
+    attribute = attribute_visitor.visit range_operation.operator
+
+    attribute.in(range_operation.value)
+  end
 
   #
   # Methods
