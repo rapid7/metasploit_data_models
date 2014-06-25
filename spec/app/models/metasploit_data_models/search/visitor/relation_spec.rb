@@ -257,7 +257,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
         context 'with all operators' do
           let(:formatted) {
-            %Q{name:"#{matching_record_name}" services.name:"#{matching_service_name}"}
+            %Q{name:"#{matching_record_name}" os_flavor:"#{matching_record_os_flavor}" os_name:"#{matching_record_os_name}" os_sp:"#{matching_record_os_sp}" services.name:"#{matching_service_name}"}
           }
 
           it 'should find only matching record' do
