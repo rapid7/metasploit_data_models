@@ -242,6 +242,40 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                               :attribute => :name
 
+        context 'with os' do
+          let(:matching_record_os_flavor) {
+            'XP'
+          }
+
+          let(:matching_record_os_name) {
+            'Microsoft Windows'
+          }
+
+          let(:matching_record_os_sp) {
+            'SP1'
+          }
+
+          context 'with a combination of Mdm::Host#os_name and Mdm:Host#os_sp' do
+            let(:formatted) {
+              %Q{os:"win xp"}
+            }
+
+            it 'finds matching record' do
+              expect(visit).to match_array [matching_record]
+            end
+          end
+
+          context 'with a combination of Mdm::Host#os_flavor and Mdm::Host#os_sp' do
+            let(:formatted) {
+              %Q{os:"xp sp1"}
+            }
+
+            it 'finds matching record' do
+              expect(visit).to match_array [matching_record]
+            end
+          end
+        end
+
         it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                               :attribute => :os_flavor
 
@@ -257,7 +291,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
         context 'with all operators' do
           let(:formatted) {
-            %Q{name:"#{matching_record_name}" os_flavor:"#{matching_record_os_flavor}" os_name:"#{matching_record_os_name}" os_sp:"#{matching_record_os_sp}" services.name:"#{matching_service_name}"}
+            %Q{name:"#{matching_record_name}" os:"#{matching_record_os_name} #{matching_record_os_flavor} #{matching_record_os_sp}" os_flavor:"#{matching_record_os_flavor}" os_name:"#{matching_record_os_name}" os_sp:"#{matching_record_os_sp}" services.name:"#{matching_service_name}"}
           }
 
           it 'should find only matching record' do
