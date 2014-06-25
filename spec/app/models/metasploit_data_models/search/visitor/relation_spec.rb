@@ -207,7 +207,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           FactoryGirl.build(
               :mdm_host,
               name: matching_record_name,
-              os_flavor: matching_record_os_name,
+              os_flavor: matching_record_os_flavor,
               os_name: matching_record_os_name,
               os_sp: matching_record_os_sp
           )
@@ -225,7 +225,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           FactoryGirl.build(
               :mdm_host,
               name: non_matching_record_name,
-              os_flavor: non_matching_record_os_name,
+              os_flavor: non_matching_record_os_flavor,
               os_name: non_matching_record_os_name,
               os_sp: non_matching_record_os_sp
           )
