@@ -5,3 +5,9 @@ en:
         messages:
           # have to duplicate activerecord.model.errors.message.taken because of the different i18n_scope
           taken: "has already been taken"
+
+        models:
+          metasploit_data_models/search/operator/multitext:
+            attributes:
+              operator_names:
+                too_short: "is too short (minimum is %{count} operator names)"
