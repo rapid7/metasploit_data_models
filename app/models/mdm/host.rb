@@ -481,6 +481,12 @@ class Mdm::Host < ActiveRecord::Base
 
   search_attribute :name,
                    type: :string
+  search_attribute :os_flavor,
+                   type: :string
+  search_attribute :os_name,
+                   type: :string
+  search_attribute :os_sp,
+                   type: :string
 
   #
   # Instance Methods

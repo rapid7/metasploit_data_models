@@ -163,12 +163,36 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           'mdm_host_name_a'
         }
 
+        let(:matching_record_os_flavor) {
+          'mdm_host_os_flavor_a'
+        }
+
+        let(:matching_record_os_name) {
+          'mdm_host_os_name_a'
+        }
+
+        let(:matching_record_os_sp) {
+          'mdm_host_os_sp_a'
+        }
+
         let(:matching_service_name) {
           'mdm_service_name_a'
         }
 
         let(:non_matching_record_name) {
           'mdm_host_name_b'
+        }
+
+        let(:non_matching_record_os_flavor) {
+          'mdm_host_os_flavor_b'
+        }
+
+        let(:non_matching_record_os_name) {
+          'mdm_host_os_name_b'
+        }
+
+        let(:non_matching_record_os_sp) {
+          'mdm_host_os_sp_b'
         }
 
         let(:non_matching_service_name) {
@@ -182,7 +206,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         let!(:matching_record) do
           FactoryGirl.build(
               :mdm_host,
-              name: matching_record_name
+              name: matching_record_name,
+              os_flavor: matching_record_os_flavor,
+              os_name: matching_record_os_name,
+              os_sp: matching_record_os_sp
           )
         end
 
@@ -197,7 +224,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         let!(:non_matching_record) do
           FactoryGirl.build(
               :mdm_host,
-              name: non_matching_record_name
+              name: non_matching_record_name,
+              os_flavor: non_matching_record_os_flavor,
+              os_name: non_matching_record_os_name,
+              os_sp: non_matching_record_os_sp
           )
         end
 
@@ -213,12 +243,21 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                               :attribute => :name
 
         it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                              :attribute => :os_flavor
+
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                              :attribute => :os_name
+
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                              :attribute => :os_sp
+
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                               association: :services,
                               attribute: :name
 
         context 'with all operators' do
           let(:formatted) {
-            %Q{name:"#{matching_record_name}" services.name:"#{matching_service_name}"}
+            %Q{name:"#{matching_record_name}" os_flavor:"#{matching_record_os_flavor}" os_name:"#{matching_record_os_name}" os_sp:"#{matching_record_os_sp}" services.name:"#{matching_service_name}"}
           }
 
           it 'should find only matching record' do
