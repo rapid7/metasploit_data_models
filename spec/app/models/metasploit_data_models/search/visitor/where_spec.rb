@@ -97,6 +97,44 @@ describe MetasploitDataModels::Search::Visitor::Where do
       end
     end
 
+    context 'with MetasploitDataModels::Search::Operation::Port::Range' do
+      let(:node) {
+        MetasploitDataModels::Search::Operation::Port::Range.new(
+            operator: operator,
+            value: value
+        )
+      }
+
+      let(:operator) {
+        MetasploitDataModels::Search::Operator::Port::List.new(
+            klass: Mdm::Service
+        )
+      }
+
+      let(:range) {
+        1..2
+      }
+
+      let(:value) {
+        "#{range.begin}-#{range.end}"
+      }
+
+      it 'should visit operation.operator with attribute_visitor' do
+        expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
+
+        visit
+      end
+
+      it 'should call in on Arel::Attributes::Attribute from attribute_visitor' do
+        attribute = double('Visited Operator')
+        allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
+
+        expect(attribute).to receive(:in).with(range)
+
+        visit
+      end
+    end
+
     context 'with Metasploit::Model::Search::Query#tree' do
       let(:node) do
         query.tree
