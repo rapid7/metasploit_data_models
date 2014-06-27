@@ -394,6 +394,20 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 expect(visit).to match_array [matching_record]
               end
             end
+
+            context 'with multiple records matching one word' do
+              let(:formatted) {
+                %Q{os:"win xp"}
+              }
+
+              let(:non_matching_record_os_name) {
+                'Microsoft Windows'
+              }
+
+              it 'finds only matching record by other words refining search' do
+                expect(visit).to match_array [matching_record]
+              end
+            end
           end
 
           it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
