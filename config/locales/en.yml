@@ -5,3 +5,15 @@ en:
         messages:
           # have to duplicate activerecord.model.errors.message.taken because of the different i18n_scope
           taken: "has already been taken"
+
+        models:
+          metasploit_data_models/search/operation/port/range:
+            attributes:
+              value:
+                port_range_extreme_inclusion: "has extreme (%{extreme}) value (%{extreme_value}) outside range (%{minimum}-%{maximum})."
+                port_range_extreme_not_an_integer: "has extreme (%{extreme}) value (%{extreme_value}) that is not an integer."
+          metasploit_data_models/search/operation/range:
+            attributes:
+              value:
+                order: "is not in order: begin (%{begin} is greater than end (%{end})."
+                range: "is not a range"
