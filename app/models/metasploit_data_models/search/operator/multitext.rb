@@ -2,7 +2,7 @@ require 'shellwords'
 
 # Searches multiple text fields by breaking up the formatted value into words and doing text search for each word across
 # each operator named in {#operator_names}.
-class MetasploitDataModels::Search::Operator::Multitext < Metasploit::Model::Search::Operator::Group::Union
+class MetasploitDataModels::Search::Operator::Multitext < Metasploit::Model::Search::Operator::Group::Intersection
   #
   # Attributes
   #
@@ -34,14 +34,24 @@ class MetasploitDataModels::Search::Operator::Multitext < Metasploit::Model::Sea
   # Instance Methods
   #
 
-  # Breaks `formatted_value` into words using `Shellwords.split`.  Each word is then search across all
+  # Breaks `formatted_value` into words using `Shellwords.split`.  Each word is then searched across all {#operators},
+  # where any operator can match for that word.  The search for multiple multiple is intersected, so that additional
+  # words can refine the search.
+  #
+  # @param formatted_value [#to_s]
+  # @return [Array<Metasploit::Model::Search::Operation::Group::Union>] Unions to be intersected.
   def children(formatted_value)
     words = Shellwords.split formatted_value.to_s
 
-    operators.flat_map { |operator|
-      words.map { |word|
+    words.map { |word|
+      child_operators = operators.map { |operator|
         operator.operate_on(word)
       }
+
+      Metasploit::Model::Search::Operation::Group::Union.new(
+          children: child_operators,
+          operator: self
+      )
     }
   end
 

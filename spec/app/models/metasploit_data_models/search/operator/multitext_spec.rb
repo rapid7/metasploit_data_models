@@ -65,18 +65,13 @@ describe MetasploitDataModels::Search::Operator::Multitext do
         %w{multiple words}
       }
 
-      it 'generates operation for each word and operator combination' do
-        operations_by_operator = children.group_by(&:operator)
+      it 'generates a union for each word' do
+        children.each_with_index do |child, index|
+          expect(child).to be_a Metasploit::Model::Search::Operation::Group::Union
 
-        operator_names.each do |operator_name|
-          operator = klass.search_operator_by_name[operator_name]
-
-          expect(operator).not_to be_nil
-
-          operations = operations_by_operator[operator]
-
-          expect(operations).not_to be_nil
-          expect(operations.map(&:value)).to match_array(words)
+          child.children.each do |grandchild|
+            expect(grandchild.value).to eq(words[index])
+          end
         end
       end
     end
@@ -86,12 +81,16 @@ describe MetasploitDataModels::Search::Operator::Multitext do
         %Q{"quoted words"}
       }
 
-      it 'generates operation for quoted words as a single argument' do
-        value_set = children.each_with_object(Set.new) { |operation, set|
-          set.add operation.value
-        }
+      it 'generates a single union for quoted words as a single argument' do
+        expect(children).to have(1).items
 
-        expect(value_set).to eq(Set.new(['quoted words']))
+        child = children.first
+
+        expect(child).to be_a Metasploit::Model::Search::Operation::Group::Union
+
+        child.children.each do |grandchild|
+          expect(grandchild.value).to eq('quoted words')
+        end
       end
     end
   end
