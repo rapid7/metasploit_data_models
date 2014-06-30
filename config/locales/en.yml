@@ -5,3 +5,8 @@ en:
         messages:
           # have to duplicate activerecord.model.errors.message.taken because of the different i18n_scope
           taken: "has already been taken"
+        models:
+          metasploit_data_models/search/operation/ip_address/invalid_range:
+            attributes:
+              value:
+                format: "does not match any known formats (IPv4, IPv4 CIDR, IPv4 NMAP, IPv4 Range, IPv6, IPv6 CIDR, IPv6 Range)"
