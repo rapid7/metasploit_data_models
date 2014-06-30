@@ -7,7 +7,7 @@ class MetasploitDataModels::Search::Visitor::Method
   end
 
   visit 'Metasploit::Model::Search::Group::Union',
-        'Metasploit::Model::Search::Operation::Union' do
+        'Metasploit::Model::Search::Operation::Group::Union' do
     :or
   end
 

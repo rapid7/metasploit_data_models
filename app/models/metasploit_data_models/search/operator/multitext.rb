@@ -2,7 +2,7 @@ require 'shellwords'
 
 # Searches multiple text fields by breaking up the formatted value into words and doing text search for each word across
 # each operator named in {#operator_names}.
-class MetasploitDataModels::Search::Operator::Multitext < Metasploit::Model::Search::Operator::Union
+class MetasploitDataModels::Search::Operator::Multitext < Metasploit::Model::Search::Operator::Group::Union
   #
   # Attributes
   #

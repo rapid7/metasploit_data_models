@@ -13,7 +13,7 @@ class MetasploitDataModels::Search::Visitor::Joins
   end
 
   visit 'Metasploit::Model::Search::Group::Union',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Union' do |parent|
     # A Set<Set> because if all children have multiple joins, but those multiple joins contain the same elements for
     # all children, then all joins can be counted as common:
     #

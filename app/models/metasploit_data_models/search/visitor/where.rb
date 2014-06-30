@@ -20,7 +20,7 @@ class MetasploitDataModels::Search::Visitor::Where
   #
 
   visit 'Metasploit::Model::Search::Group::Base',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Union' do |parent|
     method = method_visitor.visit parent
 
     children_arel = parent.children.collect { |child|

@@ -53,7 +53,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
 
     union_classes = [
         Metasploit::Model::Search::Group::Union,
-        Metasploit::Model::Search::Operation::Union
+        Metasploit::Model::Search::Operation::Group::Union
     ]
 
     union_classes.each do |union_class|
