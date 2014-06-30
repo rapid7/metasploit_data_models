@@ -2,7 +2,8 @@
 class MetasploitDataModels::Search::Visitor::Method
   include Metasploit::Model::Visitation::Visit
 
-  visit 'Metasploit::Model::Search::Group::Intersection' do
+  visit 'Metasploit::Model::Search::Group::Intersection',
+        'Metasploit::Model::Search::Operation::Group::Intersection' do
     :and
   end
 

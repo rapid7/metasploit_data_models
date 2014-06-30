@@ -6,7 +6,8 @@ class MetasploitDataModels::Search::Visitor::Joins
   # Visitors
   #
 
-  visit 'Metasploit::Model::Search::Group::Intersection' do |parent|
+  visit 'Metasploit::Model::Search::Group::Intersection',
+        'Metasploit::Model::Search::Operation::Group::Intersection' do |parent|
     parent.children.flat_map { |child|
       visit child
     }

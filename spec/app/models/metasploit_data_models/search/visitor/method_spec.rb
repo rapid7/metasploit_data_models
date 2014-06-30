@@ -24,9 +24,25 @@ describe MetasploitDataModels::Search::Visitor::Method do
       it { should == :and }
     end
 
+    context 'with Metasploit::Model::Search::Operation::Group::Intersection' do
+      let(:node_class) do
+        Metasploit::Model::Search::Operation::Group::Intersection
+      end
+
+      it { should == :and }
+    end
+
     context 'with Metasploit::Model::Search::Group::Union' do
       let(:node_class) do
         Metasploit::Model::Search::Group::Union
+      end
+
+      it { should == :or }
+    end
+
+    context 'with Metasploit::Model::Search::Operation::Group::Union' do
+      let(:node_class) do
+        Metasploit::Model::Search::Operation::Group::Union
       end
 
       it { should == :or }
