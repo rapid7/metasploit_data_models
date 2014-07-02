@@ -18,7 +18,7 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::M
   # @!attribute value
   #   The segment number.
   #
-  #   @return [String]
+  #   @return [Integer, String]
   attr_reader :value
 
   #
