@@ -23,6 +23,25 @@ class MetasploitDataModels::Search::Operation::IPAddress::V4::Single < Metasploi
   validate :format
 
   #
+  # Class Methods
+  #
+
+  # Whether the IPAddr is a single IPv4 address and not a IPv4 range.
+  #
+  # @param value [Object, IPAddr]
+  # @return [true] if `value` is IPv4 and contains only one IP address
+  # @return [false] otherwise
+  def self.valid_value?(value)
+    if value.is_a?(IPAddr) && value.ipv4?
+      range = value.to_range
+
+      range.begin == value && range.end == value
+    else
+      false
+    end
+  end
+
+  #
   # Instance Methods
   #
 
@@ -43,13 +62,7 @@ class MetasploitDataModels::Search::Operation::IPAddress::V4::Single < Metasploi
   #
   # @return [void]
   def format
-    if value.is_a? IPAddr
-      range = value.to_range
-
-      unless value.ipv4? && range.begin == value && range.end == value
-        errors.add(:value, :format)
-      end
-    else
+    unless self.class.valid_value?(value)
       errors.add(:value, :format)
     end
   end

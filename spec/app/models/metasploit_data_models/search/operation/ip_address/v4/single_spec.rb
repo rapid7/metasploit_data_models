@@ -96,6 +96,48 @@ describe MetasploitDataModels::Search::Operation::IPAddress::V4::Single do
   it_should_behave_like 'MetasploitDataModels::Search::Operation::IPAddress::*.match',
                         4 => :single
 
+  context 'valid_value?' do
+    subject(:valid_value?) {
+      described_class.valid_value?(value)
+    }
+
+    context 'with IPAddr' do
+      context 'with IPv4' do
+        context 'with CIDR' do
+          let(:value) {
+            IPAddr.new('1.2.3.4/31')
+          }
+
+          it { should be_false }
+        end
+
+        context 'with single' do
+          let(:value) {
+            IPAddr.new('1.2.3.4')
+          }
+
+          it { should be_true }
+        end
+      end
+
+      context 'with IPv6' do
+        let(:value) {
+          IPAddr.new('1:2:3:4:5:6:7:8')
+        }
+
+        it { should be_false }
+      end
+    end
+
+    context 'without IPAddr' do
+      let(:value) {
+        'not_an_ipaddr'
+      }
+
+      it { should be_false }
+    end
+  end
+
   context '#value' do
     subject(:value) {
       operation.value

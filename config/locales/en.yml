@@ -10,6 +10,12 @@ en:
             attributes:
               value:
                 format: "does not match any known formats (IPv4, IPv4 CIDR, IPv4 NMAP, IPv4 Range, IPv6, IPv6 CIDR, IPv6 Range)"
+          metasploit_data_models/search/operation/ip_address/v4/range:
+            attributes:
+              value:
+                extreme: "%{extreme} (%{extreme_value}) is not an IPAddr"
+                order: "beginning of range (%{begin}) cannot be after end of range (%{end})"
+                type: "is not a range"
           metasploit_data_models/search/operation/ip_address/v4/single:
             attributes:
               value:
