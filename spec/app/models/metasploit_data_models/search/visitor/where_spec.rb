@@ -5,6 +5,8 @@ describe MetasploitDataModels::Search::Visitor::Where do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#attribute_visitor' do
     subject(:attribute_visitor) do
       visitor.attribute_visitor
@@ -28,12 +30,14 @@ describe MetasploitDataModels::Search::Visitor::Where do
 
     arel_class_by_group_class = {
         Metasploit::Model::Search::Group::Intersection => Arel::Nodes::And,
-        Metasploit::Model::Search::Group::Union => Arel::Nodes::Or
+        Metasploit::Model::Search::Group::Union => Arel::Nodes::Or,
+        Metasploit::Model::Search::Operation::Group::Intersection => Arel::Nodes::And,
+        Metasploit::Model::Search::Operation::Group::Union => Arel::Nodes::Or
     }
 
     arel_class_by_group_class.each do |group_class, arel_class|
       context "with #{group_class}" do
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search::Group::Base',
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search*::Group::Base',
                               :arel_class => arel_class do
           let(:node_class) do
             group_class
@@ -90,6 +94,44 @@ describe MetasploitDataModels::Search::Visitor::Where do
         visitor.attribute_visitor.stub(:visit).with(operator).and_return(attribute)
 
         attribute.should_receive(:matches).with("%#{value}%")
+
+        visit
+      end
+    end
+
+    context 'with MetasploitDataModels::Search::Operation::Port::Range' do
+      let(:node) {
+        MetasploitDataModels::Search::Operation::Port::Range.new(
+            operator: operator,
+            value: value
+        )
+      }
+
+      let(:operator) {
+        MetasploitDataModels::Search::Operator::Port::List.new(
+            klass: Mdm::Service
+        )
+      }
+
+      let(:range) {
+        1..2
+      }
+
+      let(:value) {
+        "#{range.begin}-#{range.end}"
+      }
+
+      it 'should visit operation.operator with attribute_visitor' do
+        expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
+
+        visit
+      end
+
+      it 'should call in on Arel::Attributes::Attribute from attribute_visitor' do
+        attribute = double('Visited Operator')
+        allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
+
+        expect(attribute).to receive(:in).with(range)
 
         visit
       end

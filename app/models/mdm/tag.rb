@@ -61,5 +61,5 @@ class Mdm::Tag < ActiveRecord::Base
     name
   end
 
-  ActiveSupport.run_load_hooks(:mdm_tag, self)
+  Metasploit::Concern.run(self)
 end

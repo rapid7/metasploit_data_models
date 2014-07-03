@@ -11,5 +11,5 @@ class Mdm::Route < ActiveRecord::Base
              class_name: 'Mdm::Session',
              inverse_of: :routes
 
-  ActiveSupport.run_load_hooks(:mdm_route, self)
+  Metasploit::Concern.run(self)
 end

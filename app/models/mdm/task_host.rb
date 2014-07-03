@@ -11,4 +11,6 @@ class Mdm::TaskHost < ActiveRecord::Base
             :uniqueness => {
                 :scope => :task_id
             }
+
+  Metasploit::Concern.run(self)
 end

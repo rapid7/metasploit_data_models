@@ -6,14 +6,15 @@ class MetasploitDataModels::Search::Visitor::Joins
   # Visitors
   #
 
-  visit 'Metasploit::Model::Search::Group::Intersection' do |parent|
+  visit 'Metasploit::Model::Search::Group::Intersection',
+        'Metasploit::Model::Search::Operation::Group::Intersection' do |parent|
     parent.children.flat_map { |child|
       visit child
     }
   end
 
   visit 'Metasploit::Model::Search::Group::Union',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Union' do |parent|
     # A Set<Set> because if all children have multiple joins, but those multiple joins contain the same elements for
     # all children, then all joins can be counted as common:
     #
@@ -41,7 +42,10 @@ class MetasploitDataModels::Search::Visitor::Joins
     [operator.association]
   end
 
-  visit 'Metasploit::Model::Search::Operator::Attribute' do |_|
+  visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::Port::List' do |_|
     []
   end
+
+  Metasploit::Concern.run(self)
 end

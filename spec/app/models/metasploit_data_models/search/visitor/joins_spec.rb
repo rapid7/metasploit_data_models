@@ -5,53 +5,62 @@ describe MetasploitDataModels::Search::Visitor::Joins do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#visit' do
     subject(:visit) do
       visitor.visit(node)
     end
 
-    context 'with Metasploit::Model::Search::Group::Intersection' do
-      let(:children) do
-        2.times.collect { |n|
-          double("Child #{n}")
-        }
-      end
+    intersection_classes = [
+        Metasploit::Model::Search::Group::Intersection,
+        Metasploit::Model::Search::Operation::Group::Intersection
+    ]
 
-      let(:node) do
-        Metasploit::Model::Search::Group::Intersection.new(
-            :children => children
-        )
-      end
-
-      it 'should visit each child' do
-        # needed for call to visit subject
-        visitor.should_receive(:visit).with(node).and_call_original
-
-        children.each do |child|
-          visitor.should_receive(:visit).with(child).and_return([])
+    intersection_classes.each do |intersection_class|
+      context "with #{intersection_class}" do
+        let(:children) do
+          2.times.collect { |n|
+            double("Child #{n}")
+          }
         end
 
-        visit
-      end
-
-      it 'should return Array of all child visits' do
-        child_visits = []
-
-        visitor.should_receive(:visit).with(node).and_call_original
-
-        children.each_with_index do |child, i|
-          child_visit = ["Visited Child #{i}"]
-          visitor.stub(:visit).with(child).and_return(child_visit)
-          child_visits.concat(child_visit)
+        let(:node) do
+          intersection_class.new(
+              :children => children
+          )
         end
 
-        visit.should == child_visits
+        it 'should visit each child' do
+          # needed for call to visit subject
+          visitor.should_receive(:visit).with(node).and_call_original
+
+          children.each do |child|
+            visitor.should_receive(:visit).with(child).and_return([])
+          end
+
+          visit
+        end
+
+        it 'should return Array of all child visits' do
+          child_visits = []
+
+          visitor.should_receive(:visit).with(node).and_call_original
+
+          children.each_with_index do |child, i|
+            child_visit = ["Visited Child #{i}"]
+            visitor.stub(:visit).with(child).and_return(child_visit)
+            child_visits.concat(child_visit)
+          end
+
+          visit.should == child_visits
+        end
       end
     end
 
     union_classes = [
         Metasploit::Model::Search::Group::Union,
-        Metasploit::Model::Search::Operation::Union
+        Metasploit::Model::Search::Operation::Group::Union
     ]
 
     union_classes.each do |union_class|
@@ -235,9 +244,17 @@ describe MetasploitDataModels::Search::Visitor::Joins do
       end
     end
 
-    context "with Metasploit::Model::Search::Operator::Attribute" do
+    context 'with Metasploit::Model::Search::Operator::Attribute' do
       let(:node) do
         Metasploit::Model::Search::Operator::Attribute.new
+      end
+
+      it { should == [] }
+    end
+
+    context 'with MetasploitDataModels::Search::Operator::Port::List' do
+      let(:node) do
+        MetasploitDataModels::Search::Operator::Port::List.new
       end
 
       it { should == [] }
@@ -260,7 +277,6 @@ describe MetasploitDataModels::Search::Visitor::Joins do
           let(:klass) {
             Mdm::Host
           }
-
 
           context 'with name' do
             let(:name) do

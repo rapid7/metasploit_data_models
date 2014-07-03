@@ -13,6 +13,6 @@ class Mdm::WebPage < ActiveRecord::Base
 
   serialize :headers, MetasploitDataModels::Base64Serializer.new
 
-  ActiveSupport.run_load_hooks(:mdm_web_page, self)
+  Metasploit::Concern.run(self)
 end
 

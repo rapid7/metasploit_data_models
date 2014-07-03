@@ -20,7 +20,7 @@ class MetasploitDataModels::Search::Visitor::Where
   #
 
   visit 'Metasploit::Model::Search::Group::Base',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Base' do |parent|
     method = method_visitor.visit parent
 
     children_arel = parent.children.collect { |child|
@@ -43,7 +43,13 @@ class MetasploitDataModels::Search::Visitor::Where
     match_value = "%#{operation.value}%"
 
     attribute.matches(match_value)
-	end
+  end
+
+  visit 'MetasploitDataModels::Search::Operation::Port::Range' do |range_operation|
+    attribute = attribute_visitor.visit range_operation.operator
+
+    attribute.in(range_operation.value)
+  end
 
   #
   # Methods
@@ -62,4 +68,6 @@ class MetasploitDataModels::Search::Visitor::Where
   def method_visitor
     @method_visitor ||= MetasploitDataModels::Search::Visitor::Method.new
   end
+
+  Metasploit::Concern.run(self)
 end

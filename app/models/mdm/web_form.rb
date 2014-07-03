@@ -13,6 +13,6 @@ class Mdm::WebForm < ActiveRecord::Base
 
   serialize :params, MetasploitDataModels::Base64Serializer.new
 
-  ActiveSupport.run_load_hooks(:mdm_web_form, self)
+  Metasploit::Concern.run(self)
 end
 

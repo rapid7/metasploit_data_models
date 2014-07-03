@@ -37,6 +37,8 @@ describe Mdm::Host do
     ]
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'factory' do
     it 'should be valid' do
       host = FactoryGirl.build(:mdm_host)

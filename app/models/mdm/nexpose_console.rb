@@ -28,6 +28,6 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   validates :port, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
   validates :username, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_nexpose_console, self)
+  Metasploit::Concern.run(self)
 end
 

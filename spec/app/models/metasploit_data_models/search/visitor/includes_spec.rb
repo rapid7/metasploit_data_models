@@ -5,6 +5,8 @@ describe MetasploitDataModels::Search::Visitor::Includes do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#visit' do
     subject(:visit) do
       visitor.visit(node)
@@ -13,7 +15,8 @@ describe MetasploitDataModels::Search::Visitor::Includes do
     children_classes = [
         Metasploit::Model::Search::Group::Intersection,
         Metasploit::Model::Search::Group::Union,
-        Metasploit::Model::Search::Operation::Union
+        Metasploit::Model::Search::Operation::Group::Intersection,
+        Metasploit::Model::Search::Operation::Group::Union
     ]
 
     children_classes.each do |children_class|
@@ -46,12 +49,6 @@ describe MetasploitDataModels::Search::Visitor::Includes do
       end
     end
 
-    context 'with Metasploit::Model::Search::Operation::Union' do
-      let(:node) do
-
-      end
-    end
-
     context 'with Metasploit::Model::Search::Operator::Association' do
       let(:association) do
         FactoryGirl.generate :metasploit_model_search_operator_association_association
@@ -71,6 +68,14 @@ describe MetasploitDataModels::Search::Visitor::Includes do
     context 'with Metasploit::Model::Search::Operator::Attribute' do
       let(:node) do
         Metasploit::Model::Search::Operator::Attribute.new
+      end
+
+      it { should == [] }
+    end
+
+    context 'with MetasploitDataModels::Search::Operator::Port::List' do
+      let(:node) do
+        MetasploitDataModels::Search::Operator::Port::List.new
       end
 
       it { should == [] }

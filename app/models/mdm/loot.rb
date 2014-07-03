@@ -145,6 +145,8 @@ class Mdm::Loot < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_loot, self)
+  public
+
+  Metasploit::Concern.run(self)
 end
 

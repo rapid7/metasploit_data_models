@@ -481,6 +481,24 @@ class Mdm::Host < ActiveRecord::Base
 
   search_attribute :name,
                    type: :string
+  search_attribute :os_flavor,
+                   type: :string
+  search_attribute :os_name,
+                   type: :string
+  search_attribute :os_sp,
+                   type: :string
+
+  #
+  # Search Withs
+  #
+
+  search_with MetasploitDataModels::Search::Operator::Multitext,
+              name: :os,
+              operator_names: [
+                  :os_name,
+                  :os_flavor,
+                  :os_sp
+              ]
 
   #
   # Instance Methods
@@ -516,6 +534,6 @@ class Mdm::Host < ActiveRecord::Base
     !!self.virtual_host
   end
 
-  ActiveSupport.run_load_hooks(:mdm_host, self)
+  Metasploit::Concern.run(self)
 end
 

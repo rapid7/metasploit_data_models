@@ -46,6 +46,6 @@ class Mdm::HostTag < ActiveRecord::Base
 
   public
 
-  ActiveSupport.run_load_hooks(:mdm_host_tag, self)
+  Metasploit::Concern.run(self)
 end
 

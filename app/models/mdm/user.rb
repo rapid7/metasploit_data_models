@@ -27,6 +27,6 @@ class Mdm::User < ActiveRecord::Base
   serialized_prefs_attr_accessor :time_zone, :session_key
   serialized_prefs_attr_accessor :last_login_address # specifically NOT last_login_ip to prevent confusion with AuthLogic magic columns (which dont work for serialized fields)
 
-  ActiveSupport.run_load_hooks(:mdm_user, self)
+  Metasploit::Concern.run(self)
 end
 

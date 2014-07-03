@@ -5,6 +5,8 @@ describe MetasploitDataModels::Search::Visitor::Method do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#visit' do
     subject(:visit) do
       visitor.visit(node)
@@ -22,9 +24,25 @@ describe MetasploitDataModels::Search::Visitor::Method do
       it { should == :and }
     end
 
+    context 'with Metasploit::Model::Search::Operation::Group::Intersection' do
+      let(:node_class) do
+        Metasploit::Model::Search::Operation::Group::Intersection
+      end
+
+      it { should == :and }
+    end
+
     context 'with Metasploit::Model::Search::Group::Union' do
       let(:node_class) do
         Metasploit::Model::Search::Group::Union
+      end
+
+      it { should == :or }
+    end
+
+    context 'with Metasploit::Model::Search::Operation::Group::Union' do
+      let(:node_class) do
+        Metasploit::Model::Search::Operation::Group::Union
       end
 
       it { should == :or }

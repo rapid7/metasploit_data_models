@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Mdm::Ref do
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'associations' do
     # shoulda matchers don't have support for :primary_key option, so need to
     # test this association manually

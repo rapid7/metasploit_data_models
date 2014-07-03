@@ -177,11 +177,23 @@ class Mdm::Service < ActiveRecord::Base
   }
 
   #
+  #
+  # Search
+  #
+  #
+
+  #
   # Search Attributes
   #
 
   search_attribute :name,
                    type: :string
+
+  #
+  # Search Withs
+  #
+
+  search_with MetasploitDataModels::Search::Operator::Port::List
 
   #
   # Validations
@@ -202,6 +214,5 @@ class Mdm::Service < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_service, self)
+  Metasploit::Concern.run(self)
 end
-

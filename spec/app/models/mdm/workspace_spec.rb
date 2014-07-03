@@ -9,6 +9,8 @@ describe Mdm::Workspace do
     'default'
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'factory' do
     it 'should be valid' do
       workspace = FactoryGirl.build(:mdm_workspace)

@@ -24,7 +24,6 @@ class Mdm::Listener < ActiveRecord::Base
   validates :address, :ip_format => true, :presence => true
   validates :port, :presence => true, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
 
-
-  ActiveSupport.run_load_hooks(:mdm_listener, self)
+  Metasploit::Concern.run(self)
 end
 
