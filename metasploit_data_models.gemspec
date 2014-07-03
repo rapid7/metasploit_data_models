@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
       'Samuel Huckins',
       'Luke Imhoff',
       "David 'thelightcosine' Maloney",
-      'Trevor Rosen'
+      "Trevor 'burlyscudd' Rosen"
   ]
   s.email       = [
       'shuckins@rapid7.com',
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
   s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '>= 0.25.1.pre.metasploit.pre.model.pre.search.pre.operator.pre.and.pre.operation.pre.groups', '< 0.26'
+  s.add_runtime_dependency 'metasploit-model', '>= 0.25.1', '< 0.26'
   
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
