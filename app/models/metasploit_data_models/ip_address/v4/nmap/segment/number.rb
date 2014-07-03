@@ -1,5 +1,7 @@
 # A segment number in an IPv4 address that uses the NMAP octect range notation.
 class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::Model::Base
+  include Comparable
+
   #
   # CONSTANTS
   #
@@ -35,6 +37,17 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::M
   #
   # Instance Methods
   #
+
+
+  def <=>(other)
+    value <=> other.value
+  end
+
+  def succ
+    if value.respond_to? :succ
+      self.class.new(value: value.succ)
+    end
+  end
 
   # Sets {#value} by type casting String to Integer.
   #

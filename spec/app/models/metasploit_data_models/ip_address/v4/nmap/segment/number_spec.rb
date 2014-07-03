@@ -41,6 +41,81 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number do
     it { should validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
   end
 
+  it 'can be used in a Range' do
+    expect {
+      Range.new(number, number)
+    }.not_to raise_error
+  end
+
+  context '#<=>' do
+    subject(:compare) {
+      number <=> other
+    }
+
+    let(:other) {
+      double('Other')
+    }
+
+    it 'compares #values' do
+      other_value = double('other.value')
+
+      expect(other).to receive(:value).and_return(other_value)
+      expect(number.value).to receive(:<=>).with(other_value)
+
+      compare
+    end
+  end
+
+  context '#succ' do
+    subject(:succ) {
+      number.succ
+    }
+
+    context '#value' do
+      context 'with nil' do
+        let(:formatted_value) {
+          nil
+        }
+
+        specify {
+          expect(succ).not_to raise_error
+        }
+      end
+
+      context 'with number' do
+        let(:formatted_value) {
+          value.to_s
+        }
+
+        let(:value) {
+          1
+        }
+
+        it { should be_a described_class }
+
+        context 'succ.value' do
+          it 'is succ of #value' do
+            expect(succ.value).to eq(value.succ)
+          end
+        end
+      end
+
+      context 'without number' do
+        let(:formatted_value) {
+          'a'
+        }
+
+        it { should be_a described_class }
+
+        context 'succ.value' do
+          it 'is succ of #value' do
+            expect(succ.value).to eq(number.value.succ)
+          end
+        end
+      end
+    end
+  end
+
   context '#value' do
     subject(:value) do
       number.value
