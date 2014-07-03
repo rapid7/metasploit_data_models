@@ -6,6 +6,10 @@ en:
           # have to duplicate activerecord.model.errors.message.taken because of the different i18n_scope
           taken: "has already been taken"
         models:
+          metasploit_data_models/ip_address/v4/nmap/segment/range:
+            attributes:
+              value:
+                order: "beginning of range (%{begin}) cannot be after end of range (%{end})"
           metasploit_data_models/search/operation/ip_address/invalid_range:
             attributes:
               value:
