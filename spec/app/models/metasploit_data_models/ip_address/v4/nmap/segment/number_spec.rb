@@ -116,6 +116,34 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number do
     end
   end
 
+  context '#to_s' do
+    subject(:to_s) {
+      number.to_s
+    }
+
+    #
+    # let
+    #
+
+    let(:value) {
+      double('#value')
+    }
+
+    #
+    # Callbacks
+    #
+
+    before(:each) do
+      allow(number).to receive(:value).and_return(value)
+    end
+
+    it 'delegates to #value' do
+      expect(value).to receive(:to_s)
+
+      to_s
+    end
+  end
+
   context '#value' do
     subject(:value) do
       number.value

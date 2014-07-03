@@ -49,6 +49,9 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::M
     end
   end
 
+  delegate :to_s,
+           to: :value
+
   # Sets {#value} by type casting String to Integer.
   #
   # @param formatted_value [#to_s]
