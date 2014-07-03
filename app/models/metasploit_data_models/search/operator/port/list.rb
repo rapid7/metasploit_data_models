@@ -1,6 +1,6 @@
 # Searches for a network port attribute.  Ports can be given as a single number or range of numbers and either or both
 # forms can be combined into a comma separated list.  Individual port numbers are validated to be greater than 0 and
-class MetasploitDataModels::Search::Operator::Port::List < Metasploit::Model::Search::Operator::Union
+class MetasploitDataModels::Search::Operator::Port::List < Metasploit::Model::Search::Operator::Group::Union
   #
   # CONSTANTS
   #

@@ -8,7 +8,7 @@ class MetasploitDataModels::Search::Visitor::Includes
   #
 
   visit 'Metasploit::Model::Search::Group::Base',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Base' do |parent|
     parent.children.flat_map { |child|
       visit child
     }

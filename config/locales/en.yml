@@ -7,6 +7,10 @@ en:
           taken: "has already been taken"
 
         models:
+          metasploit_data_models/search/operator/multitext:
+            attributes:
+              operator_names:
+                too_short: "is too short (minimum is %{count} operator names)"
           metasploit_data_models/search/operation/port/range:
             attributes:
               value:

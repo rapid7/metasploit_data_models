@@ -489,6 +489,18 @@ class Mdm::Host < ActiveRecord::Base
                    type: :string
 
   #
+  # Search Withs
+  #
+
+  search_with MetasploitDataModels::Search::Operator::Multitext,
+              name: :os,
+              operator_names: [
+                  :os_name,
+                  :os_flavor,
+                  :os_sp
+              ]
+
+  #
   # Instance Methods
   #
 

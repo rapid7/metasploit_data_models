@@ -30,12 +30,14 @@ describe MetasploitDataModels::Search::Visitor::Where do
 
     arel_class_by_group_class = {
         Metasploit::Model::Search::Group::Intersection => Arel::Nodes::And,
-        Metasploit::Model::Search::Group::Union => Arel::Nodes::Or
+        Metasploit::Model::Search::Group::Union => Arel::Nodes::Or,
+        Metasploit::Model::Search::Operation::Group::Intersection => Arel::Nodes::And,
+        Metasploit::Model::Search::Operation::Group::Union => Arel::Nodes::Or
     }
 
     arel_class_by_group_class.each do |group_class, arel_class|
       context "with #{group_class}" do
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search::Group::Base',
+        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search*::Group::Base',
                               :arel_class => arel_class do
           let(:node_class) do
             group_class

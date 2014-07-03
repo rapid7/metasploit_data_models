@@ -15,7 +15,8 @@ describe MetasploitDataModels::Search::Visitor::Includes do
     children_classes = [
         Metasploit::Model::Search::Group::Intersection,
         Metasploit::Model::Search::Group::Union,
-        Metasploit::Model::Search::Operation::Union
+        Metasploit::Model::Search::Operation::Group::Intersection,
+        Metasploit::Model::Search::Operation::Group::Union
     ]
 
     children_classes.each do |children_class|
@@ -45,12 +46,6 @@ describe MetasploitDataModels::Search::Visitor::Includes do
             operation_class
           end
         end
-      end
-    end
-
-    context 'with Metasploit::Model::Search::Operation::Union' do
-      let(:node) do
-
       end
     end
 
