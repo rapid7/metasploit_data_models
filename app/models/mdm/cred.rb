@@ -101,8 +101,6 @@ class Mdm::Cred < ActiveRecord::Base
     self.service.host.workspace
   end
 
-  ActiveSupport.run_load_hooks(:mdm_cred, self)
-
   private
 
   def decrement_host_counter_cache
@@ -112,4 +110,8 @@ class Mdm::Cred < ActiveRecord::Base
   def increment_host_counter_cache
     Mdm::Host.increment_counter("cred_count", self.service.host_id)
   end
+
+  public
+
+  Metasploit::Concern.run(self)
 end

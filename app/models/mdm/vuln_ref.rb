@@ -13,6 +13,6 @@ class Mdm::VulnRef < ActiveRecord::Base
              class_name: 'Mdm::Vuln',
              inverse_of: :vulns_refs
 
-  ActiveSupport.run_load_hooks(:mdm_vuln_ref, self)
+  Metasploit::Concern.run(self)
 end
 

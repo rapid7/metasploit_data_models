@@ -5,6 +5,8 @@ describe Mdm::Vuln do
     FactoryGirl.build(:mdm_vuln)
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context '#destroy' do
     it 'should successfully destroy the object and dependent objects' do
       vuln = FactoryGirl.create(:mdm_vuln)

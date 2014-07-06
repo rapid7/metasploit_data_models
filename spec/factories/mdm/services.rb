@@ -8,16 +8,20 @@ FactoryGirl.define do
     #
     # Attributes
     #
-    port 4567
+    name { generate :mdm_service_name }
+    port { generate :port }
     proto 'snmp'
     state 'open'
 
     factory :web_service do
       proto 'tcp'
       name { FactoryGirl.generate(:web_service_name) }
-      port { FactoryGirl.generate(:port) }
     end
   end
+
+  sequence(:mdm_service_name) { |n|
+    "mdm_service_name#{n}"
+  }
 
   port_bits = 16
   port_limit = 1 << port_bits

@@ -26,6 +26,8 @@ describe Mdm::WebVuln do
     described_class.new
   end
 
+  it_should_behave_like 'Metasploit::Concern.run'
+
   context 'associations' do
     it { should belong_to(:web_site).class_name('Mdm::WebSite') }
   end

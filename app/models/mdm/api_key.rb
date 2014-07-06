@@ -16,5 +16,5 @@ class Mdm::ApiKey < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_api_key, self)
+  Metasploit::Concern.run(self)
 end

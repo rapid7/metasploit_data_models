@@ -7,5 +7,5 @@ class Mdm::SessionEvent < ActiveRecord::Base
              class_name: 'Mdm::Session',
              inverse_of: :events
 
-  ActiveSupport.run_load_hooks(:mdm_session_event, self)
+  Metasploit::Concern.run(self)
 end

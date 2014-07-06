@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Mdm::VulnDetail do
+  it_should_behave_like 'Metasploit::Concern.run'
 
   context 'association' do
     it { should belong_to(:vuln).class_name('Mdm::Vuln') }

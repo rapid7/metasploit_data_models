@@ -128,6 +128,8 @@ class Mdm::Task < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_task, self)
+  public
+
+  Metasploit::Concern.run(self)
 end
 

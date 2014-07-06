@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
       'Samuel Huckins',
       'Luke Imhoff',
       "David 'thelightcosine' Maloney",
-      'Trevor Rosen'
+      "Trevor 'burlyscudd' Rosen"
   ]
   s.email       = [
       'shuckins@rapid7.com',
@@ -41,6 +41,8 @@ Gem::Specification.new do |s|
 
   # os fingerprinting
   s.add_runtime_dependency 'recog'
+  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
+  s.add_runtime_dependency 'metasploit-model', '>= 0.25.1', '< 0.26'
   
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard

@@ -14,5 +14,5 @@ class Mdm::HostDetail < ActiveRecord::Base
 
   validates :host_id, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_host_detail, self)
+  Metasploit::Concern.run(self)
 end

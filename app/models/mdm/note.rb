@@ -106,6 +106,8 @@ class Mdm::Note < ActiveRecord::Base
     end
   end
 
-  ActiveSupport.run_load_hooks(:mdm_note, self)
+  public
+
+  Metasploit::Concern.run(self)
 end
 

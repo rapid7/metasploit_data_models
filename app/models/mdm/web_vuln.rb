@@ -187,6 +187,6 @@ class Mdm::WebVuln < ActiveRecord::Base
   # switch back to public for load hooks
   public
 
-  ActiveSupport.run_load_hooks(:mdm_web_vuln, self)
+  Metasploit::Concern.run(self)
 end
 

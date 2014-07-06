@@ -30,6 +30,6 @@ class Mdm::Event < ActiveRecord::Base
 
   validates :name, :presence => true
 
-  ActiveSupport.run_load_hooks(:mdm_event, self)
+  Metasploit::Concern.run(self)
 end
 

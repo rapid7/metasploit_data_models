@@ -157,5 +157,7 @@ class Mdm::Vuln < ActiveRecord::Base
     refs.each { |ref| ref.save(:validate => false) }
   end
 
-  ActiveSupport.run_load_hooks(:mdm_vuln, self)
+  public
+
+  Metasploit::Concern.run(self)
 end

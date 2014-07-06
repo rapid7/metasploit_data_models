@@ -295,5 +295,5 @@ class Mdm::Module::Detail < ActiveRecord::Base
     supports_stance
   end
 
-  ActiveSupport.run_load_hooks(:mdm_module_detail, self)
+  Metasploit::Concern.run(self)
 end
