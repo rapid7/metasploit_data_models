@@ -28,10 +28,6 @@ if defined? Rails
 end
 
 module MetasploitDataModels
-  def self.app_pathname
-    root.join('app')
-  end
-
   def self.root
     unless instance_variable_defined? :@root
       lib_pathname = Pathname.new(__FILE__).dirname
