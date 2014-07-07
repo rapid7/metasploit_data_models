@@ -37,9 +37,6 @@ describe MetasploitDataModels::Version do
     # on the target branch before committing and/or pushing to github and travis-ci.
     if pull_request.nil? || pull_request == 'false'
       context 'PREPRELEASE' do
-        before(:each) do
-          pending("This is pending until we are using Travis-ci")
-        end
         subject(:prerelease) do
           described_class::PRERELEASE
         end
