@@ -2,6 +2,7 @@
 module MetasploitDataModels::IPAddress::V4
   extend ActiveSupport::Autoload
 
+  autoload :CIDR
   autoload :Segment
 
   #
