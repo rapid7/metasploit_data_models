@@ -1,5 +1,5 @@
 # A range of segment number composed of a {#begin} and {#end} segment number, separated by a `-`.
-class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range < Metasploit::Model::Base
+class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Model::Base
   #
   # CONSTANTS
   #
@@ -9,8 +9,12 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range < Metasploit::Mo
       :begin,
       :end
   ]
+
   # Separator between the {#begin} and {#end} in the formatted value.
   SEPARATOR = '-'
+
+  # Segment numbers separated by {SEPARATOR}, signifying a continuous range from the `START` to `END`, inclusive.
+  REGEXP = /#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}#{SEPARATOR}#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}/
 
   # @!attribute value
   #   The range.
@@ -73,7 +77,7 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range < Metasploit::Mo
     formatted_extremes = formatted_value.to_s.split(SEPARATOR, 2)
 
     extremes = formatted_extremes.map { |formatted_extreme|
-      MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number.new(value: formatted_extreme)
+      MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number.new(value: formatted_extreme)
     }
 
     begin

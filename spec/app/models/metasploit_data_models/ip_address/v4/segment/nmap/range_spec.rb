@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
+describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
   subject(:range) {
     described_class.new(
         value: formatted_value
@@ -165,7 +165,7 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
 
       let(:error) {
         I18n.translate!(
-            'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/nmap/segment/range.attributes.value.order',
+            'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/segment/nmap/range.attributes.value.order',
             begin: range.begin,
             end: range.end
         )
@@ -228,7 +228,7 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
 
           context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
             it "is value before '-'" do
@@ -242,7 +242,7 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
 
           context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
             it "is value after '-'" do
@@ -264,7 +264,7 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
 
           context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
             subject(:begin_value) {
@@ -280,7 +280,7 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
 
           context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
             subject(:end_value) {
