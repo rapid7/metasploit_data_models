@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number do
+describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number do
   subject(:number) {
     described_class.new(
         value: formatted_value
@@ -10,32 +10,6 @@ describe MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number do
   let(:formatted_value) {
     nil
   }
-
-  context 'CONSTANTS' do
-    context 'BITS' do
-      subject(:bits) {
-        described_class::BITS
-      }
-
-      it { should == 8 }
-    end
-
-    context 'MAXIMUM' do
-      subject(:maximum) {
-        described_class::MAXIMUM
-      }
-
-      it { should == 255 }
-    end
-
-    context 'MINIMUM' do
-      subject(:MINIMUM) {
-        described_class::MINIMUM
-      }
-
-      it { should == 0 }
-    end
-  end
 
   context 'validations' do
     it { should validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }

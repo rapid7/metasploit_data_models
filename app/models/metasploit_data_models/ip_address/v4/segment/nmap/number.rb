@@ -1,17 +1,6 @@
 # A segment number in an IPv4 address that uses the NMAP octect range notation.
-class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::Model::Base
+class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number < Metasploit::Model::Base
   include Comparable
-
-  #
-  # CONSTANTS
-  #
-
-  # Number of bits in a IPv4 segment
-  BITS = 8
-  # Maximum segment {#value}
-  MAXIMUM = (1 << BITS) - 1
-  # Minimum segment {#value}
-  MINIMUM = 0
 
   #
   # Attributes
@@ -29,8 +18,8 @@ class MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number < Metasploit::M
 
   validates :value,
             numericality: {
-                greater_than_or_equal_to: MINIMUM,
-                less_than_or_equal_to: MAXIMUM,
+                greater_than_or_equal_to: MetasploitDataModels::IPAddress::V4::Segment::MINIMUM,
+                less_than_or_equal_to: MetasploitDataModels::IPAddress::V4::Segment::MAXIMUM,
                 only_integer: true
             }
 
