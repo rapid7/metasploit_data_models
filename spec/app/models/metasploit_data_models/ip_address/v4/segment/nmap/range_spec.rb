@@ -60,12 +60,44 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
   }
 
   context 'CONSTANTS' do
+    context 'EXTREMES' do
+      subject(:extremes) {
+        described_class::EXTREMES
+      }
+
+      it { should include :begin }
+      it { should include :end }
+    end
+
     context 'SEPARATOR' do
       subject(:separator) {
         described_class::SEPARATOR
       }
 
       it { should == '-' }
+    end
+
+    context 'REGEXP' do
+      subject(:regexp) {
+        described_class::REGEXP
+      }
+
+      it 'does not match a single segment number' do
+        expect(regexp).not_to match('255')
+      end
+
+      it 'does not match separator by itself' do
+        expect(regexp).not_to match('-')
+      end
+
+      it 'does not match range with only one extreme' do
+        expect(regexp).not_to match('0-')
+        expect(regexp).not_to match('-255')
+      end
+
+      it 'matches range' do
+        expect(regexp).to match_string_exactly('0-255')
+      end
     end
   end
 
