@@ -69,14 +69,6 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
       it { should include :end }
     end
 
-    context 'SEPARATOR' do
-      subject(:separator) {
-        described_class::SEPARATOR
-      }
-
-      it { should == '-' }
-    end
-
     context 'REGEXP' do
       subject(:regexp) {
         described_class::REGEXP
@@ -98,6 +90,14 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
       it 'matches range' do
         expect(regexp).to match_string_exactly('0-255')
       end
+    end
+
+    context 'SEPARATOR' do
+      subject(:separator) {
+        described_class::SEPARATOR
+      }
+
+      it { should == '-' }
     end
   end
 
