@@ -2,7 +2,7 @@
 #
 # @example Define `match` class method
 #   class MetasploitDataModels::Format
-#     extend MetasploitDataModels::Match
+#     extend MetasploitDataModels::Match::Child
 #
 #     #
 #     # CONSTANTS
@@ -17,7 +17,7 @@
 #   # `nil` because string `'12'` doesn't match `MetasploitDataModels::Format::MATCH_REGEXP`
 #   no_instance = MetasploitDataModels::Format.match('12')
 #
-module MetasploitDataModels::Match
+module MetasploitDataModels::Match::Child
   # Creates a new instance of the extending class if `MATCH_REGEXP`, defined on the extending class, matches
   # `formatted_value`.
   #

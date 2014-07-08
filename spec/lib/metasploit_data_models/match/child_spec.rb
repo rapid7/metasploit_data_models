@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Match do
+describe MetasploitDataModels::Match::Child do
   let(:extending_class) {
     # capture as local for Class.new block scope
     described_class = self.described_class
