@@ -1,20 +1,13 @@
 # Take an IPv4 range (`<IPv4 address>-<IPv4 address>`).
 class MetasploitDataModels::Search::Operation::IPAddress::V4::Range < Metasploit::Model::Search::Operation::Base
-  extend MetasploitDataModels::Search::Operation::IPAddress::Match
+  extend MetasploitDataModels::Match
 
   #
   # CONSTANTS
   #
 
-  # Regular expression for a range of IPv4 addresses.
-  RANGE_REGEXP = %r{
-    (?<begin>#{MetasploitDataModels::Search::Operation::IPAddress::V4::Single::ADDRESS_REGEXP})
-    -
-    (?<end>#{MetasploitDataModels::Search::Operation::IPAddress::V4::Single::ADDRESS_REGEXP})
-  }x
-
   # Regular expression for {MetasploitDataModels::Search::Operation::IPAddress::Match#match}
-  MATCH_REGEXP = /\A#{RANGE_REGEXP}\z/
+  MATCH_REGEXP = /\A#{MetasploitDataModels::IPAddress::V4::Range::REGEXP}\z/
 
   #
   # Validations

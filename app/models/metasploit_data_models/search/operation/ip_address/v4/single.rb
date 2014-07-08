@@ -1,20 +1,12 @@
 class MetasploitDataModels::Search::Operation::IPAddress::V4::Single < Metasploit::Model::Search::Operation::Base
-  extend MetasploitDataModels::Search::Operation::IPAddress::Match
+  extend MetasploitDataModels::Match
 
   #
   # CONSTANTS
   #
 
-  # Regular expression for a segment (octet) of an IPv4 address in decimal dotted notation
-  # @see http://stackoverflow.com/a/17871737/470451
-  SEGMENT_REGEXP = /(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/
-
-  # Regular expression for an IPv4 address in decimal dotted notation
-  # @see http://stackoverflow.com/a/17871737/470451
-  ADDRESS_REGEXP = /(#{SEGMENT_REGEXP}\.){3,3}#{SEGMENT_REGEXP}/
-
   # Regular expression for {MetasploitDataModels::Search::Operation::IPAddress::Match#match match}
-  MATCH_REGEXP = /\A#{ADDRESS_REGEXP}\z/
+  MATCH_REGEXP = /\A#{MetasploitDataModels::IPAddress::V4::REGEXP}\z/
 
   #
   # Validations
