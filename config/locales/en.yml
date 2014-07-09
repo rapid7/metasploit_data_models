@@ -6,6 +6,11 @@ en:
           # have to duplicate activerecord.model.errors.message.taken because of the different i18n_scope
           taken: "has already been taken"
         models:
+          metasploit_data_models/ip_address/v4/segment/nmap:
+            attributes:
+              value:
+                array: "is not an Array"
+                element: "has invalid element (%{element}) at index %{index}"
           metasploit_data_models/ip_address/v4/segment/nmap/range:
             attributes:
               value:

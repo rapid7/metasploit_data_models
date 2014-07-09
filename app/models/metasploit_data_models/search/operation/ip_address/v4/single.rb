@@ -1,5 +1,5 @@
 class MetasploitDataModels::Search::Operation::IPAddress::V4::Single < Metasploit::Model::Search::Operation::Base
-  extend MetasploitDataModels::Match
+  extend MetasploitDataModels::Match::Child
 
   #
   # CONSTANTS

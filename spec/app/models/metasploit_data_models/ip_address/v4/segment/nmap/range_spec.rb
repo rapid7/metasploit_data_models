@@ -69,6 +69,16 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
       it { should include :end }
     end
 
+    context 'MATCH_REGEXP' do
+      subject(:match_regexp) do
+        described_class::MATCH_REGEXP
+      end
+
+      it 'matches range exactly' do
+        expect(match_regexp).to match_string_exactly('0-255')
+      end
+    end
+
     context 'REGEXP' do
       subject(:regexp) {
         described_class::REGEXP
@@ -241,6 +251,30 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
 
   it_should_behave_like 'extreme', :begin
   it_should_behave_like 'extreme', :end
+
+  context '#to_s' do
+    subject(:to_s) {
+      range.to_s
+    }
+
+    context 'with Range' do
+      let(:formatted_value) {
+        '1-2'
+      }
+
+      it 'equals the original formatted value' do
+        expect(to_s).to eq(formatted_value)
+      end
+    end
+
+    context 'without Range' do
+      let(:formatted_value) {
+        '1..2'
+      }
+
+      it { should == '-' }
+    end
+  end
 
   context '#value' do
     subject(:value) {

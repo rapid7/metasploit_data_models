@@ -1,5 +1,7 @@
 # A range of segment number composed of a {#begin} and {#end} segment number, separated by a `-`.
 class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Model::Base
+  extend MetasploitDataModels::Match::Child
+
   #
   # CONSTANTS
   #
@@ -15,6 +17,9 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Mo
 
   # Segment numbers separated by {SEPARATOR}, signifying a continuous range from the `START` to `END`, inclusive.
   REGEXP = /#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}#{SEPARATOR}#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}/
+
+  # Matches a string with only a range in it.
+  MATCH_REGEXP = /\A#{REGEXP}\z/
 
   # @!attribute value
   #   The range.
@@ -66,6 +71,13 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Mo
     if value.respond_to? :end
       value.end
     end
+  end
+
+  # This range as a string.  Equivalent to the original `formatted_value` passed to {#value}.
+  #
+  # @return [String]
+  def to_s
+    "#{self.begin}-#{self.end}"
   end
 
   # Sets {#value} by breaking up the range into its begin and end Integers.

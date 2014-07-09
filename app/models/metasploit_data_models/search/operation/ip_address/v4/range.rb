@@ -1,6 +1,6 @@
 # Take an IPv4 range (`<IPv4 address>-<IPv4 address>`).
 class MetasploitDataModels::Search::Operation::IPAddress::V4::Range < Metasploit::Model::Search::Operation::Base
-  extend MetasploitDataModels::Match
+  extend MetasploitDataModels::Match::Child
 
   #
   # CONSTANTS

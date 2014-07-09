@@ -11,6 +11,22 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number do
     nil
   }
 
+  context 'CONSTANTS' do
+    context 'MATCH_REGEXP' do
+      subject(:match_regexp) {
+        described_class::MATCH_REGEXP
+      }
+
+      it 'matches segment number' do
+        expect(match_regexp).to match('255')
+      end
+
+      it 'does not match segment range' do
+        expect(match_regexp).not_to match('0-225')
+      end
+    end
+  end
+
   context 'validations' do
     it { should validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
   end

@@ -1,6 +1,19 @@
 # A segment number in an IPv4 address that uses the NMAP octect range notation.
 class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number < Metasploit::Model::Base
+  extend MetasploitDataModels::Match::Child
+
   include Comparable
+
+  #
+  # CONSTANTS
+  #
+
+  # Match only strings that contain exactly a Segment number.
+  #
+  # Used by {MetasploitDataModels::IPAddress::V4::Segment::Nmap} to determine if a string should be a
+  # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number} or
+  # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range}.
+  MATCH_REGEXP = /\A#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}\z/
 
   #
   # Attributes
