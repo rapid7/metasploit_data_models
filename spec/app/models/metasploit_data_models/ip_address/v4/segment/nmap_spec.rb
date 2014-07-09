@@ -62,6 +62,14 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap do
         expect(regexp).to match_string_exactly('1,2-3,4-5,6,7-8,9')
       end
     end
+
+    context 'SEPARATOR' do
+      subject(:separator) {
+        described_class::SEPARATOR
+      }
+
+      it { should == ',' }
+    end
   end
 
   context 'validation' do

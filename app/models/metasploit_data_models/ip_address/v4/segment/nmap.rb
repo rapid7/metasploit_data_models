@@ -23,8 +23,10 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
       # match.
       (?<number>#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP})
   }x
+  # Separator between number or ranges
+  SEPARATOR = ','
   # Segment of an NMAP address, composed of comma separated {RANGE_OR_NUMBER_REGEXP segment numbers or ranges}.
-  REGEXP = /#{RANGE_OR_NUMBER_REGEXP}(,#{RANGE_OR_NUMBER_REGEXP})*/
+  REGEXP = /#{RANGE_OR_NUMBER_REGEXP}(#{SEPARATOR}#{RANGE_OR_NUMBER_REGEXP})*/
 
   # Matches exactly an Nmap comma separated list of segment numbers and ranges.
   MATCH_REGEXP = /\A#{REGEXP}\z/
@@ -77,7 +79,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
     match = REGEXP.match(string)
 
     if match
-      ranges_or_numbers = string.split(',')
+      ranges_or_numbers = string.split(SEPARATOR)
 
       @value = ranges_or_numbers.map { |range_or_number|
         match_child(range_or_number) || range_or_number
