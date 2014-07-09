@@ -238,5 +238,15 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap do
         expect(value.length).to eq(5)
       end
     end
+
+    context 'with additional data' do
+      let(:formatted_value) {
+        'additional_data1,2-3'
+      }
+
+      it 'is original formatted value' do
+        expect(value).to eq(formatted_value)
+      end
+    end
   end
 end

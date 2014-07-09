@@ -76,7 +76,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
 
   def value=(formatted_value)
     string = formatted_value.to_s
-    match = REGEXP.match(string)
+    match = MATCH_REGEXP.match(string)
 
     if match
       ranges_or_numbers = string.split(SEPARATOR)
