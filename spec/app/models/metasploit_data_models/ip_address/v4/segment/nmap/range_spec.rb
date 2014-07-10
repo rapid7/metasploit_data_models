@@ -146,7 +146,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
           it { should include presence_error }
         end
 
-        context 'with MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number' do
+        context 'with MetasploitDataModels::IPAddress::V4::Segment' do
           context 'with valid' do
             let(:formatted_value) {
               '1-256'
@@ -180,7 +180,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
           it { should include presence_error }
         end
 
-        context 'with MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number' do
+        context 'with MetasploitDataModels::IPAddress::V4::Segment' do
           context 'with valid' do
             let(:formatted_value) {
               '256-1'
@@ -294,9 +294,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
 
-          context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             it "is value before '-'" do
               expect(range_begin.value).to eq(1)
             end
@@ -308,9 +308,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
 
-          context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             it "is value after '-'" do
               expect(range_end.value).to eq(2)
             end
@@ -330,9 +330,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
 
-          context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             subject(:begin_value) {
               range_begin.value
             }
@@ -346,9 +346,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
 
-          context 'MetasploitDataModels::IPAddress::V4::NMAP::Segment::Number#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             subject(:end_value) {
               range_end.value
             }

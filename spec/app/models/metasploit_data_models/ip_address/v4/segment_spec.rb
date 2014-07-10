@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number do
+describe MetasploitDataModels::IPAddress::V4::Segment do
   subject(:number) {
     described_class.new(
         value: formatted_value

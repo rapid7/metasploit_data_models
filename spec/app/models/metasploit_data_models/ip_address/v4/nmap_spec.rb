@@ -119,7 +119,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
       it 'has segments ordered from high to low' do
         highest_segment = value[0]
 
-        expect(highest_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number
+        expect(highest_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment
         expect(highest_segment.value[0].value).to eq(1)
 
         high_middle_segment = value[1]
@@ -130,7 +130,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
 
         low_middle_segment = value[2]
 
-        expect(low_middle_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number
+        expect(low_middle_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment
         expect(low_middle_segment.value[0].value).to eq(4)
 
         expect(low_middle_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range
@@ -143,7 +143,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
         expect(low_segment.value[0].begin.value).to eq(7)
         expect(low_segment.value[0].end.value).to eq(8)
 
-        expect(low_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number
+        expect(low_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment
         expect(low_segment.value[1].value).to eq(9)
       end
     end

@@ -3,11 +3,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
 
   include MetasploitDataModels::Match::Parent
 
-  relative_child_names = %w{Number Range}
-
-  relative_child_names.each do |relative_child_name|
-    autoload relative_child_name
-  end
+  autoload :Range
 
   #
   # CONSTANTS
@@ -45,9 +41,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
   # Match Children
   #
 
-  match_children_named relative_child_names.map { |relative_child_name|
-    "#{name}::#{relative_child_name}"
-  }
+  match_children_named %W{#{parent} #{name}::Range}
 
   #
   #

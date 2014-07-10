@@ -1,5 +1,7 @@
-# A segment number in an IPv4 address that uses the NMAP octect range notation.
-class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number < Metasploit::Model::Base
+# A segment number in an IPv4 address or the
+# {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range#begin} or
+# {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range#send}.
+class MetasploitDataModels::IPAddress::V4::Segment < Metasploit::Model::Base
   extend MetasploitDataModels::Match::Child
 
   include Comparable
@@ -8,12 +10,30 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number < Metasploit::M
   # CONSTANTS
   #
 
-  # Match only strings that contain exactly a Segment number.
+  #
+  # CONSTANTS
+  #
+
+  # Number of bits in a IPv4 segment
+  BITS = 8
+
+  # Maximum segment {#value}
+  MAXIMUM = (1 << BITS) - 1
+
+  # Minimum segment {#value}
+  MINIMUM = 0
+
+  # Regular expression for a segment (octet) of an IPv4 address in decimal dotted notation.
+  #
+  # @see http://stackoverflow.com/a/17871737/470451
+  REGEXP = /(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/
+
+  # Match only strings that contain exactly a segment.
   #
   # Used by {MetasploitDataModels::IPAddress::V4::Segment::Nmap} to determine if a string should be a
   # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number} or
   # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range}.
-  MATCH_REGEXP = /\A#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}\z/
+  MATCH_REGEXP = /\A#{REGEXP}\z/
 
   #
   # Attributes

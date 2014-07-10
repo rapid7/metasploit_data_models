@@ -89,7 +89,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Mo
     formatted_extremes = formatted_value.to_s.split(SEPARATOR, 2)
 
     extremes = formatted_extremes.map { |formatted_extreme|
-      MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number.new(value: formatted_extreme)
+      MetasploitDataModels::IPAddress::V4::Segment.new(value: formatted_extreme)
     }
 
     begin
