@@ -1,9 +1,7 @@
-class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Base
+class MetasploitDataModels::IPAddress::V4::Segment::Nmap::List < Metasploit::Model::Base
   extend ActiveSupport::Autoload
 
   include MetasploitDataModels::Match::Parent
-
-  autoload :Range
 
   #
   # CONSTANTS
@@ -12,11 +10,11 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
   # Either an individual {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number segment number} or a
   # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range segment range}.
   RANGE_OR_NUMBER_REGEXP = %r{
-      (?<range>#{self::Range::REGEXP})
+      (?<range>#{parent::Range::REGEXP})
       |
       # range first because it contains a segment and if the range isn't first only the first part of the range will
       # match.
-      (?<number>#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP})
+      (?<number>#{MetasploitDataModels::IPAddress::V4::Segment::Single::REGEXP})
   }x
   # Separator between number or ranges
   SEPARATOR = ','
@@ -41,7 +39,10 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
   # Match Children
   #
 
-  match_children_named %W{#{parent} #{name}::Range}
+  match_children_named %w{
+    MetasploitDataModels::IPAddress::V4::Segment::Single
+    MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range
+  }
 
   #
   #

@@ -11,7 +11,7 @@ en:
               segments:
                 segment_invalid: "has invalid segment (%{segment}) at index %{index}"
                 wrong_length: "is the wrong length (should be %{count} segments)"
-          metasploit_data_models/ip_address/v4/segment/nmap:
+          metasploit_data_models/ip_address/v4/segment/nmap/list:
             attributes:
               value:
                 array: "is not an Array"
