@@ -20,6 +20,11 @@ en:
             attributes:
               value:
                 order: "beginning of range (%{begin}) cannot be after end of range (%{end})"
+          metasploit_data_models/ip_address/v4/single:
+            attributes:
+              segments:
+                segment_invalid: "has invalid segment (%{segment}) at index %{index}"
+                wrong_length: "is the wrong length (should be %{count} segments)"
           metasploit_data_models/search/operation/ip_address/invalid_range:
             attributes:
               value:
