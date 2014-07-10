@@ -7,30 +7,6 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
     )
   }
 
-  context 'CONSTANTS' do
-    context 'REGEXP' do
-      subject(:regexp) {
-        described_class::REGEXP
-      }
-
-      it 'matches a normal IPv4 address because they are a generate form of Nmap format' do
-        expect(regexp).to match_string_exactly('1.2.3.4')
-      end
-
-      it 'matches an IPv4 Nmap address with comma separated list of numbers and ranges for each segment' do
-        expect(regexp).to match_string_exactly('1,2-3.4-5,6.7,8.9-10,11-12')
-      end
-    end
-
-    context 'SEPARATOR' do
-      subject(:separator) {
-        described_class::SEPARATOR
-      }
-
-      it { should == '.' }
-    end
-  end
-
   context 'validation' do
     before(:each) do
       nmap.valid?
@@ -86,6 +62,20 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
     end
   end
 
+  context 'regexp' do
+    subject(:regexp) {
+      described_class.regexp
+    }
+
+    it 'matches a normal IPv4 address because they are a generate form of Nmap format' do
+      expect(regexp).to match_string_exactly('1.2.3.4')
+    end
+
+    it 'matches an IPv4 Nmap address with comma separated list of numbers and ranges for each segment' do
+      expect(regexp).to match_string_exactly('1,2-3.4-5,6.7,8.9-10,11-12')
+    end
+  end
+
   context '#value' do
     subject(:value) {
       nmap.value
@@ -108,10 +98,10 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
         expect(value.length).to eq(4)
       end
 
-      it 'has MetasploitDataModels::IPAddress::V4::Segment::Nmap for segments' do
+      it 'has MetasploitDataModels::IPAddress::V4::Segment::Nmap::List for segments' do
         expect(
             value.all? { |segment|
-              segment.is_a? MetasploitDataModels::IPAddress::V4::Segment::Nmap
+              segment.is_a? MetasploitDataModels::IPAddress::V4::Segment::Nmap::List
             }
         ).to eq(true)
       end
@@ -119,7 +109,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
       it 'has segments ordered from high to low' do
         highest_segment = value[0]
 
-        expect(highest_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment
+        expect(highest_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Single
         expect(highest_segment.value[0].value).to eq(1)
 
         high_middle_segment = value[1]
@@ -130,7 +120,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
 
         low_middle_segment = value[2]
 
-        expect(low_middle_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment
+        expect(low_middle_segment.value[0]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Single
         expect(low_middle_segment.value[0].value).to eq(4)
 
         expect(low_middle_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range
@@ -143,7 +133,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
         expect(low_segment.value[0].begin.value).to eq(7)
         expect(low_segment.value[0].end.value).to eq(8)
 
-        expect(low_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment
+        expect(low_segment.value[1]).to be_a MetasploitDataModels::IPAddress::V4::Segment::Single
         expect(low_segment.value[1].value).to eq(9)
       end
     end
