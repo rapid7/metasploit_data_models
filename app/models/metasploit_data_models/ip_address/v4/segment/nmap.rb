@@ -1,6 +1,5 @@
 class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Base
   extend ActiveSupport::Autoload
-  extend MetasploitDataModels::Match::Child
 
   include MetasploitDataModels::Match::Parent
 
@@ -73,6 +72,15 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap < Metasploit::Model::Ba
   #
   # Instance Methods
   #
+
+  # @return [String]
+  def to_s
+    if value.is_a? Array
+      value.map(&:to_s).join(SEPARATOR)
+    else
+      value.to_s
+    end
+  end
 
   def value=(formatted_value)
     string = formatted_value.to_s

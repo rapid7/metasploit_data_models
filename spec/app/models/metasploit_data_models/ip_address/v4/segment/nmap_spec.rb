@@ -136,6 +136,32 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap do
     end
   end
 
+  context '#to_s' do
+    subject(:to_s) do
+      nmap.to_s
+    end
+
+    context 'with matching formatted value' do
+      let(:formatted_value) {
+        '1,2-3'
+      }
+
+      it 'returns a string equal to the original formatted value' do
+        expect(to_s).to eq(formatted_value)
+      end
+    end
+
+    context 'without matching formatted value' do
+      let(:formatted_value) {
+        Set.new([1,2])
+      }
+
+      it 'returned the formatted value as a string' do
+        expect(to_s).to eq(formatted_value.to_s)
+      end
+    end
+  end
+
   context '#value' do
     subject(:value) {
       nmap.value
