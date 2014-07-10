@@ -1,7 +1,7 @@
 # A segment number in an IPv4 address or the
 # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range#begin} or
 # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range#send}.
-class MetasploitDataModels::IPAddress::V4::Segment < Metasploit::Model::Base
+class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::Base
   extend MetasploitDataModels::Match::Child
 
   include Comparable
@@ -51,8 +51,8 @@ class MetasploitDataModels::IPAddress::V4::Segment < Metasploit::Model::Base
 
   validates :value,
             numericality: {
-                greater_than_or_equal_to: MetasploitDataModels::IPAddress::V4::Segment::MINIMUM,
-                less_than_or_equal_to: MetasploitDataModels::IPAddress::V4::Segment::MAXIMUM,
+                greater_than_or_equal_to: MINIMUM,
+                less_than_or_equal_to: MAXIMUM,
                 only_integer: true
             }
 
