@@ -25,10 +25,24 @@ module MetasploitDataModels::Match::Child
   def match(formatted_value)
     instance = nil
 
-    if self::MATCH_REGEXP.match(formatted_value)
+    if match_regexp.match(formatted_value)
       instance = new(value: formatted_value)
     end
 
     instance
+  end
+
+  # Regular expression to match against for {#match}.
+  #
+  # @return [Regexp] Defaults to {#regexp} pinned with `\A` and `\z`.
+  def match_regexp
+    @match_regexp ||= /\A#{regexp}\z/
+  end
+
+  # Regular expression to match child as part of {MetasploitDataModels::Match::Parent}.
+  #
+  # @return [Regexp] Default to `REGEXP` from the extending `Class`.
+  def regexp
+    self::REGEXP
   end
 end

@@ -28,13 +28,6 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # @see http://stackoverflow.com/a/17871737/470451
   REGEXP = /(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/
 
-  # Match only strings that contain exactly a segment.
-  #
-  # Used by {MetasploitDataModels::IPAddress::V4::Segment::Nmap} to determine if a string should be a
-  # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number} or
-  # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range}.
-  MATCH_REGEXP = /\A#{REGEXP}\z/
-
   #
   # Attributes
   #

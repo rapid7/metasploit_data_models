@@ -12,7 +12,7 @@ describe MetasploitDataModels::Match::Child do
       # CONSTANTS
       #
 
-      MATCH_REGEXP = /\A\d+-\d+\z/
+      REGEXP = /\d+-\d+/
 
       #
       # Attributes

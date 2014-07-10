@@ -8,108 +8,12 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
   }
 
   #
-  # Shared examples
-  #
-
-  shared_examples_for 'extreme' do |extreme|
-    context "##{extreme}" do
-      subject("range_#{extreme}") {
-        range.send(extreme)
-      }
-
-      before(:each) do
-        allow(range).to receive(:value).and_return(value)
-      end
-
-      context 'with #value' do
-        context 'with Range' do
-          let(:value) {
-            Range.new(0, 1)
-          }
-
-          it "is Range##{extreme} of #value" do
-            expect(send("range_#{extreme}")).to eq(value.send(extreme))
-          end
-        end
-
-        context 'without Range' do
-          let(:value) {
-            'invalid_value'
-          }
-
-          it { should be_nil }
-        end
-      end
-
-      context 'without #value' do
-        let(:value) {
-          nil
-        }
-
-        it { should be_nil }
-      end
-    end
-  end
-
-  #
   # lets
   #
 
   let(:formatted_value) {
     nil
   }
-
-  context 'CONSTANTS' do
-    context 'EXTREMES' do
-      subject(:extremes) {
-        described_class::EXTREMES
-      }
-
-      it { should include :begin }
-      it { should include :end }
-    end
-
-    context 'MATCH_REGEXP' do
-      subject(:match_regexp) do
-        described_class::MATCH_REGEXP
-      end
-
-      it 'matches range exactly' do
-        expect(match_regexp).to match_string_exactly('0-255')
-      end
-    end
-
-    context 'REGEXP' do
-      subject(:regexp) {
-        described_class::REGEXP
-      }
-
-      it 'does not match a single segment number' do
-        expect(regexp).not_to match('255')
-      end
-
-      it 'does not match separator by itself' do
-        expect(regexp).not_to match('-')
-      end
-
-      it 'does not match range with only one extreme' do
-        expect(regexp).not_to match('0-')
-        expect(regexp).not_to match('-255')
-      end
-
-      it 'matches range' do
-        expect(regexp).to match_string_exactly('0-255')
-      end
-    end
-
-    context 'SEPARATOR' do
-      subject(:separator) {
-        described_class::SEPARATOR
-      }
-
-      it { should == '-' }
-    end
-  end
 
   context 'validations' do
     #
@@ -249,8 +153,38 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
     end
   end
 
-  it_should_behave_like 'extreme', :begin
-  it_should_behave_like 'extreme', :end
+  context 'match_regexp' do
+    subject(:match_regexp) do
+      described_class::match_regexp
+    end
+
+    it 'matches range exactly' do
+      expect(match_regexp).to match_string_exactly('0-255')
+    end
+  end
+
+  context 'regexp' do
+    subject(:regexp) {
+      described_class::regexp
+    }
+
+    it 'does not match a single segment number' do
+      expect(regexp).not_to match('255')
+    end
+
+    it 'does not match separator by itself' do
+      expect(regexp).not_to match('-')
+    end
+
+    it 'does not match range with only one extreme' do
+      expect(regexp).not_to match('0-')
+      expect(regexp).not_to match('-255')
+    end
+
+    it 'matches range' do
+      expect(regexp).to match_string_exactly('0-255')
+    end
+  end
 
   context '#to_s' do
     subject(:to_s) {

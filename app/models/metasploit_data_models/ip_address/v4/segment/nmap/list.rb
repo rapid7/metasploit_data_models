@@ -10,7 +10,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::List < Metasploit::Mod
   # Either an individual {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Number segment number} or a
   # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range segment range}.
   RANGE_OR_NUMBER_REGEXP = %r{
-      (?<range>#{parent::Range::REGEXP})
+      (?<range>#{parent::Range.regexp})
       |
       # range first because it contains a segment and if the range isn't first only the first part of the range will
       # match.
