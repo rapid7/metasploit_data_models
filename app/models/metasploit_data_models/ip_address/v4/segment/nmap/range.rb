@@ -16,7 +16,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Mo
   SEPARATOR = '-'
 
   # Segment numbers separated by {SEPARATOR}, signifying a continuous range from the `START` to `END`, inclusive.
-  REGEXP = /#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}#{SEPARATOR}#{MetasploitDataModels::IPAddress::V4::Segment::REGEXP}/
+  REGEXP = /#{MetasploitDataModels::IPAddress::V4::Segment::Single::REGEXP}#{SEPARATOR}#{MetasploitDataModels::IPAddress::V4::Segment::Single::REGEXP}/
 
   # Matches a string with only a range in it.
   MATCH_REGEXP = /\A#{REGEXP}\z/
@@ -89,7 +89,7 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range < Metasploit::Mo
     formatted_extremes = formatted_value.to_s.split(SEPARATOR, 2)
 
     extremes = formatted_extremes.map { |formatted_extreme|
-      MetasploitDataModels::IPAddress::V4::Segment.new(value: formatted_extreme)
+      MetasploitDataModels::IPAddress::V4::Segment::Single.new(value: formatted_extreme)
     }
 
     begin

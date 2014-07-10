@@ -294,7 +294,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             it "is value before '-'" do
@@ -308,7 +308,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             it "is value after '-'" do
@@ -330,7 +330,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             subject(:begin_value) {
@@ -346,7 +346,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment }
+          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
             subject(:end_value) {
