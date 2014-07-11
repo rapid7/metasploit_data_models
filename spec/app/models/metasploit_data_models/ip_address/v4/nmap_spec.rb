@@ -21,7 +21,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
         context 'with invalid segment' do
           let(:error) {
             I18n.translate!(
-                'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/nmap.attributes.segments.segment_invalid',
+                'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/segmented.attributes.segments.segment_invalid',
                 index: 0,
                 segment: '5-4'
             )
@@ -52,7 +52,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
 
         let(:length_error) {
           I18n.translate!(
-              'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/nmap.attributes.segments.wrong_length',
+              'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/segmented.attributes.segments.wrong_length',
               count: 4
           )
         }

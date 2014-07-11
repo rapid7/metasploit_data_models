@@ -32,13 +32,89 @@ describe MetasploitDataModels::IPAddress::V4::Single do
 
         let(:length_error) {
           I18n.translate!(
-              'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/single.attributes.segments.wrong_length',
+              'metasploit.model.errors.models.metasploit_data_models/ip_address/v4/segmented.attributes.segments.wrong_length',
               count: 4
           )
         }
 
         it { should include length_error }
       end
+    end
+  end
+
+  context '+' do
+    subject(:add) do
+      single + other
+    end
+
+    context 'with MetasploitDataModels::IPAddress::V4::Single' do
+      let(:other) {
+        described_class.new(
+            value: other_formatted_value
+        )
+      }
+
+      context 'with overflow' do
+        let(:formatted_value) {
+          '255.255.255.255'
+        }
+
+        let(:other_formatted_value) {
+          '0.0.0.1'
+        }
+
+        specify {
+          expect {
+            add
+          }.to raise_error(ArgumentError, "255.255.255.255 + 0.0.0.1 is not a valid IP address.  It is 0.0.0.0 with a carry (1)")
+        }
+      end
+
+      context 'without overflow' do
+        let(:formatted_value) {
+          '254.255.255.255'
+        }
+
+        context 'with ripple carry' do
+          let(:other_formatted_value) {
+            '0.0.0.1'
+          }
+
+          it 'propagates carry corretly' do
+            expect(add).to eq(described_class.new(value: '255.0.0.0'))
+          end
+        end
+
+        context 'without ripple carry' do
+          let(:formatted_value) do
+            '4.3.2.1'
+          end
+
+          let(:other_formatted_value) do
+            '5.4.3.2'
+          end
+
+          it 'adds the correct segments together' do
+            expect(add).to eq(described_class.new(value: '9.7.5.3'))
+          end
+        end
+      end
+    end
+
+    context 'without MetasploitDataMOdels::IPAddress::V4::Single' do
+      let(:formatted_value) {
+          '255.255.255.255'
+      }
+
+      let(:other) {
+        1
+      }
+
+      specify {
+        expect {
+          add
+        }.to raise_error(TypeError, "Cannot add #{other.class} to #{described_class}")
+      }
     end
   end
 

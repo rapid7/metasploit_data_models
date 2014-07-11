@@ -1,5 +1,7 @@
 # An IPv4 address that is composed of 4 {#segments}.
 class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
+  include Comparable
+
   #
   # CONSTANTS
   #
@@ -79,6 +81,15 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
   # Instance methods
   #
 
+  def <=>(other)
+    if other.is_a? self.class
+      segments <=> other.segments
+    else
+      # The interface for <=> requires nil be returned if other is incomparable
+      nil
+    end
+  end
+
   # Array of segments.
   #
   # @return [Array] if {#value} is an `Array`.
@@ -91,6 +102,23 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
     end
   end
 
+  # Set {#segments}.
+  #
+  # @param segments [Array] `Array` of {segment_class} instances
+  # @return [Array] `Array` of {segment_class} instances
+  def segments=(segments)
+    @value = segments
+  end
+
+  # Segments joined with {SEPARATOR}.
+  #
+  # @return [String]
+  def to_s
+    segments.map(&:to_s).join(SEPARATOR)
+  end
+
+  # @note Set {#segments} if value is not formatted, but already broken into an `Array` of {segment_class} instances.
+  #
   # Sets {#value} by parsing its segments.
   #
   # @param formatted_value [#to_s]
