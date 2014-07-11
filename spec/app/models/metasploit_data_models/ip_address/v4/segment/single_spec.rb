@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MetasploitDataModels::IPAddress::V4::Segment::Single do
-  subject(:number) {
+  subject(:single) {
     described_class.new(
         value: formatted_value
     )
@@ -17,7 +17,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
   it 'can be used in a Range' do
     expect {
-      Range.new(number, number)
+      Range.new(single, single)
     }.not_to raise_error
   end
 
@@ -37,7 +37,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
   context '#<=>' do
     subject(:compare) {
-      number <=> other
+      single <=> other
     }
 
     let(:other) {
@@ -48,7 +48,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       other_value = double('other.value')
 
       expect(other).to receive(:value).and_return(other_value)
-      expect(number.value).to receive(:<=>).with(other_value)
+      expect(single.value).to receive(:<=>).with(other_value)
 
       compare
     end
@@ -56,7 +56,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
   context '#succ' do
     subject(:succ) {
-      number.succ
+      single.succ
     }
 
     context '#value' do
@@ -97,7 +97,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
         context 'succ.value' do
           it 'is succ of #value' do
-            expect(succ.value).to eq(number.value.succ)
+            expect(succ.value).to eq(single.value.succ)
           end
         end
       end
@@ -106,7 +106,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
   context '#to_s' do
     subject(:to_s) {
-      number.to_s
+      single.to_s
     }
 
     #
@@ -122,7 +122,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
     #
 
     before(:each) do
-      allow(number).to receive(:value).and_return(value)
+      allow(single).to receive(:value).and_return(value)
     end
 
     it 'delegates to #value' do
@@ -134,7 +134,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
 
   context '#value' do
     subject(:value) do
-      number.value
+      single.value
     end
 
     context 'with Integer' do
