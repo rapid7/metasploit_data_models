@@ -1,5 +1,7 @@
 # Common behavior for ranges under {MetasploitDataModels::IPAddress}, including ranges of addresses and segments.
 module MetasploitDataModels::IPAddress::Range
+  # so that translations for error messages can be filed under metasploit_data_models/ip_address/range
+  extend ActiveModel::Naming
   extend ActiveSupport::Concern
 
   #
