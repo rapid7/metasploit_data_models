@@ -230,7 +230,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
 
           it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
-          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             it "is value before '-'" do
               expect(range_begin.value).to eq(1)
             end
@@ -244,7 +244,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
 
           it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
-          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             it "is value after '-'" do
               expect(range_end.value).to eq(2)
             end
@@ -266,7 +266,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
 
           it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
-          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             subject(:begin_value) {
               range_begin.value
             }
@@ -282,7 +282,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
 
           it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
-          context 'MetasploitDataModels::IPAddress::V4::Segment#value' do
+          context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             subject(:end_value) {
               range_end.value
             }
