@@ -21,6 +21,117 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
     }.not_to raise_error
   end
 
+  context '#add_with_carry' do
+    subject(:add_with_carry) {
+      single.add_with_carry(*arguments)
+    }
+
+    let(:carry_out) {
+      add_with_carry[1]
+    }
+
+    let(:segment_out) {
+      add_with_carry[0]
+    }
+
+    context 'with carry' do
+      let(:arguments) {
+        [
+            other_single,
+            1
+        ]
+      }
+
+      context 'with overflow' do
+        let(:formatted_value) {
+          '255'
+        }
+
+        let(:other_single) {
+          described_class.new(value: 255)
+        }
+
+        it 'outputs a proper segment' do
+          expect(segment_out).to be_a described_class
+          expect(segment_out.value).to be <= 255
+          expect(segment_out.value).to eq(255)
+        end
+
+        it 'outputs a carry' do
+          expect(carry_out).to eq(1)
+        end
+      end
+
+      context 'without overflow' do
+        let(:formatted_value) {
+          '254'
+        }
+
+        let(:other_single) {
+          described_class.new(value: 0)
+        }
+
+        it 'outs a proper segment' do
+          expect(segment_out).to be_a described_class
+          expect(segment_out.value).to be <= 255
+          expect(segment_out.value).to eq(255)
+        end
+
+        it 'does not output a carry' do
+          expect(carry_out).to eq(0)
+        end
+      end
+    end
+
+    context 'without carry' do
+      let(:arguments) {
+        [
+            other_single
+        ]
+      }
+
+      context 'with overflow' do
+        let(:formatted_value) {
+          '255'
+        }
+
+        let(:other_single) {
+          described_class.new(value: 255)
+        }
+
+        it 'outputs a proper segment' do
+          expect(segment_out).to be_a described_class
+          expect(segment_out.value).to be <= 255
+          expect(segment_out.value).to eq(254)
+        end
+
+        it 'outputs a carry' do
+          expect(carry_out).to eq(1)
+        end
+      end
+
+      context 'without overflow' do
+        let(:formatted_value) {
+          '255'
+        }
+
+        let(:other_single) {
+          described_class.new(value: 0)
+        }
+
+        it 'outs a proper segment' do
+          expect(segment_out).to be_a described_class
+          expect(segment_out.value).to be <= 255
+          expect(segment_out.value).to eq(255)
+        end
+
+        it 'does not output a carry' do
+          expect(carry_out).to eq(0)
+        end
+      end
+    end
+  end
+
   context 'match_regexp' do
     subject(:match_regexp) {
       described_class.match_regexp

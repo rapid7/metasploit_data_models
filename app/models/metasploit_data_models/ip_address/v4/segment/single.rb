@@ -17,8 +17,11 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # Number of bits in a IPv4 segment
   BITS = 8
 
+  # Limit that {#value} can never reach
+  LIMIT = 1 << BITS
+
   # Maximum segment {#value}
-  MAXIMUM = (1 << BITS) - 1
+  MAXIMUM = LIMIT - 1
 
   # Minimum segment {#value}
   MINIMUM = 0
@@ -53,9 +56,26 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # Instance Methods
   #
 
-
   def <=>(other)
     value <=> other.value
+  end
+
+  # Full add (as in [full adder](https://en.wikipedia.org/wiki/Full_adder)) two (this segment and `other`) segments and
+  # a carry from the previous {#add_with_carry}.
+  #
+  # @param other [MetasploitDataModels:IPAddress::V4::Segment::Single] segment to add to this segment.
+  # @param carry [Integer] integer to add to this segment and other segment from a previous call to {#add_with_carry}
+  #   for lower segments.
+  # @return [Array<(MetasploitDataModels::IPAddress::V4::Segment::Single, Integer)>] Array containing a proper segment
+  #   (where {#value} is less than {LIMIT}) and a carry integer to pass to next call to {#add_with_carry}.
+  # @return (see #half_add)
+  def add_with_carry(other, carry=0)
+    improper_value = self.value + other.value + carry
+    proper_value = improper_value % LIMIT
+    carry = improper_value / LIMIT
+    segment = self.class.new(value: proper_value)
+
+    [segment, carry]
   end
 
   def succ
