@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MetasploitDataModels::IPAddress::V4::Single do
-  subject(:nmap) {
+  subject(:single) {
     described_class.new(
         value: formatted_value
     )
@@ -9,12 +9,12 @@ describe MetasploitDataModels::IPAddress::V4::Single do
 
   context 'validation' do
     before(:each) do
-      nmap.valid?
+      single.valid?
     end
 
     context 'errors on #segments' do
       subject(:segments_errors) {
-        nmap.errors[:segments]
+        single.errors[:segments]
       }
 
       context 'with segments' do
@@ -58,7 +58,7 @@ describe MetasploitDataModels::IPAddress::V4::Single do
 
   context '#value' do
     subject(:value) {
-      nmap.value
+      single.value
     }
 
     context 'with nil' do
