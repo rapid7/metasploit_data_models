@@ -1,5 +1,7 @@
 # An IPv4 address that is composed of 4 {#segments}.
 class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
+  extend MetasploitDataModels::Match::Child
+
   include Comparable
 
   #

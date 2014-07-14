@@ -52,6 +52,8 @@ module MetasploitDataModels::IPAddress::CIDR
   end
 
   module ClassMethods
+    include MetasploitDataModels::Match::Child
+
     #
     # Attributes
     #
