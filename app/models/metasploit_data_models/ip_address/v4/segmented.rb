@@ -39,7 +39,7 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
 
   validates :segments,
             length: {
-              is: 4
+              is: SEGMENT_COUNT
             }
 
   #
@@ -75,6 +75,10 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
 
   def self.segment_class_name
     @segment_class_name
+  end
+
+  def self.segment_count
+    SEGMENT_COUNT
   end
 
   #

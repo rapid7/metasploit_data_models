@@ -18,4 +18,12 @@ describe MetasploitDataModels::IPAddress::V4::Segmented do
       it { should == '.' }
     end
   end
+
+  context 'segment_count' do
+    subject(:segment_count) {
+      described_class.segment_count
+    }
+
+    it { should == 4 }
+  end
 end

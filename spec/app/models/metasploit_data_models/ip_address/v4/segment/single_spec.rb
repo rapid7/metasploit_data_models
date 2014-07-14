@@ -132,6 +132,14 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
     end
   end
 
+  context 'bits' do
+    subject(:bits) {
+      described_class.bits
+    }
+
+    it { should == 8 }
+  end
+
   context 'match_regexp' do
     subject(:match_regexp) {
       described_class.match_regexp

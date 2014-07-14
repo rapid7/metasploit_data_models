@@ -53,6 +53,14 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
             }
 
   #
+  # Class Methods
+  #
+
+  def self.bits
+    BITS
+  end
+
+  #
   # Instance Methods
   #
 
