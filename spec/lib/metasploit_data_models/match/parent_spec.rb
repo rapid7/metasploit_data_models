@@ -54,10 +54,10 @@ describe MetasploitDataModels::Match::Parent do
 
     before(:each) do
       stub_const('NumberChild', number_child_class)
-      stub_const('NumberChild::MATCH_REGEXP', /\A\d+\z/)
+      stub_const('NumberChild::REGEXP', /\d+/)
 
       stub_const('RangeChild', range_child_class)
-      stub_const('RangeChild::MATCH_REGEXP', /\A\d+-\d+\z/)
+      stub_const('RangeChild::REGEXP', /\d+-\d+/)
 
       including_class.class_eval do
         match_children_named %w{NumberChild RangeChild}

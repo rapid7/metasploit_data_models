@@ -9,12 +9,6 @@ describe MetasploitDataModels::Match::Child do
       extend described_class
 
       #
-      # CONSTANTS
-      #
-
-      REGEXP = /\d+-\d+/
-
-      #
       # Attributes
       #
 
@@ -23,6 +17,11 @@ describe MetasploitDataModels::Match::Child do
       attr_accessor :value
     }
   }
+
+  before(:each) do
+    stub_const('ExtendingClass', extending_class)
+    stub_const('ExtendingClass::REGEXP', /\d+-\d+/)
+  end
 
   context '#match' do
     subject(:match) {
