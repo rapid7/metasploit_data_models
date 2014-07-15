@@ -1,3 +1,6 @@
+# A comma separated list of {MetasploitDataModels::IPAddress::V4::Segment::Single segment numbers} and
+# {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range range of segment numbers} making up one segment of
+# {MetasploitDataModels::IPAddress::V4::Nmap}.
 class MetasploitDataModels::IPAddress::V4::Segment::Nmap::List < Metasploit::Model::Base
   extend ActiveSupport::Autoload
 
@@ -77,6 +80,11 @@ class MetasploitDataModels::IPAddress::V4::Segment::Nmap::List < Metasploit::Mod
     end
   end
 
+  # Set {#value} to an `Array` of segment numbers and ranges.
+  #
+  # @param formatted_value [#to_s]
+  # @return [Array<MetasploitDataModels::IPAddress::V4::Segment::Single, MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range>] a parsed `Array` of segment numbers and ranges.
+  # @return [#to_s] if `formatted_value` does not match {MATCH_REGEXP}.
   def value=(formatted_value)
     string = formatted_value.to_s
     match = MATCH_REGEXP.match(string)

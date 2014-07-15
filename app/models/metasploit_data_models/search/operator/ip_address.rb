@@ -1,3 +1,5 @@
+# Operator for `inet` columns in a PostgreSQL database, which operates on formatted values using
+# {MetasploitDataModels::Search::Operation::IPAddress}.
 class MetasploitDataModels::Search::Operator::IPAddress < Metasploit::Model::Search::Operator::Single
   #
   # Attributes
@@ -22,6 +24,9 @@ class MetasploitDataModels::Search::Operator::IPAddress < Metasploit::Model::Sea
 
   alias_method :name, :attribute
 
+  # The class used for `#operte_on`.
+  #
+  # @return [String] `'MetasploitDataModels::Search::Operation::IPAddress'`
   def operation_class_name
     @operation_class_name ||= 'MetasploitDataModels::Search::Operation::IPAddress'
   end

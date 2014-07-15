@@ -51,6 +51,7 @@ module MetasploitDataModels::IPAddress::CIDR
               presence: true
   end
 
+  # Class methods added to the including `Class`.
   module ClassMethods
     include MetasploitDataModels::Match::Child
 

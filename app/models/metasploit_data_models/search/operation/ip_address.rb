@@ -1,3 +1,7 @@
+# Searches an `inet` column in a PostgreSQL database using
+# {MetasploitDataModels::IPAddress::V4::Single a standard IPv4 address},
+# {MetasploitDataModels::IPAddress::V4::CIDR an IPv4 CIDR block}, or
+# {MetasploitDataModels::IPAddress::V4::Range an IPv4 address range}.
 class MetasploitDataModels::Search::Operation::IPAddress < Metasploit::Model::Search::Operation::Base
   include MetasploitDataModels::Match::Parent
 

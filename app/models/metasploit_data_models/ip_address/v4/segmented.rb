@@ -1,4 +1,16 @@
-# An IPv4 address that is composed of 4 {#segments}.
+# @note {segment} must be called in subclasses to set the {segment_class_name}.
+#
+# An IPv4 address that is composed of {SEGMENT_COUNT 4} {#segments} separated by {SEPARATOR `'.'`}.
+#
+# @example Using single segments to make a single IPv4 address class
+#   class MetasploitDataModels::IPAddress::V4::Single < MetasploitDataModels::IPAddress::V4::Segmented
+#      #
+#      # Segments
+#      #
+#
+#      segment class_name: 'MetasploitDataModels::IPAddress::V4::Segment::Single'
+#   end
+#
 class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
   extend MetasploitDataModels::Match::Child
 
@@ -48,10 +60,12 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
   # Class methods
   #
 
-  def self.match_regexp
-    @match_regexp ||= /\A#{regexp}\z/
-  end
-
+  # @note Call {segment} with the {segment_class_name} before calling this method, as it uses {segment_class} to look
+  #   up the `REGEXP` of the {segment_class}.
+  #
+  # Regular expression that matches the part of a string that represents a IPv4 segmented IP address format.
+  #
+  # @return [Regexp]
   def self.regexp
     unless @regexp
       separated_segment_count = SEGMENT_COUNT - 1
@@ -65,20 +79,42 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
     @regexp
   end
 
+  # Sets up the {segment_class_name} for the subclass.
+  #
+  # @example Using {segment} to set {segment_class_name}
+  #   segment class_name: 'MetasploitDataModels::IPAddress::V4::Segment::Single'
+  #
+  # @param options [Hash{Symbol => String}]
+  # @option options [String] :class_name a `Class#name` to use for {segment_class_name}.
+  # @return [void]
   def self.segment(options={})
     options.assert_valid_keys(:class_name)
 
     @segment_class_name = options.fetch(:class_name)
   end
 
+  # @note Call {segment} to set the {segment_class_name} before calling {segment_class}, which will attempt to
+  #   String#constantize` {segment_class_name}.
+  #
+  # The `Class` used to parse each segment of the IPv4 address.
+  #
+  # @return [Class]
   def self.segment_class
     @segment_class = segment_class_name.constantize
   end
 
+  # @note Call {segment} to set {segment_class_name}
+  #
+  # The name of {segment_class}
+  #
+  # @return [String] a `Class#name` for {segment_class}.
   def self.segment_class_name
     @segment_class_name
   end
 
+  # (see SEGMENT_COUNT)
+  #
+  # @return [Integer]
   def self.segment_count
     SEGMENT_COUNT
   end
@@ -87,6 +123,12 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
   # Instance methods
   #
 
+  # Compare this segment IPv4 address to `other`.
+  #
+  # @return [1] if {#segments} are greater than {#segments} of `other`.
+  # @return [0] if {#segments} are equal to {#segments} of `other`.
+  # @return [-1] if {#segments} are less than {#segments} of `other`.
+  # @return [nil] if `other` isn't the same `Class`
   def <=>(other)
     if other.is_a? self.class
       segments <=> other.segments

@@ -57,25 +57,55 @@ module MetasploitDataModels::IPAddress::Range
   end
 
 
+  # Class methods added to the including `Class`.
   module ClassMethods
+    # @note Call {#extremes} first to set {#extreme_class_name}.
+    #
+    # Regular expression that matches a string exactly when it contains an IP address range with the correct
+    # {#extreme_class}.
+    #
+    # @return [Regexp] {#regexp} pinned with `'\A'` and `'\z'` to the whole `String`.
     def match_regexp
       @match_regexp ||= /\A#{regexp}\z/
     end
 
+    # @note Call {#extremes} first to set {#extreme_class_name}.
+    #
+    # The `Class` for each extreme (`Range#begin` and `Range#end`) of the range.
+    #
+    # @return [Class]
     def extreme_class
       @extreme_class ||= extreme_class_name.constantize
     end
 
+    # The name of {#extreme_class}.
+    #
+    # @return [String] `Class#name` passed to :class_name key when {#extremes} was called.
+    # @return [nil] if {#extremes} has not been called.
     def extreme_class_name
       @extreme_class_name
     end
 
+    # Sets {#extreme_class_name}.
+    #
+    # @example Setting extremes class name
+    #   extremes class_name: 'MetasploitDataModels::IPAddress::V4::Single'
+    #
+    # @param options [Hash{Symbol => String}]
+    # @option options [String] :class_name {#extreme_class_name}.
+    # @return [void]
     def extremes(options={})
       options.assert_valid_keys(:class_name)
 
       @extreme_class_name = options.fetch(:class_name)
     end
 
+    # @note Call {#extremes} first to set {#extreme_class_name}.
+    #
+    # Regular expression match a {SEPARATOR} separated range with {#extreme_class} parseable `Range#begin` and
+    # `Range#end`.
+    #
+    # @return [Regexp]
     def regexp
       @regexp ||= /#{extreme_class.regexp}#{SEPARATOR}#{extreme_class.regexp}/
     end

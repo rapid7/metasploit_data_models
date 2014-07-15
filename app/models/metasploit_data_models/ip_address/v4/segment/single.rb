@@ -56,6 +56,9 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # Class Methods
   #
 
+  # (see BITS)
+  #
+  # @return [Integer] {BITS}
   def self.bits
     BITS
   end
@@ -64,6 +67,12 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # Instance Methods
   #
 
+  # Compare this segment to `other`.
+  #
+  # @param other [#value] another segent to compare against.
+  # @return [1] if this segment is greater than `other`.
+  # @return [0] if this segment is equal to `other`.
+  # @return [-1] if this segment is less than `other`.
   def <=>(other)
     value <=> other.value
   end
@@ -86,6 +95,10 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
     [segment, carry]
   end
 
+  # The succeeding segment.  Used in `Range`s when walking the `Range`.
+  #
+  # @return [MetasploitDataModels::IPAddress::V4::Segment::Single] if {#value} responds to `#succ`.
+  # @return [nil] otherwise
   def succ
     if value.respond_to? :succ
       self.class.new(value: value.succ)
