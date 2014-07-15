@@ -60,6 +60,8 @@ class MetasploitDataModels::Search::Visitor::Where
             attribute,
             value_as_inet
         )
+      else
+        raise TypeError, "Don't know how to handle #{value.class}"
     end
   end
 
