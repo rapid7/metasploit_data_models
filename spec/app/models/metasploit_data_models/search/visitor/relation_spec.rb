@@ -264,7 +264,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
         context 'with all operators' do
           let(:formatted) {
-            %Q{name:"#{matching_record_name}" services.name:"#{matching_service_name}"}
+            %Q{
+              address:1.3.4.5/8
+              address:1.1.1.1-5.6.7.7
+              address:1.2.3.4
+              name:"#{matching_record_name}"
+              services.name:"#{matching_service_name}"
+            }
           }
 
           it 'should find only matching record' do
