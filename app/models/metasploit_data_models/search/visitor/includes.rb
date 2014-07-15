@@ -8,7 +8,7 @@ class MetasploitDataModels::Search::Visitor::Includes
   #
 
   visit 'Metasploit::Model::Search::Group::Base',
-        'Metasploit::Model::Search::Operation::Union' do |parent|
+        'Metasploit::Model::Search::Operation::Group::Base' do |parent|
     parent.children.flat_map { |child|
       visit child
     }
@@ -22,8 +22,9 @@ class MetasploitDataModels::Search::Visitor::Includes
     [operator.association]
   end
 
-  visit 'MetasploitDataModels::Search::Operator::IPAddress',
-        'Metasploit::Model::Search::Operator::Attribute' do |_operator|
+  visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::IPAddress',
+        'MetasploitDataModels::Search::Operator::Port::List' do |_operator|
     []
   end
 

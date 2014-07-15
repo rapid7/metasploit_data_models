@@ -40,8 +40,8 @@ different on_load name, which is just the class name converted to an underscored
 
 ### Metasploit Framework
 
-In Metasploit Framework, `MetasploitDataModels.require_models` is called by the `Msf::DbManager` to use the data models
-only if the user wants to use the database.
+In Metasploit Framework, `MetasploitDataModels::Engine` is loaded, but the data models are only if the user wants to use
+the database.
 
 ### Elsewhere
 
@@ -58,3 +58,7 @@ Give it a path to a working MSF database.yml file for full
 ActiveRecord-based access to your data.
 
 __Note:__ "development" mode is hardcoded into the console currently.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)

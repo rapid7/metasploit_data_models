@@ -1,8 +1,31 @@
 module MetasploitDataModels
-  # MetasploitDataModels follows the {http://semver.org/  Semantic Versioning Specification}.  At this time, the API
-  # is considered unstable because although the database migrations have moved from
-  # metasploit-framework/data/sql/migrate to db/migrate in this project, not all models have specs that verify the
-  # migrations (with have_db_column and have_db_index) and certain models may not be shared between metasploit-framework
-  # and pro, so models may be removed in the future.  Because of the unstable API the version should remain below 1.0.0
-  VERSION = '0.17.3'
+  # Holds components of {VERSION} as defined by {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0}.
+  module Version
+    # The major version number.
+    MAJOR = 0
+    # The minor version number, scoped to the {MAJOR} version number.
+    MINOR = 18
+    # The patch number, scoped to the {MINOR} version number.
+    PATCH = 1
+    # The pre-release version, scoped to the {MINOR} version number.
+    PRERELEASE = 'mdm-host-address-search'
+
+    # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
+    # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
+    #
+    # @return [String] '{MAJOR}.{MINOR}.{PATCH}' on master.  '{MAJOR}.{MINOR}.{PATCH}-PRERELEASE' on any branch
+    #   other than master.
+    def self.full
+      version = "#{MAJOR}.#{MINOR}.#{PATCH}"
+
+      if defined? PRERELEASE
+        version = "#{version}-#{PRERELEASE}"
+      end
+
+      version
+    end
+  end
+
+  # @see Version.full
+  VERSION = Version.full
 end
