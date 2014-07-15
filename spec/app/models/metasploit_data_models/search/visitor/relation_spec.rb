@@ -226,7 +226,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           context 'with CIDR' do
             let(:formatted_address) {
-              '1.2.3.4/24'
+              '1.3.4.5/8'
             }
 
             it 'should find only matching record' do
