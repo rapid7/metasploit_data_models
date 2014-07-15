@@ -76,6 +76,8 @@ class MetasploitDataModels::Search::Visitor::Where
         )
       when MetasploitDataModels::IPAddress::Range
         Arel::Nodes::Between.new(attribute, value_node)
+      when MetasploitDataModels::IPAddress::V4::Single
+        Arel::Nodes::Equality.new(attribute, value_node)
       else
         raise TypeError, "Don't know how to handle #{value.class}"
     end

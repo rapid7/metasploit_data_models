@@ -243,6 +243,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               expect(visit).to match_array([matching_record])
             end
           end
+
+          context 'with single' do
+            let(:formatted_address) {
+              '1.2.3.4'
+            }
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
+          end
         end
 
         it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
