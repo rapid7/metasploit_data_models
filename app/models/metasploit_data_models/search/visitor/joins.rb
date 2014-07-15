@@ -41,7 +41,8 @@ class MetasploitDataModels::Search::Visitor::Joins
     [operator.association]
   end
 
-  visit 'Metasploit::Model::Search::Operator::Attribute' do |_|
+  visit 'MetasploitDataModels::Search::Operator::IPAddress',
+        'Metasploit::Model::Search::Operator::Attribute' do |_|
     []
   end
 

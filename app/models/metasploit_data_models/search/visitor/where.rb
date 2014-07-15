@@ -43,7 +43,25 @@ class MetasploitDataModels::Search::Visitor::Where
     match_value = "%#{operation.value}%"
 
     attribute.matches(match_value)
-	end
+  end
+
+  visit 'MetasploitDataModels::Search::Operation::IPAddress' do |operation|
+    attribute = attribute_visitor.visit operation.operator
+    value = operation.value
+
+    case value
+      when MetasploitDataModels::IPAddress::CIDR
+        formatted_value = "#{value.address}/#{value.prefix_length}"
+        cast_argument = Arel::Nodes::As.new(formatted_value, Arel::Nodes::SqlLiteral.new('INET'))
+        value_as_inet = Arel::Nodes::NamedFunction.new('CAST', [cast_argument])
+
+        Arel::Nodes::InfixOperation.new(
+            '<<',
+            attribute,
+            value_as_inet
+        )
+    end
+  end
 
   #
   # Methods

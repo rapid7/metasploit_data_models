@@ -483,6 +483,13 @@ class Mdm::Host < ActiveRecord::Base
                    type: :string
 
   #
+  # Search Withs
+  #
+
+  search_with MetasploitDataModels::Search::Operator::IPAddress,
+              attribute: :address
+
+  #
   # Instance Methods
   #
 

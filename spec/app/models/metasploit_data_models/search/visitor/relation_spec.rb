@@ -159,12 +159,20 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
         #
 
+        let(:matching_record_address) {
+          '1.2.3.4'
+        }
+
         let(:matching_record_name) {
           'mdm_host_name_a'
         }
 
         let(:matching_service_name) {
           'mdm_service_name_a'
+        }
+
+        let(:non_matching_record_address) {
+          '5.6.7.8'
         }
 
         let(:non_matching_record_name) {
@@ -182,6 +190,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         let!(:matching_record) do
           FactoryGirl.build(
               :mdm_host,
+              address: matching_record_address,
               name: matching_record_name
           )
         end
@@ -197,6 +206,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
         let!(:non_matching_record) do
           FactoryGirl.build(
               :mdm_host,
+              address: non_matching_record_address,
               name: non_matching_record_name
           )
         end
@@ -207,6 +217,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               host: non_matching_record,
               name: non_matching_service_name
           )
+        end
+
+        context 'with address operator' do
+          let(:formatted) do
+            "address:#{formatted_address}"
+          end
+
+          context 'with CIDR' do
+            let(:formatted_address) {
+              '1.2.3.4/24'
+            }
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
+          end
         end
 
         it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
