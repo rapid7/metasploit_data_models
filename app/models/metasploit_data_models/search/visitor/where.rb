@@ -45,30 +45,37 @@ class MetasploitDataModels::Search::Visitor::Where
     attribute.matches(match_value)
   end
 
+  visit 'MetasploitDataModels::IPAddress::CIDR' do |cidr|
+    cast_to_inet "#{cidr.address}/#{cidr.prefix_length}"
+  end
+
+  visit 'MetasploitDataModels::IPAddress::Range' do |ip_address_range|
+    range = ip_address_range.value
+
+    begin_node = visit range.begin
+    end_node = visit range.end
+
+    Arel::Nodes::And.new(begin_node, end_node)
+  end
+
+  visit 'MetasploitDataModels::IPAddress::V4::Single' do |ip_address|
+    cast_to_inet(ip_address.to_s)
+  end
+
   visit 'MetasploitDataModels::Search::Operation::IPAddress' do |operation|
     attribute = attribute_visitor.visit operation.operator
     value = operation.value
+    value_node = visit value
 
     case value
       when MetasploitDataModels::IPAddress::CIDR
-        formatted_value = "#{value.address}/#{value.prefix_length}"
-        value_as_inet = cast_to_inet formatted_value
-
         Arel::Nodes::InfixOperation.new(
             '<<',
             attribute,
-            value_as_inet
+            value_node
         )
       when MetasploitDataModels::IPAddress::Range
-        range = value.value
-
-        extremes_as_inet = MetasploitDataModels::IPAddress::Range::EXTREMES.map { |extreme|
-          formatted_ip_address = range.send(extreme).to_s
-          cast_to_inet formatted_ip_address
-        }
-        and_extremes = Arel::Nodes::And.new(*extremes_as_inet)
-
-        Arel::Nodes::Between.new(attribute, and_extremes)
+        Arel::Nodes::Between.new(attribute, value_node)
       else
         raise TypeError, "Don't know how to handle #{value.class}"
     end
