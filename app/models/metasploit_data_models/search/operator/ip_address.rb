@@ -4,7 +4,7 @@ class MetasploitDataModels::Search::Operator::IPAddress < Metasploit::Model::Sea
   #
 
   # @!attribute [r] attribute
-  #   The attribute on {Metasploit::Model::Search::Operator::Base#klass klass} that is searchable.
+  #   The attribute on `Metasploit::Model::Search::Operator::Base#klass` that is searchable.
   #
   #   @return [Symbol] the attribute name
   attr_accessor :attribute

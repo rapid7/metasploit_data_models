@@ -9,7 +9,7 @@
 module MetasploitDataModels::Match::Parent
   extend ActiveSupport::Concern
 
-  # @examples Declaring children classes
+  # @example Declaring children classes
   #   class FirstChild < Metasploit::Model::Base
   #     extend MetasploitDataModels::Match::Child
   #
