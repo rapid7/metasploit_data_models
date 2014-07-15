@@ -52,14 +52,23 @@ class MetasploitDataModels::Search::Visitor::Where
     case value
       when MetasploitDataModels::IPAddress::CIDR
         formatted_value = "#{value.address}/#{value.prefix_length}"
-        cast_argument = Arel::Nodes::As.new(formatted_value, Arel::Nodes::SqlLiteral.new('INET'))
-        value_as_inet = Arel::Nodes::NamedFunction.new('CAST', [cast_argument])
+        value_as_inet = cast_to_inet formatted_value
 
         Arel::Nodes::InfixOperation.new(
             '<<',
             attribute,
             value_as_inet
         )
+      when MetasploitDataModels::IPAddress::Range
+        range = value.value
+
+        extremes_as_inet = MetasploitDataModels::IPAddress::Range::EXTREMES.map { |extreme|
+          formatted_ip_address = range.send(extreme).to_s
+          cast_to_inet formatted_ip_address
+        }
+        and_extremes = Arel::Nodes::And.new(*extremes_as_inet)
+
+        Arel::Nodes::Between.new(attribute, and_extremes)
       else
         raise TypeError, "Don't know how to handle #{value.class}"
     end
@@ -82,6 +91,18 @@ class MetasploitDataModels::Search::Visitor::Where
   def method_visitor
     @method_visitor ||= MetasploitDataModels::Search::Visitor::Method.new
   end
+
+  private
+
+  # Casts a literal string to INET in AREL.
+  #
+  # @return [Arel::Nodes::NamedFunction]
+  def cast_to_inet(string)
+    cast_argument = Arel::Nodes::As.new(string, Arel::Nodes::SqlLiteral.new('INET'))
+    Arel::Nodes::NamedFunction.new('CAST', [cast_argument])
+  end
+
+  public
 
   Metasploit::Concern.run(self)
 end
