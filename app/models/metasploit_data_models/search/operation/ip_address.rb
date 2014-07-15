@@ -10,7 +10,6 @@ class MetasploitDataModels::Search::Operation::IPAddress < Metasploit::Model::Se
   match_children_named %w{
     MetasploitDataModels::IPAddress::V4::Single
     MetasploitDataModels::IPAddress::V4::CIDR
-    MetasploitDataModels::IPAddress::V4::Nmap
     MetasploitDataModels::IPAddress::V4::Range
   }
 

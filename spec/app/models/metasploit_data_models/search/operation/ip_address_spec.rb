@@ -57,7 +57,7 @@ describe MetasploitDataModels::Search::Operation::IPAddress do
           end
         end
 
-        context 'with Nmap' do
+        context 'with Nmap', pending: 'MSP-10712' do
           context 'with valid segment range' do
             let(:formatted_value) {
               '1-2.3.4.5'
@@ -144,7 +144,7 @@ describe MetasploitDataModels::Search::Operation::IPAddress do
         it { should be_a MetasploitDataModels::IPAddress::V4::CIDR }
       end
 
-      context 'with Nmap' do
+      context 'with Nmap', pending: 'MSP-10712' do
         let(:formatted_value) {
           '1.2.3.4-5'
         }
