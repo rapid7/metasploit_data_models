@@ -1,4 +1,6 @@
 class Mdm::Tag < ActiveRecord::Base
+  include Metasploit::Model::Search
+
   #
   # Relations
   #
@@ -26,6 +28,12 @@ class Mdm::Tag < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Host>]
   has_many :hosts, :through => :hosts_tags, :class_name => 'Mdm::Host'
 
+  #
+  # Search
+  #
+
+  search_attribute :name,
+                   type: :string
 
   #
   # Validations

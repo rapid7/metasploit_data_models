@@ -437,6 +437,45 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             end
           end
         end
+
+        context 'with Mdm::Tag' do
+          #
+          # lets
+          #
+
+          let(:klass) {
+            Mdm::Tag
+          }
+
+          let(:matching_name) {
+            'matching.tag'
+          }
+
+          let(:non_matching_name) {
+            'tag.does.not.match'
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                name: matching_name
+            )
+          }
+
+          let!(:non_matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                name: non_matching_name
+            )
+          }
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :name
+        end
       end
     end
   end
