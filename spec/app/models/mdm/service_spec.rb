@@ -3,6 +3,19 @@ require 'spec_helper'
 describe Mdm::Service do
   it_should_behave_like 'Metasploit::Concern.run'
 
+  context 'CONSTANTS' do
+    context 'STATES' do
+      subject(:states) {
+        described_class::STATES
+      }
+
+      it { should include 'closed' }
+      it { should include 'filtered' }
+      it { should include 'open' }
+      it { should include 'unknown' }
+    end
+  end
+
   context "Associations" do
 
     it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
