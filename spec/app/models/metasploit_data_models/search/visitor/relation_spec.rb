@@ -158,6 +158,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     context 'matching record' do
       context 'Metasploit::Model::Search::Query#klass' do
         context 'with Mdm::Service' do
+          include_context 'Rex::Text'
+
           #
           # lets
           #
@@ -169,6 +171,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           #
           # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
           #
+
+          let(:non_matching_info) {
+            'mdm_service_info_c'
+          }
 
           let(:non_matching_name) {
             'mdm_service_name_c'
@@ -185,6 +191,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:non_matching_record) {
             FactoryGirl.create(
                 :mdm_service,
+                info: non_matching_info,
                 name: non_matching_name,
                 port: non_matching_port
             )
@@ -281,6 +288,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
             #
 
+            let(:matching_info) {
+              'mdm_service_info_a'
+            }
+
             let(:matching_name) {
               'mdm_service_name_a'
             }
@@ -296,13 +307,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             let!(:matching_record) {
               FactoryGirl.create(
                   :mdm_service,
+                  info: matching_info,
                   name: matching_name,
                   port: matching_port
               )
             }
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-                                  :attribute => :name
+                                  attribute: :info
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  attribute: :name
 
             context 'with all operators' do
               let(:formatted) {

@@ -186,6 +186,8 @@ class Mdm::Service < ActiveRecord::Base
   # Search Attributes
   #
 
+  search_attribute :info,
+                   type: :string
   search_attribute :name,
                    type: :string
 
