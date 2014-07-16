@@ -6,6 +6,9 @@ class Mdm::Service < ActiveRecord::Base
   # CONSTANTS
   #
 
+  # Valid values for {#proto}.
+  PROTOS = %w{tcp udp}
+
   # Valid values for {#state}.
   STATES = ['open', 'closed', 'filtered', 'unknown']
 
@@ -204,7 +207,10 @@ class Mdm::Service < ActiveRecord::Base
             numericality: {
                 only_integer: true
             }
-  validates :proto, presence: true
+  validates :proto,
+            inclusion: {
+                in: PROTOS
+            }
 
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} whenever {#info} has
   # changed.

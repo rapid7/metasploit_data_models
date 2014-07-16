@@ -4,6 +4,15 @@ describe Mdm::Service do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'CONSTANTS' do
+    context 'PROTOS' do
+      subject(:protos) {
+        described_class::PROTOS
+      }
+
+      it { should include 'tcp' }
+      it { should include 'udp' }
+    end
+
     context 'STATES' do
       subject(:states) {
         described_class::STATES
@@ -46,13 +55,13 @@ describe Mdm::Service do
       end
     end
 
-    context "search for 'snmp'" do
+    context "search for 'tcp'" do
       it "should find only services that match" do
-        snmp_service   = FactoryGirl.create(:mdm_service)
-        ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
-        search_results = Mdm::Service.search('snmp')
-        search_results.should     include(snmp_service)
-        search_results.should_not include(ftp_service)
+        tcp_service   = FactoryGirl.create(:mdm_service, proto: 'tcp')
+        udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
+        search_results = Mdm::Service.search('tcp')
+        search_results.should     include(tcp_service)
+        search_results.should_not include(udp_service)
       end
     end
   end
@@ -116,6 +125,6 @@ describe Mdm::Service do
     }
 
     it { should validate_numericality_of(:port).only_integer }
-    it { should validate_presence_of(:proto) }
+    it { should ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
   end
 end
