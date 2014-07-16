@@ -158,6 +158,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
     context 'matching record' do
       context 'Metasploit::Model::Search::Query#klass' do
         context 'with Mdm::Service' do
+          #
+          # lets
+          #
+
           let(:klass) {
             Mdm::Service
           }
@@ -173,7 +177,6 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let(:non_matching_port) {
             3
           }
-
 
           #
           # let!s
@@ -269,25 +272,21 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             end
           end
 
-          context 'with all operators' do
+          context 'with single matching record' do
             #
             # lets
             #
-
-            let(:formatted) {
-              %Q{name:#{matching_name} port:#{matching_port}}
-            }
 
             #
             # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
             #
 
-            let(:matching_port) {
-              1
-            }
-
             let(:matching_name) {
               'mdm_service_name_a'
+            }
+
+            let(:matching_port) {
+              1
             }
 
             #
@@ -302,8 +301,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               )
             }
 
-            it 'finds only matching record' do
-              expect(visit).to match_array([matching_record])
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  :attribute => :name
+
+            context 'with all operators' do
+              let(:formatted) {
+                %Q{name:#{matching_name} port:#{matching_port}}
+              }
+
+              it 'finds only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
             end
           end
         end
