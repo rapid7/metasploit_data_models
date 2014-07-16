@@ -488,6 +488,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                 attribute: :name
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{desc:"#{matching_desc}" name:"#{matching_name}"}
+            }
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
+          end
         end
       end
     end
