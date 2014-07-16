@@ -447,8 +447,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             Mdm::Tag
           }
 
+          let(:matching_desc) {
+            'This is a description'
+          }
+
           let(:matching_name) {
             'matching.tag'
+          }
+
+          let(:non_matching_desc) {
+            'This could be a description'
           }
 
           let(:non_matching_name) {
@@ -462,6 +470,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:matching_record) {
             FactoryGirl.create(
                 :mdm_tag,
+                desc: matching_desc,
                 name: matching_name
             )
           }
@@ -469,9 +478,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:non_matching_record) {
             FactoryGirl.create(
                 :mdm_tag,
+                desc: non_matching_desc,
                 name: non_matching_name
             )
           }
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :desc
 
           it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                 attribute: :name

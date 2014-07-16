@@ -32,6 +32,8 @@ class Mdm::Tag < ActiveRecord::Base
   # Search
   #
 
+  search_attribute :desc,
+                   type: :string
   search_attribute :name,
                    type: :string
 
