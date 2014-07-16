@@ -193,6 +193,10 @@ class Mdm::Service < ActiveRecord::Base
                    type: :string
   search_attribute :name,
                    type: :string
+  search_attribute :proto,
+                   type: {
+                       set: :string
+                   }
 
   #
   # Search Withs
@@ -211,6 +215,21 @@ class Mdm::Service < ActiveRecord::Base
             inclusion: {
                 in: PROTOS
             }
+
+  #
+  # Class Methods
+  #
+
+  # Set of searchable values for {#proto}.
+  #
+  # @return [Set<String>] {PROTOS} as a `Set`.
+  def self.proto_set
+    @proto_set ||= Set.new(PROTOS)
+  end
+
+  #
+  # Instance Methods
+  #
 
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} whenever {#info} has
   # changed.

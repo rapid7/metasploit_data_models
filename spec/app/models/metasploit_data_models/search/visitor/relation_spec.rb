@@ -184,6 +184,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             3
           }
 
+          let(:non_matching_proto) {
+            'udp'
+          }
+
           #
           # let!s
           #
@@ -193,9 +197,11 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 :mdm_service,
                 info: non_matching_info,
                 name: non_matching_name,
-                port: non_matching_port
+                port: non_matching_port,
+                proto: non_matching_proto
             )
           }
+          p
 
           context 'with port' do
             #
@@ -300,6 +306,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               1
             }
 
+            let(:matching_proto) {
+              'tcp'
+            }
+
             #
             # let!s
             #
@@ -309,7 +319,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                   :mdm_service,
                   info: matching_info,
                   name: matching_name,
-                  port: matching_port
+                  port: matching_port,
+                  proto: matching_proto
               )
             }
 
@@ -319,9 +330,12 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :name
 
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  attribute: :proto
+
             context 'with all operators' do
               let(:formatted) {
-                %Q{name:#{matching_name} port:#{matching_port}}
+                %Q{name:#{matching_name} port:#{matching_port} proto:#{matching_proto}}
               }
 
               it 'finds only matching record' do
