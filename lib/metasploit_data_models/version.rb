@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 18
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 1
+    PATCH = 2
     # The pre-release version, scoped to the {MINOR} version number.
     PRERELEASE = 'mdm-host-address-search'
 
@@ -24,7 +24,19 @@ module MetasploitDataModels
 
       version
     end
+
+    # The full gem version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the {PRERELEASE} in the
+    # {http://guides.rubygems.org/specification-reference/#version RubyGems versioning} format.
+    #
+    # @return [String] '{MAJOR}.{MINOR}.{PATCH}' on master.  '{MAJOR}.{MINOR}.{PATCH}.{PRERELEASE}' on any branch
+    #   other than master.
+    def self.gem
+      full.gsub('-', '.pre.')
+    end
   end
+
+  # @see Version.gem
+  GEM_VERSION = Version.gem
 
   # @see Version.full
   VERSION = Version.full
