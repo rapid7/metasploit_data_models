@@ -10,10 +10,6 @@ class MetasploitDataModels::IPAddress::V4::Segment::Single < Metasploit::Model::
   # CONSTANTS
   #
 
-  #
-  # CONSTANTS
-  #
-
   # Number of bits in a IPv4 segment
   BITS = 8
 
