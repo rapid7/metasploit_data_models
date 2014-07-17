@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 18
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 1
+    PATCH = 2
     # The pre-release version, scoped to the {PATCH} version number.
     PRERELEASE = 'mdm-tag-search'
 
