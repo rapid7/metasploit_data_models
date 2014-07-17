@@ -24,7 +24,7 @@ class MetasploitDataModels::Search::Operator::IPAddress < Metasploit::Model::Sea
 
   alias_method :name, :attribute
 
-  # The class used for `#operte_on`.
+  # The class used for `Metasploit::Model::Search::Operator::Single#operate_on`.
   #
   # @return [String] `'MetasploitDataModels::Search::Operation::IPAddress'`
   def operation_class_name
