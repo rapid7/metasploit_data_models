@@ -62,15 +62,6 @@ describe MetasploitDataModels::IPAddress::Range do
   }
 
   context 'CONSTANTS' do
-    context 'EXTREMES' do
-      subject(:extremes) {
-        described_class::EXTREMES
-      }
-
-      it { should include :begin }
-      it { should include :end }
-    end
-
     context 'SEPARATOR' do
       subject(:separator) {
         described_class::SEPARATOR
