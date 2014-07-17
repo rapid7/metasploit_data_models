@@ -1,4 +1,4 @@
-# including arel-helpers in all active record models. this should be moved down to mdm.
+# Including arel-helpers in all active record models.
 # https://github.com/camertron/arel-helpers
 
 ActiveRecord::Base.send(:include, ArelHelpers::ArelTable)
