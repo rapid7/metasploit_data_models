@@ -45,6 +45,44 @@ class MetasploitDataModels::Search::Visitor::Where
     attribute.matches(match_value)
   end
 
+  visit 'MetasploitDataModels::IPAddress::CIDR' do |cidr|
+    cast_to_inet "#{cidr.address}/#{cidr.prefix_length}"
+  end
+
+  visit 'MetasploitDataModels::IPAddress::Range' do |ip_address_range|
+    range = ip_address_range.value
+
+    begin_node = visit range.begin
+    end_node = visit range.end
+
+    Arel::Nodes::And.new(begin_node, end_node)
+  end
+
+  visit 'MetasploitDataModels::IPAddress::V4::Single' do |ip_address|
+    cast_to_inet(ip_address.to_s)
+  end
+
+  visit 'MetasploitDataModels::Search::Operation::IPAddress' do |operation|
+    attribute = attribute_visitor.visit operation.operator
+    value = operation.value
+    value_node = visit value
+
+    case value
+      when MetasploitDataModels::IPAddress::CIDR
+        Arel::Nodes::InfixOperation.new(
+            '<<',
+            attribute,
+            value_node
+        )
+      when MetasploitDataModels::IPAddress::Range
+        Arel::Nodes::Between.new(attribute, value_node)
+      when MetasploitDataModels::IPAddress::V4::Single
+        Arel::Nodes::Equality.new(attribute, value_node)
+      else
+        raise TypeError, "Don't know how to handle #{value.class}"
+    end
+  end
+
   visit 'MetasploitDataModels::Search::Operation::Port::Range' do |range_operation|
     attribute = attribute_visitor.visit range_operation.operator
 
@@ -68,6 +106,18 @@ class MetasploitDataModels::Search::Visitor::Where
   def method_visitor
     @method_visitor ||= MetasploitDataModels::Search::Visitor::Method.new
   end
+
+  private
+
+  # Casts a literal string to INET in AREL.
+  #
+  # @return [Arel::Nodes::NamedFunction]
+  def cast_to_inet(string)
+    cast_argument = Arel::Nodes::As.new(string, Arel::Nodes::SqlLiteral.new('INET'))
+    Arel::Nodes::NamedFunction.new('CAST', [cast_argument])
+  end
+
+  public
 
   Metasploit::Concern.run(self)
 end

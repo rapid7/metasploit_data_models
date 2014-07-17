@@ -30,7 +30,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
 
   # documentation
-  s.add_development_dependency 'yard'
+  # @note 0.8.7.4 has a bug where attribute writers show up as undocumented
+  s.add_development_dependency 'yard', '< 0.8.7.4'
   # debugging
   s.add_development_dependency 'pry'
 

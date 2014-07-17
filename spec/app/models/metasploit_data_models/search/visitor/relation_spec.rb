@@ -349,14 +349,12 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           #
           # lets
           #
-
-          let(:klass) {
-            Mdm::Host
-          }
-
-          #
           # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
           #
+
+          let(:matching_record_address) {
+            '1.2.3.4'
+          }
 
           let(:matching_record_os_flavor) {
             'mdm_host_os_flavor_a'
@@ -370,16 +368,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             'mdm_host_os_sp_a'
           }
 
-          let(:matching_service_name) {
-            'mdm_service_name_a'
-          }
-
           let(:matching_record_name) {
             'mdm_host_name_a'
           }
 
           let(:matching_service_name) {
             'mdm_service_name_a'
+          }
+
+          let(:non_matching_record_address) {
+            '5.6.7.8'
           }
 
           let(:non_matching_record_os_flavor) {
@@ -392,10 +390,6 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           let(:non_matching_record_os_sp) {
             'mdm_host_os_sp_b'
-          }
-
-          let(:non_matching_service_name) {
-            'mdm_service_name_b'
           }
 
           let(:non_matching_record_name) {
@@ -413,6 +407,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:matching_record) do
             FactoryGirl.build(
                 :mdm_host,
+                address: matching_record_address,
                 name: matching_record_name,
                 os_flavor: matching_record_os_flavor,
                 os_name: matching_record_os_name,
@@ -431,6 +426,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:non_matching_record) do
             FactoryGirl.build(
                 :mdm_host,
+                address: non_matching_record_address,
                 name: non_matching_record_name,
                 os_flavor: non_matching_record_os_flavor,
                 os_name: non_matching_record_os_name,
@@ -444,6 +440,42 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 host: non_matching_record,
                 name: non_matching_service_name
             )
+          end
+
+          context 'with address operator' do
+            let(:formatted) do
+              "address:#{formatted_address}"
+            end
+
+            context 'with CIDR' do
+              let(:formatted_address) {
+                '1.3.4.5/8'
+              }
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with Range' do
+              let(:formatted_address) {
+                '1.1.1.1-5.6.7.7'
+              }
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with single' do
+              let(:formatted_address) {
+                '1.2.3.4'
+              }
+
+              it 'should find only matching record' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
           end
 
           it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -512,7 +544,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           context 'with all operators' do
             let(:formatted) {
-              %Q{name:"#{matching_record_name}" os:"#{matching_record_os_name} #{matching_record_os_flavor} #{matching_record_os_sp}" os_flavor:"#{matching_record_os_flavor}" os_name:"#{matching_record_os_name}" os_sp:"#{matching_record_os_sp}" services.name:"#{matching_service_name}"}
+              %Q{
+              address:1.3.4.5/8
+              address:1.1.1.1-5.6.7.7
+              address:1.2.3.4
+              name:"#{matching_record_name}"
+              os:"#{matching_record_os_name} #{matching_record_os_flavor} #{matching_record_os_sp}"
+              os_flavor:"#{matching_record_os_flavor}"
+              os_name:"#{matching_record_os_name}"
+              os_sp:"#{matching_record_os_sp}"
+              services.name:"#{matching_service_name}"
+            }
             }
 
             it 'should find only matching record' do
@@ -522,6 +564,107 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
               expect(visit).to match_array([matching_record])
             end
+          end
+        end
+
+        context 'with Mdm::Service' do
+          let(:klass) {
+            Mdm::Service
+          }
+
+          let(:matching_ports) {
+            [
+                1,
+                2
+            ]
+          }
+
+          let(:matching_records) {
+            matching_record_by_port.values
+          }
+
+          let(:non_matching_port) {
+            3
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record_by_port) {
+            matching_ports.each_with_object({}) { |matching_port, matching_record_by_port|
+              matching_record_by_port[matching_port] = FactoryGirl.create(
+                  :mdm_service,
+                  port: matching_port
+              )
+            }
+          }
+
+          let!(:non_matching_record) {
+            FactoryGirl.create(
+                :mdm_service,
+                port: non_matching_port
+            )
+          }
+
+          context 'with port' do
+            context 'with single port number' do
+              let(:formatted) {
+                "port:#{matching_port}"
+              }
+
+              let(:matching_port) {
+                matching_ports.sample
+              }
+
+              let(:matching_record) {
+                matching_record_by_port[matching_port]
+              }
+
+              it 'should find only record with that port number' do
+                expect(visit).to match_array([matching_record])
+              end
+            end
+
+            context 'with port range' do
+              let(:formatted) {
+                "port:#{matching_ports.min}-#{matching_ports.max}"
+              }
+
+              it 'should find all records with port numbers within the range' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+
+            context 'with comma separated port numbers' do
+              let(:formatted) {
+                "port:#{matching_ports.join(',')}"
+              }
+
+              it 'should find all records with the port numbers' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+
+            context 'with overlapping comma separated port number and range' do
+              let(:matching_port) {
+                matching_ports.sample
+              }
+
+              let(:formatted) {
+                %Q{port:#{matching_port},#{matching_ports.min}-#{matching_ports.max}}
+              }
+
+              it 'should find all records with the matching ports once' do
+                expect(visit).to match_array(matching_records)
+              end
+            end
+          end
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{port:#{matching_port}}
+            }
           end
         end
       end

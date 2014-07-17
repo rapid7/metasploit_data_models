@@ -7,6 +7,7 @@ class MetasploitDataModels::Search::Visitor::Attribute
   end
 
   visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::IPAddress',
         'MetasploitDataModels::Search::Operator::Port::List' do |operator|
     table = operator.klass.arel_table
     table[operator.attribute]

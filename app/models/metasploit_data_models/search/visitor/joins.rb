@@ -43,6 +43,7 @@ class MetasploitDataModels::Search::Visitor::Joins
   end
 
   visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::IPAddress',
         'MetasploitDataModels::Search::Operator::Port::List' do |_|
     []
   end
