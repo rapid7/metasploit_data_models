@@ -4,7 +4,7 @@ module MetasploitDataModels
     # The major version number.
     MAJOR = 0
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 18
+    MINOR = 19
     # The patch number, scoped to the {MINOR} version number.
     PATCH = 1
 
