@@ -6,12 +6,17 @@ require 'shellwords'
 #
 # Gems
 #
+# gems must load explicitly any gem declared in gemspec
+# @see https://github.com/bundler/bundler/issues/2018#issuecomment-6819359
+#
+#
 require 'active_record'
 require 'active_support'
 require 'active_support/all'
 require 'active_support/dependencies'
 require 'metasploit/concern'
 require 'metasploit/model'
+require 'arel-helpers'
 
 #
 # Project
