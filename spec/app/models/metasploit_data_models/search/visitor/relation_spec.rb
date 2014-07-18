@@ -201,7 +201,6 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 proto: non_matching_proto
             )
           }
-          p
 
           context 'with port' do
             #
