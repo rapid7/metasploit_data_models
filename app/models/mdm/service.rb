@@ -223,6 +223,8 @@ class Mdm::Service < ActiveRecord::Base
   # Set of searchable values for {#proto}.
   #
   # @return [Set<String>] {PROTOS} as a `Set`.
+  # @see Metasploit::Model::Search::Operation::Set#membership
+  # @see Metasploit::Model::Search::Operator::Attribute#attribute_set
   def self.proto_set
     @proto_set ||= Set.new(PROTOS)
   end
