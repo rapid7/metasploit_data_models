@@ -55,7 +55,8 @@ class MetasploitDataModels::Search::Visitor::Where
     begin_node = visit range.begin
     end_node = visit range.end
 
-    Arel::Nodes::And.new(begin_node, end_node)
+    # AND nodes should be created with a list
+    Arel::Nodes::And.new([begin_node, end_node])
   end
 
   visit 'MetasploitDataModels::IPAddress::V4::Single' do |ip_address|

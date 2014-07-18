@@ -8,12 +8,6 @@ module MetasploitDataModels::IPAddress::Range
   # CONSTANTS
   #
 
-  # The name of the extremes of a range.
-  EXTREMES = [
-      :begin,
-      :end
-  ]
-
   # Separator between the {#begin} and {#end} in the formatted value.
   SEPARATOR = '-'
 
@@ -167,7 +161,7 @@ module MetasploitDataModels::IPAddress::Range
   #
   # @return [void]
   def extremes_valid
-    EXTREMES.each do |extreme_name|
+    [:begin, :end].each do |extreme_name|
       extreme_value = send(extreme_name)
 
       unless extreme_value.respond_to?(:valid?) && extreme_value.valid?
