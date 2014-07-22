@@ -381,6 +381,54 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                   association: :host,
                                   attribute: :name
 
+            context 'with host.os' do
+              let(:matching_host_os_flavor) {
+                'XP'
+              }
+
+              let(:matching_host_os_name) {
+                'Microsoft Windows'
+              }
+
+              let(:matching_host_os_sp) {
+                'SP1'
+              }
+
+              context 'with a combination of Mdm::Host#os_name and Mdm:Host#os_sp' do
+                let(:formatted) {
+                  %Q{host.os:"win xp"}
+                }
+
+                it 'finds matching record' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+
+              context 'with a combination of Mdm::Host#os_flavor and Mdm::Host#os_sp' do
+                let(:formatted) {
+                  %Q{host.os:"xp sp1"}
+                }
+
+                it 'finds matching record' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+
+              context 'with multiple records matching one word' do
+                let(:formatted) {
+                  %Q{host.os:"win xp"}
+                }
+
+                let(:non_matching_host_os_name) {
+                  'Microsoft Windows'
+                }
+
+                it 'finds only matching record by other words refining search' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+            end
+
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   association: :host,
                                   attribute: :os_flavor
@@ -406,6 +454,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               let(:formatted) {
                 %Q{
                   host.name:#{matching_host_name}
+                  host.os:"#{matching_host_os_name} #{matching_host_os_flavor} #{matching_host_os_sp}"
                   host.os_flavor:#{matching_host_os_flavor}
                   host.os_name:#{matching_host_os_name}
                   host.os_sp:#{matching_host_os_sp}
