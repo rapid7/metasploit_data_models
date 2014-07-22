@@ -176,7 +176,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             FactoryGirl.create(
                 :mdm_host,
                 name: non_matching_host_name,
-                os_flavor: non_matching_host_os_flavor
+                os_flavor: non_matching_host_os_flavor,
+                os_name: non_matching_host_os_name
             )
           }
 
@@ -186,6 +187,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           let(:non_matching_host_os_flavor) {
             'mdm_host_os_flavor_b'
+          }
+
+          let(:non_matching_host_os_name) {
+            'mdm_host_os_name_b'
           }
 
           let(:non_matching_info) {
@@ -314,7 +319,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               FactoryGirl.create(
                   :mdm_host,
                   name: matching_host_name,
-                  os_flavor: matching_host_os_flavor
+                  os_flavor: matching_host_os_flavor,
+                  os_name: matching_host_os_name
               )
             }
 
@@ -324,6 +330,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
             let(:matching_host_os_flavor) {
               'mdm_host_os_flavor_a'
+            }
+
+            let(:matching_host_os_name) {
+              'mdm_host_os_name_a'
             }
 
             let(:matching_info) {
@@ -366,6 +376,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                   attribute: :os_flavor
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :os_name
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -378,7 +392,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               let(:formatted) {
                 %Q{
                   host.name:#{matching_host_name}
-                  host.os_flavor:"#{matching_host_os_flavor}"
+                  host.os_flavor:#{matching_host_os_flavor}
+                  host.os_name:#{matching_host_os_name}
                   name:#{matching_name}
                   port:#{matching_port}
                   proto:#{matching_proto}
