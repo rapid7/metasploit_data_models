@@ -175,12 +175,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let(:non_matching_host) {
             FactoryGirl.create(
                 :mdm_host,
-                name: non_matching_host_name
+                name: non_matching_host_name,
+                os_flavor: non_matching_host_os_flavor
             )
           }
 
           let(:non_matching_host_name) {
             'mdm_host_name_b'
+          }
+
+          let(:non_matching_host_os_flavor) {
+            'mdm_host_os_flavor_b'
           }
 
           let(:non_matching_info) {
@@ -308,12 +313,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             let(:matching_host) {
               FactoryGirl.create(
                   :mdm_host,
-                  name: matching_host_name
+                  name: matching_host_name,
+                  os_flavor: matching_host_os_flavor
               )
             }
 
             let(:matching_host_name) {
               'mdm_host_name_a'
+            }
+
+            let(:matching_host_os_flavor) {
+              'mdm_host_os_flavor_a'
             }
 
             let(:matching_info) {
@@ -352,6 +362,10 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                   attribute: :name
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :os_flavor
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -362,7 +376,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
             context 'with all operators' do
               let(:formatted) {
-                %Q{host.name:#{matching_host_name} name:#{matching_name} port:#{matching_port} proto:#{matching_proto}}
+                %Q{
+                  host.name:#{matching_host_name}
+                  host.os_flavor:"#{matching_host_os_flavor}"
+                  name:#{matching_name}
+                  port:#{matching_port}
+                  proto:#{matching_proto}
+                }
               }
 
               it 'finds only matching record' do
