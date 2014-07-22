@@ -566,67 +566,65 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
+        context 'with Mdm::Tag' do
+          #
+          # lets
+          #
 
-      end
-
-      context 'with Mdm::Tag' do
-        #
-        # lets
-        #
-
-        let(:klass) {
-          Mdm::Tag
-        }
-
-        let(:matching_desc) {
-          'This is a description'
-        }
-
-        let(:matching_name) {
-          'matching.tag'
-        }
-
-        let(:non_matching_desc) {
-          'This could be a description'
-        }
-
-        let(:non_matching_name) {
-          'tag.does.not.match'
-        }
-
-        #
-        # let!s
-        #
-
-        let!(:matching_record) {
-          FactoryGirl.create(
-            :mdm_tag,
-            desc: matching_desc,
-            name: matching_name
-          )
-        }
-
-        let!(:non_matching_record) {
-          FactoryGirl.create(
-            :mdm_tag,
-            desc: non_matching_desc,
-            name: non_matching_name
-          )
-        }
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-          attribute: :desc
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-          attribute: :name
-
-        context 'with all operators' do
-          let(:formatted) {
-            %Q{desc:"#{matching_desc}" name:"#{matching_name}"}
+          let(:klass) {
+            Mdm::Tag
           }
 
-          it 'should find only matching record' do
-            expect(visit).to match_array([matching_record])
+          let(:matching_desc) {
+            'This is a description'
+          }
+
+          let(:matching_name) {
+            'matching.tag'
+          }
+
+          let(:non_matching_desc) {
+            'This could be a description'
+          }
+
+          let(:non_matching_name) {
+            'tag.does.not.match'
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: matching_desc,
+                name: matching_name
+            )
+          }
+
+          let!(:non_matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: non_matching_desc,
+                name: non_matching_name
+            )
+          }
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :desc
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :name
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{desc:"#{matching_desc}" name:"#{matching_name}"}
+            }
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
           end
         end
       end
