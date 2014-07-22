@@ -186,6 +186,12 @@ class Mdm::Service < ActiveRecord::Base
   #
 
   #
+  # Search Associations
+  #
+
+  search_association :host
+
+  #
   # Search Attributes
   #
 

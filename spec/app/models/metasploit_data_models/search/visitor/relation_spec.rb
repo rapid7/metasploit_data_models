@@ -172,6 +172,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
           #
 
+          let(:non_matching_host) {
+            FactoryGirl.create(
+                :mdm_host,
+                name: non_matching_host_name
+            )
+          }
+
+          let(:non_matching_host_name) {
+            'mdm_host_name_b'
+          }
+
           let(:non_matching_info) {
             'mdm_service_info_c'
           }
@@ -195,6 +206,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:non_matching_record) {
             FactoryGirl.create(
                 :mdm_service,
+                host: non_matching_host,
                 info: non_matching_info,
                 name: non_matching_name,
                 port: non_matching_port,
@@ -293,6 +305,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
             #
 
+            let(:matching_host) {
+              FactoryGirl.create(
+                  :mdm_host,
+                  name: matching_host_name
+              )
+            }
+
+            let(:matching_host_name) {
+              'mdm_host_name_a'
+            }
+
             let(:matching_info) {
               'mdm_service_info_a'
             }
@@ -316,12 +339,17 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             let!(:matching_record) {
               FactoryGirl.create(
                   :mdm_service,
+                  host: matching_host,
                   info: matching_info,
                   name: matching_name,
                   port: matching_port,
                   proto: matching_proto
               )
             }
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :name
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
@@ -334,7 +362,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
             context 'with all operators' do
               let(:formatted) {
-                %Q{name:#{matching_name} port:#{matching_port} proto:#{matching_proto}}
+                %Q{host.name:#{matching_host_name} name:#{matching_name} port:#{matching_port} proto:#{matching_proto}}
               }
 
               it 'finds only matching record' do
