@@ -83,14 +83,63 @@ describe Mdm::Cred do
   end
 
   context 'methods' do
+    #
+    # lets
+    #
+
+    let(:host) {
+      FactoryGirl.create(
+          :mdm_host,
+          workspace: workspace
+      )
+    }
+
+    let(:other_service) {
+      FactoryGirl.create(
+          :mdm_service,
+          host: host
+      )
+    }
+
+    let(:service) {
+      FactoryGirl.create(
+          :mdm_service,
+          host: host
+      )
+    }
+
+    let(:ssh_key) {
+      FactoryGirl.create(
+          :mdm_cred,
+          pass: '/path/to/keyfile',
+          proof: "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a",
+          ptype: 'ssh_key',
+          service: service,
+          user: 'msfadmin'
+      )
+    }
+
+    let(:ssh_pubkey) {
+      FactoryGirl.create(
+          :mdm_cred,
+          pass: '/path/to/keyfile',
+          proof: "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a",
+          ptype: 'ssh_pubkey',
+          service: service,
+          user: 'msfadmin'
+      )
+    }
+
+    let(:workspace) {
+      FactoryGirl.create(:mdm_workspace)
+    }
+
+    #
+    # Callbacks
+    #
+
     before(:all) do
       Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
-      workspace =  FactoryGirl.create(:mdm_workspace)
-      host = FactoryGirl.create(:mdm_host, :workspace => workspace)
-      @svc1 = FactoryGirl.create(:mdm_service, :host => host)
-      @svc2 = FactoryGirl.create(:mdm_service, :host => host)
-      @cred1 = FactoryGirl.create(:mdm_cred, :service => @svc1, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
-      @pubkey = FactoryGirl.create(:mdm_cred, :service => @svc1, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
     end
 
     context '#ptype_human' do
@@ -140,79 +189,163 @@ describe Mdm::Cred do
 
     context '#ssh_key_matches?' do
       it 'should return true if the ssh_keys match' do
-        cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
-        cred2.ssh_key_matches?(@cred1).should == true
+        other_ssh_key = FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a',
+            ptype: 'ssh_key',
+            service: other_service,
+            user: 'msfadmin'
+        )
+
+        expect(other_ssh_key.ssh_key_matches?(ssh_key)).to eq(true)
       end
 
       it 'should return false if passed something other than a cred' do
-        @cred1.ssh_key_matches?(@svc1).should == false
+        expect(ssh_key.ssh_key_matches?(service)).to eq(false)
       end
 
       it 'should return false if the ptypes do not match' do
-        cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
-        cred2.ssh_key_matches?(@cred1).should == false
+        different_ptype = FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a',
+            ptype: 'ssh_pubkey',
+            service: other_service,
+            user: 'msfadmin'
+        )
+
+        expect(different_ptype.ssh_key_matches?(ssh_key)).to eq(false)
       end
 
       it 'should return false if the key ids do not match' do
-        cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=66:d4:22:6e:88:d6:74:A1:44:3e:d6:d5:AA:89:73:8b")
-        cred2.ssh_key_matches?(@cred1).should == false
+        different_proof = FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=66:d4:22:6e:88:d6:74:A1:44:3e:d6:d5:AA:89:73:8b',
+            ptype: 'ssh_pubkey',
+            service: other_service,
+            user: 'msfadmin'
+        )
+
+        expect(different_proof.ssh_key_matches?(ssh_key)).to eq(false)
       end
 
       it 'should behave the same for public keys as private keys' do
-        pubkey2 = FactoryGirl.create(:mdm_cred, :service => @svc1, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
-        pubkey3 = FactoryGirl.create(:mdm_cred, :service => @svc1, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=66:d4:22:6e:88:d6:74:A1:44:3e:d6:d5:AA:89:73:8b")
-        pubkey2.ssh_key_matches?(@pubkey).should == true
+        pubkey2 = FactoryGirl.create(:mdm_cred, :service => service, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
+        pubkey3 = FactoryGirl.create(:mdm_cred, :service => service, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=66:d4:22:6e:88:d6:74:A1:44:3e:d6:d5:AA:89:73:8b")
+        pubkey2.ssh_key_matches?(ssh_pubkey).should == true
         pubkey2.ssh_key_matches?(pubkey3).should == false
       end
 
       it 'should always return false for non ssh key creds' do
-        cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
-        cred3 = FactoryGirl.create(:mdm_cred, :service => @svc2, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
+        cred2 = FactoryGirl.create(:mdm_cred, :service => other_service, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
+        cred3 = FactoryGirl.create(:mdm_cred, :service => other_service, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
         cred2.ssh_key_matches?(cred3).should == false
       end
     end
 
     context '#ssh_keys' do
-      before(:all) do
-        @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
+      #
+      # lets
+      #
+
+      let(:other_ssh_key) {
+        FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a',
+            ptype: 'ssh_key',
+            service: other_service,
+            user: 'msfadmin'
+        )
+      }
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        ssh_key
+        ssh_pubkey
       end
+
       it 'should return all ssh private keys with a matching id' do
-        @cred2.ssh_keys.should include(@cred1)
+        other_ssh_key.ssh_keys.should include(ssh_key)
       end
 
       it 'should return all ssh public keys with a matching id' do
-        @cred2.ssh_keys.should include(@pubkey)
+        other_ssh_key.ssh_keys.should include(ssh_pubkey)
       end
     end
 
     context '#ssh_private_keys' do
-      before(:all) do
-        @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
+      #
+      # lets
+      #
+
+      let(:other_ssh_key) {
+        FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a',
+            ptype: 'ssh_key',
+            service: other_service,
+            user: 'msfadmin',
+        )
+      }
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        ssh_key
+        ssh_pubkey
       end
 
       it 'should return ssh private keys with matching ids' do
-        @cred2.ssh_private_keys.should include(@cred1)
+        other_ssh_key.ssh_private_keys.should include(ssh_key)
       end
 
       it 'should not return ssh public keys with matching ids' do
-        @cred2.ssh_private_keys.should_not include(@pubkey)
+        other_ssh_key.ssh_private_keys.should_not include(ssh_pubkey)
       end
     end
 
     context '#ssh_public_keys' do
-      before(:all) do
-        @cred2 = FactoryGirl.create(:mdm_cred, :service => @svc2, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
+      #
+      # lets
+      #
+
+      let(:other_ssh_key) {
+        FactoryGirl.create(
+            :mdm_cred,
+            pass: '/path/to/keyfile',
+            proof: 'KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a',
+            ptype: 'ssh_key',
+            service: other_service,
+            user: 'msfadmin'
+        )
+      }
+
+      #
+      # Callbacks
+      #
+
+      before(:each) do
+        ssh_key
+        ssh_pubkey
       end
 
       it 'should not return ssh private keys with matching ids' do
-        @cred2.ssh_public_keys.should_not include(@cred1)
+        other_ssh_key.ssh_public_keys.should_not include(ssh_key)
       end
 
       it 'should return ssh public keys with matching ids' do
-        @cred2.ssh_public_keys.should include(@pubkey)
+        other_ssh_key.ssh_public_keys.should include(ssh_pubkey)
       end
     end
-
   end
 
   context 'factory' do

@@ -23,6 +23,7 @@ class MetasploitDataModels::Search::Visitor::Includes
   end
 
   visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::IPAddress',
         'MetasploitDataModels::Search::Operator::Port::List' do |_operator|
     []
   end
