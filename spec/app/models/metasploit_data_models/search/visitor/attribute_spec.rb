@@ -47,28 +47,28 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
     end
 
     context 'with Metasploit::Model::Search::Operator::Association' do
-      let(:attribute_operator) do
-        double('Attribute Operator')
+      let(:source_operator) do
+        double('source operator')
       end
 
       let(:node) do
         Metasploit::Model::Search::Operator::Association.new(
-            :attribute_operator => attribute_operator
+            :source_operator => source_operator
         )
       end
 
-      it 'should visit Metasploit::Model::Search::Operator::Association#attribute_operator' do
+      it 'should visit Metasploit::Model::Search::Operator::Association#source_operator' do
         visitor.should_receive(:visit).with(node).and_call_original
-        visitor.should_receive(:visit).with(attribute_operator)
+        visitor.should_receive(:visit).with(source_operator)
 
         visit
       end
 
-      it 'should return visit of Metasploit::Model::Search::Operator::Association#attribute_operator' do
+      it 'should return visit of Metasploit::Model::Search::Operator::Association#source_operator' do
         visitor.should_receive(:visit).with(node).and_call_original
 
-        visited = double('Attribute Operator Visited')
-        visitor.stub(:visit).with(attribute_operator).and_return(visited)
+        visited = double('Source Operator Visited')
+        visitor.stub(:visit).with(source_operator).and_return(visited)
 
         visit.should == visited
       end
