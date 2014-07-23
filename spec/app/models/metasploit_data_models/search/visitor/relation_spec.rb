@@ -172,6 +172,32 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
           #
 
+          let(:non_matching_host) {
+            FactoryGirl.create(
+                :mdm_host,
+                name: non_matching_host_name,
+                os_flavor: non_matching_host_os_flavor,
+                os_name: non_matching_host_os_name,
+                os_sp: non_matching_host_os_sp
+            )
+          }
+
+          let(:non_matching_host_name) {
+            'mdm_host_name_b'
+          }
+
+          let(:non_matching_host_os_flavor) {
+            'mdm_host_os_flavor_b'
+          }
+
+          let(:non_matching_host_os_name) {
+            'mdm_host_os_name_b'
+          }
+
+          let(:non_matching_host_os_sp) {
+            'mdm_host_os_sp_b'
+          }
+
           let(:non_matching_info) {
             'mdm_service_info_c'
           }
@@ -195,6 +221,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let!(:non_matching_record) {
             FactoryGirl.create(
                 :mdm_service,
+                host: non_matching_host,
                 info: non_matching_info,
                 name: non_matching_name,
                 port: non_matching_port,
@@ -293,6 +320,32 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             # Don't use factories to prevent prefix aliasing when sequences go from 1 to 10 or 10 to 100
             #
 
+            let(:matching_host) {
+              FactoryGirl.create(
+                  :mdm_host,
+                  name: matching_host_name,
+                  os_flavor: matching_host_os_flavor,
+                  os_name: matching_host_os_name,
+                  os_sp: matching_host_os_sp
+              )
+            }
+
+            let(:matching_host_name) {
+              'mdm_host_name_a'
+            }
+
+            let(:matching_host_os_flavor) {
+              'mdm_host_os_flavor_a'
+            }
+
+            let(:matching_host_os_name) {
+              'mdm_host_os_name_a'
+            }
+
+            let(:matching_host_os_sp) {
+              'mdm_host_os_sp_a'
+            }
+
             let(:matching_info) {
               'mdm_service_info_a'
             }
@@ -316,12 +369,77 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             let!(:matching_record) {
               FactoryGirl.create(
                   :mdm_service,
+                  host: matching_host,
                   info: matching_info,
                   name: matching_name,
                   port: matching_port,
                   proto: matching_proto
               )
             }
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :name
+
+            context 'with host.os' do
+              let(:matching_host_os_flavor) {
+                'XP'
+              }
+
+              let(:matching_host_os_name) {
+                'Microsoft Windows'
+              }
+
+              let(:matching_host_os_sp) {
+                'SP1'
+              }
+
+              context 'with a combination of Mdm::Host#os_name and Mdm:Host#os_sp' do
+                let(:formatted) {
+                  %Q{host.os:"win xp"}
+                }
+
+                it 'finds matching record' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+
+              context 'with a combination of Mdm::Host#os_flavor and Mdm::Host#os_sp' do
+                let(:formatted) {
+                  %Q{host.os:"xp sp1"}
+                }
+
+                it 'finds matching record' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+
+              context 'with multiple records matching one word' do
+                let(:formatted) {
+                  %Q{host.os:"win xp"}
+                }
+
+                let(:non_matching_host_os_name) {
+                  'Microsoft Windows'
+                }
+
+                it 'finds only matching record by other words refining search' do
+                  expect(visit).to match_array [matching_record]
+                end
+              end
+            end
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :os_flavor
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :os_name
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: :host,
+                                  attribute: :os_sp
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
@@ -334,7 +452,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
             context 'with all operators' do
               let(:formatted) {
-                %Q{name:#{matching_name} port:#{matching_port} proto:#{matching_proto}}
+                %Q{
+                  host.name:#{matching_host_name}
+                  host.os:"#{matching_host_os_name} #{matching_host_os_flavor} #{matching_host_os_sp}"
+                  host.os_flavor:#{matching_host_os_flavor}
+                  host.os_name:#{matching_host_os_name}
+                  host.os_sp:#{matching_host_os_sp}
+                  name:#{matching_name}
+                  port:#{matching_port}
+                  proto:#{matching_proto}
+                }
               }
 
               it 'finds only matching record' do
@@ -566,67 +693,65 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
         end
 
+        context 'with Mdm::Tag' do
+          #
+          # lets
+          #
 
-      end
-
-      context 'with Mdm::Tag' do
-        #
-        # lets
-        #
-
-        let(:klass) {
-          Mdm::Tag
-        }
-
-        let(:matching_desc) {
-          'This is a description'
-        }
-
-        let(:matching_name) {
-          'matching.tag'
-        }
-
-        let(:non_matching_desc) {
-          'This could be a description'
-        }
-
-        let(:non_matching_name) {
-          'tag.does.not.match'
-        }
-
-        #
-        # let!s
-        #
-
-        let!(:matching_record) {
-          FactoryGirl.create(
-            :mdm_tag,
-            desc: matching_desc,
-            name: matching_name
-          )
-        }
-
-        let!(:non_matching_record) {
-          FactoryGirl.create(
-            :mdm_tag,
-            desc: non_matching_desc,
-            name: non_matching_name
-          )
-        }
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-          attribute: :desc
-
-        it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
-          attribute: :name
-
-        context 'with all operators' do
-          let(:formatted) {
-            %Q{desc:"#{matching_desc}" name:"#{matching_name}"}
+          let(:klass) {
+            Mdm::Tag
           }
 
-          it 'should find only matching record' do
-            expect(visit).to match_array([matching_record])
+          let(:matching_desc) {
+            'This is a description'
+          }
+
+          let(:matching_name) {
+            'matching.tag'
+          }
+
+          let(:non_matching_desc) {
+            'This could be a description'
+          }
+
+          let(:non_matching_name) {
+            'tag.does.not.match'
+          }
+
+          #
+          # let!s
+          #
+
+          let!(:matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: matching_desc,
+                name: matching_name
+            )
+          }
+
+          let!(:non_matching_record) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: non_matching_desc,
+                name: non_matching_name
+            )
+          }
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :desc
+
+          it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                attribute: :name
+
+          context 'with all operators' do
+            let(:formatted) {
+              %Q{desc:"#{matching_desc}" name:"#{matching_name}"}
+            }
+
+            it 'should find only matching record' do
+              expect(visit).to match_array([matching_record])
+            end
           end
         end
       end

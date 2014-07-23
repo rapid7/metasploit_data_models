@@ -119,6 +119,16 @@ describe Mdm::Service do
     end
   end
 
+  context 'search' do
+    let(:base_class) {
+      described_class
+    }
+
+    context 'associations' do
+      it_should_behave_like 'search_association', :host
+    end
+  end
+
   context "validations" do
     subject(:mdm_service) {
       FactoryGirl.build(:mdm_service)

@@ -186,6 +186,12 @@ class Mdm::Service < ActiveRecord::Base
   #
 
   #
+  # Search Associations
+  #
+
+  search_association :host
+
+  #
   # Search Attributes
   #
 
@@ -202,6 +208,14 @@ class Mdm::Service < ActiveRecord::Base
   # Search Withs
   #
 
+  # Have to declare on Mdm::Service because non-attribute operators cannot function as association operators
+  search_with MetasploitDataModels::Search::Operator::Multitext,
+              name: :'host.os',
+              operator_names: [
+                  :'host.os_name',
+                  :'host.os_flavor',
+                  :'host.os_sp'
+              ]
   search_with MetasploitDataModels::Search::Operator::Port::List
 
   #
