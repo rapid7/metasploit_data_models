@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 19
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 2
+    PATCH = 3
     # The pre-release version, scoped to the {PATCH} version number.
     PRERELEASE = 'service-association-search'
 
