@@ -189,7 +189,7 @@ class Mdm::Service < ActiveRecord::Base
   # Search Associations
   #
 
-  search_association :host
+  search_associations host: :tags
 
   #
   # Search Attributes

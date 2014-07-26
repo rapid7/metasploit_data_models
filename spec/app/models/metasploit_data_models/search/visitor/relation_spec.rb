@@ -180,7 +180,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                 os_flavor: non_matching_host_os_flavor,
                 os_name: non_matching_host_os_name,
                 os_sp: non_matching_host_os_sp
-            )
+            ).tap { |host|
+              FactoryGirl.create(
+                  :mdm_host_tag,
+                  host: host,
+                  tag: non_matching_tag
+              )
+            }
           }
 
           let(:non_matching_host_address) {
@@ -217,6 +223,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           let(:non_matching_proto) {
             'udp'
+          }
+
+          let(:non_matching_tag) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: non_matching_tag_desc,
+                name: non_matching_tag_name
+            )
+          }
+
+          let(:non_matching_tag_desc) {
+            'Mdm::Tag#description b'
+          }
+
+          let(:non_matching_tag_name) {
+            'mdm_tag_name.b'
           }
 
           #
@@ -333,7 +355,13 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                   os_flavor: matching_host_os_flavor,
                   os_name: matching_host_os_name,
                   os_sp: matching_host_os_sp
-              )
+              ).tap { |host|
+                FactoryGirl.create(
+                    :mdm_host_tag,
+                    host: host,
+                    tag: matching_tag
+                )
+              }
             }
 
             let(:matching_host_address) {
@@ -370,6 +398,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
             let(:matching_proto) {
               'tcp'
+            }
+
+            let(:matching_tag) {
+              FactoryGirl.create(
+                  :mdm_tag,
+                  desc: matching_tag_desc,
+                  name: matching_tag_name
+              )
+            }
+
+            let(:matching_tag_desc) {
+              'Mdm::Tag#description a'
+            }
+
+            let(:matching_tag_name) {
+              'mdm_tag_name.a'
             }
 
             #
@@ -488,6 +532,18 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                   attribute: :os_sp
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: {
+                                      host: :tags
+                                  },
+                                  attribute: :desc
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: {
+                                      host: :tags
+                                  },
+                                  attribute: :name
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -507,6 +563,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                   host.os_flavor:#{matching_host_os_flavor}
                   host.os_name:#{matching_host_os_name}
                   host.os_sp:#{matching_host_os_sp}
+                  host.tags.desc:"#{matching_tag_desc}"
+                  host.tags.name:#{matching_tag_name}
                   name:#{matching_name}
                   port:#{matching_port}
                   proto:#{matching_proto}
