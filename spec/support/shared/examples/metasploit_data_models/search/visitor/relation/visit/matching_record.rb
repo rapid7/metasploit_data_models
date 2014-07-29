@@ -4,30 +4,43 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit match
   attribute = options.fetch(:attribute)
   association = options[:association]
 
-  if association
-    formatted_operator = "#{association}.#{attribute}"
-  else
-    formatted_operator = attribute.to_s
+  def self.nested_hash_to_array(association)
+    case association
+      when Hash
+        hash = association
+        keys = hash.keys
+
+        unless keys.length == 1
+          raise ArgumentError, 'Only single key Hashes are allowed to nest associations'
+        end
+
+        parent_association = keys.first
+        child_association = hash[parent_association]
+
+        [parent_association, *nested_hash_to_array(child_association)]
+      when Symbol
+        [association]
+      when nil
+        []
+      else
+        raise TypeError, "Cannot convert #{association.class} (#{association}) to array"
+    end
   end
+
+  associations = nested_hash_to_array(association)
+  messages = [*associations, attribute]
+  formatted_operator = messages.map(&:to_s).join('.')
 
   context "with #{formatted_operator}" do
     let(:formatted) do
       "#{formatted_operator}:\"#{value}\""
     end
 
-    if association
-      let(:associated) do
-        # wrap in array so single and plural associations can be handled the same.
-        Array.wrap(matching_record.send(association)).first
-      end
-
-      let(:value) do
-        associated.send(attribute)
-      end
-    else
-      let(:value) do
-        matching_record.send(attribute)
-      end
+    let(:value) do
+      messages.inject(matching_record) { |instance, message|
+        # wrap in array so singel and plural associatins can be handled the same
+        Array.wrap(instance.send(message)).first
+      }
     end
 
     it 'should find only matching record' do

@@ -175,11 +175,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           let(:non_matching_host) {
             FactoryGirl.create(
                 :mdm_host,
+                address: non_matching_host_address,
                 name: non_matching_host_name,
                 os_flavor: non_matching_host_os_flavor,
                 os_name: non_matching_host_os_name,
                 os_sp: non_matching_host_os_sp
-            )
+            ).tap { |host|
+              FactoryGirl.create(
+                  :mdm_host_tag,
+                  host: host,
+                  tag: non_matching_tag
+              )
+            }
+          }
+
+          let(:non_matching_host_address) {
+            '5.6.7.8'
           }
 
           let(:non_matching_host_name) {
@@ -212,6 +223,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
           let(:non_matching_proto) {
             'udp'
+          }
+
+          let(:non_matching_tag) {
+            FactoryGirl.create(
+                :mdm_tag,
+                desc: non_matching_tag_desc,
+                name: non_matching_tag_name
+            )
+          }
+
+          let(:non_matching_tag_desc) {
+            'Mdm::Tag#description b'
+          }
+
+          let(:non_matching_tag_name) {
+            'mdm_tag_name.b'
           }
 
           #
@@ -323,11 +350,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             let(:matching_host) {
               FactoryGirl.create(
                   :mdm_host,
+                  address: matching_host_address,
                   name: matching_host_name,
                   os_flavor: matching_host_os_flavor,
                   os_name: matching_host_os_name,
                   os_sp: matching_host_os_sp
-              )
+              ).tap { |host|
+                FactoryGirl.create(
+                    :mdm_host_tag,
+                    host: host,
+                    tag: matching_tag
+                )
+              }
+            }
+
+            let(:matching_host_address) {
+              '1.2.3.4'
             }
 
             let(:matching_host_name) {
@@ -362,6 +400,22 @@ describe MetasploitDataModels::Search::Visitor::Relation do
               'tcp'
             }
 
+            let(:matching_tag) {
+              FactoryGirl.create(
+                  :mdm_tag,
+                  desc: matching_tag_desc,
+                  name: matching_tag_name
+              )
+            }
+
+            let(:matching_tag_desc) {
+              'Mdm::Tag#description a'
+            }
+
+            let(:matching_tag_name) {
+              'mdm_tag_name.a'
+            }
+
             #
             # let!s
             #
@@ -376,6 +430,42 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                   proto: matching_proto
               )
             }
+
+            context 'with host.address operator' do
+              let(:formatted) do
+                "host.address:#{formatted_address}"
+              end
+
+              context 'with CIDR' do
+                let(:formatted_address) {
+                  '1.3.4.5/8'
+                }
+
+                it 'should find only matching record' do
+                  expect(visit).to match_array([matching_record])
+                end
+              end
+
+              context 'with Range' do
+                let(:formatted_address) {
+                  '1.1.1.1-5.6.7.7'
+                }
+
+                it 'should find only matching record' do
+                  expect(visit).to match_array([matching_record])
+                end
+              end
+
+              context 'with single' do
+                let(:formatted_address) {
+                  '1.2.3.4'
+                }
+
+                it 'should find only matching record' do
+                  expect(visit).to match_array([matching_record])
+                end
+              end
+            end
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   association: :host,
@@ -442,6 +532,18 @@ describe MetasploitDataModels::Search::Visitor::Relation do
                                   attribute: :os_sp
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: {
+                                      host: :tags
+                                  },
+                                  attribute: :desc
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
+                                  association: {
+                                      host: :tags
+                                  },
+                                  attribute: :name
+
+            it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
                                   attribute: :info
 
             it_should_behave_like 'MetasploitDataModels::Search::Visitor::Relation#visit matching record',
@@ -453,11 +555,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             context 'with all operators' do
               let(:formatted) {
                 %Q{
+                  host.address:1.3.4.5/8
+                  host.address:1.1.1.1-5.6.7.7
+                  host.address:1.2.3.4
                   host.name:#{matching_host_name}
                   host.os:"#{matching_host_os_name} #{matching_host_os_flavor} #{matching_host_os_sp}"
                   host.os_flavor:#{matching_host_os_flavor}
                   host.os_name:#{matching_host_os_name}
                   host.os_sp:#{matching_host_os_sp}
+                  host.tags.desc:"#{matching_tag_desc}"
+                  host.tags.name:#{matching_tag_name}
                   name:#{matching_name}
                   port:#{matching_port}
                   proto:#{matching_proto}

@@ -38,6 +38,10 @@ class MetasploitDataModels::Search::Visitor::Where
     attribute.eq(operation.value)
   end
 
+  visit 'Metasploit::Model::Search::Operation::Association' do |operation|
+    visit operation.source_operation
+  end
+
   visit 'Metasploit::Model::Search::Operation::String' do |operation|
     attribute = attribute_visitor.visit operation.operator
     match_value = "%#{operation.value}%"

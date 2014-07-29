@@ -29,6 +29,58 @@ describe MetasploitDataModels::Search::Visitor::Includes do
       end
     end
 
+    context 'with Metasploit::Model::Search::Operation::Association' do
+      let(:association) {
+        :parent_association
+      }
+
+      let(:node) {
+        operator.operate_on('formatted_value')
+      }
+
+      let(:operator) {
+        Metasploit::Model::Search::Operator::Association.new(
+            association: association,
+            source_operator: source_operator
+        )
+      }
+
+      context '#source_operation' do
+        let(:attribute_operator) {
+          Metasploit::Model::Search::Operator::Attribute.new(
+              type: :string
+          )
+        }
+
+        context 'with Metasploit::Model::Search::Operation::Association' do
+          let(:source_operator) {
+            Metasploit::Model::Search::Operator::Association.new(
+                association: source_operator_association,
+                source_operator: attribute_operator
+            )
+          }
+
+          let(:source_operator_association) {
+            :child_association
+          }
+
+          it 'is [{ association => nested associations }]' do
+            expect(visit).to eq([{association => [source_operator_association]}])
+          end
+        end
+
+        context 'without Metasploit::Model::Search::Operation::Association' do
+          let(:source_operator) {
+            attribute_operator
+          }
+
+          it 'is [association]' do
+            expect(visit).to eq([association])
+          end
+        end
+      end
+    end
+
     operation_classes = [
         Metasploit::Model::Search::Operation::Boolean,
         Metasploit::Model::Search::Operation::Date,
@@ -60,8 +112,8 @@ describe MetasploitDataModels::Search::Visitor::Includes do
         )
       end
 
-      it 'should include association' do
-        visit.should include(association)
+      it 'is #association' do
+        expect(visit).to eq(association)
       end
     end
 

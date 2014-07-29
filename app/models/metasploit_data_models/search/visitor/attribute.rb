@@ -3,7 +3,7 @@ class MetasploitDataModels::Search::Visitor::Attribute
   include Metasploit::Model::Visitation::Visit
 
   visit 'Metasploit::Model::Search::Operator::Association' do |operator|
-    visit operator.attribute_operator
+    visit operator.source_operator
   end
 
   visit 'Metasploit::Model::Search::Operator::Attribute',
