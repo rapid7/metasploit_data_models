@@ -3,6 +3,28 @@ require 'spec_helper'
 describe Mdm::Service do
   it_should_behave_like 'Metasploit::Concern.run'
 
+  context 'CONSTANTS' do
+    context 'PROTOS' do
+      subject(:protos) {
+        described_class::PROTOS
+      }
+
+      it { should include 'tcp' }
+      it { should include 'udp' }
+    end
+
+    context 'STATES' do
+      subject(:states) {
+        described_class::STATES
+      }
+
+      it { should include 'closed' }
+      it { should include 'filtered' }
+      it { should include 'open' }
+      it { should include 'unknown' }
+    end
+  end
+
   context "Associations" do
 
     it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
@@ -33,13 +55,13 @@ describe Mdm::Service do
       end
     end
 
-    context "search for 'snmp'" do
+    context "search for 'tcp'" do
       it "should find only services that match" do
-        snmp_service   = FactoryGirl.create(:mdm_service)
-        ftp_service    =  FactoryGirl.create(:mdm_service, :proto => 'ftp')
-        search_results = Mdm::Service.search('snmp')
-        search_results.should     include(snmp_service)
-        search_results.should_not include(ftp_service)
+        tcp_service   = FactoryGirl.create(:mdm_service, proto: 'tcp')
+        udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
+        search_results = Mdm::Service.search('tcp')
+        search_results.should     include(tcp_service)
+        search_results.should_not include(udp_service)
       end
     end
   end
@@ -97,45 +119,22 @@ describe Mdm::Service do
     end
   end
 
+  context 'search' do
+    let(:base_class) {
+      described_class
+    }
+
+    context 'associations' do
+      it_should_behave_like 'search_association', :host
+    end
+  end
+
   context "validations" do
-    let(:mdm_service) do
-      mdm_service = FactoryGirl.build(:mdm_service)
-      mdm_service.valid?
-      mdm_service
-    end
+    subject(:mdm_service) {
+      FactoryGirl.build(:mdm_service)
+    }
 
-    context "invalid" do
-      it "should validate presence of :port" do
-        mdm_service.port = nil
-        mdm_service.valid?
-        mdm_service.errors[:port][0].should include "is not a number"
-      end
-
-      it "should validate presence of :proto" do
-        mdm_service.proto = nil
-        mdm_service.valid?
-        mdm_service.errors[:proto][0].should include "can't be blank"
-      end
-
-      it "should not allow non-numeric value for port" do
-        mdm_service.port = Faker::Lorem.characters(4)
-        mdm_service.valid?
-        mdm_service.errors[:port][0].should include "is not a number"
-      end
-    end
-
-    context "valid" do
-      it "should allow numeric value for port" do
-        mdm_service.port = Faker::Number.number(4)
-        mdm_service.valid?
-        mdm_service.should have(0).errors_on(:port)
-      end
-
-      it "should allow proto" do
-        mdm_service.proto = "tcp"
-        mdm_service.valid?
-        mdm_service.should have(0).errors_on(:proto)
-      end
-    end
+    it { should validate_numericality_of(:port).only_integer }
+    it { should ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
   end
 end

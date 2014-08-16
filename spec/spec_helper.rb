@@ -32,6 +32,7 @@ Rails.backtrace_cleaner.remove_silencers!
 
 engines = [
     Metasploit::Concern::Engine,
+    Metasploit::Model::Engine,
     MetasploitDataModels::Engine
 ]
 

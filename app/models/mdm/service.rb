@@ -6,6 +6,9 @@ class Mdm::Service < ActiveRecord::Base
   # CONSTANTS
   #
 
+  # Valid values for {#proto}.
+  PROTOS = %w{tcp udp}
+
   # Valid values for {#state}.
   STATES = ['open', 'closed', 'filtered', 'unknown']
 
@@ -183,11 +186,23 @@ class Mdm::Service < ActiveRecord::Base
   #
 
   #
+  # Search Associations
+  #
+
+  search_associations host: :tags
+
+  #
   # Search Attributes
   #
 
+  search_attribute :info,
+                   type: :string
   search_attribute :name,
                    type: :string
+  search_attribute :proto,
+                   type: {
+                       set: :string
+                   }
 
   #
   # Search Withs
@@ -202,7 +217,27 @@ class Mdm::Service < ActiveRecord::Base
             numericality: {
                 only_integer: true
             }
-  validates :proto, presence: true
+  validates :proto,
+            inclusion: {
+                in: PROTOS
+            }
+
+  #
+  # Class Methods
+  #
+
+  # Set of searchable values for {#proto}.
+  #
+  # @return [Set<String>] {PROTOS} as a `Set`.
+  # @see Metasploit::Model::Search::Operation::Set#membership
+  # @see Metasploit::Model::Search::Operator::Attribute#attribute_set
+  def self.proto_set
+    @proto_set ||= Set.new(PROTOS)
+  end
+
+  #
+  # Instance Methods
+  #
 
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} whenever {#info} has
   # changed.

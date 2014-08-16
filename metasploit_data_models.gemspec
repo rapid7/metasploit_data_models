@@ -4,7 +4,7 @@ require 'metasploit_data_models/version'
 
 Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
-  s.version     = MetasploitDataModels::VERSION
+  s.version     = MetasploitDataModels::GEM_VERSION
   s.authors     = [
       'Samuel Huckins',
       'Luke Imhoff',
@@ -30,7 +30,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
 
   # documentation
-  s.add_development_dependency 'yard'
+  # @note 0.8.7.4 has a bug where attribute writers show up as undocumented
+  s.add_development_dependency 'yard', '< 0.8.7.4'
   # debugging
   s.add_development_dependency 'pry'
 
@@ -42,7 +43,10 @@ Gem::Specification.new do |s|
   # os fingerprinting
   s.add_runtime_dependency 'recog'
   s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '>= 0.25.1', '< 0.26'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.26.1'
+  
+  # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
+  s.add_runtime_dependency 'arel-helpers'
   
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard

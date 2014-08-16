@@ -75,7 +75,9 @@ describe MetasploitDataModels::Search::Visitor::Joins do
           context 'without child joins' do
             let(:children) do
               Array.new(2) {
-                Metasploit::Model::Search::Operator::Attribute.new
+                operator = Metasploit::Model::Search::Operator::Attribute.new(type: :string)
+
+                operator.operate_on('formatted_value')
               }
             end
 
@@ -87,20 +89,31 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               FactoryGirl.generate :metasploit_model_search_operator_association_association
             end
 
+            let(:association_operation) {
+              association_operator.operate_on('formatted_value')
+            }
+
             let(:association_operator) do
+              source_operator = Metasploit::Model::Search::Operator::Attribute.new(type: :string)
+
               Metasploit::Model::Search::Operator::Association.new(
-                  association: association
+                  association: association,
+                  source_operator: source_operator
               )
             end
 
+            let(:attribute_operation) {
+              attribute_operator.operate_on('formatted_value')
+            }
+
             let(:attribute_operator) do
-              Metasploit::Model::Search::Operator::Attribute.new
+              Metasploit::Model::Search::Operator::Attribute.new(type: :string)
             end
 
             let(:children) do
               [
-                  association_operator,
-                  attribute_operator
+                  association_operation,
+                  attribute_operation
               ]
             end
 
@@ -112,15 +125,22 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               FactoryGirl.generate :metasploit_model_search_operator_association_association
             end
 
+            let(:association_operation) {
+              association_operator.operate_on('formatted_value')
+            }
+
             let(:association_operator) do
+              source_operator = Metasploit::Model::Search::Operator::Attribute.new(type: :string)
+
               Metasploit::Model::Search::Operator::Association.new(
-                  association: association
+                  association: association,
+                  source_operator: source_operator
               )
             end
 
             let(:children) do
               Array.new(2) {
-                association_operator
+                association_operation
               }
             end
 
@@ -140,10 +160,19 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               disjoint_associations[0, 1] + common_associations
             end
 
+            let(:first_association_operations) {
+              first_association_operators.map { |association_operator|
+                association_operator.operate_on('formatted_value')
+              }
+            }
+
             let(:first_association_operators) do
               first_associations.collect { |association|
+                source_operator = Metasploit::Model::Search::Operator::Attribute.new(type: :string)
+
                 Metasploit::Model::Search::Operator::Association.new(
-                    association: association
+                    association: association,
+                    source_operator: source_operator
                 )
               }
             end
@@ -152,16 +181,25 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               disjoint_associations[1, 1] + common_associations
             end
 
+            let(:second_association_operations) {
+              second_association_operators.map { |association_operator|
+                association_operator.operate_on('formatted_value')
+              }
+            }
+
             let(:second_association_operators) do
               second_associations.collect { |association|
+                source_operator = Metasploit::Model::Search::Operator::Attribute.new(type: :string)
+
                 Metasploit::Model::Search::Operator::Association.new(
-                    association: association
+                    association: association,
+                    source_operator: source_operator
                 )
               }
             end
 
             let(:children) do
-              [first_association_operators, second_association_operators].collect { |grandchildren|
+              [first_association_operations, second_association_operations].collect { |grandchildren|
                 Metasploit::Model::Search::Group::Intersection.new(
                     children: grandchildren
                 )
@@ -208,6 +246,58 @@ describe MetasploitDataModels::Search::Visitor::Joins do
       end
     end
 
+    context 'with Metasploit::Model::Search::Operation::Association' do
+      let(:association) {
+        :parent_association
+      }
+
+      let(:node) {
+        operator.operate_on('formatted_value')
+      }
+
+      let(:operator) {
+        Metasploit::Model::Search::Operator::Association.new(
+            association: association,
+            source_operator: source_operator
+        )
+      }
+
+      context '#source_operation' do
+        let(:attribute_operator) {
+          Metasploit::Model::Search::Operator::Attribute.new(
+              type: :string
+          )
+        }
+
+        context 'with Metasploit::Model::Search::Operation::Association' do
+          let(:source_operator) {
+            Metasploit::Model::Search::Operator::Association.new(
+                association: source_operator_association,
+                source_operator: attribute_operator
+            )
+          }
+
+          let(:source_operator_association) {
+            :child_association
+          }
+
+          it 'is [{ association => nested associations }]' do
+            expect(visit).to eq([{association => [source_operator_association]}])
+          end
+        end
+
+        context 'without Metasploit::Model::Search::Operation::Association' do
+          let(:source_operator) {
+            attribute_operator
+          }
+
+          it 'is [association]' do
+            expect(visit).to eq([association])
+          end
+        end
+      end
+    end
+
     operation_classes = [
         Metasploit::Model::Search::Operation::Boolean,
         Metasploit::Model::Search::Operation::Date,
@@ -239,8 +329,8 @@ describe MetasploitDataModels::Search::Visitor::Joins do
         )
       end
 
-      it 'should include association' do
-        visit.should include(association)
+      it 'is #association' do
+        expect(visit).to eq(association)
       end
     end
 

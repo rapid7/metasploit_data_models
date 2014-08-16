@@ -34,15 +34,31 @@ class MetasploitDataModels::Search::Visitor::Joins
     common_join_set.to_a
   end
 
+  visit 'Metasploit::Model::Search::Operation::Association' do |operation|
+    association = visit operation.operator
+    nested_associations = visit operation.source_operation
+
+    if nested_associations.empty?
+      [association]
+    else
+      [
+          {
+              association => nested_associations
+          }
+      ]
+    end
+  end
+
   visit 'Metasploit::Model::Search::Operation::Base' do |operation|
     visit operation.operator
   end
 
   visit 'Metasploit::Model::Search::Operator::Association' do |operator|
-    [operator.association]
+    operator.association
   end
 
   visit 'Metasploit::Model::Search::Operator::Attribute',
+        'MetasploitDataModels::Search::Operator::IPAddress',
         'MetasploitDataModels::Search::Operator::Port::List' do |_|
     []
   end

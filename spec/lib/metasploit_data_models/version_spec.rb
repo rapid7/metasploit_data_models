@@ -37,9 +37,6 @@ describe MetasploitDataModels::Version do
     # on the target branch before committing and/or pushing to github and travis-ci.
     if pull_request.nil? || pull_request == 'false'
       context 'PREPRELEASE' do
-        before(:each) do
-          pending("This is pending until we are using Travis-ci")
-        end
         subject(:prerelease) do
           described_class::PRERELEASE
         end
@@ -63,7 +60,7 @@ describe MetasploitDataModels::Version do
               expect(prerelease).to eq(match[:prerelease])
             end
           else
-            tag_regex = /\Av(?<major>\d+).(?<minor>\d+).(?<patch>\d+)(-(?<prerelease>.*))?\z/
+            tag_regex = /\Av(?<major>\d+).(?<minor>\d+).(?<patch>\d+)(\.pre\.(?<prerelease>.*))?\z/
             # travis-ci sets TRAVIS_BRANCH to the tag name for tag builds
             match = branch.match(tag_regex)
 
@@ -71,8 +68,8 @@ describe MetasploitDataModels::Version do
               tag_prerelease = match[:prerelease]
 
               if tag_prerelease
-                it 'matches the tag prerelease' do
-                  expect(prerelease).to eq(tag_prerelease)
+                it 'matches the tag prerelease converted from a gem version to a VERSION' do
+                  expect(prerelease).to eq(tag_prerelease.gsub('.pre.', '-'))
                 end
               else
                 it 'does not have a PRERELEASE' do

@@ -10,7 +10,7 @@ FactoryGirl.define do
     #
     name { generate :mdm_service_name }
     port { generate :port }
-    proto 'snmp'
+    proto { generate :mdm_service_proto }
     state 'open'
 
     factory :web_service do
@@ -22,6 +22,8 @@ FactoryGirl.define do
   sequence(:mdm_service_name) { |n|
     "mdm_service_name#{n}"
   }
+
+  sequence :mdm_service_proto, Mdm::Service::PROTOS.cycle
 
   port_bits = 16
   port_limit = 1 << port_bits
