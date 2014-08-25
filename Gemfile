@@ -3,9 +3,13 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
+gem 'metasploit-concern', :github => 'rapid7/metasploit-concern', :branch => 'staging/rails-4.0'
+gem 'metasploit-model', :github => 'rapid7/metasploit-model', :branch => 'staging/rails-4.0'
+
 group :development do
+  gem 'metasploit-erd', :github => 'rapid7/metasploit-erd', :branch => 'staging/rails-4.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', '~> 0.0.2'
+  gem 'yard-metasploit-erd', :github => 'rapid7/yard-metasploit-erd', :branch => 'staging/rails-4.0'
 end
 
 # used by dummy application
@@ -15,10 +19,12 @@ group :development, :test do
   gem 'factory_girl', '>= 4.1.0'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
-  # rails is only used for the dummy application in spec/dummy
-  # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
-  # @see MSP-2971
-  gem 'rails', '>= 3.2', '< 4.0.0'
+  
+  rails_version_constraint = [
+      '>= 4.0.9',
+      '< 4.1.0'
+  ]
+  gem 'rails', *rails_version_constraint
   # Used to create fake data
   gem "faker"
 end

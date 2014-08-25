@@ -35,12 +35,12 @@ Gem::Specification.new do |s|
   # debugging
   s.add_development_dependency 'pry'
 
-  # restrict from rails 4.0 as it requires protected_attributes gem and other changes for compatibility
-  # @see MSP-2971
-  s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
-  s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.26.1'
+  rails_version_constraints = ['>= 4.0.9', '< 4.1.0']
+  
+  s.add_runtime_dependency 'activerecord', *rails_version_constraints
+  s.add_runtime_dependency 'activesupport', *rails_version_constraints
+  s.add_runtime_dependency 'metasploit-concern'
+  s.add_runtime_dependency 'metasploit-model'
   
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
