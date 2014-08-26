@@ -149,6 +149,7 @@ module Mdm::Host::OperatingSystemNormalization
       'smb.fingerprint'  => {
         :native_os               => [ 'smb.native_os' ],
       },
+      
       'http.fingerprint' => {
         :header_server           => [ 'http_header.server', 'apache_os' ],
         :header_set_cookie       => [ 'http_header.cookie' ],
@@ -157,6 +158,15 @@ module Mdm::Host::OperatingSystemNormalization
       # :content                 => 'http_body'
       # :code                    => 'http_response_code'
       # :message                 => 'http_response_message'
+      },
+
+      'sip.options.fingerprint' => {
+        :header_server           => [ 'sip_header.server' ],
+        :header_user_agent       => [ 'sip_header.user_agent' ],
+      # TODO: Candidates for future Recog support
+      # :code                    => 'sip_response_code'
+      # :message                 => 'sip_response_message'
+      # :header_allow            => 'sip_response_allow'    # Order of Allow: headers can be fingerprinted
       }
     }
 
