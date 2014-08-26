@@ -926,7 +926,7 @@ describe Mdm::Host do
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Windows XP'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == 0.84
         end
 
         it 'should return OS name for a Metasploitable fingerprint' do
@@ -935,7 +935,7 @@ describe Mdm::Host do
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Linux'
           result['os.version'].should == '2.6.X'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == 0.84
         end
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
@@ -945,7 +945,7 @@ describe Mdm::Host do
           result['os.product'].should == 'Mac OS X'
           result['os.vendor'].should == 'Apple'
           result['os.version'].should == '10.8.X'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == 0.84
         end
       end
 
