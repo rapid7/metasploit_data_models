@@ -13,7 +13,7 @@ class Mdm::Macro < ActiveRecord::Base
   # Validations
   #
 
-  validates :name, :presence => true, :format => /^[^'|"]+$/
+  validates :name, :presence => true, :format => /\A[^'|"]+\z/
 
   Metasploit::Concern.run(self)
 end

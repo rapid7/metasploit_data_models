@@ -48,7 +48,7 @@ class Mdm::Tag < ActiveRecord::Base
             }
   validates :name,
             :format => {
-                :with => /^[A-Za-z0-9\x2e\x2d_]+$/, :message => "must be alphanumeric, dots, dashes, or underscores"
+                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => "must be alphanumeric, dots, dashes, or underscores"
             },
             :presence => true
 
