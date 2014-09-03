@@ -25,7 +25,7 @@ en:
                 help: "The OS flavor running on this host."
               os_sp:
                 help: "The OS service pack running on this host."
-              os:
+              os_name:
                 help: "The OS running on this host."
               os:
                 help: "The OS running on this host."
