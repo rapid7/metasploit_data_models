@@ -136,9 +136,9 @@ describe Mdm::Service do
                             type: {
                                 set: :string
                             }
-      it_should_behave_like 'search_attribute',
-                            :port,
-                            type: :port_list
+      it_should_behave_like 'search_with',
+                             MetasploitDataModels::Search::Operator::Port::List,
+                             name: :port
     end
 
     context 'associations' do

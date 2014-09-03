@@ -830,9 +830,9 @@ describe Mdm::Host do
       it_should_behave_like 'search_attribute',
                             :name,
                             type: :string
-      it_should_behave_like 'search_attribute',
-                            :address,
-                            type: :address
+      it_should_behave_like 'search_with',
+                            MetasploitDataModels::Search::Operator::IPAddress,
+                            name: :address
       it_should_behave_like 'search_attribute',
                             :os_flavor,
                             type: :string
@@ -840,7 +840,7 @@ describe Mdm::Host do
                             :os_sp,
                             type: :string
       it_should_behave_like 'search_attribute',
-                            :os,
+                            :os_name,
                             type: :string
     end
   end
