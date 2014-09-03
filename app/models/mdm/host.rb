@@ -500,10 +500,6 @@ class Mdm::Host < ActiveRecord::Base
                   :os_sp
               ]
 
-  #
-  # Search Withs
-  #
-
   search_with MetasploitDataModels::Search::Operator::IPAddress,
               attribute: :address
 

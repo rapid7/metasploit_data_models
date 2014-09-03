@@ -819,4 +819,29 @@ describe Mdm::Host do
     end
 
   end
+
+
+  context 'search' do
+    let(:base_class) {
+      described_class
+    }
+
+    context 'attributes' do
+      it_should_behave_like 'search_attribute',
+                            :name,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :address,
+                            type: :address
+      it_should_behave_like 'search_attribute',
+                            :os_flavor,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :os_sp,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :os,
+                            type: :string
+    end
+  end
 end

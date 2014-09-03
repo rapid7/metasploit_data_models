@@ -1,4 +1,42 @@
 en:
+  activerecord:
+    ancestors:
+      mdm/service:
+        search:
+          operator:
+            names:
+              info:
+                help: 'A banner grab containing information about the service.'
+              name:
+                help: "The name of the service application, like 'ssh' or 'vnc'."
+              proto:
+                help: "The protocol for the service, like 'tcp' or 'udp'."
+              port:
+                help: "The port this service runs on."
+      mdm/host:
+        search:
+          operator:
+            names:
+              name:
+                help: "The hostname associated with this host."
+              address:
+                help: "The IPv4 or IPv6 associated with this host"
+              os_flavor:
+                help: "The OS flavor running on this host."
+              os_sp:
+                help: "The OS service pack running on this host."
+              os:
+                help: "The OS running on this host."
+              os:
+                help: "The OS running on this host."
+      mdm/tag:
+        search:
+          operator:
+            names:
+              name:
+                help: "The name of the tag."
+              desc:
+                help: "The description of the tag."
   metasploit:
     model:
       errors:
