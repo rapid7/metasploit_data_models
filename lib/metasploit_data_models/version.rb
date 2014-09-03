@@ -2,11 +2,13 @@ module MetasploitDataModels
   # Holds components of {VERSION} as defined by {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0}.
   module Version
     # The major version number.
-    MAJOR = 0
+    MAJOR = 1
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 19
+    MINOR = 0
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 4
+    PATCH = 0
+    
+    PRERELEASE = 'rails-4.0'
 
     # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
     # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
