@@ -6,37 +6,31 @@ en:
           operator:
             names:
               info:
-                help: 'A banner grab containing information about the service.'
+                help: 'Finds services whose banners contain the specified value.'
               name:
-                help: "The name of the service application, like 'ssh' or 'vnc'."
+                help: "Finds services that match the specified name."
               proto:
-                help: "The protocol for the service, like 'tcp' or 'udp'."
+                help: "Searches for services running the specified protocol, such as UDP or TCP."
               port:
-                help: "The port this service runs on."
+                help: "Finds services that are running on the specified ports or range of ports."
       mdm/host:
         search:
           operator:
             names:
               name:
-                help: "The hostname associated with this host."
+                help: "Finds hosts whose names contain the specified value."
               address:
-                help: "The IPv4 or IPv6 associated with this host"
-              os_flavor:
-                help: "The OS flavor running on this host."
-              os_sp:
-                help: "The OS service pack running on this host."
-              os_name:
-                help: "The OS running on this host."
+                help: "Finds hosts whose IPv4 or IPv6 address matches the specified value."
               os:
-                help: "The OS running on this host."
+                help: "Searches for hosts that are running a specific OS."
       mdm/tag:
         search:
           operator:
             names:
               name:
-                help: "The name of the tag."
+                help: "Searches for records that are attached to a specific tag."
               desc:
-                help: "The description of the tag."
+                help: "Searches for records that are attached to a tag with the specified description."
   metasploit:
     model:
       errors:
