@@ -34,7 +34,7 @@ require 'recog'
 #  -> os.language = 'English'
 #  -> os.arch     = 'x86'
 #
-# These rules are then mapped to the MDM::Host attributes below:
+# These rules are then mapped to the {Mdm::Host} attributes below:
 #   * os_name     - Maps to a normalized os.product key
 #   * os_flavor   - Maps to a normalized os.edition key
 #   * os_sp       - Maps to a normalized os.version key (soon os_version)
@@ -45,27 +45,27 @@ require 'recog'
 #   * name        - Maps to the host.name key
 #   * mac         - Maps to the host.mac key
 #
-# The following keys are not mapped to MDM::Host at this time (but should be):
-#   * os.vendor 
+# The following keys are not mapped to {Mdm::Host} at this time (but should be):
+#   * os.vendor
 #
 # In order to execute these rules, this module is responsible for mapping various
-# fingerprint sources to MDM::Host values. This requires some ugly glue code to
+# fingerprint sources to {Mdm::Host} values. This requires some ugly glue code to
 # account for differences between each supported input (external scanners), the
 # Recog gem and associated databases, and how Metasploit itself likes to handle
 # these values. Getting a mapping wrong is often harmless, but can impact the
-# automatic targetting capabilities of certain exploit modules. 
+# automatic targetting capabilities of certain exploit modules.
 #
 # In other words, this is a best-effort attempt to rational multiple competing
 # sources of information about a host and come up with the values representing
-# a normalized assessment of the system. The use of Recog and multiple scanner
+# a normalized assessment of the system. The use of `Recog` and multiple scanner
 # fingerprints can result in a comprehensive (and confident) identification of
 # the remote operating system and associated services.
 #
 # Historically, there are direct conflicts between certain Metasploit modules,
-# certain scanners, and external fingerprint databases in terms of how a 
-# particular OS and patch level is represented. This module attempts to fix
-# what it can and serve as documentation and live workarounds for the rest.
-# 
+# certain scanners, and external fingerprint databases in terms of how a
+# particular OS and patch level is represented. This module attempts to fix what
+# it can and serve as documentation and live workarounds for the rest.
+#
 # Examples of known conflicts that are still in progress:
 #
 # * Metasploit defines an OS constant of 'win'/'windows' as Microsoft Windows
@@ -76,10 +76,10 @@ require 'recog'
 # * Windows service packs represented as 'Service Pack X' or 'SPX'
 #   -> The preferred form is to set os.version to 'SPX'
 #   -> Many external scanners & Recog prefer 'Service Pack X'
-# 
+#
 # * Apple Mac OS X, Cisco IOS, IBM AIX, Ubuntu Linux, all reported with vendor prefix
 #   -> The preferred form is to remove the vendor from os.product
-#   -> MDM::Host currently has no vendor field, so this information is lost today
+#   -> {Mdm::Host} currently has no vendor field, so this information is lost today
 #   -> Many scanners report leading vendor strings and require normalization
 #
 #  * The os_flavor field is used in contradictory ways across Metasploit
@@ -89,7 +89,7 @@ require 'recog'
 #
 #
 #
-# 
+#
 # Maintenance:
 #
 # 1. Ensure that the latest Recog gem is present and installed
@@ -98,7 +98,7 @@ require 'recog'
 #      1) parse_windows_os_str()
 #      2) normalize_nmap_fingerprint()
 #      3) normalize_nexpose_fingerprint()
-#      4) Other scanner normalizers 
+#      4) Other scanner normalizers
 #    b) Mobile operating systems are minimally recognized
 #
 #
@@ -121,6 +121,12 @@ require 'recog'
 #
 module Mdm::Host::OperatingSystemNormalization
 
+  # Cap nmap certainty at 0.84 until we update it more frequently
+  # XXX: Without this, Nmap will beat the default certainty of recog
+  #      matches and its less-confident guesses will take precedence
+  #      over service-based fingerprints.
+  MAX_NMAP_CERTAINTY = 0.84
+
   #
   # Normalize the operating system fingerprints provided by various scanners
   # (nmap, nexpose, retina, nessus, metasploit modules, and more!)
@@ -134,11 +140,106 @@ module Mdm::Host::OperatingSystemNormalization
 
     #
     # The goal is to infer as much as we can about the OS of the device and
-    # the various services offered using the Recog gem and some glue logic 
+    # the various services offered using the Recog gem and some glue logic
     # to determine the best weights. This method can result in changes to
     # the recorded host.os_name, host.os_flavor, host.os_sp, host.os_lang,
     # host.purpose, host.name, host.arch, and the service details.
     #
+
+
+    # Note that we're already restricting the query to this host by using
+    # host.notes instead of Note, so don't need a host_id in the
+    # conditions.
+    fingerprintable_notes = self.notes.where("ntype like '%%fingerprint'")
+    fingerprintable_notes.each do |fp_note|
+      matches += recog_matches_for_note(fp_note)
+    end
+
+    # XXX: This hack solves the memory leak generated by self.services.each {}
+    fingerprintable_services = self.services.where("name is not null and name != '' and info is not null and info != ''")
+    fingerprintable_services.each do |s|
+      matches += recog_matches_for_service(s)
+    end
+
+    #
+    # Look for generic fingerprint.match notes that generate a match hash from modules
+    # This handles ad-hoc os.language, host.name, etc identifications
+    #
+    generated_matches = self.notes.where(ntype: 'fingerprint.match')
+    generated_matches.each do |m|
+      next unless (m.data and m.data.kind_of?(::Hash))
+      matches << m.data.dup
+    end
+
+    # Normalize matches for consistency during the ranking phase
+    matches = matches.map{ |m| normalize_match(m) }
+
+    # Calculate the best OS match based on fingerprint hits
+    match = Recog::Nizer.best_os_match(matches)
+
+    # Merge and normalize the best match to the host object
+    apply_match_to_host(match) if match
+
+    # Handle cases where the flavor contains the base name (legacy parsing, etc)
+    # TODO: Remove this once we are sure it is no longer needed
+    if host.os_name && host.os_flavor && host.os_flavor.index(host.os_name)
+      dlog("Host #{host.address} has os_flavor that contains os_name")
+      dlog("os_flavor: #{host.os_flavor}")
+      dlog("os_name: #{host.os_name}")
+      host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip
+    end
+
+    # Set some sane defaults if needed
+    host.os_name ||= 'Unknown'
+    host.purpose ||= 'device'
+
+    host.save if host.changed?
+  end
+
+  def recog_matches_for_service(s)
+    #
+    # We assume that the service.info field contains certain types of probe
+    # replies and associate these with one or more Recog databases. The mapping
+    # of service.name to a specific database only fits into so many places and
+    # Mdm currently serves that role.
+    #
+
+    service_match_keys = Hash.new { [] }
+    service_match_keys.merge({
+      # TODO: Implement smb.generic fingerprint database
+      # 'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
+      # 'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
+
+      'ssh'     => [ 'ssh.banner' ], # Recog expects just the vendor string, not the protocol version
+      'http'    => [ 'http_header.server', 'apache_os'], # The 'Apache' fingerprints try to infer OS/distribution from the extra information in the Server header
+      'https'   => [ 'http_header.server', 'apache_os'], # XXX: verify vmware esx(i) case on https (TODO: normalize https to http, track SSL elsewhere, such as a new set of fields)
+      'snmp'    => [ 'snmp.sys_description' ],
+      'telnet'  => [ 'telnet.banner' ],
+      'smtp'    => [ 'smtp.banner' ],
+      'imap'    => [ 'imap4.banner' ],  # Metasploit reports 143/993 as imap (TODO: normalize imap to imap4)
+      'pop3'    => [ 'pop3.banner' ],   # Metasploit reports 110/995 as pop3
+      'nntp'    => [ 'nntp.banner' ],
+      'ftp'     => [ 'ftp.banner' ],
+      'ssdp'    => [ 'ssdp_header.server' ]
+    })
+
+    matches = []
+
+    service_match_keys[s.name].each do |rdb|
+      banner = s.info
+      if self.respond_to?("service_banner_recog_filter_#{s.name}")
+        banner = self.send("service_banner_recog_filter_#{s.name}", banner)
+      end
+      res = Recog::Nizer.match(rdb, banner)
+      matches << res if res
+    end
+
+    matches
+  end
+
+  def recog_matches_for_note(note)
+    # Skip notes that are missing the correct structure or have been blacklisted
+    return [] if not validate_fingerprint_data(note)
 
     #
     # These rules define the relationship between fingerprint note keys
@@ -160,104 +261,27 @@ module Mdm::Host::OperatingSystemNormalization
       }
     }
 
-    # Note that we're already restricting the query to this host by using
-    # host.notes instead of Note, so don't need a host_id in the
-    # conditions.
-    fingerprintable_notes = self.notes.where("ntype like '%%fingerprint'")
-    fingerprintable_notes.each do |fp|
+    matches = []
 
-      # Skip notes that are missing the correct structure or have been blacklisted
-      next if not validate_fingerprint_data(fp)
-
-      # Look for a specific Recog database for this type and data key
-      if fingerprint_note_match_keys.has_key?( fp.ntype )
-        fingerprint_note_match_keys[ fp.ntype ].each_pair do |k,rdbs|
-          if fp.data.has_key?(k)
-            rdbs.each do |rdb|
-              res = Recog::Nizer.match(rdb, fp.data[k])
-              matches << res if res
-            end
+    # Look for a specific Recog database for this type and data key
+    if fingerprint_note_match_keys.has_key?( note.ntype )
+      fingerprint_note_match_keys[ note.ntype ].each_pair do |k,rdbs|
+        if note.data.has_key?(k)
+          rdbs.each do |rdb|
+            res = Recog::Nizer.match(rdb, note.data[k])
+            matches << res if res
           end
         end
-      else 
-        # Add all generic match results to the overall match array
-        normalize_scanner_fp(fp).each do |m|
-          next unless m
-          matches << m
-        end
       end
-
+    else
+      # Add all generic match results to the overall match array
+      normalize_scanner_fp(note).each do |m|
+        next unless m
+        matches << m
+      end
     end
 
-    #
-    # We assume that the service.info field contains certain types of probe 
-    # replies and associate these with one or more Recog databases. The mapping
-    # of service.name to a specific database only fits into so many places and
-    # MDM currently serves that role.
-    #
-
-    service_match_keys = {
-      # TODO: Implement smb.generic fingerprint database
-      # 'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
-      # 'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
-      
-      'ssh'     => [ 'ssh.banner' ], # Recog expects just the vendor string, not the protocol version
-      'http'    => [ 'http_header.server', 'apache_os'], # The 'Apache' fingerprints try to infer OS/distribution from the extra information in the Server header
-      'https'   => [ 'http_header.server', 'apache_os'], # XXX: verify vmware esx(i) case on https (TODO: normalize https to http, track SSL elsewhere, such as a new set of fields)
-      'snmp'    => [ 'snmp.sys_description' ],
-      'telnet'  => [ 'telnet.banner' ],
-      'smtp'    => [ 'smtp.banner' ],
-      'imap'    => [ 'imap4.banner' ],  # Metasploit reports 143/993 as imap (TODO: normalize imap to imap4)
-      'pop3'    => [ 'pop3.banner' ],   # Metasploit reports 110/995 as pop3
-      'nntp'    => [ 'nntp.banner' ],
-      'ftp'     => [ 'ftp.banner' ],
-      'ssdp'    => [ 'ssdp_header.server' ]
-    }
-
-    # XXX: This hack solves the memory leak generated by self.services.each {}    
-    fingerprintable_services = self.services.where("name is not null and name != '' and info is not null and info != ''")
-    fingerprintable_services.each do |s|
-      next unless service_match_keys.has_key?(s.name)
-      service_match_keys[s.name].each do |rdb|
-        banner = s.info
-        if self.respond_to?("service_banner_recog_filter_#{s.name}")
-          banner = self.send("service_banner_recog_filter_#{s.name}", banner)
-        end
-        res = Recog::Nizer.match(rdb, banner)
-        matches << res if res 
-       end
-    end
-
-    #
-    # Look for generic fingerprint.match notes that generate a match hash from modules
-    # This handles ad-hoc os.language, host.name, etc identifications
-    #
-    generated_matches = self.notes.where("ntype like 'fingerprint.match'")
-    generated_matches.each do |m|
-      next unless (m.data and m.data.kind_of?(::Hash))
-      matches << m.data.dup
-    end
-
-    # Normalize matches for consistency during the ranking phase
-    matches = matches.map{ |m| normalize_match(m) }
-
-    # Calculate the best OS match based on fingerprint hits
-    match = Recog::Nizer.best_os_match(matches)
-
-    # Merge and normalize the best match to the host object
-    apply_match_to_host(match) if match 
-
-    # Handle cases where the flavor contains the base name (legacy parsing, etc)
-    # TODO: Remove this once we are sure it is no longer needed
-    if host.os_name and host.os_flavor and host.os_flavor.index(host.os_name)
-      host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip
-    end
-
-    # Set some sane defaults if needed
-    host.os_name ||= 'Unknown'
-    host.purpose ||= 'device'
-
-    host.save if host.changed?
+    matches
   end
 
   # Determine if the fingerprint data is readable. If not, it nearly always
@@ -320,9 +344,9 @@ module Mdm::Host::OperatingSystemNormalization
     m
   end
 
-  # 
+  #
   # Recog assumes that the protocol version of the SSH banner has been removed
-  # 
+  #
   def service_banner_recog_filter_ssh(banner)
     if banner =~ /^SSH-\d+\.\d+-(.*)/
       $1
@@ -332,8 +356,8 @@ module Mdm::Host::OperatingSystemNormalization
   end
 
   #
-  # Examine the assertations of the merged best match and map these 
-  # back to fields of MDM::Host. Take particular care not to leave
+  # Examine the assertations of the merged best match and map these
+  # back to fields of {Mdm::Host}. Take particular care not to leave
   # related fields (os_*) in a conflicting state, leverage existing
   # values where possible, and use the most confident values we have.
   #
@@ -363,7 +387,7 @@ module Mdm::Host::OperatingSystemNormalization
 
     #
     # Map match fields from Recog fingerprint style to Metasploit style
-    # 
+    #
 
     # os.build:                 Examples: 9001, 2600, 7602
     # os.device:                Examples: General, ADSL Modem, Broadband router, Cable Modem, Camera, Copier, CSU/DSU
@@ -474,7 +498,7 @@ module Mdm::Host::OperatingSystemNormalization
         if possible_sp =~ /Service Pack (\d+)/
           ret['os.version'] = 'SP' + $1
         end
-=end        
+=end
       when /Linux (\d+\.\d+\.\d+\S*)\s* \((\w*)\)/
         ret['os.product'] = "Linux"
         ret['os.version'] = $1
@@ -483,7 +507,7 @@ module Mdm::Host::OperatingSystemNormalization
         ret['os.product'] = data[:os]
     end
     ret['os.arch'] = data[:arch] if data[:arch]
-    ret['host.name'] = data[:name] if data[:name] 
+    ret['host.name'] = data[:name] if data[:name]
     [ ret ]
   end
 
@@ -511,22 +535,18 @@ module Mdm::Host::OperatingSystemNormalization
 
     ret['host.name'] = data[:hostname] if data[:hostname]
 
-    # Cap nmap certainty at 0.84 until we update it more frequently
-    # XXX: Without this, Nmap will beat the default certainty of recog
-    #      matches and its less-confident guesses will take precedence
-    #      over service-based fingerprints.
     if ret['os.certainty']
-      ret['os.certainty'] = [ ret['os.certainty'].to_f, 0.84 ].min.to_s
+      ret['os.certainty'] = [ ret['os.certainty'].to_f, MAX_NMAP_CERTAINTY ].min.to_s
     end
-  
-    [ ret ]  
+
+    [ ret ]
   end
 
   #
   # Normalize data from MBSA fingerprints
   #
   def normalize_mbsa_fingerprint(data)
-    ret = {}    
+    ret = {}
     # :os_match=>"Microsoft Windows Vista SP0 or SP1, Server 2008, or Windows 7 Ultimate (build 7000)"
     #    :os_vendor=>"Microsoft" :os_family=>"Windows" :os_version=>"7" :os_accuracy=>"100"
     ret['os.certainty'] = ( data[:os_accuracy].to_f / 100.0 ).to_s if data[:os_accuracy]
@@ -547,7 +567,7 @@ module Mdm::Host::OperatingSystemNormalization
   # Normalize data from Nexpose fingerprints
   #
   def normalize_nexpose_fingerprint(data)
-    ret = {}    
+    ret = {}
     # :family=>"Windows" :certainty=>"0.85" :vendor=>"Microsoft" :product=>"Windows 7 Ultimate Edition"
     # :family=>"Windows" :certainty=>"0.67" :vendor=>"Microsoft" :arch=>"x86" :product=>'Windows 7' :version=>'SP1'
     # :family=>"Linux" :certainty=>"0.64" :vendor=>"Linux" :product=>"Linux"
@@ -561,16 +581,16 @@ module Mdm::Host::OperatingSystemNormalization
 
     case data[:product]
     when /^Windows/
-      
+
       # TODO: Verify Windows CE and Windows 8 RT fingerprints
       # Translate the version into the representation we want
 
       case data[:version].to_s
-      
+
       # These variants are normalized to just 'Windows <Version>'
       when "NT", "2000", "95", "ME", "XP", "Vista", "7", "8", "8.1"
         ret['os.product'] = "Windows #{data[:version]}"
-      
+
       # Service pack in the version field should be recognized
       when /^SP\d+/, /^Service Pack \d+/
         ret['os.product'] = data[:product]
@@ -586,7 +606,7 @@ module Mdm::Host::OperatingSystemNormalization
         ret['os.product'] = "Windows Server #{data[:version]}"
       end
 
-      # Extract the edition string if it is present 
+      # Extract the edition string if it is present
       if data[:product] =~ /(XP|Vista|\d+(?:\.\d+)) (\w+|\w+ \w+|\w+ \w+ \w+) Edition/
         ret['os.edition'] = $2
       end
@@ -631,7 +651,7 @@ module Mdm::Host::OperatingSystemNormalization
   # Normalize data from Nessus fingerprints
   #
   def normalize_nessus_fingerprint(data)
-    ret = {}   
+    ret = {}
     # :os=>"Microsoft Windows 2000 Advanced Server (English)"
     # :os=>"Microsoft Windows 2000\nMicrosoft Windows XP"
     # :os=>"Linux Kernel 2.6"
@@ -661,7 +681,7 @@ module Mdm::Host::OperatingSystemNormalization
 
       when /^Linux Kernel ([\d\.]+)(.*)/
         # Look for strings like "Linux Kernel 2.6 on Ubuntu 9.10 (karmic)"
-        # Ex: Linux Kernel 2.2 on Red Hat Linux release 6.2 (Zoot) 
+        # Ex: Linux Kernel 2.2 on Red Hat Linux release 6.2 (Zoot)
         # Ex: Linux Kernel 2.6 on Ubuntu Linux 8.04 (hardy)
         ret['os.product'] = "Linux"
         ret['os.version'] = $1
@@ -685,7 +705,7 @@ module Mdm::Host::OperatingSystemNormalization
     end
 
     ret['host.name'] = data[:hname] if data[:hname]
-    [ ret ] 
+    [ ret ]
   end
 
   #
@@ -711,7 +731,7 @@ module Mdm::Host::OperatingSystemNormalization
       when /^([^\s]+) (Linux)(.*)/
         ret['os.product'] = $2
         ret['os.vendor'] = $1
-        
+
         ver = $3.to_s.strip.split(/\s+/).first
         if ver =~ /^\d+\./
           ret['os.version'] = ver
@@ -726,7 +746,7 @@ module Mdm::Host::OperatingSystemNormalization
     end
     [ ret ]
   end
-  
+
   #
   # Normalize data from FusionVM fingerprints
   #
@@ -770,14 +790,14 @@ module Mdm::Host::OperatingSystemNormalization
     hits = []
 
     return hits if not validate_fingerprint_data(fp)
-    
+
     case fp.ntype
     when /^host\.os\.(.*_fingerprint)$/
       pname = $1
       pmeth = 'normalize_' + pname
       if self.respond_to?(pmeth)
         hits = self.send(pmeth, fp.data)
-      else 
+      else
         hits = normalize_generic_fingerprint(fp.data)
       end
     end
@@ -812,7 +832,7 @@ module Mdm::Host::OperatingSystemNormalization
     ret = {}
 
     # Set some reasonable defaults for Windows
-    ret['os.vendor']  = 'Microsoft'    
+    ret['os.vendor']  = 'Microsoft'
     ret['os.product'] = 'Windows'
 
     # Determine the actual Windows product name
@@ -829,11 +849,11 @@ module Mdm::Host::OperatingSystemNormalization
         # If we couldn't pull out anything specific for the flavor, just cut
         # off the stuff we know for sure isn't it and hope for the best
         ret['os.product'] = (ret['os.product'] + ' ' + str.gsub(/(Microsoft )|(Windows )|(Service Pack|SP) ?(\d+)/i, '').strip).strip
-        
+
         # Make sure the product name doesn't include any non-alphanumeric stuff
         # This fixes cases where the above code leaves 'Windows XX (Build 3333,)...'
         ret['os.product'] = ret['os.product'].split(/[^a-zA-Z0-9 ]/).first.strip
-        
+
     end
 
     # Take a guess at the architecture

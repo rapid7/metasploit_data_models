@@ -661,7 +661,7 @@ describe Mdm::Host do
           result['os.build'].should == '6001'
           result['os.version'].should == 'SP1'
         end
-         
+
         it 'should default to Windows <name> if all else fails' do
             result = host.send(:parse_windows_os_str, 'Windows Foobar Service Pack 3')
             result['os.product'].should == 'Windows Foobar'
@@ -697,8 +697,9 @@ describe Mdm::Host do
       before(:each) do
         stub_const('Rex::Text', Module.new)
         allow(Rex::Text).to receive(:ascii_safe_hex) do |unsanitized|
+          r = Regexp.new("([^[:print:]])", Regexp::NOENCODING)
           # Pass back the sanitized value for the stub
-          unsanitized.gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xFF])/n){ |x| "\\x%.2x" % x.unpack("C*")[0]}
+          unsanitized.force_encoding('binary').gsub(r){ |x| "\\x%.2x" % (x.unpack("C*")[0]) }
         end
       end
 
@@ -707,7 +708,7 @@ describe Mdm::Host do
         host.send(:apply_match_to_host, match)
         host.mac.should == '00:11:22:33:44:55'
       end
-      
+
       it 'should set host.name when host.name is present' do
         match = { 'host.name' => 'webbyweb' }
         host.send(:apply_match_to_host, match)
@@ -739,7 +740,7 @@ describe Mdm::Host do
         host.os_name.should == 'Windows 2012'
         host.purpose.should == 'server'
       end
-      
+
       it 'should set host.purpose to printer when os.device is Print server' do
         match = { 'os.device' => 'Print server' }
         host.send(:apply_match_to_host, match)
@@ -780,11 +781,11 @@ describe Mdm::Host do
         match = { 'linux.kernel.version' => '3.2.11' }
         host.send(:apply_match_to_host, match)
         host.os_sp.should == '3.2.11'
-      end      
+      end
     end
 
     context '#normalize_match' do
-   
+
       it 'should convert Service Pack X to SPX' do
         match = { 'os.version' => 'Service Pack 2' }
         result = host.send(:normalize_match, match)
@@ -796,14 +797,14 @@ describe Mdm::Host do
         result = host.send(:normalize_match, match)
         result['os.version'].should == 'No Service Pack'
       end
-      
+
       it 'should convert Apple Mac OS X to Mac OS X' do
         match = { 'os.product' => 'Apple Mac OS X' }
         result = host.send(:normalize_match, match)
         result['os.product'].should == 'Mac OS X'
         result['os.vendor'].should == 'Apple'
       end
-      
+
       it 'should convert Microsoft Windows to Windows' do
         match = { 'os.product' => 'Microsoft Windows 7' }
         result = host.send(:normalize_match, match)
@@ -819,7 +820,7 @@ describe Mdm::Host do
     end
 
     context '#guess_purpose_from_match' do
-   
+
       it 'should detect Windows XP as a client' do
         match = { 'os.product' => 'Windows XP' }
         result = host.send(:guess_purpose_from_match, match)
@@ -855,7 +856,7 @@ describe Mdm::Host do
         result = host.send(:guess_purpose_from_match, match)
         result.should == 'printer'
       end
-      
+
       it 'should detect Unknown Printer as a printer' do
         match = { 'os.product' => 'Unknown Printer' }
         result = host.send(:guess_purpose_from_match, match)
@@ -872,7 +873,7 @@ describe Mdm::Host do
         match = { 'os.vendor' => 'Check Point', 'os.product' => 'Firewall-1' }
         result = host.send(:guess_purpose_from_match, match)
         result.should == 'firewall'
-      end        
+      end
     end
 
     context '#normalize_scanner_fp' do
@@ -926,7 +927,7 @@ describe Mdm::Host do
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Windows XP'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
 
         it 'should return OS name for a Metasploitable fingerprint' do
@@ -935,7 +936,7 @@ describe Mdm::Host do
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Linux'
           result['os.version'].should == '2.6.X'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
@@ -945,7 +946,7 @@ describe Mdm::Host do
           result['os.product'].should == 'Mac OS X'
           result['os.vendor'].should == 'Apple'
           result['os.version'].should == '10.8.X'
-          result['os.certainty'].to_f.should == 1.0
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
       end
 
