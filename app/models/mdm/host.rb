@@ -34,6 +34,7 @@ class Mdm::Host < ActiveRecord::Base
       'x64',
       'x86',
       'x86_64',
+      '',
       UNKNOWN_ARCHITECTURE
   ]
 
