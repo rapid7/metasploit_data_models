@@ -303,7 +303,7 @@ describe Mdm::Host do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:address).of_type(:string).with_options(:null => false) }
+      it { should have_db_column(:address).of_type(:inet).with_options(:null => false) }
       it { should have_db_column(:arch).of_type(:string) }
       it { should have_db_column(:comm).of_type(:string) }
       it { should have_db_column(:comments).of_type(:text) }
