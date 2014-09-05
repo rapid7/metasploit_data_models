@@ -419,7 +419,7 @@ class Mdm::Host < ActiveRecord::Base
 
   validates :address,
             :exclusion => {
-                :in => ['127.0.0.1']
+                :in => [IPAddr.new('127.0.0.1')]
             },
             :ip_format => true,
             :presence => true,
