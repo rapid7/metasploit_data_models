@@ -526,7 +526,12 @@ class Mdm::Host < ActiveRecord::Base
   # @return [void]
   def ip_address_invalid?
     begin
-      potential_ip = IPAddr.new(address)
+      if value.is_a? IPAddr
+        potential_ip = address.dup
+      else
+        potential_ip = IPAddr.new(address)
+      end
+      
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true
