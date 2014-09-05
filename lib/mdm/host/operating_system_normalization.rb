@@ -6,35 +6,36 @@ require 'recog'
 #
 # Rules for operating system fingerprinting in Metasploit
 #
-# The os.product key identifies the common-name of a specific operating system
+# The `os.product` key identifies the common-name of a specific operating system
 # Examples include: Linux, Windows XP, Mac OS X, IOS, AIX, HP-UX, VxWorks
 #
-# The os.version key identifies the service pack or version of the operating system
+# The `os.version` key identifies the service pack or version of the operating system
 # Sometimes this means a kernel or firmware version when the distribution or OS
 # version is not available.
 # Examples include: SP2, 10.04, 2.6.47, 10.6.1
 #
-# The os.vendor key identifies the manufacturer of the operating system
+# The `os.vendor` key identifies the manufacturer of the operating system
 # Examples include: Microsoft, Ubuntu, Cisco, HP, IBM, Wind River
 #
-# The os.family key identifies the group of the operating system. This is often a
+# The `os.family` key identifies the group of the operating system. This is often a
 # duplicate of os.product, unless a more specific product name is available.
 # Examples include: Windows, Linux, IOS, HP-UX, AIX
 #
-# The os.edition key identifies the specific variant of the operating system
+# The `os.edition` key identifies the specific variant of the operating system
 # Examples include: Enterprise, Professional, Starter, Evaluation, Home, Datacenter
 #
 # An example breakdown of a common operating system is shown below
 #
 #  * Microsoft Windows XP Professional Service Pack 3 English (x86)
-#  -> os.product  = 'Windows XP'
-#  -> os.edition  = 'Professional'
-#  -> os.vendor   = 'Microsoft'
-#  -> os.version  = 'SP3'
-#  -> os.language = 'English'
-#  -> os.arch     = 'x86'
+#     - os.product  = 'Windows XP'
+#     - os.edition  = 'Professional'
+#     - os.vendor   = 'Microsoft'
+#     - os.version  = 'SP3'
+#     - os.language = 'English'
+#     - os.arch     = 'x86'
 #
 # These rules are then mapped to the {Mdm::Host} attributes below:
+#
 #   * os_name     - Maps to a normalized os.product key
 #   * os_flavor   - Maps to a normalized os.edition key
 #   * os_sp       - Maps to a normalized os.version key (soon os_version)
@@ -42,10 +43,12 @@ require 'recog'
 #   * arch        - Maps to a normalized os.arch key
 #
 # Additional rules include the following mappings:
+#
 #   * name        - Maps to the host.name key
 #   * mac         - Maps to the host.mac key
 #
 # The following keys are not mapped to {Mdm::Host} at this time (but should be):
+#
 #   * os.vendor
 #
 # In order to execute these rules, this module is responsible for mapping various
@@ -55,11 +58,11 @@ require 'recog'
 # these values. Getting a mapping wrong is often harmless, but can impact the
 # automatic targetting capabilities of certain exploit modules.
 #
-# In other words, this is a best-effort attempt to rational multiple competing
-# sources of information about a host and come up with the values representing
-# a normalized assessment of the system. The use of `Recog` and multiple scanner
-# fingerprints can result in a comprehensive (and confident) identification of
-# the remote operating system and associated services.
+# In other words, this is a best-effort attempt to rationalize multiple competing
+# sources of information about a host and come up with the values representing a
+# normalized assessment of the system. The use of `Recog` and multiple scanner
+# fingerprints can result in a comprehensive (and confident) identification of the
+# remote operating system and associated services.
 #
 # Historically, there are direct conflicts between certain Metasploit modules,
 # certain scanners, and external fingerprint databases in terms of how a
@@ -69,23 +72,28 @@ require 'recog'
 # Examples of known conflicts that are still in progress:
 #
 # * Metasploit defines an OS constant of 'win'/'windows' as Microsoft Windows
-#   -> Scanner modules report a mix of 'Microsoft Windows' and 'Windows'
-#   -> Nearly all exploit modules reference 'Windows <Release> SP<Version>'
-#   -> Nmap (and other scanners) also prefix the vendor before Windows
+#
+#   - Scanner modules report a mix of 'Microsoft Windows' and 'Windows'
+#   - Nearly all exploit modules reference 'Windows <Release> SP<Version>'
+#   - Nmap (and other scanners) also prefix the vendor before Windows
+#
 #
 # * Windows service packs represented as 'Service Pack X' or 'SPX'
-#   -> The preferred form is to set os.version to 'SPX'
-#   -> Many external scanners & Recog prefer 'Service Pack X'
+#
+#   - The preferred form is to set os.version to 'SPX'
+#   - Many external scanners & Recog prefer 'Service Pack X'
 #
 # * Apple Mac OS X, Cisco IOS, IBM AIX, Ubuntu Linux, all reported with vendor prefix
-#   -> The preferred form is to remove the vendor from os.product
-#   -> {Mdm::Host} currently has no vendor field, so this information is lost today
-#   -> Many scanners report leading vendor strings and require normalization
+#
+#   - The preferred form is to remove the vendor from os.product
+#   - {Mdm::Host} currently has no vendor field, so this information is lost today
+#   - Many scanners report leading vendor strings and require normalization
 #
 #  * The os_flavor field is used in contradictory ways across Metasploit
-#   -> The preferred form is to be a 'display only' field
-#   -> Some Recog fingerprints still append the edition to os.product
-#   -> Many scanners report the edition as a trailing suffix to os.product
+#
+#   - The preferred form is to be a 'display only' field
+#   - Some Recog fingerprints still append the edition to os.product
+#   - Many scanners report the edition as a trailing suffix to os.product
 #
 #
 #
@@ -109,7 +117,7 @@ require 'recog'
 #       The real solution is to add os_vendor and take this into account for icons
 #
 # @todo Implement rspec coverage for normalize_os()
-# @todo Implement smb.generic fingerprint database (replace parse_windows_os_str?)
+# @todo Implement smb.generic fingerprint database (replace {#parse_windows_os_str}?)
 # @todo Implement Samba version matching for specific distributions and OS versions
 # @todo Implement DD-WRT and various embedded device signatures currently missing
 # @todo Correct inconsistencies in os_name use by removing the vendor string (Microsoft Windows -> Windows)
@@ -131,21 +139,18 @@ module Mdm::Host::OperatingSystemNormalization
   # Normalize the operating system fingerprints provided by various scanners
   # (nmap, nexpose, retina, nessus, metasploit modules, and more!)
   #
-  # These are stored as notes (instead of directly in the os_* fields)
-  # specifically for this purpose.
+  # These are stored as {Mdm::Note notes} (instead of directly in the os_*
+  # fields) specifically for this purpose.
+  #
+  # The goal is to infer as much as we can about the OS of the device and the
+  # various {Mdm::Service services} offered using the Recog gem and some glue
+  # logic to determine the best weights. This method can result in changes to
+  # the recorded {#os_name}, {#os_flavor}, {#os_sp}, {#os_lang}, {#purpose},
+  # {#name}, {#arch}, and the {Mdm::Service service details}.
   #
   def normalize_os
     host   = self
     matches = []
-
-    #
-    # The goal is to infer as much as we can about the OS of the device and
-    # the various services offered using the Recog gem and some glue logic
-    # to determine the best weights. This method can result in changes to
-    # the recorded host.os_name, host.os_flavor, host.os_sp, host.os_lang,
-    # host.purpose, host.name, host.arch, and the service details.
-    #
-
 
     # Note that we're already restricting the query to this host by using
     # host.notes instead of Note, so don't need a host_id in the
