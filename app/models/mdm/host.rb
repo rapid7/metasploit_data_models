@@ -477,6 +477,12 @@ class Mdm::Host < ActiveRecord::Base
         lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
 
   #
+  # Callbacks
+  #
+
+  before_validation :normalize_arch
+
+  #
   #
   # Search
   #
@@ -552,6 +558,15 @@ class Mdm::Host < ActiveRecord::Base
   # @return [false] otherwise.
   def is_vm?
     !!self.virtual_host
+  end
+
+  private
+
+  def normalize_arch
+    if attribute_present?(:arch) && !ARCHITECTURES.include?(self.arch)
+      self.detected_arch = arch
+      self.arch = UNKNOWN_ARCHITECTURE
+    end
   end
 
   Metasploit::Concern.run(self)
