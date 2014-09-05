@@ -7,8 +7,13 @@ class Mdm::Host < ActiveRecord::Base
   # CONSTANTS
   #
 
-  # Either the CPU architecture for native code or the programming language name for exploits that run code in the
-  # programming language's  virtual machine.
+  # Special {#arch} value to indicate we should look at {#detected_arch}
+  # instead
+  UNKNOWN_ARCHITECTURE = 'Unknown'
+
+  # Either the CPU architecture for native code or the programming language
+  # name for exploits that run code in the programming language's virtual
+  # machine.
   ARCHITECTURES = [
       'armbe',
       'armle',
@@ -28,7 +33,8 @@ class Mdm::Host < ActiveRecord::Base
       # To be used for compatability with 'X86_64'
       'x64',
       'x86',
-      'x86_64'
+      'x86_64',
+      UNKNOWN_ARCHITECTURE
   ]
 
   # Fields searched for the search scope
@@ -289,6 +295,7 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [String] an element of {ARCHITECTURES}
 
+
   # @!attribute [rw] comm
   #   @todo https://www.pivotaltracker.com/story/show/49722411
   #
@@ -308,6 +315,12 @@ class Mdm::Host < ActiveRecord::Base
   #   Counter cache for {#creds}.
   #
   #   @return [Integer]
+
+  # @!attribute [rw] detected_arch
+  #   The architecture of the host's CPU as detected by `Recog`. If {#arch} is
+  #   not 'Unknown', this is undefined.
+  #
+  #   @return [String] a free-form string most likely from network data
 
   # @!attribute [rw] exploit_attempt_count
   #   Counter cache for {#exploit_attempts}.
