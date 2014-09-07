@@ -319,7 +319,7 @@ class Mdm::Host < ActiveRecord::Base
 
   # @!attribute [rw] detected_arch
   #   The architecture of the host's CPU as detected by `Recog`. If {#arch} is
-  #   not 'Unknown', this is undefined.
+  #   not {UNKNOWN_ARCHITECTURE}, this is undefined.
   #
   #   @return [String] a free-form string most likely from network data
 
