@@ -296,7 +296,6 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [String] an element of {ARCHITECTURES}
 
-
   # @!attribute [rw] comm
   #   @todo https://www.pivotaltracker.com/story/show/49722411
   #
