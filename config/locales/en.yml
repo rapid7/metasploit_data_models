@@ -6,11 +6,11 @@ en:
           operator:
             names:
               info:
-                help: "Filters the results by banners that contain the specified value."
+                help: "Filters the results by service information or banners that contain the specified value."
               name:
                 help: "Filters the results by service name."
               proto:
-                help: "Filters the results by protocol."
+                help: "Filters the results by transport protocol."
               port:
                 help: "Filters the results by port number."
       mdm/host:
