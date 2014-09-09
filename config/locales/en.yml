@@ -6,31 +6,31 @@ en:
           operator:
             names:
               info:
-                help: 'Finds services whose banners contain the specified value.'
+                help: "Filters the results by banners that contain the specified value."
               name:
-                help: "Finds services that match the specified name."
+                help: "Filters the results by service name."
               proto:
-                help: "Searches for services running the specified protocol, such as UDP or TCP."
+                help: "Filters the results by protocol."
               port:
-                help: "Finds services that are running on the specified ports or range of ports."
+                help: "Filters the results by port number."
       mdm/host:
         search:
           operator:
             names:
               name:
-                help: "Finds hosts whose names contain the specified value."
+                help: "Filters the results by host name."
               address:
-                help: "Finds hosts whose IPv4 or IPv6 address matches the specified value."
+                help: "Filters the results by IP address or range."
               os:
-                help: "Searches for hosts that are running a specific OS."
+                help: "Filters the results by operating system."
       mdm/tag:
         search:
           operator:
             names:
               name:
-                help: "Searches for records that are attached to a specific tag."
+                help: "Filters the results by tag."
               desc:
-                help: "Searches for records that are attached to a tag with the specified description."
+                help: "Filters the results by the description field of an associated tag."
   metasploit:
     model:
       errors:
