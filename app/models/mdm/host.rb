@@ -420,6 +420,12 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Integer]
 
   #
+  # Callbacks
+  #
+
+  before_validation :normalize_arch
+
+  #
   # Nested Attributes
   # @note Must be declared after relations being referenced.
   #
@@ -475,12 +481,6 @@ class Mdm::Host < ActiveRecord::Base
         }
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
-
-  #
-  # Callbacks
-  #
-
-  before_validation :normalize_arch
 
   #
   #
