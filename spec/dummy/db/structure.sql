@@ -310,7 +310,8 @@ CREATE TABLE hosts (
     service_count integer DEFAULT 0,
     host_detail_count integer DEFAULT 0,
     exploit_attempt_count integer DEFAULT 0,
-    cred_count integer DEFAULT 0
+    cred_count integer DEFAULT 0,
+    detected_arch character varying(255)
 );
 
 
@@ -2983,6 +2984,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130531144949');
 INSERT INTO schema_migrations (version) VALUES ('20130604145732');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717150737');
+
+INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

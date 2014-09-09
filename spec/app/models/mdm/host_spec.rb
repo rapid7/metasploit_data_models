@@ -25,7 +25,8 @@ describe Mdm::Host do
         'x64',
         'x86',
         'x86_64',
-        ''
+        '',
+        'Unknown',
     ]
   end
 
@@ -268,6 +269,15 @@ describe Mdm::Host do
         architectures.should include('x86')
         architectures.should include('x86_64')
       end
+
+      it 'should include blank string to indicate no detection has happened' do
+        architectures.should include('')
+      end
+
+      it 'should include "Unknown" for failed detection attempts' do
+        architectures.should include('Unknown')
+      end
+
     end
 
 		context 'SEARCH_FIELDS' do
@@ -382,7 +392,24 @@ describe Mdm::Host do
       end
     end
 
-    it { should ensure_inclusion_of(:arch).in_array(architectures).allow_blank }
+    context 'arch' do
+      let(:workspace) { FactoryGirl.create(:mdm_workspace) }
+      let(:address) { '192.168.0.1' }
+      let(:host) { FactoryGirl.create(:mdm_host, :address => address, :workspace => workspace, :arch => arch) }
+      context 'with an unknown architecture' do
+        let(:arch) { "asdfasdf" }
+        it 'should normalize to Unknown' do
+          host.should be_valid
+          host.arch.should be described_class::UNKNOWN_ARCHITECTURE
+        end
+      end
+      described_class::ARCHITECTURES.each do |arch|
+        context "with known architecture '#{arch}'" do
+          let(:arch) { arch }
+          it { should be_valid }
+        end
+      end
+    end
     it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
@@ -819,7 +846,6 @@ describe Mdm::Host do
     end
 
   end
-
 
   context 'search' do
     let(:base_class) {

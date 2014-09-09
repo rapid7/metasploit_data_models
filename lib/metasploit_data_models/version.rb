@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 19
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 5
+    PATCH = 8
     # delete me.
     PRERELEASE = 'cred-search-operator-help'
 
