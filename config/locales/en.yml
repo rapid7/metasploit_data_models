@@ -1,4 +1,38 @@
 en:
+  activerecord:
+    ancestors:
+      mdm/service:
+        search:
+          operator:
+            names:
+              info:
+                help: "Filters the results by service information or banners that contain the specified value."
+              name:
+                help: "Filters the results by service name."
+              proto:
+                help: "Filters the results by transport protocol."
+              port:
+                help: "Filters the results by port number."
+      mdm/host:
+        search:
+          operator:
+            names:
+              name:
+                help: "Filters the results by host name."
+              address:
+                help: "Filters the results by IP address or range."
+              os:
+                help: "Filters the results by operating system."
+              os_name:
+                help: "Filters the results by operating system."
+      mdm/tag:
+        search:
+          operator:
+            names:
+              name:
+                help: "Filters the results by tag."
+              desc:
+                help: "Filters the results by the description field of an associated tag."
   metasploit:
     model:
       errors:

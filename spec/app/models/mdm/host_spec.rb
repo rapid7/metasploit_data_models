@@ -846,4 +846,31 @@ describe Mdm::Host do
     end
 
   end
+
+  context 'search' do
+    let(:base_class) {
+      described_class
+    }
+
+    context 'attributes' do
+
+      it_should_behave_like 'search_with',
+                            MetasploitDataModels::Search::Operator::IPAddress,
+                            name: :address
+      it_should_behave_like 'search_attribute',
+                            :name,
+                            type: :string
+      it_should_behave_like 'search_with',
+                            MetasploitDataModels::Search::Operator::Multitext,
+                            name: :os,
+                            operator_names: [
+                              :os_name,
+                              :os_flavor,
+                              :os_sp
+                            ]
+      it_should_behave_like 'search_attribute',
+                            :os_name,
+                            type: :string
+    end
+  end
 end
