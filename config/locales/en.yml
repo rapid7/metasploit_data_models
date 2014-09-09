@@ -23,6 +23,8 @@ en:
                 help: "Filters the results by IP address or range."
               os:
                 help: "Filters the results by operating system."
+              os_name:
+                help: "Filters the results by operating system."
       mdm/tag:
         search:
           operator:
