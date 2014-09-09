@@ -269,6 +269,15 @@ describe Mdm::Host do
         architectures.should include('x86')
         architectures.should include('x86_64')
       end
+
+      it 'should include blank string to indicate no detection has happened' do
+        architectures.should include('')
+      end
+
+      it 'should include "Unknown" for failed detection attempts' do
+        architectures.should include('Unknown')
+      end
+
     end
 
 		context 'SEARCH_FIELDS' do
