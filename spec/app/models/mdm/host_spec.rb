@@ -834,12 +834,6 @@ describe Mdm::Host do
                             MetasploitDataModels::Search::Operator::IPAddress,
                             name: :address
       it_should_behave_like 'search_attribute',
-                            :os_flavor,
-                            type: :string
-      it_should_behave_like 'search_attribute',
-                            :os_sp,
-                            type: :string
-      it_should_behave_like 'search_attribute',
                             :os_name,
                             type: :string
     end
