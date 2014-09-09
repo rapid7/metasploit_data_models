@@ -570,6 +570,7 @@ class Mdm::Host < ActiveRecord::Base
   end
 
   public
+
   Metasploit::Concern.run(self)
 end
 
