@@ -419,7 +419,7 @@ class Mdm::Host < ActiveRecord::Base
 
   validates :address,
             :exclusion => {
-                :in => ['127.0.0.1']
+                :in => [IPAddr.new('127.0.0.1')]
             },
             :ip_format => true,
             :presence => true,
@@ -526,7 +526,12 @@ class Mdm::Host < ActiveRecord::Base
   # @return [void]
   def ip_address_invalid?
     begin
-      potential_ip = IPAddr.new(address)
+      if address.is_a? IPAddr
+        potential_ip = address.dup
+      else
+        potential_ip = IPAddr.new(address)
+      end
+      
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true
