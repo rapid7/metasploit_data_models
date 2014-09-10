@@ -1,4 +1,11 @@
 class Mdm::Event < ActiveRecord::Base
+  
+  #
+  # Mass Assignment Security
+  #
+  
+  attr_accessible :name, :username, :info
+  
   #
   # Relations
   #
