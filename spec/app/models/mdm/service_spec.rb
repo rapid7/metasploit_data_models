@@ -124,6 +124,23 @@ describe Mdm::Service do
       described_class
     }
 
+    context 'attributes' do
+      it_should_behave_like 'search_attribute',
+                            :info,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :name,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :proto,
+                            type: {
+                                set: :string
+                            }
+      it_should_behave_like 'search_with',
+                             MetasploitDataModels::Search::Operator::Port::List,
+                             name: :port
+    end
+
     context 'associations' do
       it_should_behave_like 'search_association', :host
     end

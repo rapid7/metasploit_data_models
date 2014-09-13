@@ -97,4 +97,20 @@ describe Mdm::Tag do
       }.to change(Mdm::Tag, :count).by(-1)
     end
   end
+
+
+  context 'search' do
+    let(:base_class) {
+      described_class
+    }
+
+    context 'attributes' do
+      it_should_behave_like 'search_attribute',
+                            :name,
+                            type: :string
+      it_should_behave_like 'search_attribute',
+                            :desc,
+                            type: :string
+    end
+  end
 end
