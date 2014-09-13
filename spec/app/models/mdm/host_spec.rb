@@ -725,7 +725,7 @@ describe Mdm::Host do
         stub_const('Rex::Text', Module.new)
         allow(Rex::Text).to receive(:ascii_safe_hex) do |unsanitized|
           # Pass back the sanitized value for the stub
-          unsanitized.gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xFF])/n){ |x| "\\x%.2x" % x.unpack("C*")[0]}
+          unsanitized.unpack("C*").pack("C*").gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xFF])/n){ |x| "\\x%.2x" % x.unpack("C*")[0]}
         end
       end
 
