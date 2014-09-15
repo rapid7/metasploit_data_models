@@ -1,5 +1,6 @@
 # A system with an {#address IP address} on the network that has been discovered in some way.
 class Mdm::Host < ActiveRecord::Base
+  require 'mdm/host/operating_system_normalization'
   include Mdm::Host::OperatingSystemNormalization
   include Metasploit::Model::Search
 
