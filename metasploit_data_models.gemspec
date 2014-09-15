@@ -39,8 +39,8 @@ Gem::Specification.new do |s|
   # @see MSP-2971
   s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.26.1'
+  s.add_runtime_dependency 'metasploit-concern', '0.2.0.pre.dep.pre.railties'
+  s.add_runtime_dependency 'metasploit-model', '0.27.0.pre.dep.pre.railties'
   s.add_runtime_dependency 'railties', '< 4.0.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
