@@ -25,6 +25,16 @@ class Mdm::Service < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :service
 
+  # @!attribute logins
+  #   Credentials gathered from this service.
+  #
+  #   @return [ActiveRecord::Relation<Metasploit::Credential::Login>]
+  has_many :logins,
+           class_name: 'Metasploit::Credential::Login',
+           dependent: :destroy,
+           inverse_of: :service
+
+
   # @!attribute exploit_attempts
   #   Exploit attempts against this service.
   #
