@@ -1,3 +1,5 @@
+require 'metasploit_data_models/match'
+
 # Uses classes that extend {MetasploitDataModels::Match::Child}
 #
 # @example Add match_child to class.

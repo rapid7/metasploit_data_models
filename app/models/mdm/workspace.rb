@@ -156,11 +156,11 @@ class Mdm::Workspace < ActiveRecord::Base
 
   def unique_web_forms
     query = <<-EOQ
-          SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query  
-            FROM hosts, services, web_sites, web_forms  
-            WHERE hosts.workspace_id = #{id} AND        
-            services.host_id = hosts.id AND         
-            web_sites.service_id = services.id AND  
+          SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query
+            FROM hosts, services, web_sites, web_forms
+            WHERE hosts.workspace_id = #{id} AND
+            services.host_id = hosts.id AND
+            web_sites.service_id = services.id AND
             web_forms.web_site_id = web_sites.id
     EOQ
     Mdm::WebForm.find_by_sql(query)

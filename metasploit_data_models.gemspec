@@ -39,26 +39,27 @@ Gem::Specification.new do |s|
   # @see MSP-2971
   s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.26.1'
-  
+  s.add_runtime_dependency 'metasploit-concern', '~> 0.2.1'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.27.0'
+  s.add_runtime_dependency 'railties', '< 4.0.0'
+
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
-  
+
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
     s.add_development_dependency 'kramdown'
 
     s.add_runtime_dependency 'jdbc-postgres'
     s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
-    
+
     s.platform = Gem::Platform::JAVA
   else
     # markdown formatting for yard
     s.add_development_dependency 'redcarpet'
 
     s.add_runtime_dependency 'pg'
-    
+
     s.platform = Gem::Platform::RUBY
   end
 end

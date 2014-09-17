@@ -1,8 +1,9 @@
+require 'metasploit_data_models/match/parent'
+
 # A comma separated list of {MetasploitDataModels::IPAddress::V4::Segment::Single segment numbers} and
 # {MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range range of segment numbers} making up one segment of
 # {MetasploitDataModels::IPAddress::V4::Nmap}.
 class MetasploitDataModels::IPAddress::V4::Segment::Nmap::List < Metasploit::Model::Base
-  extend ActiveSupport::Autoload
 
   include MetasploitDataModels::Match::Parent
 
