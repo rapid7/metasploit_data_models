@@ -43,8 +43,9 @@ Gem::Specification.new do |s|
   # os fingerprinting
   s.add_runtime_dependency 'recog'
 
-  s.add_runtime_dependency 'metasploit-concern', '~> 0.1.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.26.1'
+  s.add_runtime_dependency 'metasploit-concern', '~> 0.2.1'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.27.0'
+  s.add_runtime_dependency 'railties', '< 4.0.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'

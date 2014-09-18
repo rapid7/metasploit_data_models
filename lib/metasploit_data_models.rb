@@ -24,13 +24,9 @@ require 'arel-helpers'
 require 'mdm'
 require 'mdm/module'
 require 'metasploit_data_models/base64_serializer'
-require 'metasploit_data_models/version'
+require 'metasploit_data_models/engine'
 require 'metasploit_data_models/serialized_prefs'
-
-# Only include the Rails engine when using Rails.
-if defined? Rails
-  require 'metasploit_data_models/engine'
-end
+require 'metasploit_data_models/version'
 
 module MetasploitDataModels
   def self.root
@@ -44,9 +40,3 @@ module MetasploitDataModels
   end
 end
 
-lib_pathname = MetasploitDataModels.root.join('lib')
-# has to work under 1.8.7, so can't use to_path
-lib_path = lib_pathname.to_s
-# Add path to gem's lib so that concerns for models are loaded correctly if models are reloaded
-ActiveSupport::Dependencies.autoload_paths << lib_path
-ActiveSupport::Dependencies.autoload_once_paths << lib_path

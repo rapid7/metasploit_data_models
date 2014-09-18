@@ -95,6 +95,26 @@ ALTER SEQUENCE clients_id_seq OWNED BY clients.id;
 
 
 --
+-- Name: credential_cores_tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE credential_cores_tasks (
+    core_id integer,
+    task_id integer
+);
+
+
+--
+-- Name: credential_logins_tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE credential_logins_tasks (
+    login_id integer,
+    task_id integer
+);
+
+
+--
 -- Name: creds; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -310,7 +330,8 @@ CREATE TABLE hosts (
     service_count integer DEFAULT 0,
     host_detail_count integer DEFAULT 0,
     exploit_attempt_count integer DEFAULT 0,
-    cred_count integer DEFAULT 0
+    cred_count integer DEFAULT 0,
+    detected_arch character varying(255)
 );
 
 
@@ -474,6 +495,332 @@ CREATE SEQUENCE macros_id_seq
 --
 
 ALTER SEQUENCE macros_id_seq OWNED BY macros.id;
+
+
+--
+-- Name: metasploit_credential_cores; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_cores (
+    id integer NOT NULL,
+    origin_id integer NOT NULL,
+    origin_type character varying(255) NOT NULL,
+    private_id integer,
+    public_id integer,
+    realm_id integer,
+    workspace_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    logins_count integer DEFAULT 0
+);
+
+
+--
+-- Name: metasploit_credential_cores_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_cores_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_cores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_cores_id_seq OWNED BY metasploit_credential_cores.id;
+
+
+--
+-- Name: metasploit_credential_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_logins (
+    id integer NOT NULL,
+    core_id integer NOT NULL,
+    service_id integer NOT NULL,
+    access_level character varying(255),
+    status character varying(255) NOT NULL,
+    last_attempted_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_logins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_logins_id_seq OWNED BY metasploit_credential_logins.id;
+
+
+--
+-- Name: metasploit_credential_origin_cracked_passwords; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_origin_cracked_passwords (
+    id integer NOT NULL,
+    metasploit_credential_core_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_origin_cracked_passwords_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_origin_cracked_passwords_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_origin_cracked_passwords_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_origin_cracked_passwords_id_seq OWNED BY metasploit_credential_origin_cracked_passwords.id;
+
+
+--
+-- Name: metasploit_credential_origin_imports; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_origin_imports (
+    id integer NOT NULL,
+    filename text NOT NULL,
+    task_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_origin_imports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_origin_imports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_origin_imports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_origin_imports_id_seq OWNED BY metasploit_credential_origin_imports.id;
+
+
+--
+-- Name: metasploit_credential_origin_manuals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_origin_manuals (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_origin_manuals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_origin_manuals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_origin_manuals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_origin_manuals_id_seq OWNED BY metasploit_credential_origin_manuals.id;
+
+
+--
+-- Name: metasploit_credential_origin_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_origin_services (
+    id integer NOT NULL,
+    service_id integer NOT NULL,
+    module_full_name text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_origin_services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_origin_services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_origin_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_origin_services_id_seq OWNED BY metasploit_credential_origin_services.id;
+
+
+--
+-- Name: metasploit_credential_origin_sessions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_origin_sessions (
+    id integer NOT NULL,
+    post_reference_name text NOT NULL,
+    session_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_origin_sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_origin_sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_origin_sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_origin_sessions_id_seq OWNED BY metasploit_credential_origin_sessions.id;
+
+
+--
+-- Name: metasploit_credential_privates; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_privates (
+    id integer NOT NULL,
+    type character varying(255) NOT NULL,
+    data text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    jtr_format character varying(255)
+);
+
+
+--
+-- Name: metasploit_credential_privates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_privates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_privates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_privates_id_seq OWNED BY metasploit_credential_privates.id;
+
+
+--
+-- Name: metasploit_credential_publics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_publics (
+    id integer NOT NULL,
+    username character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_publics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_publics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_publics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_publics_id_seq OWNED BY metasploit_credential_publics.id;
+
+
+--
+-- Name: metasploit_credential_realms; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE metasploit_credential_realms (
+    id integer NOT NULL,
+    key character varying(255) NOT NULL,
+    value character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: metasploit_credential_realms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE metasploit_credential_realms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: metasploit_credential_realms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE metasploit_credential_realms_id_seq OWNED BY metasploit_credential_realms.id;
 
 
 --
@@ -1898,6 +2245,76 @@ ALTER TABLE ONLY macros ALTER COLUMN id SET DEFAULT nextval('macros_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY metasploit_credential_cores ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_cores_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_logins ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_logins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_cracked_passwords ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_origin_cracked_passwords_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_imports ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_origin_imports_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_manuals ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_origin_manuals_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_services ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_origin_services_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_sessions ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_origin_sessions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_privates ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_privates_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_publics ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_publics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY metasploit_credential_realms ALTER COLUMN id SET DEFAULT nextval('metasploit_credential_realms_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY mod_refs ALTER COLUMN id SET DEFAULT nextval('mod_refs_id_seq'::regclass);
 
 
@@ -2250,6 +2667,86 @@ ALTER TABLE ONLY macros
 
 
 --
+-- Name: metasploit_credential_cores_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_cores
+    ADD CONSTRAINT metasploit_credential_cores_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_logins
+    ADD CONSTRAINT metasploit_credential_logins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_origin_cracked_passwords_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_cracked_passwords
+    ADD CONSTRAINT metasploit_credential_origin_cracked_passwords_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_origin_imports_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_imports
+    ADD CONSTRAINT metasploit_credential_origin_imports_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_origin_manuals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_manuals
+    ADD CONSTRAINT metasploit_credential_origin_manuals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_origin_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_services
+    ADD CONSTRAINT metasploit_credential_origin_services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_origin_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_origin_sessions
+    ADD CONSTRAINT metasploit_credential_origin_sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_privates_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_privates
+    ADD CONSTRAINT metasploit_credential_privates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_publics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_publics
+    ADD CONSTRAINT metasploit_credential_publics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metasploit_credential_realms_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY metasploit_credential_realms
+    ADD CONSTRAINT metasploit_credential_realms_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: mod_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2588,6 +3085,90 @@ CREATE UNIQUE INDEX index_hosts_on_workspace_id_and_address ON hosts USING btree
 
 
 --
+-- Name: index_metasploit_credential_cores_on_origin_type_and_origin_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_cores_on_origin_type_and_origin_id ON metasploit_credential_cores USING btree (origin_type, origin_id);
+
+
+--
+-- Name: index_metasploit_credential_cores_on_private_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_cores_on_private_id ON metasploit_credential_cores USING btree (private_id);
+
+
+--
+-- Name: index_metasploit_credential_cores_on_public_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_cores_on_public_id ON metasploit_credential_cores USING btree (public_id);
+
+
+--
+-- Name: index_metasploit_credential_cores_on_realm_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_cores_on_realm_id ON metasploit_credential_cores USING btree (realm_id);
+
+
+--
+-- Name: index_metasploit_credential_cores_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_cores_on_workspace_id ON metasploit_credential_cores USING btree (workspace_id);
+
+
+--
+-- Name: index_metasploit_credential_logins_on_core_id_and_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_metasploit_credential_logins_on_core_id_and_service_id ON metasploit_credential_logins USING btree (core_id, service_id);
+
+
+--
+-- Name: index_metasploit_credential_logins_on_service_id_and_core_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_metasploit_credential_logins_on_service_id_and_core_id ON metasploit_credential_logins USING btree (service_id, core_id);
+
+
+--
+-- Name: index_metasploit_credential_origin_imports_on_task_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_origin_imports_on_task_id ON metasploit_credential_origin_imports USING btree (task_id);
+
+
+--
+-- Name: index_metasploit_credential_origin_manuals_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_metasploit_credential_origin_manuals_on_user_id ON metasploit_credential_origin_manuals USING btree (user_id);
+
+
+--
+-- Name: index_metasploit_credential_privates_on_type_and_data; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_metasploit_credential_privates_on_type_and_data ON metasploit_credential_privates USING btree (type, data);
+
+
+--
+-- Name: index_metasploit_credential_publics_on_username; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_metasploit_credential_publics_on_username ON metasploit_credential_publics USING btree (username);
+
+
+--
+-- Name: index_metasploit_credential_realms_on_key_and_value; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_metasploit_credential_realms_on_key_and_value ON metasploit_credential_realms USING btree (key, value);
+
+
+--
 -- Name: index_module_actions_on_module_detail_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2781,6 +3362,69 @@ CREATE INDEX index_web_vulns_on_name ON web_vulns USING btree (name);
 --
 
 CREATE INDEX index_web_vulns_on_path ON web_vulns USING btree (path);
+
+
+--
+-- Name: originating_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX originating_credential_cores ON metasploit_credential_origin_cracked_passwords USING btree (metasploit_credential_core_id);
+
+
+--
+-- Name: unique_complete_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_complete_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, realm_id, public_id, private_id) WHERE (((realm_id IS NOT NULL) AND (public_id IS NOT NULL)) AND (private_id IS NOT NULL));
+
+
+--
+-- Name: unique_metasploit_credential_origin_services; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_metasploit_credential_origin_services ON metasploit_credential_origin_services USING btree (service_id, module_full_name);
+
+
+--
+-- Name: unique_metasploit_credential_origin_sessions; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_metasploit_credential_origin_sessions ON metasploit_credential_origin_sessions USING btree (session_id, post_reference_name);
+
+
+--
+-- Name: unique_private_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_private_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, private_id) WHERE (((realm_id IS NULL) AND (public_id IS NULL)) AND (private_id IS NOT NULL));
+
+
+--
+-- Name: unique_privateless_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_privateless_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, realm_id, public_id) WHERE (((realm_id IS NOT NULL) AND (public_id IS NOT NULL)) AND (private_id IS NULL));
+
+
+--
+-- Name: unique_public_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_public_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, public_id) WHERE (((realm_id IS NULL) AND (public_id IS NOT NULL)) AND (private_id IS NULL));
+
+
+--
+-- Name: unique_publicless_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_publicless_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, realm_id, private_id) WHERE (((realm_id IS NOT NULL) AND (public_id IS NULL)) AND (private_id IS NOT NULL));
+
+
+--
+-- Name: unique_realmless_metasploit_credential_cores; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_realmless_metasploit_credential_cores ON metasploit_credential_cores USING btree (workspace_id, public_id, private_id) WHERE (((realm_id IS NULL) AND (public_id IS NOT NULL)) AND (private_id IS NOT NULL));
 
 
 --
@@ -2983,6 +3627,44 @@ INSERT INTO schema_migrations (version) VALUES ('20130531144949');
 INSERT INTO schema_migrations (version) VALUES ('20130604145732');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717150737');
+
+INSERT INTO schema_migrations (version) VALUES ('20140331173835');
+
+INSERT INTO schema_migrations (version) VALUES ('20140407212345');
+
+INSERT INTO schema_migrations (version) VALUES ('20140410132401');
+
+INSERT INTO schema_migrations (version) VALUES ('20140410161611');
+
+INSERT INTO schema_migrations (version) VALUES ('20140410191213');
+
+INSERT INTO schema_migrations (version) VALUES ('20140410205410');
+
+INSERT INTO schema_migrations (version) VALUES ('20140411142102');
+
+INSERT INTO schema_migrations (version) VALUES ('20140411205325');
+
+INSERT INTO schema_migrations (version) VALUES ('20140414192550');
+
+INSERT INTO schema_migrations (version) VALUES ('20140417140933');
+
+INSERT INTO schema_migrations (version) VALUES ('20140520140817');
+
+INSERT INTO schema_migrations (version) VALUES ('20140603163708');
+
+INSERT INTO schema_migrations (version) VALUES ('20140605173747');
+
+INSERT INTO schema_migrations (version) VALUES ('20140702184622');
+
+INSERT INTO schema_migrations (version) VALUES ('20140703144541');
+
+INSERT INTO schema_migrations (version) VALUES ('20140722174919');
+
+INSERT INTO schema_migrations (version) VALUES ('20140728191933');
+
+INSERT INTO schema_migrations (version) VALUES ('20140801150537');
+
+INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

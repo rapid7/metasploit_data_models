@@ -1,0 +1,2 @@
+module MetasploitDataModels::Match
+end

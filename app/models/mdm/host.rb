@@ -1,5 +1,7 @@
 # A system with an {#address IP address} on the network that has been discovered in some way.
 class Mdm::Host < ActiveRecord::Base
+  require 'mdm/host/operating_system_normalization'
+
   include Mdm::Host::OperatingSystemNormalization
   include Metasploit::Model::Search
 
@@ -7,8 +9,13 @@ class Mdm::Host < ActiveRecord::Base
   # CONSTANTS
   #
 
-  # Either the CPU architecture for native code or the programming language name for exploits that run code in the
-  # programming language's  virtual machine.
+  # Special {#arch} value to indicate we should look at {#detected_arch}
+  # instead
+  UNKNOWN_ARCHITECTURE = 'Unknown'
+
+  # Either the CPU architecture for native code or the programming language
+  # name for exploits that run code in the programming language's virtual
+  # machine.
   ARCHITECTURES = [
       'armbe',
       'armle',
@@ -28,7 +35,9 @@ class Mdm::Host < ActiveRecord::Base
       # To be used for compatability with 'X86_64'
       'x64',
       'x86',
-      'x86_64'
+      'x86_64',
+      '',
+      UNKNOWN_ARCHITECTURE
   ]
 
   # Fields searched for the search scope
@@ -309,6 +318,12 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [Integer]
 
+  # @!attribute [rw] detected_arch
+  #   The architecture of the host's CPU as detected by `Recog`. If {#arch} is
+  #   not {UNKNOWN_ARCHITECTURE}, this is undefined.
+  #
+  #   @return [String] a free-form string most likely from network data
+
   # @!attribute [rw] exploit_attempt_count
   #   Counter cache for {#exploit_attempts}.
   #
@@ -407,6 +422,12 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Integer]
 
   #
+  # Callbacks
+  #
+
+  before_validation :normalize_arch
+
+  #
   # Nested Attributes
   # @note Must be declared after relations being referenced.
   #
@@ -500,10 +521,6 @@ class Mdm::Host < ActiveRecord::Base
                   :os_sp
               ]
 
-  #
-  # Search Withs
-  #
-
   search_with MetasploitDataModels::Search::Operator::IPAddress,
               attribute: :address
 
@@ -540,6 +557,17 @@ class Mdm::Host < ActiveRecord::Base
   def is_vm?
     !!self.virtual_host
   end
+
+  private
+
+  def normalize_arch
+    if attribute_present?(:arch) && !ARCHITECTURES.include?(self.arch)
+      self.detected_arch = arch
+      self.arch = UNKNOWN_ARCHITECTURE
+    end
+  end
+
+  public
 
   Metasploit::Concern.run(self)
 end
