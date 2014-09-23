@@ -22,8 +22,8 @@ class Mdm::Event < ActiveRecord::Base
   # Scopes
   #
 
-  scope :flagged, where(:critical => true, :seen => false)
-  scope :module_run, where(:name => 'module_run')
+  scope :flagged, -> { where(:critical => true, :seen => false) }
+  scope :module_run, -> { where(:name => 'module_run') }
 
   #
   # Serializations
