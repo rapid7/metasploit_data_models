@@ -1,5 +1,12 @@
 class Mdm::VulnAttempt < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :attempted_at, :exploited, :fail_reason, :username, 
+                  :module, :fail_detail
+  
+  #
   # Associations
   #
 

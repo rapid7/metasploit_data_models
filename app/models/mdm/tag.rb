@@ -1,5 +1,12 @@
 class Mdm::Tag < ActiveRecord::Base
   include Metasploit::Model::Search
+  
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name, :desc, :report_summary, :report_detail, :critical
+  
 
   #
   # Relations

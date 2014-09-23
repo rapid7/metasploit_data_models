@@ -1,5 +1,13 @@
 class Mdm::User < ActiveRecord::Base
   extend MetasploitDataModels::SerializedPrefs
+  
+  #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :username, :crypted_password, :password_salt, 
+                  :persistence_token, :fullname, :email, :phone, :company, 
+                  :prefs
 
   #
   # Relations

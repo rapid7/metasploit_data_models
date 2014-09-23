@@ -1,5 +1,11 @@
 class Mdm::Workspace < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name, :boundary, :description, :limit_to_network
+  
+  #
   # Callbacks
   #
 

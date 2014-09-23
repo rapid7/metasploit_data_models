@@ -1,5 +1,11 @@
 class Mdm::WebSite < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :vhost, :comments, :options
+  
+  #
   # Relations
   #
 

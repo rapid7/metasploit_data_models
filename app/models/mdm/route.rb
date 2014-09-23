@@ -1,5 +1,11 @@
 class Mdm::Route < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :subnet, :netmask
+  
+  #
   # Relations
   #
 

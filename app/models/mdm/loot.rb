@@ -2,6 +2,12 @@
 # sessions on other machines in the network.
 class Mdm::Loot < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :ltype, :path, :data, :content_type, :name, :info
+  
+  #
   # CONSTANTS
   #
 

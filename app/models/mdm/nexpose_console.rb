@@ -1,5 +1,12 @@
 class Mdm::NexposeConsole < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :enabled, :owner, :address, :port, :username, :password, 
+                  :status, :version, :cert, :cached_sites, :name
+  
+  #
   # Associations
   #
 

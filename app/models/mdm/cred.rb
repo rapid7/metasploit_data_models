@@ -1,5 +1,11 @@
 class Mdm::Cred < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+  
+  attr_accessible :user, :pass, :active, :proof, :ptype, :source_type
+
+  #
   # CONSTANTS
   #
   KEY_ID_REGEX = /([0-9a-fA-F:]{47})/

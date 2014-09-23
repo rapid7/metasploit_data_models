@@ -2,6 +2,13 @@
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :stype, :via_exploit, :via_payload, :desc, :port, :platform, 
+                  :datastore, :opened_at, :closed_at, :close_reason, :last_seen
+  
+  #
   # Associations
   #
 

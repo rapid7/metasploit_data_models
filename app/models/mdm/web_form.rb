@@ -1,5 +1,11 @@
 class Mdm::WebForm < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :path, :method, :params, :query
+  
+  #
   # Relations
   #
 

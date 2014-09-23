@@ -1,6 +1,12 @@
 # A vulnerability found on a {#host} or {#service}.
 class Mdm::Vuln < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :name, :info, :exploited_at
+  
+  #
   # Associations
   #
 

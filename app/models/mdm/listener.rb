@@ -1,5 +1,11 @@
 class Mdm::Listener < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :enabled, :owner, :payload, :address, :port, :options, :macro
+  
+  #
   # Relations
   #
 

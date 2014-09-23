@@ -1,5 +1,15 @@
 class Mdm::VulnDetail < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :cvss_score, :cvss_vector, :title, :description, :solution, 
+                  :proof, :nx_severity, :nx_pci_severity, :nx_published, 
+                  :nx_added, :nx_modified, :nx_tags, :nx_vuln_status, 
+                  :nx_proof_key, :src, :nx_vulnerable_since, 
+                  :nx_pci_compliance_status
+  
+  #
   # Relations
   #
 

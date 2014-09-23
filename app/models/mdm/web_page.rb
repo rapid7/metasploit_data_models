@@ -1,5 +1,12 @@
 class Mdm::WebPage < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :path, :query, :code, :cookie, :auth, :ctype, :mtime, 
+                  :location, :headers, :body, :request
+  
+  #
   # Relations
   #
 

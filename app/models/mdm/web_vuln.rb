@@ -12,6 +12,14 @@
 #   end
 class Mdm::WebVuln < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :path, :method, :params, :pname, :risk, :name, :query, 
+                  :category, :confidence, :description, :blame, :request, 
+                  :proof, :owner, :payload
+  
+  #
   # CONSTANTS
   #
 

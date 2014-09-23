@@ -1,5 +1,12 @@
 class Mdm::HostDetail < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :src, :nx_site_name, :nx_site_importance, :nx_scan_template, 
+                  :nx_risk_score
+  
+  #
   # Relations
   #
 

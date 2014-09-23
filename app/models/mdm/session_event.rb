@@ -1,5 +1,11 @@
 class Mdm::SessionEvent < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :etype, :command, :output, :remote_path, :local_path
+  
+  #
   # Relations
   #
 

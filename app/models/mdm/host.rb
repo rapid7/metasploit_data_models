@@ -6,6 +6,14 @@ class Mdm::Host < ActiveRecord::Base
   include Metasploit::Model::Search
 
   #
+  # Mass Assignment Security
+  #
+
+  attr_accessible :address, :mac, :comm, :name, :state, :os_name, :os_flavor, 
+                  :os_sp, :os_lang, :arch, :purpose, :info, :comments, :scope, 
+                  :virtual_host, :detected_arch
+  
+  #
   # CONSTANTS
   #
 
