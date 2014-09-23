@@ -1,3 +1,5 @@
+require 'metasploit_data_models/match/child'
+
 # Common behavior for Class-InterDomain Routing (`<address>/<prefix-length>`) notation under
 # {MetasploitDataModels::IPAddress},
 module MetasploitDataModels::IPAddress::CIDR

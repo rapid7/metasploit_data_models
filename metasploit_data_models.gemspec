@@ -41,24 +41,25 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', *rails_version_constraints
   s.add_runtime_dependency 'metasploit-concern'
   s.add_runtime_dependency 'metasploit-model'
+  s.add_runtime_dependency 'railties', *rails_version_constraints
   
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
-  
+
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
     s.add_development_dependency 'kramdown'
 
     s.add_runtime_dependency 'jdbc-postgres'
     s.add_runtime_dependency 'activerecord-jdbcpostgresql-adapter'
-    
+
     s.platform = Gem::Platform::JAVA
   else
     # markdown formatting for yard
     s.add_development_dependency 'redcarpet'
 
     s.add_runtime_dependency 'pg'
-    
+
     s.platform = Gem::Platform::RUBY
   end
 end

@@ -10,6 +10,8 @@ module MetasploitDataModels
       g.test_framework :rspec, :fixture => false
     end
 
+    config.paths.add 'lib', autoload: true
+
     initializer 'metasploit_data_models.prepend_factory_path', :after => 'factory_girl.set_factory_paths' do
       if defined? FactoryGirl
         relative_definition_file_path = config.generators.options[:factory_girl][:dir]
