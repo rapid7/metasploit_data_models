@@ -61,7 +61,7 @@ describe Mdm::Workspace do
       context '#normalize' do
         it 'should be called' do
           workspace.should_receive(:normalize)
-          workspace.run_callbacks(:save, false)
+          workspace.run_callbacks(:save)
         end
       end
     end
