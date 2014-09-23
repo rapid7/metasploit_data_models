@@ -472,8 +472,8 @@ class Mdm::Host < ActiveRecord::Base
   # Scopes
   #
 
-  scope :alive, where({'hosts.state' => 'alive'})
-  scope :flagged, where('notes.critical = true AND notes.seen = false').includes(:notes)
+  scope :alive, -> { where({'hosts.state' => 'alive'}) }
+  scope :flagged, -> { where('notes.critical = true AND notes.seen = false').includes(:notes) }
   scope :search,
         lambda { |*args|
           # @todo replace with AREL

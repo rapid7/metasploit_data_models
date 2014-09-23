@@ -173,7 +173,7 @@ class Mdm::Service < ActiveRecord::Base
   # Scopes
   #
 
-  scope :inactive, where("services.state != 'open'")
+  scope :inactive, -> { where("services.state != 'open'") }
   scope :with_state, lambda { |a_state|  where("services.state = ?", a_state)}
   scope :search, lambda { |*args|
     where([

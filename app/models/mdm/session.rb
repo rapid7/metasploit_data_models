@@ -152,9 +152,9 @@ class Mdm::Session < ActiveRecord::Base
   # Scopes
   #
 
-  scope :alive, where('closed_at IS NULL')
-  scope :dead, where('closed_at IS NOT NULL')
-  scope :upgradeable, where("closed_at IS NULL AND stype = 'shell' and platform ILIKE '%win%'")
+  scope :alive, -> { where('closed_at IS NULL') }
+  scope :dead, -> { where('closed_at IS NOT NULL') }
+  scope :upgradeable, -> { where("closed_at IS NULL AND stype = 'shell' and platform ILIKE '%win%'") }
 
   #
   # Serializations

@@ -107,7 +107,7 @@ class Mdm::Task < ActiveRecord::Base
   # Scopes
   #
 
-  scope :running, order( "created_at DESC" ).where("completed_at IS NULL")
+  scope :running, -> { order( "created_at DESC" ).where("completed_at IS NULL") }
 
   #
   # Serializations
