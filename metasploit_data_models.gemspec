@@ -45,6 +45,9 @@ Gem::Specification.new do |s|
   
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
+  
+  # Fixes a problem with arel not being able to visit IPAddr nodes
+  s.add_runtime_dependency 'postgres_ext'
 
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
