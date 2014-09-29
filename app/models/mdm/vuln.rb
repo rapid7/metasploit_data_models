@@ -91,11 +91,10 @@ class Mdm::Vuln < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Module::Detail>]
   has_many :module_details,
-           :class_name => 'Mdm::Module::Detail',
-           :source => :detail,
-           :through => :module_refs,
-           :uniq => true
-
+            -> { uniq },
+            :class_name => 'Mdm::Module::Detail',
+            :source => :detail,
+            :through => :module_refs
   #
   # Attributes
   #

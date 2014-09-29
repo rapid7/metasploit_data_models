@@ -22,7 +22,7 @@ class Mdm::User < ActiveRecord::Base
            class_name: 'Mdm::Tag',
            inverse_of: :user
 
-  has_and_belongs_to_many :workspaces, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::Workspace'
+  has_and_belongs_to_many :workspaces, -> { uniq }, :join_table => 'workspace_members', :class_name => 'Mdm::Workspace'
 
   #
   # Serialziations

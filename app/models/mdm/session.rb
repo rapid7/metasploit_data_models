@@ -17,10 +17,10 @@ class Mdm::Session < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Event>]
   has_many :events,
-           class_name: 'Mdm::SessionEvent',
-           dependent: :delete_all,
-           inverse_of: :session,
-           order: 'created_at'
+            -> { order('created_at') },
+            class_name: 'Mdm::SessionEvent',
+            dependent: :delete_all,
+            inverse_of: :session
 
   # @!attribute exploit_attempt
   #   Exploit attempt that created this session.

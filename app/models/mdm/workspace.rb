@@ -27,8 +27,8 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :listeners, :dependent => :destroy, :class_name => 'Mdm::Listener'
   has_many :notes, :class_name => 'Mdm::Note'
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
-  has_many :tasks, :dependent => :destroy, :class_name => 'Mdm::Task', :order => 'created_at DESC'
-  has_and_belongs_to_many :users, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::User'
+  has_many :tasks, -> { order('created_at DESC') }, :dependent => :destroy, :class_name => 'Mdm::Task'
+  has_and_belongs_to_many :users, -> { uniq }, :join_table => 'workspace_members', :class_name => 'Mdm::User'
 
   #
   # Through :hosts
