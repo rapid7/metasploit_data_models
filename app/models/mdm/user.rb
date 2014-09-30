@@ -5,7 +5,7 @@ class Mdm::User < ActiveRecord::Base
   # Mass Assignment Security
   #
 
-  attr_accessible :username, :crypted_password, :password_salt, 
+  attr_accessible :username, :password, :password_confirmation, :time_zone,
                   :persistence_token, :fullname, :email, :phone, :company, 
                   :prefs
 
