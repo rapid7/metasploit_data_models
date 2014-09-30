@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 20
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 0
+    PATCH = 1
 
     PRERELEASE = 'recog'
 
