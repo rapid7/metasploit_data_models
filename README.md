@@ -19,23 +19,23 @@ __MetasploitDataModels__ exists to do several key things:
 
 In a Rails application, MetasploitDataModels acts a
 [Rails Engine](http://edgeapi.rubyonrails.org/classes/Rails/Engine.html) and the models are available to application
-just as if they were defined under app/models.  If your Rails appliation needs to modify the models, this can be done
-using ActiveSupport.on_load hooks in initializers.  The block passed to on_load hook is evaluated in the context of the
+just as if they were defined under `app/models`.  If your Rails appliation needs to modify the models, this can be done
+using `ActiveSupport.on_load` hooks in initializers.  The block passed to on_load hook is evaluated in the context of the
 model class, so defining method and including modules will work just like reopeninng the class, but
-ActiveSupport.on_load ensures that the monkey patches will work after reloading in development mode.  Each class has a
-different on_load name, which is just the class name converted to an underscored symbol, so Mdm::ApiKey runs the
-:mdm_api_key load hooks, etc.
+`ActiveSupport.on_load` ensures that the monkey patches will work after reloading in development mode.  Each class has a
+different `on_load` name, which is just the class name converted to an underscored symbol, so `Mdm::ApiKey` runs the
+`:mdm_api_key` load hooks, etc.
 
     # Gemfile
     gem :metasploiit_data_models, :git => git://github.com/rapid7/metasploit_data_models.git, :tag => 'v0.3.0'
 
     # config/initializers/metasploit_data_models.rb
     ActiveSupport.on_load(:mdm_api_key) do
-        # Returns the String obfuscated token for display. Meant to avoid CSRF
-        # api-key stealing attackes.
-        def obfuscated_token
-          token[0..3] + "****************************"
-        end
+      # Returns the String obfuscated token for display. Meant to avoid CSRF
+      # api-key stealing attackes.
+      def obfuscated_token
+        token[0..3] + "****************************"
+      end
     end
 
 ### Metasploit Framework
