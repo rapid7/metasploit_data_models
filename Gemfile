@@ -8,8 +8,8 @@ group :development do
   gem 'yard-metasploit-erd', '~> 0.0.2'
 end
 
-gem 'metasploit-concern', path: '/Users/techpeace/rapid7/metasploit-concern'
-gem 'metasploit-model', path: '/Users/techpeace/rapid7/metasploit-model'
+gem 'metasploit-concern', git: 'git@github.com:rapid7/metasploit-concern.git', branch: 'bug/MSP-11412/engine-requires'
+gem 'metasploit-model', git: 'git@github.com:rapid7/metasploit-model.git', branch: 'bug/MSP-11412/engine-requires'
 
 # used by dummy application
 group :development, :test do
