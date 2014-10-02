@@ -24,7 +24,6 @@ require 'arel-helpers'
 require 'mdm'
 require 'mdm/module'
 require 'metasploit_data_models/base64_serializer'
-require 'metasploit_data_models/engine'
 require 'metasploit_data_models/serialized_prefs'
 require 'metasploit_data_models/version'
 
