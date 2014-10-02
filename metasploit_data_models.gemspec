@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport'
 
   # os fingerprinting
-  s.add_runtime_dependency 'recog', '~> 1.0.0'
+  s.add_runtime_dependency 'recog', '~> 1.0'
 
   s.add_runtime_dependency 'metasploit-concern', '~> 0.2.1'
   s.add_runtime_dependency 'metasploit-model', '~> 0.27.0'
