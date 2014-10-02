@@ -47,6 +47,11 @@ describe Mdm::Host do
     end
   end
 
+  context 'Constants' do
+    subject(:max_nmap_certainty) { described_class::MAX_NMAP_CERTAINTY }
+    it { should eq(0.84) }
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object and the dependent objects' do
       host = FactoryGirl.create(:mdm_host)
@@ -748,7 +753,7 @@ describe Mdm::Host do
       end
 
       it 'should set host.name to an escaped hex value when host.name contains high bytes' do
-        match = { 'host.name' => "HighBytes\xff\xf0" }
+        match = { 'host.name' => "HighBytes\xff\xf0".force_encoding('binary') }
         host.send(:apply_match_to_host, match)
         host.name.should == "HighBytes\\xff\\xf0"
       end
