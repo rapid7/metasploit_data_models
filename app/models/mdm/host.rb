@@ -359,7 +359,7 @@ class Mdm::Host < ActiveRecord::Base
   #   The flavor of {#os_name}.
   #
   #   @example Windows XP
-  #     host.os_name = 'Microsoft Windows'
+  #     host.os_name = 'Windows'
   #     host.os_flavor = 'XP'
   #
   #   @return [String]
@@ -379,7 +379,7 @@ class Mdm::Host < ActiveRecord::Base
   #   The service pack of the {#os_flavor} of the {#os_name}.
   #
   #   @example Windows XP SP2
-  #     host.os_name = 'Microsoft Windows'
+  #     host.os_name = 'Windows'
   #     host.os_flavor = 'XP'
   #     host.os_sp = 'SP2'
   #

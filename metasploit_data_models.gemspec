@@ -39,6 +39,9 @@ Gem::Specification.new do |s|
   # @see MSP-2971
   s.add_runtime_dependency 'activerecord', '>= 3.2.13', '< 4.0.0'
   s.add_runtime_dependency 'activesupport'
+  # os fingerprinting
+  s.add_runtime_dependency 'recog', '~> 1.0'
+
   s.add_runtime_dependency 'metasploit-concern', '~> 0.3.0'
   s.add_runtime_dependency 'metasploit-model', '~> 0.28.0'
   s.add_runtime_dependency 'railties', '< 4.0.0'
