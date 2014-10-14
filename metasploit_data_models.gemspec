@@ -36,16 +36,19 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
 
   rails_version_constraints = ['>= 4.0.9', '< 4.1.0']
-  
+
   s.add_runtime_dependency 'activerecord', *rails_version_constraints
   s.add_runtime_dependency 'activesupport', *rails_version_constraints
   s.add_runtime_dependency 'metasploit-concern'
   s.add_runtime_dependency 'metasploit-model'
   s.add_runtime_dependency 'railties', *rails_version_constraints
-  
+
+  # os fingerprinting
+  s.add_runtime_dependency 'recog', '~> 1.0'
+
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
-  
+
   # Fixes a problem with arel not being able to visit IPAddr nodes
   s.add_runtime_dependency 'postgres_ext'
 

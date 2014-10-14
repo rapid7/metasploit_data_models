@@ -47,6 +47,11 @@ describe Mdm::Host do
     end
   end
 
+  context 'Constants' do
+    subject(:max_nmap_certainty) { described_class::MAX_NMAP_CERTAINTY }
+    it { should eq(0.84) }
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object and the dependent objects' do
       host = FactoryGirl.create(:mdm_host)
@@ -547,126 +552,152 @@ describe Mdm::Host do
     end
 
     context '#parse_windows_os_str' do
-      it 'should always return the os_name as Microsoft Windows' do
+      it 'should always return the os_name as Windows' do
         result = host.send(:parse_windows_os_str, '')
-        result[:os_name].should == 'Microsoft Windows'
+        result['os.product'].should == 'Windows'
       end
 
       context 'arch' do
         it 'should return a value for arch if there is one' do
           result = host.send(:parse_windows_os_str, 'Windows x64')
-          result[:arch].should == 'x64'
+          result['os.arch'].should == 'x64'
         end
 
         it "should not have an arch key if we don't know the arch" do
           result = host.send(:parse_windows_os_str, 'Windows')
-          result.has_key?(:arch).should == false
+          result.has_key?('os.arch').should == false
         end
       end
 
       context 'Service Pack' do
         it 'should be returned if we see Service Pack X' do
           result = host.send(:parse_windows_os_str, 'Windows XP Service Pack 1')
-          result[:os_sp].should == 'SP1'
+          result['os.version'].should == 'SP1'
         end
 
         it 'should be returned if we see SPX' do
           result = host.send(:parse_windows_os_str, 'Windows XP SP3')
-          result[:os_sp].should == 'SP3'
+          result['os.version'].should == 'SP3'
         end
       end
 
-      context 'os flavor' do
-        it "should appear as 2003 for '.NET Server'" do
+      context 'os product' do
+
+         it "should appear as Windows 95 for 'Windows 95" do
+          result = host.send(:parse_windows_os_str, 'Windows 95')
+          result['os.product'].should == 'Windows 95'
+        end
+
+        it "should appear as Windows NT 3.51 for 'Windows NT 3.51" do
+          result = host.send(:parse_windows_os_str, 'Windows NT 3.51')
+          result['os.product'].should == 'Windows NT 3.51'
+        end
+
+        it "should appear as Windows NT 4.0 for 'Windows NT 4.0" do
+          result = host.send(:parse_windows_os_str, 'Windows NT 4.0')
+          result['os.product'].should == 'Windows NT 4.0'
+        end
+
+        it "should appear as Windows 98 for 'Windows 98" do
+          result = host.send(:parse_windows_os_str, 'Windows 98')
+          result['os.product'].should == 'Windows 98'
+        end
+
+        it "should appear as Windows ME for 'Windows ME" do
+          result = host.send(:parse_windows_os_str, 'Windows ME')
+          result['os.product'].should == 'Windows ME'
+        end
+
+        it "should appear as Windows 2003 for '.NET Server'" do
           result = host.send(:parse_windows_os_str, 'Windows .NET Server')
-          result[:os_flavor].should == '2003'
+          result['os.product'].should == 'Windows Server 2003'
         end
 
-        it 'should be recognized for XP' do
+        it 'should be recognized for Windows XP' do
           result = host.send(:parse_windows_os_str, 'Windows XP')
-          result[:os_flavor].should == 'XP'
+          result['os.product'].should == 'Windows XP'
         end
 
-        it 'should be recognized for 2000' do
+        it 'should be recognized for Windows Server 2000' do
           result = host.send(:parse_windows_os_str, 'Windows 2000')
-          result[:os_flavor].should == '2000'
+          result['os.product'].should == 'Windows Server 2000'
         end
 
-        it 'should be recognized for 2003' do
+        it 'should be recognized for Windows Server 2003' do
           result = host.send(:parse_windows_os_str, 'Windows 2003')
-          result[:os_flavor].should == '2003'
+          result['os.product'].should == 'Windows Server 2003'
         end
 
-        it 'should be recognized for 2008' do
+        it 'should be recognized for Windows 2008' do
           result = host.send(:parse_windows_os_str, 'Windows 2008')
-          result[:os_flavor].should == '2008'
+          result['os.product'].should == 'Windows Server 2008'
         end
 
-        it 'should be recognized for Vista' do
+        it 'should be recognized for Windows 2012' do
+          result = host.send(:parse_windows_os_str, 'Windows 2012')
+          result['os.product'].should == 'Windows Server 2012'
+        end
+
+        it 'should be recognized for Windows Vista' do
           result = host.send(:parse_windows_os_str, 'Windows Vista')
-          result[:os_flavor].should == 'Vista'
+          result['os.product'].should == 'Windows Vista'
         end
 
-        it 'should be recognized for SBS' do
-          result = host.send(:parse_windows_os_str, 'Windows SBS')
-          result[:os_flavor].should == 'SBS'
-        end
-
-        it 'should be recognized for 2000 Advanced Server' do
+        it 'should be recognized for Windows Server 2000' do
           result = host.send(:parse_windows_os_str, 'Windows 2000 Advanced Server')
-          result[:os_flavor].should == '2000 Advanced Server'
+          result['os.product'].should == 'Windows Server 2000'
         end
 
-        it 'should be recognized for 7' do
+        it 'should be recognized for Windows 7' do
           result = host.send(:parse_windows_os_str, 'Windows 7')
-          result[:os_flavor].should == '7'
+          result['os.product'].should == 'Windows 7'
         end
 
-        it 'should be recognized for 7 X Edition' do
+        it 'should be recognized for Windows 7 Ultimate Edition' do
           result = host.send(:parse_windows_os_str, 'Windows 7 Ultimate Edition')
-          result[:os_flavor].should == '7 Ultimate Edition'
+          result['os.product'].should == 'Windows 7'
+          result['os.edition'].should == 'Ultimate'
         end
 
-        it 'should be recognized for 8' do
+        it 'should be recognized for Windows 8' do
           result = host.send(:parse_windows_os_str, 'Windows 8')
-          result[:os_flavor].should == '8'
+          result['os.product'].should == 'Windows 8'
         end
 
-        it 'should be guessed at if all else fails' do
+        it 'should be recognized for Windows 8.1' do
+          result = host.send(:parse_windows_os_str, 'Windows 8.1')
+          result['os.product'].should == 'Windows 8.1'
+        end
+
+        it 'should be recognized for Windows 8.2' do
+          result = host.send(:parse_windows_os_str, 'Windows 8.2')
+          result['os.product'].should == 'Windows 8.2'
+        end
+
+        it 'should be recognized as Windows XP, Build 2600, SP3' do
+          result = host.send(:parse_windows_os_str, 'Windows XP (Build 2600, Service Pack 3).')
+          result['os.product'].should == 'Windows XP'
+          result['os.build'].should == '2600'
+          result['os.version'].should == 'SP3'
+        end
+
+        it 'should be recognized as Windows Server 2003, Build 3790' do
+          result = host.send(:parse_windows_os_str, 'Windows .NET Server (Build 3790).')
+          result['os.product'].should == 'Windows Server 2003'
+          result['os.build'].should == '3790'
+        end
+
+        it 'should be recognized as Windows Server 2008, Build 6001, SP1' do
+          result = host.send(:parse_windows_os_str, 'Windows 2008 (Build 6001, Service Pack 1).')
+          result['os.product'].should == 'Windows Server 2008'
+          result['os.build'].should == '6001'
+          result['os.version'].should == 'SP1'
+        end
+
+        it 'should default to Windows <name> if all else fails' do
             result = host.send(:parse_windows_os_str, 'Windows Foobar Service Pack 3')
-            result[:os_flavor].should == 'Foobar'
-        end
-      end
-
-      context 'os type' do
-        it 'should be server for Windows NT' do
-          result = host.send(:parse_windows_os_str, 'Windows NT 4')
-          result[:type].should == 'server'
-        end
-
-        it 'should be server for Windows 2003' do
-          result = host.send(:parse_windows_os_str, 'Windows 2003')
-          result[:type].should == 'server'
-        end
-
-        it 'should be server for Windows 2008' do
-          result = host.send(:parse_windows_os_str, 'Windows 2008')
-          result[:type].should == 'server'
-        end
-
-        it 'should be server for Windows SBS' do
-          result = host.send(:parse_windows_os_str, 'Windows SBS')
-          result[:type].should == 'server'
-        end
-
-        it 'should be server for anything with Server in the string' do
-          result = host.send(:parse_windows_os_str, 'Windows Foobar Server')
-          result[:type].should == 'server'
-        end
-
-        it 'should be client for anything else' do
-          result = host.send(:parse_windows_os_str, 'Windows XP')
-          result[:type].should == 'client'
+            result['os.product'].should == 'Windows Foobar'
+            result['os.version'].should == 'SP3'
         end
       end
     end
@@ -681,7 +712,7 @@ describe Mdm::Host do
         host.validate_fingerprint_data(fingerprint).should == false
       end
 
-      it 'should return false for postgressql fingerprints' do
+      it 'should return false for postgresql fingerprints' do
         fingerprint= FactoryGirl.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
         host.validate_fingerprint_data(fingerprint).should == false
       end
@@ -692,81 +723,261 @@ describe Mdm::Host do
       end
     end
 
+
+    context '#apply_match_to_host' do
+
+      before(:each) do
+        stub_const('Rex::Text', Module.new)
+        allow(Rex::Text).to receive(:ascii_safe_hex) do |unsanitized|
+          # Pass back the sanitized value for the stub
+          unsanitized.unpack("C*").pack("C*").gsub(/([\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xFF])/n){ |x| "\\x%.2x" % x.unpack("C*")[0]}
+        end
+      end
+
+      it 'should set host.mac when host.mac is present' do
+        match = { 'host.mac' => '00:11:22:33:44:55' }
+        host.send(:apply_match_to_host, match)
+        host.mac.should == '00:11:22:33:44:55'
+      end
+
+      it 'should set host.name when host.name is present' do
+        match = { 'host.name' => 'webbyweb' }
+        host.send(:apply_match_to_host, match)
+        host.name.should == 'webbyweb'
+      end
+
+      it 'should set host.arch when os.arch is present' do
+        match = { 'os.arch' => 'x86' }
+        host.send(:apply_match_to_host, match)
+        host.arch.should == 'x86'
+      end
+
+      it 'should set host.name to an escaped hex value when host.name contains high bytes' do
+        match = { 'host.name' => "HighBytes\xff\xf0".force_encoding('binary') }
+        host.send(:apply_match_to_host, match)
+        host.name.should == "HighBytes\\xff\\xf0"
+      end
+
+      it 'should set host.purpose to client when os.product is Windows XP' do
+        match = { 'os.product' => 'Windows XP' }
+        host.send(:apply_match_to_host, match)
+        host.os_name.should == 'Windows XP'
+        host.purpose.should == 'client'
+      end
+
+      it 'should set host.purpose to server when os.product is Windows 2012' do
+        match = { 'os.product' => 'Windows 2012' }
+        host.send(:apply_match_to_host, match)
+        host.os_name.should == 'Windows 2012'
+        host.purpose.should == 'server'
+      end
+
+      it 'should set host.purpose to printer when os.device is Print server' do
+        match = { 'os.device' => 'Print server' }
+        host.send(:apply_match_to_host, match)
+        host.purpose.should == 'printer'
+      end
+
+      it 'should set host.os_lang to English when os.language is English' do
+        match = { 'os.language' => 'English' }
+        host.send(:apply_match_to_host, match)
+        host.os_lang.should == 'English'
+      end
+
+      it 'should set host.os_name to Windows 8.1 when os.product is Windows 8.1' do
+        match = { 'os.product' => 'Windows 8.1' }
+        host.send(:apply_match_to_host, match)
+        host.os_name.should == 'Windows 8.1'
+      end
+
+      it 'should set host.os_name to Windows when os.product is not set and os.family is Windows' do
+        match = { 'os.family' => 'Windows' }
+        host.send(:apply_match_to_host, match)
+        host.os_name.should == 'Windows'
+      end
+
+      it 'should set host.os_flavor to Professional when os.edition is Professional' do
+        match = { 'os.edition' => 'Professional' }
+        host.send(:apply_match_to_host, match)
+        host.os_flavor.should == 'Professional'
+      end
+
+      it 'should set host.os_sp to SP2 when os.version is SP2' do
+        match = { 'os.version' => 'SP2' }
+        host.send(:apply_match_to_host, match)
+        host.os_sp.should == 'SP2'
+      end
+
+      it 'should set host.os_sp to 3.2.11 when os.version is nil and linux.kernel.version is 3.2.11' do
+        match = { 'linux.kernel.version' => '3.2.11' }
+        host.send(:apply_match_to_host, match)
+        host.os_sp.should == '3.2.11'
+      end
+    end
+
+    context '#normalize_match' do
+
+      it 'should convert Service Pack X to SPX' do
+        match = { 'os.version' => 'Service Pack 2' }
+        result = host.send(:normalize_match, match)
+        result['os.version'].should == 'SP2'
+      end
+
+      it 'should not convert No Service Pack to SP' do
+        match = { 'os.version' => 'No Service Pack' }
+        result = host.send(:normalize_match, match)
+        result['os.version'].should == 'No Service Pack'
+      end
+
+      it 'should convert Apple Mac OS X to Mac OS X' do
+        match = { 'os.product' => 'Apple Mac OS X' }
+        result = host.send(:normalize_match, match)
+        result['os.product'].should == 'Mac OS X'
+        result['os.vendor'].should == 'Apple'
+      end
+
+      it 'should convert Microsoft Windows to Windows' do
+        match = { 'os.product' => 'Microsoft Windows 7' }
+        result = host.send(:normalize_match, match)
+        result['os.product'].should == 'Windows 7'
+        result['os.vendor'].should == 'Microsoft'
+      end
+
+      it 'should convert Windows Server 2012 to Windows 2012' do
+        match = { 'os.product' => 'Windows Server 2012' }
+        result = host.send(:normalize_match, match)
+        result['os.product'].should == 'Windows 2012'
+      end
+    end
+
+    context '#guess_purpose_from_match' do
+
+      it 'should detect Windows XP as a client' do
+        match = { 'os.product' => 'Windows XP' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'client'
+      end
+
+      it 'should detect Windows 8.1 as a client' do
+        match = { 'os.product' => 'Windows 8.1' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'client'
+      end
+
+      it 'should detect Windows 2000 as a server' do
+        match = { 'os.product' => 'Windows 2000' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'server'
+      end
+
+      it 'should detect Windows Server 2012 as a server' do
+        match = { 'os.product' => 'Windows Server 2012' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'server'
+      end
+
+      it 'should detect Linux as a server' do
+        match = { 'os.product' => 'Linux' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'server'
+      end
+
+      it 'should detect JetDirect as a printer' do
+        match = { 'os.product' => 'JetDirect', 'os.device' => 'Print server' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'printer'
+      end
+
+      it 'should detect Unknown Printer as a printer' do
+        match = { 'os.product' => 'Unknown Printer' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'printer'
+      end
+
+      it 'should detect Linksys Router as a router' do
+        match = { 'os.product' => 'Linksys', 'os.device' => 'Router' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'router'
+      end
+
+      it 'should detect CheckPoint Firewall-1 as a firewall' do
+        match = { 'os.vendor' => 'Check Point', 'os.product' => 'Firewall-1' }
+        result = host.send(:guess_purpose_from_match, match)
+        result.should == 'firewall'
+      end
+    end
+
     context '#normalize_scanner_fp' do
       context 'for session_fingerprint' do
         it 'should return all the correct data for Windows XP SP3 x86' do
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Microsoft Windows'
-          result[:os_flavor].should == 'XP'
-          result[:os_sp].should == 'SP3'
-          result[:arch].should == 'x86'
-          result[:type].should == 'client'
-          result[:name].should == nil
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Windows XP'
+          result['os.version'].should == 'SP3'
+          result['os.arch'].should == 'x86'
+          result['host.name'].should == nil
+          result['os.certainty'].to_f.should == 0.8
         end
 
         it 'should return all the correct data for Windows 2008 SP1 x64' do
           fp_data = { :os => 'Microsoft Windows 2008 SP1', :arch => 'x64'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Microsoft Windows'
-          result[:os_flavor].should == '2008'
-          result[:os_sp].should == 'SP1'
-          result[:arch].should == 'x64'
-          result[:type].should == 'server'
-          result[:name].should == nil
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Windows Server 2008'
+          result['os.version'].should == 'SP1'
+          result['os.arch'].should == 'x64'
+          result['host.name'].should == nil
+          result['os.certainty'].to_f.should == 0.8
         end
 
         it 'should fingerprint Metasploitable correctly' do
           # Taken from an actual session_fingerprint of Metasploitable 2
           fp_data = { :os => 'Linux 2.6.24-16-server (i386)', :name => 'metasploitable'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Linux'
-          result[:name].should == 'metasploitable'
-          result[:os_sp].should == '2.6.24-16-server'
-          result[:arch].should == 'x86'
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Linux'
+          result['host.name'].should == 'metasploitable'
+          result['os.version'].should == '2.6.24-16-server'
+          result['os.arch'].should == 'x86'
+          result['os.certainty'].to_f.should == 0.8
         end
 
         it 'should just populate os_name if it is unsure' do
           fp_data = { :os => 'Darwin 12.3.0 x86_64 i386'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Darwin 12.3.0 x86_64 i386'
-          result[:os_sp].should == nil
-          result[:arch].should == nil
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Darwin 12.3.0 x86_64 i386'
+          result['os.version'].should == nil
+          result['os.arch'].should == nil
+          result['os.certainty'].should == 0.8
         end
       end
 
       context 'for nmap_fingerprint' do
-        it 'should return OS name and flavor for a Windows XP fingerprint' do
+        it 'should return OS name for a Windows XP fingerprint' do
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Microsoft Windows'
-          result[:os_flavor].should == 'XP'
-          result[:certainty].should == 1
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Windows XP'
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
 
-        it 'should return OS name and flavor for a Metasploitable fingerprint' do
+        it 'should return OS name for a Metasploitable fingerprint' do
           fp_data = {:os_vendor=>"Linux", :os_family=>"Linux", :os_version=>"2.6.X", :os_accuracy=>100}
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Linux'
-          result[:os_flavor].should == '2.6.X'
-          result[:certainty].should == 1
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Linux'
+          result['os.version'].should == '2.6.X'
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
           fp_data = {:os_vendor=>"Apple", :os_family=>"Mac OS X", :os_version=>"10.8.X", :os_accuracy=>100}
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Apple Mac OS X'
-          result[:os_flavor].should == '10.8.X'
-          result[:certainty].should == 1
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Mac OS X'
+          result['os.vendor'].should == 'Apple'
+          result['os.version'].should == '10.8.X'
+          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
         end
       end
 
@@ -774,50 +985,51 @@ describe Mdm::Host do
         context 'of a Windows system' do
           it 'should return a generic Windows fingerprint with no product info' do
             fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host)
-            result = host.send(:normalize_scanner_fp, fingerprint)
-            result[:os_name].should == 'Microsoft Windows'
-            result[:arch].should == 'x86'
-            result[:certainty].should == 0.67
+            result = host.send(:normalize_scanner_fp, fingerprint).first
+            result['os.product'].should == 'Windows'
+            result['os.arch'].should == 'x86'
+            result['os.certainty'].to_f.should == 0.67
           end
 
           it 'should recognize a Windows 7 fingerprint' do
             fp_data = {:family=>"Windows", :certainty=>"0.67", :vendor=>"Microsoft", :arch=>"x86", :product => 'Windows 7', :version => 'SP1'}
             fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
-            result = host.send(:normalize_scanner_fp, fingerprint)
-            result[:os_name].should == 'Microsoft Windows'
-            result[:os_flavor].should == '7'
-            result[:os_sp].should == 'SP1'
-            result[:arch].should == 'x86'
-            result[:certainty].should == 0.67
+            result = host.send(:normalize_scanner_fp, fingerprint).first
+            result['os.product'].should == 'Windows 7'
+            result['os.version'].should == 'SP1'
+            result['os.arch'].should == 'x86'
+            result['os.certainty'].to_f.should == 0.67
           end
         end
 
         it 'should recognize an OSX fingerprint' do
           fp_data = {:family=>"Mac OS X", :certainty=>"0.80", :vendor=>"Apple"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Apple Mac OS X'
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Mac OS X'
+          result['os.vendor'].should == "Apple"
         end
 
         it 'should recognize a Cisco fingerprint' do
           fp_data = {:family=>"IOS", :certainty=>"1.00", :vendor=>"Cisco", :version=>"11.2(8)SA2"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Cisco IOS'
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'IOS'
+          result['os.vendor'].should == 'Cisco'
         end
 
-        it 'should recognize an embeeded fingerprint' do
+        it 'should recognize an embedded fingerprint' do
           fp_data = {:family=>"embedded", :certainty=>"1.00", :vendor=>"Footek"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Footek'
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Footek'
         end
 
         it 'should handle an unknown fingerprint' do
           fp_data = {:certainty=>"1.00", :vendor=>"Footek"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should == 'Footek'
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should == 'Footek'
         end
 
 
@@ -826,21 +1038,19 @@ describe Mdm::Host do
       context 'for retina_fingerprint' do
         it 'should recognize a Windows fingerprint' do
           fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should ==  'Microsoft Windows'
-          result[:os_flavor].should == '2003'
-          result[:arch].should == 'x64'
-          result[:os_sp].should == 'SP2'
-          result[:type].should == 'server'
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should ==  'Windows Server 2003'
+          result['os.arch'].should == 'x64'
+          result['os.version'].should == 'SP2'
+          result['os.certainty'].to_f.should == 0.8
         end
 
         it 'should otherwise jsut copy the fingerprint to os_name' do
           fp_data = { :os => 'Linux 2.6.X (i386)'}
           fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
-          result = host.send(:normalize_scanner_fp, fingerprint)
-          result[:os_name].should ==  'Linux 2.6.X (i386)'
-          result[:certainty].should == 0.8
+          result = host.send(:normalize_scanner_fp, fingerprint).first
+          result['os.product'].should ==  'Linux 2.6.X (i386)'
+          result['os.certainty'].to_f.should == 0.8
         end
       end
     end
