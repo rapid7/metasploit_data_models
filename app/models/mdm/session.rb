@@ -5,8 +5,8 @@ class Mdm::Session < ActiveRecord::Base
   # Mass Assignment Security
   #
 
-  attr_accessible :stype, :via_exploit, :via_payload, :desc, :port, :platform, 
-                  :datastore, :opened_at, :closed_at, :close_reason, :last_seen
+  attr_accessible :host_id, :stype, :via_exploit, :via_payload, :desc, :port, :platform, 
+                  :datastore, :opened_at, :closed_at, :close_reason, :last_seen, :local_id
   
   #
   # Associations
