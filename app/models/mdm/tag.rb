@@ -2,14 +2,7 @@ class Mdm::Tag < ActiveRecord::Base
   include Metasploit::Model::Search
   
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name, :desc, :report_summary, :report_detail, :critical
-  
-
-  #
-  # Relations
+  # Associations
   #
 
   # @!attribute hosts_tags
@@ -44,6 +37,22 @@ class Mdm::Tag < ActiveRecord::Base
   search_attribute :name,
                    type: :string
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :name, :desc, :report_summary, :report_detail, :critical
+  
+  # Foreign Keys
+  
+  attr_accessible :user_id
+  
+  # Model Associations
+  
+  attr_accessible :hosts_tags, :user, :hosts
+  
   #
   # Validations
   #

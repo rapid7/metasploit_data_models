@@ -2,15 +2,7 @@ class Mdm::User < ActiveRecord::Base
   extend MetasploitDataModels::SerializedPrefs
   
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :username, :password, :password_confirmation, :time_zone,
-                  :persistence_token, :fullname, :email, :phone, :company, 
-                  :prefs
-
-  #
-  # Relations
+  # Associations
   #
 
   has_many :owned_workspaces,
@@ -35,6 +27,20 @@ class Mdm::User < ActiveRecord::Base
   serialized_prefs_attr_accessor :time_zone, :session_key
   serialized_prefs_attr_accessor :last_login_address # specifically NOT last_login_ip to prevent confusion with AuthLogic magic columns (which dont work for serialized fields)
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :username, :crypted_password, :password_salt,
+                  :persistence_token, :fullname, :email, :phone, :company,
+                  :prefs, :admin
+  
+  # Model Associations
+  
+  attr_accessible :owned_workspaces, :tags, :workspaces
+  
   Metasploit::Concern.run(self)
 end
 

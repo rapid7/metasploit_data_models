@@ -1,5 +1,5 @@
 class Mdm::Module::Action < ActiveRecord::Base
-  self.table_name = 'module_actions'
+  self.table_name = 'module_actions'  
 
   #
   # Associations
@@ -10,8 +10,14 @@ class Mdm::Module::Action < ActiveRecord::Base
   #
   # Mass Assignment Security
   #
-
+  
+  # Database Columns
+  
   attr_accessible :name
+  
+  # Model Associations
+  
+  attr_accessible :detail
 
   #
   # Validations

@@ -1,12 +1,7 @@
 class Mdm::WebSite < ActiveRecord::Base
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :vhost, :comments, :options
   
   #
-  # Relations
+  # Associations
   #
 
   belongs_to :service,
@@ -35,6 +30,22 @@ class Mdm::WebSite < ActiveRecord::Base
 
   serialize :options, ::MetasploitDataModels::Base64Serializer.new
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :vhost, :comments, :options
+  
+  # Foreign Keys
+  
+  attr_accessible :service_id
+  
+  # Model Associations
+  
+  attr_accessible :service, :web_forms, :web_pages, :web_vulns
+  
   def form_count
     web_forms.size
   end

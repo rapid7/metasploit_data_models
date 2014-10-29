@@ -34,8 +34,14 @@ class Mdm::Module::Ref < ActiveRecord::Base
   #
   # Mass Assignment Security
   #
-
+  
+  # Database Columns
+  
   attr_accessible :name
+  
+  # Model Associations
+  
+  attr_accessible :detail, :refs
 
   #
   # Validations

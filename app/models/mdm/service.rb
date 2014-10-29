@@ -3,12 +3,6 @@ class Mdm::Service < ActiveRecord::Base
   include Metasploit::Model::Search
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :port, :proto, :state, :name, :info
-
-  #
   # CONSTANTS
   #
 
@@ -216,6 +210,24 @@ class Mdm::Service < ActiveRecord::Base
 
   search_with MetasploitDataModels::Search::Operator::Port::List
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :port, :proto, :state, :name, :info
+  
+  # Foreign Keys
+  
+  attr_accessible :host_id
+  
+  # Model Associations
+  
+  attr_accessible :creds, :exploit_attempts, :exploited_hosts, :host, :loots,
+                  :notes, :task_services, :vulns, :web_sites, :tasks,
+                  :web_pages, :web_forms, :web_vulns
+ 
   #
   # Validations
   #

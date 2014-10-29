@@ -10,9 +10,14 @@ class Mdm::Module::Target < ActiveRecord::Base
   #
   # Mass Assignment Security
   #
-
-  attr_accessible :index
-  attr_accessible :name
+  
+  # Database Columns
+  
+  attr_accessible :index, :name
+  
+  # Model Associations
+  
+  attr_accessible :detail
 
   #
   # Validators

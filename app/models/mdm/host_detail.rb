@@ -1,13 +1,6 @@
 class Mdm::HostDetail < ActiveRecord::Base
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :src, :nx_site_name, :nx_site_importance, :nx_scan_template, 
-                  :nx_risk_score
-  
-  #
-  # Relations
+  # Associations
   #
 
   belongs_to :host,
@@ -15,6 +8,23 @@ class Mdm::HostDetail < ActiveRecord::Base
              counter_cache: :host_detail_count,
              inverse_of: :host_details
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :src, :nx_site_name, :nx_site_importance, :nx_scan_template
+                  :nx_risk_score
+  
+  # Foreign Keys
+  
+  attr_accessible :host_id, :nx_console_id, :nx_device_id
+  
+  # Model Associations
+  
+  attr_accessible :host
+  
   #
   # Validations
   #

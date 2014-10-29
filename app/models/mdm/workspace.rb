@@ -1,9 +1,4 @@
 class Mdm::Workspace < ActiveRecord::Base
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name, :boundary, :description, :limit_to_network
   
   #
   # Callbacks
@@ -40,6 +35,24 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :services, :through => :hosts, :class_name => 'Mdm::Service', :foreign_key => 'service_id'
   has_many :sessions, :through => :hosts, :class_name => 'Mdm::Session'
 
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :name, :boundary, :description, :limit_to_network
+  
+  # Foreign Keys
+  
+  attr_accessible :owner_id
+  
+  # Model Associations
+  
+  attr_accessible :creds, :events, :hosts, :listeners, :notes, :owner, :tasks,
+                  :users, :clients, :exploited_hosts, :loots, :vulns, :services,
+                  :sessions
+  
   #
   # Validations
   #

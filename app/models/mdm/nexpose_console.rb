@@ -1,10 +1,4 @@
 class Mdm::NexposeConsole < ActiveRecord::Base
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :enabled, :owner, :address, :port, :username, :password, 
-                  :status, :version, :cert, :cached_sites, :name
   
   #
   # Associations
@@ -17,8 +11,21 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   has_many :vuln_details,
            class_name: 'Mdm::VulnDetail',
            foreign_key: :nx_console_id,
-           inverse_of: :nexpose_console
-
+           inverse_of: :nexpose_console  
+  
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :enabled, :owner, :address, :port, :username, :password,
+                  :status, :version, :cert, :cached_sites, :name
+  
+  # Model Associations
+  
+  attr_accessible :vuln_details
+  
   #
   # Serializations
   #

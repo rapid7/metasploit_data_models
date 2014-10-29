@@ -1,24 +1,6 @@
 class Mdm::Cred < ActiveRecord::Base
   #
-  # Mass Assignment Security
-  #
-  
-  attr_accessible :user, :pass, :active, :proof, :ptype, :source_type
-
-  #
-  # CONSTANTS
-  #
-  KEY_ID_REGEX = /([0-9a-fA-F:]{47})/
-  PTYPES = {
-      'read/write password' => 'password_rw',
-      'read-only password' => 'password_ro',
-      'SMB hash' => 'smb_hash',
-      'SSH private key' => 'ssh_key',
-      'SSH public key' => 'ssh_pubkey'
-  }
-
-  #
-  # Relations
+  # Associations
   #
 
   # @!attribute [rw] servce
@@ -43,9 +25,37 @@ class Mdm::Cred < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Task>]
   has_many :tasks, :through => :task_creds
+  
+  #
+  # CONSTANTS
+  #
+  KEY_ID_REGEX = /([0-9a-fA-F:]{47})/
+  PTYPES = {
+      'read/write password' => 'password_rw',
+      'read-only password' => 'password_ro',
+      'SMB hash' => 'smb_hash',
+      'SSH private key' => 'ssh_key',
+      'SSH public key' => 'ssh_pubkey'
+  }
 
   after_create :increment_host_counter_cache
   after_destroy :decrement_host_counter_cache
+
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :user, :pass, :active, :proof, :ptype, :source_type
+  
+  # Foreign Keys
+  
+  attr_accessible :service_id, :source_id
+  
+  # Model Associations
+  
+  attr_accessible :service, :task_creds, :tasks
 
   def ptype_human
     humanized = PTYPES.select do |k, v|

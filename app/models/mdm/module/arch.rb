@@ -10,8 +10,14 @@ class Mdm::Module::Arch < ActiveRecord::Base
   #
   # Mass Assignment Security
   #
-
+  
+  # Database Columns
+  
   attr_accessible :name
+  
+  # Model Associations
+  
+  attr_accessible :detail
 
   #
   # Validations
