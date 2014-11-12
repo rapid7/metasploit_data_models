@@ -372,16 +372,16 @@ module Mdm::Host::OperatingSystemNormalization
     # These values in a match always override the current value unless
     # the host attribute has been explicitly locked by the user
 
-    if match.has_key?('host.mac') and ! host.attribute_locked?(:mac)
+    if match['host.mac'] && !host.attribute_locked?(:mac)
       host.mac = sanitize(match['host.mac'])
     end
 
-    if match.has_key?('host.name') and ! host.attribute_locked?(:name)
+    if match['host.name'] && !host.attribute_locked?(:name)
       host.name = sanitize(match['host.name'])
     end
 
     # Select the os architecture if available
-    if match.has_key?('os.arch') and ! host.attribute_locked?(:arch)
+    if match['os.arch'] && !host.attribute_locked?(:arch)
       host.arch = sanitize(match['os.arch'])
     end
 
