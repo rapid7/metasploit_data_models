@@ -121,4 +121,14 @@ describe Mdm::NexposeConsole do
 
   end
 
+  context 'callbacks' do
+    describe '#strip_protocol' do
+      it 'should strip protocol handlers from the front of the address' do
+        nexpose_console = FactoryGirl.create(:mdm_nexpose_console, :address => 'https://foo.bar.com')
+        expect(nexpose_console.address).to eq 'foo.bar.com'
+      end
+
+    end
+  end
+
 end

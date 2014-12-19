@@ -12,6 +12,8 @@ class Mdm::NexposeConsole < ActiveRecord::Base
            foreign_key: :nx_console_id,
            inverse_of: :nexpose_console
 
+  before_save :strip_protocol
+
   #
   # Serializations
   #
@@ -27,6 +29,10 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   validates :password, :presence => true
   validates :port, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
   validates :username, :presence => true
+
+  def strip_protocol
+    self.address.gsub!(/^http(s)*:\/\//i,'')
+  end
 
   Metasploit::Concern.run(self)
 end
