@@ -1,6 +1,7 @@
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - rake db:setup
+cache: bundler
 language: ruby
 matrix:
   allow_failures:
