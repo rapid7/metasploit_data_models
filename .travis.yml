@@ -12,3 +12,4 @@ rvm:
   - '2.1'
   - 'jruby-19mode'
   - 'rbx-2.2'
+sudo: false
