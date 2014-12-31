@@ -1,6 +1,6 @@
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
-  - rake db:setup
+  - bundle exec rake db:setup
 cache: bundler
 language: ruby
 matrix:
