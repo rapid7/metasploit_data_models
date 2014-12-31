@@ -5,7 +5,7 @@ gemspec
 
 gem 'metasploit-model',
     github: 'rapid7/metasploit-model',
-    ref: '8794a1313d58fc588fa0fd5994cd1a8c150536f0'
+    ref: 'ee4d06009811c21c36ace781b27509f816ef7fee'
 
 group :development do
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
