@@ -3,14 +3,9 @@ before_script:
   - bundle exec rake db:setup
 cache: bundler
 language: ruby
-matrix:
-  allow_failures:
-    # Rubinius.mri_backtrace primitive failed (PrimitiveFailure)
-    - rvm: 'rbx-2.2'
 rvm:
   - '1.9.3'
   - '2.0'
   - '2.1'
   - jruby-1.7.17
-  - 'rbx-2.2'
 sudo: false
