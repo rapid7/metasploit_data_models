@@ -3,9 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-cache',
-    github: 'rapid7/metasploit-cache',
-    ref: 'f7a888beaac50d9d9c8ba66c0563ea1ac048f07a'
 gem 'metasploit-model',
     github: 'rapid7/metasploit-model',
     ref: '8794a1313d58fc588fa0fd5994cd1a8c150536f0'
