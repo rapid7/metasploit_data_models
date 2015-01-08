@@ -11,8 +11,10 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   has_many :vuln_details,
            class_name: 'Mdm::VulnDetail',
            foreign_key: :nx_console_id,
-           inverse_of: :nexpose_console  
-  
+           inverse_of: :nexpose_console
+
+  before_save :strip_protocol
+
   #
   # Mass Assignment Security
   #
@@ -41,6 +43,10 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   validates :password, :presence => true
   validates :port, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
   validates :username, :presence => true
+
+  def strip_protocol
+    self.address.gsub!(/^http(s)*:\/\//i,'')
+  end
 
   Metasploit::Concern.run(self)
 end
