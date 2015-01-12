@@ -59,15 +59,6 @@ describe Mdm::Task do
 
   end
 
-  context 'scopes' do
-    context "running" do
-      it "should exclude completed tasks" do
-        task = FactoryGirl.create(:mdm_task, :completed_at => Time.now)
-        Mdm::Task.running.should_not include(task)
-      end
-    end
-  end
-
   context 'callbacks' do
     context 'before_destroy' do
       it 'should call #delete_file' do
