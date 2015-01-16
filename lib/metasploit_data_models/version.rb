@@ -4,9 +4,9 @@ module MetasploitDataModels
     # The major version number.
     MAJOR = 0
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 21
+    MINOR = 22
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 4
+    PATCH = 1
     PRERELEASE = 'service-uniqueness2'
 
     # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
