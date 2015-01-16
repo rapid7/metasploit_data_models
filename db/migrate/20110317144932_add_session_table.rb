@@ -50,13 +50,13 @@ class AddSessionTable < ActiveRecord::Migration
  		# Migrate session data from events table
  		#
 
- 		close_events = Event.find_all_by_name("session_close")
- 		open_events  = Event.find_all_by_name("session_open")
+ 		close_events = Event.where(name: "session_close")
+ 		open_events  = Event.where(name: "session_open")
 
- 		command_events  = Event.find_all_by_name("session_command")
- 		output_events   = Event.find_all_by_name("session_output")
- 		upload_events   = Event.find_all_by_name("session_upload")
- 		download_events = Event.find_all_by_name("session_download")
+ 		command_events  = Event.where(name: "session_command")
+ 		output_events   = Event.where(name: "session_output")
+ 		upload_events   = Event.where(name: "session_upload")
+ 		download_events = Event.where(name: "session_download")
 
  		open_events.each do |o|
  			c = close_events.find { |e| e.info[:session_uuid] == o.info[:session_uuid] }
