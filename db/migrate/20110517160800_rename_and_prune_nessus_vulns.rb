@@ -6,7 +6,7 @@ class RenameAndPruneNessusVulns < ActiveRecord::Migration
 	# No table changes, just vuln renaming to drop the NSS id
 	# from those vulns that have it and a descriptive name.
 	def self.up
-		Vuln.find(:all).each do |v|
+		Vuln.all.each do |v|
 			if v.name =~ /^NSS-0?\s*$/
 				v.delete
 				next
