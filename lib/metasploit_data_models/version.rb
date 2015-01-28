@@ -7,7 +7,6 @@ module MetasploitDataModels
     MINOR = 22
     # The patch number, scoped to the {MINOR} version number.
     PATCH = 2
-    PRERELEASE = 'correcting-svc-uniq-validation'
 
     # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
     # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
