@@ -222,14 +222,19 @@ class Mdm::Service < ActiveRecord::Base
                 in: PROTOS
             }
 
-  validates :host_id,
-            uniqueness: {
-              message: 'already has a service with this port and proto',
-              scope: [
-                :port,
-                :proto
-              ]
-            }
+  validate :uniq_port_proto_per_host
+
+  # Custom validation to ensure that the combination of port and protocol
+  # for a service doesn't already exist for the same host.
+  def uniq_port_proto_per_host
+    no_dupes = Mdm::Service.where(host_id: host.id, port: port, proto: proto).blank?
+    error_msg = 'This host already has a service with this port and protocol.'
+
+    unless no_dupes
+      errors.add(:port, error_msg)
+      errors.add(:proto, error_msg)
+    end
+  end
 
   #
   # Class Methods
