@@ -11,7 +11,7 @@
 #     end
 #   end
 class Mdm::WebVuln < ActiveRecord::Base
-  
+
   #
   # CONSTANTS
   #
@@ -110,24 +110,6 @@ class Mdm::WebVuln < ActiveRecord::Base
   #
   #   @return [Integer]
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :path, :method, :params, :pname, :risk, :name, :query,
-                  :category, :confidence, :description, :blame, :request,
-                  :proof, :owner, :payload
-  
-  # Foreign Keys
-  
-  attr_accessible :web_site_id
-  
-  # Model Associations
-  
-  attr_accessible :web_site
-  
   #
   # Validations
   #

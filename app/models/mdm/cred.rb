@@ -25,7 +25,7 @@ class Mdm::Cred < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Task>]
   has_many :tasks, :through => :task_creds
-  
+
   #
   # CONSTANTS
   #
@@ -40,22 +40,6 @@ class Mdm::Cred < ActiveRecord::Base
 
   after_create :increment_host_counter_cache
   after_destroy :decrement_host_counter_cache
-
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :user, :pass, :active, :proof, :ptype, :source_type
-  
-  # Foreign Keys
-  
-  attr_accessible :service_id, :source_id
-  
-  # Model Associations
-  
-  attr_accessible :service, :task_creds, :tasks
 
   def ptype_human
     humanized = PTYPES.select do |k, v|

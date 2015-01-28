@@ -1,11 +1,5 @@
 class Mdm::Macro < ActiveRecord::Base
   extend MetasploitDataModels::SerializedPrefs
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :owner, :name, :description, :actions, :prefs
-  
 
   #
   # Serialization

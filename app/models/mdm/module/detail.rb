@@ -2,7 +2,7 @@
 # {Mdm::Module} namespace.
 class Mdm::Module::Detail < ActiveRecord::Base
   self.table_name = 'module_details'
-  
+
   #
   # CONSTANTS
   #
@@ -171,21 +171,6 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   {#supports_stance? support stances}.
   #
   #   @return ['active', 'passive', nil]
-
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :mtime, :file, :mtype, :refname, :fullname, :name, :rank,
-                  :description, :license, :privileged, :disclosure_date,
-                  :default_target, :default_action, :stance, :ready
-  
-  # Model Associations
-  
-  attr_accessible :actions, :archs, :authors, :mixins, :platforms, :refs
-                  :targets
 
   #
   # Validations

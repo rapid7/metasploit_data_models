@@ -435,28 +435,6 @@ class Mdm::Host < ActiveRecord::Base
   accepts_nested_attributes_for :services, :reject_if => lambda { |s| s[:port].blank? }, :allow_destroy => true
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :address, :mac, :comm, :name, :state, :os_name, :os_flavor,
-                  :os_sp, :os_lang, :arch, :purpose, :info, :comments, :scope,
-                  :virtual_host, :detected_arch
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id
-  
-  # Model Associations
-  
-  attr_accessible :clients, :events, :task_hosts, :exploit_attempts,
-                  :exploited_hosts, :host_details, :hosts_tags, :loots, :notes,
-                  :services, :sessions, :vulns, :workspace, :tags, :creds,
-                  :service_notes, :web_sites, :tasks, :vuln_refs, :refs,
-                  :module_refs, :module_details
-  
-  #
   # Validations
   #
 
@@ -570,7 +548,7 @@ class Mdm::Host < ActiveRecord::Base
       else
         potential_ip = IPAddr.new(address)
       end
-      
+
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true

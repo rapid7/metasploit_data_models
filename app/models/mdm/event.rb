@@ -1,5 +1,5 @@
 class Mdm::Event < ActiveRecord::Base
-    
+
   #
   # Associations
   #
@@ -11,7 +11,7 @@ class Mdm::Event < ActiveRecord::Base
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
              inverse_of: :events
-  
+
   #
   # Scopes
   #
@@ -24,22 +24,6 @@ class Mdm::Event < ActiveRecord::Base
   #
 
   serialize :info, MetasploitDataModels::Base64Serializer.new
-
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :name, :critical, :seen, :username, :info
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id, :host_id
-  
-  # Model Associations
-  
-  attr_accessible :host, :workspace
 
   #
   # Validations
