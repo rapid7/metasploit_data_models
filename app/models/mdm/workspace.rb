@@ -95,7 +95,7 @@ class Mdm::Workspace < ActiveRecord::Base
   end
 
   def self.default
-    find_or_create_by_name(DEFAULT)
+    where(name: DEFAULT).first_or_create
   end
 
   def default?
