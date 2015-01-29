@@ -4,7 +4,7 @@ class MigrateCredData < ActiveRecord::Migration
 		begin # Wrap the whole thing in a giant rescue.
 		skipped_notes = []
 		new_creds = []
-		Mdm::Note.find(:all).each do |note|
+		Mdm::Note.all.each do |note|
 			next unless note.ntype[/^auth\.(.*)/]
 			service_name = $1
 			if !service_name
@@ -135,7 +135,7 @@ class MigrateCredData < ActiveRecord::Migration
 		end
 
 		say "Deleting migrated auth notes."
-		Mdm::Note.find(:all).each do |note|
+		Mdm::Note.all.each do |note|
 			next unless note.ntype[/^auth\.(.*)/]
 			note.delete
 		end
