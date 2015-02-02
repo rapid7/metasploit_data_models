@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 22
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 5
+    PATCH = 6
 
     PRERELEASE = 'convert-find-or-create-by'
 
