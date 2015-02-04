@@ -103,11 +103,7 @@ class Mdm::Task < ActiveRecord::Base
   has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
 
 
-  #
-  # Scopes
-  #
 
-  scope :running, -> { order( "created_at DESC" ).where("completed_at IS NULL") }
 
   #
   # Serializations
