@@ -4,27 +4,16 @@ class Mdm::Note < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] host
-  #   The host to which this note is attached.
+  # @!attribute [rw] notable
+  #   The model to which this note is attached.
   #
-  #   @return [Mdm::Host] if note is attached to an {Mdm::Host}.
+  #   @return [Notable] if note is attached to an {Notable}.
   #   @return [nil] if note is attached to an {Mdm::Service}.
-  belongs_to :host,
-             class_name: 'Mdm::Host',
-             counter_cache: :note_count,
-             inverse_of: :notes
-
-  # @!attribute [rw] service
-  #   The service to which this note is attached.
-  #
-  #   @return [Mdm::Service] if note is attached to an {Mdm::Service}.
-  #   @return [nil] if not is attached to an {Mdm::Host}.
-  belongs_to :service,
-             class_name: 'Mdm::Service',
-             inverse_of: :notes
+  belongs_to :notable,
+             polymorphic: true
 
   # @!attribute [rw] workspace
-  #   The workspace in which the {#host} or {#service} exists.
+  #   The workspace in which the notes exists.
   #
   #   @return [Mdm::Workspace]
   belongs_to :workspace,

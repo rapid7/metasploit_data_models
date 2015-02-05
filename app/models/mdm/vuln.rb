@@ -90,6 +90,16 @@ class Mdm::Vuln < ActiveRecord::Base
            :through => :module_refs,
            :uniq => true
 
+  # @!attribute [rw] notes
+  #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
+  #
+  #   @return [Array<Mdm::Note>]
+  has_many :notes,
+           class_name: 'Mdm::Note',
+           dependent: :delete_all,
+           order: 'notes.created_at',
+           as: :notable
+
   #
   # Attributes
   #

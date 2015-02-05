@@ -67,7 +67,7 @@ class Mdm::Service < ActiveRecord::Base
   has_many :notes,
            class_name: 'Mdm::Note',
            dependent: :destroy,
-           inverse_of: :service
+           as: :notable
 
   # @!attribute [rw] task_services
   #   Details about what Tasks touched this service

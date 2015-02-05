@@ -141,9 +141,9 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [Array<Mdm::Note>]
   has_many :notes,
            class_name: 'Mdm::Note',
-           inverse_of: :host,
            dependent: :delete_all,
-           order: 'notes.created_at'
+           order: 'notes.created_at',
+           as: :notable
 
   # @!attribute [rw] services
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
