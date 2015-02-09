@@ -19,8 +19,8 @@ describe Mdm::Note do
 
     context 'columns' do
       it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:service_id).of_type(:integer) }
+      it { should have_db_column(:notable_id).of_type(:integer) }
+      it { should have_db_column(:notable_type).of_type(:string) }
       it { should have_db_column(:ntype).of_type(:string) }
       it { should have_db_column(:critical).of_type(:boolean) }
       it { should have_db_column(:seen).of_type(:boolean) }
@@ -42,8 +42,7 @@ describe Mdm::Note do
 
   context 'associations' do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should belong_to(:service).class_name('Mdm::Service') }
+    it { should belong_to(:notable)}
   end
 
   context 'scopes' do

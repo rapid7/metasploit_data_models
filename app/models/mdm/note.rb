@@ -10,7 +10,8 @@ class Mdm::Note < ActiveRecord::Base
   #   @return [Notable] if note is attached to an {Notable}.
   #   @return [nil] if note is attached to an {Mdm::Service}.
   belongs_to :notable,
-             polymorphic: true
+             polymorphic: true,
+             counter_cache: :note_count
 
   # @!attribute [rw] workspace
   #   The workspace in which the notes exists.
@@ -79,7 +80,7 @@ class Mdm::Note < ActiveRecord::Base
 
   #
   # Serializations
-  #
+  #                                                                             q
 
   serialize :data, ::MetasploitDataModels::Base64Serializer.new
 
@@ -90,8 +91,8 @@ class Mdm::Note < ActiveRecord::Base
   #
   # @return [void]
   def normalize
-    if data_changed? and ntype =~ /fingerprint/
-      host.normalize_os
+    if data_changed? and ntype =~ /fingerprint/ and notable_type == 'Mdm::Host'
+      notable.normalize_os
     end
   end
 

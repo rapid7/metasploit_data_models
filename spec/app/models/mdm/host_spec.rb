@@ -60,7 +60,7 @@ describe Mdm::Host do
       host_detail = FactoryGirl.create(:mdm_host_detail, :host => host)
       loot = FactoryGirl.create(:mdm_loot, :host => host)
       task_host = FactoryGirl.create(:mdm_task_host, :host => host)
-      note = FactoryGirl.create(:mdm_note, :host => host)
+      note = FactoryGirl.create(:mdm_note, :notable => host)
       svc = FactoryGirl.create(:mdm_service, :host => host)
       session = FactoryGirl.create(:mdm_session, :host => host)
       vuln = FactoryGirl.create(:mdm_vuln, :host => host)
@@ -910,7 +910,7 @@ describe Mdm::Host do
     context '#normalize_scanner_fp' do
       context 'for session_fingerprint' do
         it 'should return all the correct data for Windows XP SP3 x86' do
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host)
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :notable => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Windows XP'
           result['os.version'].should == 'SP3'
@@ -921,7 +921,7 @@ describe Mdm::Host do
 
         it 'should return all the correct data for Windows 2008 SP1 x64' do
           fp_data = { :os => 'Microsoft Windows 2008 SP1', :arch => 'x64'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Windows Server 2008'
           result['os.version'].should == 'SP1'
@@ -933,7 +933,7 @@ describe Mdm::Host do
         it 'should fingerprint Metasploitable correctly' do
           # Taken from an actual session_fingerprint of Metasploitable 2
           fp_data = { :os => 'Linux 2.6.24-16-server (i386)', :name => 'metasploitable'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Linux'
           result['host.name'].should == 'metasploitable'
@@ -944,7 +944,7 @@ describe Mdm::Host do
 
         it 'should just populate os_name if it is unsure' do
           fp_data = { :os => 'Darwin 12.3.0 x86_64 i386'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Darwin 12.3.0 x86_64 i386'
           result['os.version'].should == nil
@@ -955,7 +955,7 @@ describe Mdm::Host do
 
       context 'for nmap_fingerprint' do
         it 'should return OS name for a Windows XP fingerprint' do
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :notable => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Windows XP'
           result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
@@ -963,7 +963,7 @@ describe Mdm::Host do
 
         it 'should return OS name for a Metasploitable fingerprint' do
           fp_data = {:os_vendor=>"Linux", :os_family=>"Linux", :os_version=>"2.6.X", :os_accuracy=>100}
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Linux'
           result['os.version'].should == '2.6.X'
@@ -972,7 +972,7 @@ describe Mdm::Host do
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
           fp_data = {:os_vendor=>"Apple", :os_family=>"Mac OS X", :os_version=>"10.8.X", :os_accuracy=>100}
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Mac OS X'
           result['os.vendor'].should == 'Apple'
@@ -984,7 +984,7 @@ describe Mdm::Host do
       context 'for nexpose_fingerprint' do
         context 'of a Windows system' do
           it 'should return a generic Windows fingerprint with no product info' do
-            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host)
+            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host)
             result = host.send(:normalize_scanner_fp, fingerprint).first
             result['os.product'].should == 'Windows'
             result['os.arch'].should == 'x86'
@@ -993,7 +993,7 @@ describe Mdm::Host do
 
           it 'should recognize a Windows 7 fingerprint' do
             fp_data = {:family=>"Windows", :certainty=>"0.67", :vendor=>"Microsoft", :arch=>"x86", :product => 'Windows 7', :version => 'SP1'}
-            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host, :data => fp_data)
             result = host.send(:normalize_scanner_fp, fingerprint).first
             result['os.product'].should == 'Windows 7'
             result['os.version'].should == 'SP1'
@@ -1004,7 +1004,7 @@ describe Mdm::Host do
 
         it 'should recognize an OSX fingerprint' do
           fp_data = {:family=>"Mac OS X", :certainty=>"0.80", :vendor=>"Apple"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Mac OS X'
           result['os.vendor'].should == "Apple"
@@ -1012,7 +1012,7 @@ describe Mdm::Host do
 
         it 'should recognize a Cisco fingerprint' do
           fp_data = {:family=>"IOS", :certainty=>"1.00", :vendor=>"Cisco", :version=>"11.2(8)SA2"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'IOS'
           result['os.vendor'].should == 'Cisco'
@@ -1020,14 +1020,14 @@ describe Mdm::Host do
 
         it 'should recognize an embedded fingerprint' do
           fp_data = {:family=>"embedded", :certainty=>"1.00", :vendor=>"Footek"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Footek'
         end
 
         it 'should handle an unknown fingerprint' do
           fp_data = {:certainty=>"1.00", :vendor=>"Footek"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should == 'Footek'
         end
@@ -1037,7 +1037,7 @@ describe Mdm::Host do
 
       context 'for retina_fingerprint' do
         it 'should recognize a Windows fingerprint' do
-          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host)
+          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :notable => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should ==  'Windows Server 2003'
           result['os.arch'].should == 'x64'
@@ -1047,7 +1047,7 @@ describe Mdm::Host do
 
         it 'should otherwise jsut copy the fingerprint to os_name' do
           fp_data = { :os => 'Linux 2.6.X (i386)'}
-          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :notable => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           result['os.product'].should ==  'Linux 2.6.X (i386)'
           result['os.certainty'].to_f.should == 0.8
