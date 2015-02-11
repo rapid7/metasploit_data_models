@@ -6,7 +6,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 22
     # The patch number, scoped to the {MINOR} version number.
-    PATCH = 7
+    PATCH = 9
 
 
     PRERELEASE = 'add-note-id-to-vuln'
