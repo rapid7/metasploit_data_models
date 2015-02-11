@@ -56,6 +56,16 @@ class Mdm::Vuln < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :vuln
 
+  # @!attribute [rw] notes
+  #   Notes about the vuln entered by a user with {Mdm::Note#created_at oldest notes} first.
+  #
+  #   @return [Array<Mdm::Note>]
+  has_many :notes,
+           class_name: 'Mdm::Note',
+           inverse_of: :vuln,
+           dependent: :delete_all,
+           order: 'notes.created_at'
+
   #
   # Through :vuln_refs
   #
