@@ -222,14 +222,6 @@ class Mdm::Service < ActiveRecord::Base
                 in: PROTOS
             }
 
-  validates :host_id,
-            uniqueness: {
-              message: 'already has a service with this port and proto',
-              scope: [
-                :port,
-                :proto
-              ]
-            }
 
   #
   # Class Methods
