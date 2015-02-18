@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :mdm_module_detail, :class => Mdm::Module::Detail do
-    transient do
+    ignore do
       root {
         MetasploitDataModels.root
       }
