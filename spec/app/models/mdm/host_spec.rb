@@ -415,7 +415,7 @@ describe Mdm::Host do
         end
       end
     end
-    it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
+    it { should validate_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
 
