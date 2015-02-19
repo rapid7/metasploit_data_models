@@ -61,6 +61,42 @@ ALTER SEQUENCE api_keys_id_seq OWNED BY api_keys.id;
 
 
 --
+-- Name: automatic_exploitation_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_matches (
+    id integer NOT NULL,
+    module_detail_id integer,
+    state character varying(255),
+    nexpose_data_vulnerability_definition_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    match_set_id integer,
+    matchable_type character varying(255),
+    matchable_id integer
+);
+
+
+--
+-- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_matches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_matches_id_seq OWNED BY automatic_exploitation_matches.id;
+
+
+--
 -- Name: clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -730,6 +766,49 @@ CREATE SEQUENCE module_refs_id_seq
 --
 
 ALTER SEQUENCE module_refs_id_seq OWNED BY module_refs.id;
+
+
+--
+-- Name: module_runs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE module_runs (
+    id integer NOT NULL,
+    trackable_type character varying(255),
+    trackable_id integer,
+    attempted_at timestamp without time zone,
+    session_id integer,
+    port integer,
+    proto character varying(255),
+    fail_detail text,
+    status character varying(255),
+    username character varying(255),
+    user_id integer,
+    fail_reason character varying(255),
+    module_name text,
+    module_detail_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE module_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE module_runs_id_seq OWNED BY module_runs.id;
 
 
 --
@@ -1823,6 +1902,13 @@ ALTER TABLE ONLY api_keys ALTER COLUMN id SET DEFAULT nextval('api_keys_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY automatic_exploitation_matches ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_matches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
 
 
@@ -1950,6 +2036,13 @@ ALTER TABLE ONLY module_platforms ALTER COLUMN id SET DEFAULT nextval('module_pl
 --
 
 ALTER TABLE ONLY module_refs ALTER COLUMN id SET DEFAULT nextval('module_refs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY module_runs ALTER COLUMN id SET DEFAULT nextval('module_runs_id_seq'::regclass);
 
 
 --
@@ -2164,6 +2257,14 @@ ALTER TABLE ONLY api_keys
 
 
 --
+-- Name: automatic_exploitation_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_matches
+    ADD CONSTRAINT automatic_exploitation_matches_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2313,6 +2414,14 @@ ALTER TABLE ONLY module_platforms
 
 ALTER TABLE ONLY module_refs
     ADD CONSTRAINT module_refs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: module_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY module_runs
+    ADD CONSTRAINT module_runs_pkey PRIMARY KEY (id);
 
 
 --
@@ -2545,6 +2654,13 @@ ALTER TABLE ONLY wmap_targets
 
 ALTER TABLE ONLY workspaces
     ADD CONSTRAINT workspaces_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_automatic_exploitation_matches_on_ref_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_matches_on_ref_id ON automatic_exploitation_matches USING btree (module_detail_id);
 
 
 --
@@ -3000,6 +3116,12 @@ INSERT INTO schema_migrations (version) VALUES ('20130604145732');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717150737');
 
+INSERT INTO schema_migrations (version) VALUES ('20131002004641');
+
+INSERT INTO schema_migrations (version) VALUES ('20131011184338');
+
+INSERT INTO schema_migrations (version) VALUES ('20131021185657');
+
 INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 
 INSERT INTO schema_migrations (version) VALUES ('20150112203945');
@@ -3009,6 +3131,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150205192745');
 INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219173821');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
