@@ -65,16 +65,49 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #
 
 
-  # A reference to the Metasploit content module in the DB cache
-  # @return [Mdm::Module::Detail]
+  # @!attribute [rw] module_detail
+  #  A reference to the Metasploit content module in the DB cache
+  #
+  #  @return [Mdm::Module::Detail]
   belongs_to :module_detail,
              class_name: 'Mdm::Module::Detail',
              inverse_of: :module_runs
 
+
+  # @!attribute [rw] spawned_session
+  #
+  #  The session created by running this module.
+  #  Note that this is NOT the session that modules are run on.
+  #
+  #  @return [Mdm::Session]
+  has_one :spawned_session,
+             class_name: 'Mdm::Session',
+             inverse_of: :originating_module_run
+
+
+  # @!attribute [rw] target_session
+  #
+  #  The session this module was run on, if any.
+  #  Note that this is NOT a session created by this module run
+  #  of exploit modules.
+  #
+  #  @return [Mdm::Session]
+  belongs_to :target_session,
+             class_name: 'Mdm::Session',
+             foreign_key: :session_id,
+             inverse_of: :target_module_runs
+
+
+
+  # Declares this model to implement a polymorphic relationship with other models.
   belongs_to :trackable, polymorphic: true
 
-  # The user that launched this module
-  # @return [Mdm::User]
+
+  # @!attribute [rw] user
+  #
+  #  The user that launched this module
+  #
+  #  @return [Mdm::User]
   belongs_to :user,
              class_name:  'Mdm::User',
              foreign_key: 'user_id',

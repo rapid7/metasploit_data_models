@@ -22,10 +22,34 @@ describe MetasploitDataModels::ModuleRun do
 
   context "associations" do
     it { is_expected.to belong_to(:user).class_name('Mdm::User') }
+    it { is_expected.to belong_to(:target_session).class_name('Mdm::Session') }
     it { is_expected.to belong_to(:trackable) }
+    it { is_expected.to have_one(:spawned_session).class_name('Mdm::Session') }
   end
 
   context "validations" do
+    describe "when a session is set on the module run" do
+      before(:each) do
+        module_run.target_session = FactoryGirl.build(:mdm_session)
+      end
+
+      context "when module_name is present" do
+        context "when the module is an exploit" do
+          before(:each){ module_run.module_name = 'exploit/windows/mah-crazy-exploit' }
+
+          it { is_expected.to_not be_valid }
+        end
+      end
+
+      context "when module_detail is present" do
+        before(:each) do
+          module_run.module_detail = FactoryGirl.create(:mdm_module_detail, fullname: 'exploit/windows/some-evil')
+        end
+
+        it { is_expected.to_not be_valid }
+      end
+    end
+
     describe "attempted_at" do
       before(:each){ module_run.attempted_at = nil }
 

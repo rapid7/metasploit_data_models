@@ -1188,7 +1188,8 @@ CREATE TABLE sessions (
     closed_at timestamp without time zone,
     close_reason character varying(255),
     local_id integer,
-    last_seen timestamp without time zone
+    last_seen timestamp without time zone,
+    module_run_id integer
 );
 
 
@@ -2846,6 +2847,13 @@ CREATE INDEX index_services_on_state ON services USING btree (state);
 
 
 --
+-- Name: index_sessions_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_module_run_id ON sessions USING btree (module_run_id);
+
+
+--
 -- Name: index_vulns_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3133,6 +3141,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
 
 INSERT INTO schema_migrations (version) VALUES ('20150219173821');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219215039');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
