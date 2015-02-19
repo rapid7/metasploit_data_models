@@ -32,7 +32,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
   #
-  #   @return [Array<Mdm::VulnAttempt>]
+  #   @return [ActiveRecord::Relation<Mdm::VulnAttempt>]
   has_many :vuln_attempts,
            class_name: 'Mdm::VulnAttempt',
            dependent: :destroy,
@@ -41,7 +41,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [rw] vuln_details
   #   Additional information about this vulnerability.
   #
-  #   @return [Array<Mdm::VulnDetail>]
+  #   @return [ActiveRecord::Relation<Mdm::VulnDetail>]
   has_many :vuln_details,
            class_name: 'Mdm::VulnDetail',
            dependent: :destroy,
@@ -50,7 +50,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [rw] vulns_refs
   #   Join model that joins this vuln to its {Mdm::Ref external references}.
   #
-  #   @return [Array<Mdm::VulnRef>]
+  #   @return [ActiveRecord::Relation<Mdm::VulnRef>]
   has_many :vulns_refs,
            class_name: 'Mdm::VulnRef',
            dependent: :destroy,
@@ -59,7 +59,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [rw] notes
   #   Notes about the vuln entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
-  #   @return [Array<Mdm::Note>]
+  #   @return [<ActiveRecord::RelationMdm::Note>]
   has_many :notes,
            class_name: 'Mdm::Note',
            inverse_of: :vuln,
@@ -73,7 +73,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [r] refs
   #   External references to this vulnerability.
   #
-  #   @return [Array<Mdm::Ref>]
+  #   @return [ActiveRecord::Relation<Mdm::Ref>]
   has_many :refs, :class_name => 'Mdm::Ref', :through => :vulns_refs
 
   #
@@ -83,8 +83,17 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [r] module_refs
   #   References in module that match {Mdm::Ref#name names} in {#refs}.
   #
-  #   @return [Array<Mdm::Module::Ref>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Ref>]
   has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
+
+
+  # @!attribute [r] module_runs
+  #   References to times that a module has been run to exercise this vuln
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
+  has_many :module_runs,
+           class_name: 'MetasploitDataModels::ModuleRun',
+           as: :trackable
 
   #
   # Through module_refs
@@ -93,7 +102,7 @@ class Mdm::Vuln < ActiveRecord::Base
   # @!attribute [r] module_details
   #   {Mdm::Module::Detail Modules} that share the same external references as this vuln.
   #
-  #   @return [Array<Mdm::Module::Detail>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Detail>]
   has_many :module_details,
            :class_name => 'Mdm::Module::Detail',
            :source => :detail,

@@ -33,16 +33,15 @@ describe Mdm::Vuln do
 
 
   context 'associations' do
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should belong_to(:service).class_name('Mdm::Service') }
-    it { should have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
-    # @todo https://www.pivotaltracker.com/story/show/49004623
-    it { should have_many(:refs).class_name('Mdm::Ref').through(:vulns_refs) }
-    it { should have_many(:vuln_attempts).class_name('Mdm::VulnAttempt').dependent(:destroy) }
-    it { should have_many(:vuln_details).class_name('Mdm::VulnDetail').dependent(:destroy) }
-    # @todo https://www.pivotaltracker.com/story/show/49004623
-    it { should have_many(:vulns_refs).class_name('Mdm::VulnRef').dependent(:destroy) }
-    it { should have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:service).class_name('Mdm::Service') }
+    it { is_expected.to have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
+    it { is_expected.to have_many(:module_runs).class_name('MetasploitDataModels::ModuleRun') }
+    it { is_expected.to have_many(:refs).class_name('Mdm::Ref').through(:vulns_refs) }
+    it { is_expected.to have_many(:vuln_attempts).class_name('Mdm::VulnAttempt').dependent(:destroy) }
+    it { is_expected.to have_many(:vuln_details).class_name('Mdm::VulnDetail').dependent(:destroy) }
+    it { is_expected.to have_many(:vulns_refs).class_name('Mdm::VulnRef').dependent(:destroy) }
+    it { is_expected.to have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
 
     context 'module_details' do
       it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }

@@ -4,6 +4,22 @@ describe MetasploitDataModels::ModuleRun do
 
   subject(:module_run){FactoryGirl.build(:module_run)}
 
+  context "database columns" do
+    it { is_expected.to have_db_column(:attempted_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:fail_detail).of_type(:text) }
+    it { is_expected.to have_db_column(:fail_reason).of_type(:string) }
+    it { is_expected.to have_db_column(:module_detail_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:module_name).of_type(:text) }
+    it { is_expected.to have_db_column(:port).of_type(:integer) }
+    it { is_expected.to have_db_column(:proto).of_type(:string) }
+    it { is_expected.to have_db_column(:session_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:status).of_type(:string) }
+    it { is_expected.to have_db_column(:trackable_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:trackable_type).of_type(:string) }
+    it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:username).of_type(:string) }
+  end
+
   context "associations" do
     it { is_expected.to belong_to(:user).class_name('Mdm::User') }
     it { is_expected.to belong_to(:trackable) }
