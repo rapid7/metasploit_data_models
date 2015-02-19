@@ -1,15 +1,29 @@
 FactoryGirl.define do
-  factory :module_run do
-    trackable_type "MyString"
-    trackable_id 1
-    attempted_at "2015-02-19 11:38:21"
+  sequence(:session_id)
+
+  factory :module_run, class: MetasploitDataModels::ModuleRun do
+
+    association :user, factory: :mdm_user
+
+    trait :failed do
+      status MetasploitDataModels::ModuleRun::FAIL
+    end
+
+    trait :exploited do
+      status MetasploitDataModels::ModuleRun::SUCCEED
+    end
+
+    trait :error do
+      status MetasploitDataModels::ModuleRun::ERROR
+    end
+
+    attempted_at Time.now
     session_id 1
-    port 1
-    proto "MyString"
-    fail_detail "MyText"
-    status "MyString"
-    username "MyString"
-    user_id 1
+    port { generate(:port) }
+    proto "http"
+    fail_detail "Failed to execute payload froamasher"
+    status MetasploitDataModels::ModuleRun::SUCCEED
+    username "joefoo"
     module_name "exploit/windows/happy-stack-smasher"
   end
 end

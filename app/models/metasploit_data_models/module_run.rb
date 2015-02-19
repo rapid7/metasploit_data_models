@@ -1,5 +1,5 @@
-# Holds the record of having launched piece of Metasploit content.
-# Has associations to {Mdm::User} for audit purposes, and makes polymorphic associations to things like
+# {MetasploitDataModels::ModuleRun} holds the record of having launched piece of Metasploit content.
+# It has associations to {Mdm::User} for audit purposes, and makes polymorphic associations to things like
 # {Mdm::Vuln} and {Mdm::Host} for flexible record keeping about activity attacking either specific vulns or just
 # making mischief on specific remote targets w/out the context of a vuln or even a remote IP service.
 class MetasploitDataModels::ModuleRun < ActiveRecord::Base
@@ -8,13 +8,13 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #
 
   # Marks the module as having successfully run
-  STATUS_EXPLOITED     = 'exploited'
+  SUCCEED      = 'succeeded'
   # Marks the run as having not run successfully
-  STATUS_FAILED        = 'failed'
+  FAIL        = 'failed'
   # Marks the module as having had a runtime error
-  STATUS_ERROR         = 'error'
+  ERROR       = 'error'
   # {ModuleRun} objects will be validated against these statuses
-  VALID_STATUSES = [STATUS_EXPLOITED, STATUS_FAILED, STATUS_ERROR]
+  VALID_STATUSES = [SUCCEED, FAIL, ERROR]
 
 
   #
@@ -56,7 +56,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
 
   # @!attribute [rw] username
   #   The name of the user running this module
-  # @return [Datetime]
+  # @return [String]
 
 
 
@@ -65,14 +65,44 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #
 
 
+  # A reference to the Metasploit content module in the DB cache
+  # @return [Mdm::Module::Detail]
+  belongs_to :module_detail,
+             class_name: 'Mdm::Module::Detail',
+             inverse_of: :module_runs
+
   belongs_to :trackable, polymorphic: true
 
   # The user that launched this module
   # @return [Mdm::User]
   belongs_to :user,
-             class_name:  "Mdm::User",
-             foreign_key: "user_id",
+             class_name:  'Mdm::User',
+             foreign_key: 'user_id',
              inverse_of: :module_runs
 
+
+
+  #
+  # Validations
+  #
+
+  validates :attempted_at,
+            presence: true
+
+  validate :module_information_is_present
+
+  validates :status,
+            inclusion: VALID_STATUSES
+
+
+  private
+
+  # Mark the object as invalid if there is no associated #module_name or {Mdm::ModuleDetail}
+  # @return [void]
+  def module_information_is_present
+    if module_name.blank? && module_detail.blank?
+      errors.add(:base, "One of module_name or module_detail_id must be set")
+    end
+  end
 
 end
