@@ -42,6 +42,7 @@ describe Mdm::Vuln do
     it { should have_many(:vuln_details).class_name('Mdm::VulnDetail').dependent(:destroy) }
     # @todo https://www.pivotaltracker.com/story/show/49004623
     it { should have_many(:vulns_refs).class_name('Mdm::VulnRef').dependent(:destroy) }
+    it { should have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
 
     context 'module_details' do
       it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }

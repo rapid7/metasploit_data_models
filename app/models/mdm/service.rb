@@ -217,6 +217,14 @@ class Mdm::Service < ActiveRecord::Base
             numericality: {
                 only_integer: true
             }
+  validates :port,
+            uniqueness: {
+              message: 'already exists on this host and protocol',
+              scope: [
+                :host_id,
+                :proto
+              ]
+            }
   validates :proto,
             inclusion: {
                 in: PROTOS

@@ -24,6 +24,15 @@ class Mdm::Note < ActiveRecord::Base
              class_name: 'Mdm::Service',
              inverse_of: :notes
 
+  # @!attribute [rw] vuln
+  #   The vuln to which this note is attached.
+  #
+  #   @return [Mdm::Vuln] if note is attached to an {Mdm::Vuln}.
+  #   @return [nil] if not is attached to an {Mdm::Host}.
+  belongs_to :vuln,
+             class_name: 'Mdm::Vuln',
+             inverse_of: :notes
+
   # @!attribute [rw] workspace
   #   The workspace in which the {#host} or {#service} exists.
   #

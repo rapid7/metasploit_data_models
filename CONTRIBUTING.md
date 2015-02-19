@@ -148,7 +148,7 @@ If your changes are incompatible with the previous branch's API, then increment
 - [ ] `rake release`
 
 ## MRI Ruby
-- [ ] `rvm use ruby-1.9.3@metasploit_data_models`
+- [ ] `rvm use ruby-2.1@metasploit_data_models`
 - [ ] `rm Gemfile.lock`
 - [ ] `bundle install`
 - [ ] `rake release`
