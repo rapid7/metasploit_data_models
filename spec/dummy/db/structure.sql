@@ -818,7 +818,8 @@ CREATE TABLE notes (
     updated_at timestamp without time zone,
     critical boolean,
     seen boolean,
-    data text
+    data text,
+    vuln_id integer
 );
 
 
@@ -2680,6 +2681,13 @@ CREATE INDEX index_notes_on_ntype ON notes USING btree (ntype);
 
 
 --
+-- Name: index_notes_on_vuln_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_notes_on_vuln_id ON notes USING btree (vuln_id);
+
+
+--
 -- Name: index_refs_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2997,6 +3005,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 INSERT INTO schema_migrations (version) VALUES ('20150112203945');
 
 INSERT INTO schema_migrations (version) VALUES ('20150205192745');
+
+INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
 
