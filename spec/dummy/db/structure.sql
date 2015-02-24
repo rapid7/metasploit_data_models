@@ -66,7 +66,6 @@ ALTER SEQUENCE api_keys_id_seq OWNED BY api_keys.id;
 
 CREATE TABLE automatic_exploitation_matches (
     id integer NOT NULL,
-    vuln_id integer,
     module_detail_id integer,
     state character varying(255),
     nexpose_data_vulnerability_definition_id integer,
@@ -2603,13 +2602,6 @@ ALTER TABLE ONLY workspaces
 --
 
 CREATE INDEX index_automatic_exploitation_matches_on_ref_id ON automatic_exploitation_matches USING btree (module_detail_id);
-
-
---
--- Name: index_automatic_exploitation_matches_on_vuln_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_automatic_exploitation_matches_on_vuln_id ON automatic_exploitation_matches USING btree (vuln_id);
 
 
 --
