@@ -48,6 +48,31 @@ describe Mdm::Note do
     it { should belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
+
+  context 'validations' do
+    context 'vuln note' do
+      it 'should validate note size is under 1024 characters when a vuln note' do
+        vuln = FactoryGirl.create(:mdm_vuln)
+        note = FactoryGirl.create(:mdm_note, vuln: vuln)
+        note.data = {comment: Faker::Lorem.characters(1025)}
+
+        note.should_not be_valid
+        note.errors[:data][0].should include('is not under nexpose character limit')
+      end
+
+      it 'should be valid if note size is under 1024 characters when a vuln note' do
+        vuln = FactoryGirl.create(:mdm_vuln)
+        note = FactoryGirl.create(:mdm_note, data: {comment: Faker::Lorem.characters(10)}, vuln: vuln)
+        note.should be_valid
+      end
+
+      it 'should be valid if note size is over 1024 characters and not a vuln note' do
+        note = FactoryGirl.create(:mdm_note, data: {comment: Faker::Lorem.characters(1025)})
+        note.should be_valid
+      end
+    end
+  end
+
   context 'scopes' do
     context 'flagged' do
       it 'should exclude non-critical note' do

@@ -80,6 +80,12 @@ class Mdm::Note < ActiveRecord::Base
 
   after_save :normalize
 
+
+  #
+  # Validations
+  #
+  validate :vuln_note_under_nexpose_limit
+
   #
   # Scopes
   #
@@ -114,6 +120,17 @@ class Mdm::Note < ActiveRecord::Base
       host.normalize_os
     end
   end
+
+  # If this is a note on a vuln make sure it is under the nexpose comment exception limit
+  #
+  # @return [Boolean]
+  def vuln_note_under_nexpose_limit
+    if not data[:comment].try(:size).nil? and not vuln_id.nil?
+      errors.add(:data, 'is not under nexpose character limit') if data[:comment].size > 1024
+    end
+
+  end
+
 
   public
 
