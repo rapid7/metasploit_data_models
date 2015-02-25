@@ -22,6 +22,7 @@ describe Mdm::VulnAttempt do
       it { should have_db_column(:session_id).of_type(:integer) }
       it { should have_db_column(:loot_id).of_type(:integer) }
       it { should have_db_column(:fail_detail).of_type(:text) }
+      it { should have_db_column(:last_fail_reason).of_type(:string)}
     end
   end
 

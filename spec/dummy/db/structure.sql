@@ -1393,7 +1393,8 @@ CREATE TABLE vuln_attempts (
     module text,
     session_id integer,
     loot_id integer,
-    fail_detail text
+    fail_detail text,
+    last_fail_reason character varying(255)
 );
 
 
@@ -3009,6 +3010,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150205192745');
 INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
+
+INSERT INTO schema_migrations (version) VALUES ('20150220202955');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
