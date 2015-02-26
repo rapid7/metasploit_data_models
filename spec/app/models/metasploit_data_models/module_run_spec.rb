@@ -24,29 +24,68 @@ describe MetasploitDataModels::ModuleRun do
     it { is_expected.to belong_to(:user).class_name('Mdm::User') }
     it { is_expected.to belong_to(:target_session).class_name('Mdm::Session') }
     it { is_expected.to belong_to(:trackable) }
+    it { is_expected.to have_many(:loots).class_name('Mdm::Loot') }
     it { is_expected.to have_one(:spawned_session).class_name('Mdm::Session') }
   end
 
   context "validations" do
-    describe "when a session is set on the module run" do
+    describe "when a target_session is set on the module run" do
       before(:each) do
         module_run.target_session = FactoryGirl.build(:mdm_session)
       end
 
       context "when module_name is present" do
         context "when the module is an exploit" do
-          before(:each){ module_run.module_name = 'exploit/windows/mah-crazy-exploit' }
+          before(:each) do
+            module_run.module_detail = nil
+            module_run.module_name   = 'exploit/windows/mah-crazy-exploit'
+          end
 
           it { is_expected.to_not be_valid }
         end
       end
 
       context "when module_detail is present" do
+        context "when the module is an exploit" do
+          before(:each) do
+            module_run.module_name   = nil
+            module_run.module_detail = FactoryGirl.create(:mdm_module_detail,
+                                                          fullname: 'exploit/windows/some-evil',
+                                                          mtype: 'exploit')
+          end
+
+          it { is_expected.to_not be_valid }
+        end
+      end
+    end
+
+    describe "when a spawned_session is set on the module run" do
+      before(:each) do
+        module_run.spawned_session = FactoryGirl.build(:mdm_session)
+      end
+
+      context "when the module_name is present" do
         before(:each) do
-          module_run.module_detail = FactoryGirl.create(:mdm_module_detail, fullname: 'exploit/windows/some-evil')
+          module_run.module_name   = 'post/multi/gather/steal-minecraft-maps'
+          module_run.module_detail = nil
         end
 
-        it { is_expected.to_not be_valid }
+        context "when the module is not an exploit" do
+          it { is_expected.to_not be_valid }
+        end
+      end
+
+      context "when the module_detail is present" do
+        before(:each) do
+          module_run.module_name   = nil
+          module_run.module_detail = FactoryGirl.create(:mdm_module_detail,
+                                                        fullname: 'post/multi/gather/steal-minecraft-maps',
+                                                        mtype: 'post')
+        end
+
+        context "when the module is not an exploit" do
+          it { is_expected.to_not be_valid }
+        end
       end
     end
 

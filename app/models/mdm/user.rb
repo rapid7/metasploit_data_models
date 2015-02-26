@@ -13,6 +13,7 @@ class Mdm::User < ActiveRecord::Base
   has_many :module_runs,
            class_name: 'MetasploitDataModels::ModuleRun',
            inverse_of: :user
+
   has_many :tags,
            class_name: 'Mdm::Tag',
            inverse_of: :user

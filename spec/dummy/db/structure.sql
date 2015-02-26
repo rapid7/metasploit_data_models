@@ -455,7 +455,8 @@ CREATE TABLE loots (
     updated_at timestamp without time zone NOT NULL,
     content_type character varying(255),
     name text,
-    info text
+    info text,
+    module_run_id integer
 );
 
 
@@ -774,19 +775,19 @@ ALTER SEQUENCE module_refs_id_seq OWNED BY module_refs.id;
 
 CREATE TABLE module_runs (
     id integer NOT NULL,
-    trackable_type character varying(255),
-    trackable_id integer,
     attempted_at timestamp without time zone,
-    session_id integer,
+    fail_detail text,
+    fail_reason character varying(255),
+    module_detail_id integer,
+    module_name text,
     port integer,
     proto character varying(255),
-    fail_detail text,
+    session_id integer,
     status character varying(255),
-    username character varying(255),
+    trackable_id integer,
+    trackable_type character varying(255),
     user_id integer,
-    fail_reason character varying(255),
-    module_name text,
-    module_detail_id integer,
+    username character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2707,6 +2708,13 @@ CREATE UNIQUE INDEX index_hosts_on_workspace_id_and_address ON hosts USING btree
 
 
 --
+-- Name: index_loots_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_loots_on_module_run_id ON loots USING btree (module_run_id);
+
+
+--
 -- Name: index_module_actions_on_module_detail_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3143,6 +3151,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150212214222');
 INSERT INTO schema_migrations (version) VALUES ('20150219173821');
 
 INSERT INTO schema_migrations (version) VALUES ('20150219215039');
+
+INSERT INTO schema_migrations (version) VALUES ('20150226151459');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
