@@ -1,7 +1,11 @@
-# {MetasploitDataModels::ModuleRun} holds the record of having launched piece of Metasploit content.
+# {MetasploitDataModels::ModuleRun} holds the record of having launched a piece of Metasploit content.
 # It has associations to {Mdm::User} for audit purposes, and makes polymorphic associations to things like
 # {Mdm::Vuln} and {Mdm::Host} for flexible record keeping about activity attacking either specific vulns or just
 # making mischief on specific remote targets w/out the context of a vuln or even a remote IP service.
+#
+# There are also associations to {Mdm::Session} for two use cases: a `spawned_session` is a
+# session created by the ModuleRun. A `target_session` is a session that the ModuleRun
+# is acting upon (e.g.) for running a post module.
 class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #
   # Constants
@@ -23,40 +27,40 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
 
   # @!attribute [rw] attempted_at
   #   The date/time when this module was run
-  # @return [Datetime]
+  #   @return [Datetime]
 
   # @!attribute [rw] fail_detail
   #   Arbitrary information captured by the module to give in-depth reason for failure
-  # @return [String]
+  #   @return [String]
 
   # @!attribute [rw] fail_reason
   #   One of the values of the constants in {Msf::Module::Failure}
-  # @return [String]
+  #   @return [String]
 
   # @!attribute [rw] module_name
   #   The Msf::Module#fullname of the module being run
-  # @return [String]
+  #   @return [String]
 
   # @!attribute [rw] port
   #   The port that the remote host was attacked on, if any
-  # @return [Fixnum]
+  #   @return [Fixnum]
 
   # @!attribute [rw] proto
   #   The name of the protocol that the host was attacked on, if any
-  # @return [String]
+  #   @return [String]
 
   # @!attribute [rw] session_id
   #   The {Mdm::Session} that this was run with, in the case of a post module. In exploit modules, this field will
   #   remain null.
-  # @return [Datetime]
+  #   @return [Datetime]
 
   # @!attribute [rw] status
   #   The result of running the module
-  # @return [String]
+  #   @return [String]
 
   # @!attribute [rw] username
   #   The name of the user running this module
-  # @return [String]
+  #   @return [String]
 
 
 
