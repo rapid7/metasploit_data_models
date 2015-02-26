@@ -61,6 +61,39 @@ ALTER SEQUENCE api_keys_id_seq OWNED BY api_keys.id;
 
 
 --
+-- Name: automatic_exploitation_match_results; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_match_results (
+    id integer NOT NULL,
+    match_id integer,
+    run_id integer,
+    state character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: automatic_exploitation_match_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_match_results_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_match_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_match_results_id_seq OWNED BY automatic_exploitation_match_results.id;
+
+
+--
 -- Name: automatic_exploitation_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1858,6 +1891,13 @@ ALTER TABLE ONLY api_keys ALTER COLUMN id SET DEFAULT nextval('api_keys_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY automatic_exploitation_match_results ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_match_results_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY automatic_exploitation_matches ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_matches_id_seq'::regclass);
 
 
@@ -2203,6 +2243,14 @@ ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_s
 
 ALTER TABLE ONLY api_keys
     ADD CONSTRAINT api_keys_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: automatic_exploitation_match_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_match_results
+    ADD CONSTRAINT automatic_exploitation_match_results_pkey PRIMARY KEY (id);
 
 
 --
@@ -3053,6 +3101,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130717150737');
 INSERT INTO schema_migrations (version) VALUES ('20131002004641');
 
 INSERT INTO schema_migrations (version) VALUES ('20131011184338');
+
+INSERT INTO schema_migrations (version) VALUES ('20131017150735');
 
 INSERT INTO schema_migrations (version) VALUES ('20131021185657');
 
