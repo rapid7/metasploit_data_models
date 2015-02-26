@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe MetasploitDataModels::ModuleRun do
 
-  subject(:module_run){FactoryGirl.build(:module_run)}
+  subject(:module_run){FactoryGirl.build(:metasploit_data_models_module_run)}
 
   context "database columns" do
     it { is_expected.to have_db_column(:attempted_at).of_type(:datetime) }

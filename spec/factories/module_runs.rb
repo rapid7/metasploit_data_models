@@ -1,7 +1,7 @@
 FactoryGirl.define do
   sequence(:session_id)
 
-  factory :module_run, class: MetasploitDataModels::ModuleRun do
+  factory :metasploit_data_models_module_run, class: MetasploitDataModels::ModuleRun do
 
     association :user, factory: :mdm_user
 
