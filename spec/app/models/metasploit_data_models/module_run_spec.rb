@@ -9,7 +9,7 @@ describe MetasploitDataModels::ModuleRun do
     it { is_expected.to have_db_column(:fail_detail).of_type(:text) }
     it { is_expected.to have_db_column(:fail_reason).of_type(:string) }
     it { is_expected.to have_db_column(:module_detail_id).of_type(:integer) }
-    it { is_expected.to have_db_column(:module_name).of_type(:text) }
+    it { is_expected.to have_db_column(:module_full_name).of_type(:text) }
     it { is_expected.to have_db_column(:port).of_type(:integer) }
     it { is_expected.to have_db_column(:proto).of_type(:string) }
     it { is_expected.to have_db_column(:session_id).of_type(:integer) }
@@ -30,62 +30,24 @@ describe MetasploitDataModels::ModuleRun do
 
   context "validations" do
     describe "when a target_session is set on the module run" do
-      before(:each) do
-        module_run.target_session = FactoryGirl.build(:mdm_session)
-      end
-
-      context "when module_name is present" do
-        context "when the module is an exploit" do
-          before(:each) do
-            module_run.module_detail = nil
-            module_run.module_name   = 'exploit/windows/mah-crazy-exploit'
-          end
-
-          it { is_expected.to_not be_valid }
+      context "when the module is an exploit" do
+        before(:each) do
+          module_run.target_session = FactoryGirl.build(:mdm_session)
+          module_run.module_full_name = 'exploit/windows/mah-crazy-exploit'
         end
-      end
 
-      context "when module_detail is present" do
-        context "when the module is an exploit" do
-          before(:each) do
-            module_run.module_name   = nil
-            module_run.module_detail = FactoryGirl.create(:mdm_module_detail,
-                                                          fullname: 'exploit/windows/some-evil',
-                                                          mtype: 'exploit')
-          end
-
-          it { is_expected.to_not be_valid }
-        end
+        it { is_expected.to_not be_valid }
       end
     end
 
     describe "when a spawned_session is set on the module run" do
       before(:each) do
-        module_run.spawned_session = FactoryGirl.build(:mdm_session)
+        module_run.spawned_session  = FactoryGirl.build(:mdm_session)
+        module_run.module_full_name = 'post/multi/gather/steal-minecraft-maps'
       end
 
-      context "when the module_name is present" do
-        before(:each) do
-          module_run.module_name   = 'post/multi/gather/steal-minecraft-maps'
-          module_run.module_detail = nil
-        end
-
-        context "when the module is not an exploit" do
-          it { is_expected.to_not be_valid }
-        end
-      end
-
-      context "when the module_detail is present" do
-        before(:each) do
-          module_run.module_name   = nil
-          module_run.module_detail = FactoryGirl.create(:mdm_module_detail,
-                                                        fullname: 'post/multi/gather/steal-minecraft-maps',
-                                                        mtype: 'post')
-        end
-
-        context "when the module is not an exploit" do
-          it { is_expected.to_not be_valid }
-        end
+      context "when the module is not an exploit" do
+        it { is_expected.to_not be_valid }
       end
     end
 
@@ -96,10 +58,9 @@ describe MetasploitDataModels::ModuleRun do
     end
 
     describe "content information" do
-      context "when there is no module_name and no module_detail" do
+      context "when there is no module_name" do
         before(:each) do
-          module_run.module_name   = nil
-          module_run.module_detail = nil
+          module_run.module_full_name = nil
         end
 
         it { is_expected.to_not be_valid }

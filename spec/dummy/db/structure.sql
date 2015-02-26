@@ -61,42 +61,6 @@ ALTER SEQUENCE api_keys_id_seq OWNED BY api_keys.id;
 
 
 --
--- Name: automatic_exploitation_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE automatic_exploitation_matches (
-    id integer NOT NULL,
-    module_detail_id integer,
-    state character varying(255),
-    nexpose_data_vulnerability_definition_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    match_set_id integer,
-    matchable_type character varying(255),
-    matchable_id integer
-);
-
-
---
--- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE automatic_exploitation_matches_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE automatic_exploitation_matches_id_seq OWNED BY automatic_exploitation_matches.id;
-
-
---
 -- Name: clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -779,7 +743,7 @@ CREATE TABLE module_runs (
     fail_detail text,
     fail_reason character varying(255),
     module_detail_id integer,
-    module_name text,
+    module_full_name text,
     port integer,
     proto character varying(255),
     session_id integer,
@@ -1904,13 +1868,6 @@ ALTER TABLE ONLY api_keys ALTER COLUMN id SET DEFAULT nextval('api_keys_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY automatic_exploitation_matches ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_matches_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
 
 
@@ -2256,14 +2213,6 @@ ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_s
 
 ALTER TABLE ONLY api_keys
     ADD CONSTRAINT api_keys_pkey PRIMARY KEY (id);
-
-
---
--- Name: automatic_exploitation_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY automatic_exploitation_matches
-    ADD CONSTRAINT automatic_exploitation_matches_pkey PRIMARY KEY (id);
 
 
 --
@@ -2656,13 +2605,6 @@ ALTER TABLE ONLY wmap_targets
 
 ALTER TABLE ONLY workspaces
     ADD CONSTRAINT workspaces_pkey PRIMARY KEY (id);
-
-
---
--- Name: index_automatic_exploitation_matches_on_ref_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_automatic_exploitation_matches_on_ref_id ON automatic_exploitation_matches USING btree (module_detail_id);
 
 
 --
@@ -3131,12 +3073,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130531144949');
 INSERT INTO schema_migrations (version) VALUES ('20130604145732');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717150737');
-
-INSERT INTO schema_migrations (version) VALUES ('20131002004641');
-
-INSERT INTO schema_migrations (version) VALUES ('20131011184338');
-
-INSERT INTO schema_migrations (version) VALUES ('20131021185657');
 
 INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 

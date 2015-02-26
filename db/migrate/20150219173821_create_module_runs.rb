@@ -5,7 +5,7 @@ class CreateModuleRuns < ActiveRecord::Migration
       t.text :fail_detail
       t.string :fail_reason
       t.integer :module_detail_id
-      t.text :module_name
+      t.text :module_full_name
       t.integer :port
       t.string :proto
       t.integer :session_id

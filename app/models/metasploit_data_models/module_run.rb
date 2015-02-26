@@ -8,7 +8,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #
 
   # Marks the module as having successfully run
-  SUCCEED      = 'succeeded'
+  SUCCEED     = 'succeeded'
   # Marks the run as having not run successfully
   FAIL        = 'failed'
   # Marks the module as having had a runtime error
@@ -64,14 +64,6 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   # Associations
   #
 
-
-  # @!attribute [rw] module_detail
-  #  A reference to the Metasploit content module in the DB cache
-  #
-  #  @return [Mdm::Module::Detail]
-  belongs_to :module_detail,
-             class_name: 'Mdm::Module::Detail',
-             inverse_of: :module_runs
 
 
   # @!attribute [rw] loots
@@ -151,7 +143,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   # Mark the object as invalid if there is no associated #module_name or {Mdm::ModuleDetail}
   # @return [void]
   def module_information_is_present
-    if module_name.blank? && module_detail.blank?
+    if module_full_name.blank?
       errors.add(:base, "One of module_name or module_detail_id must be set")
     end
   end
@@ -161,15 +153,8 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   def no_spawned_session_for_non_exploits
     return true unless spawned_session.present? # nothing to do unless spawned_session is set
 
-    if module_name.present?
-      if module_name.split('/').first != 'exploit'
-        errors.add(:base, 'spawned_session cannot be set for non-exploit modules. Use target_session.')
-      end
-
-    elsif module_detail.present?
-      if module_detail.mtype != 'exploit'
-        errors.add(:base, 'spawned_session cannot be set for non-exploit modules. Use target_session.')
-      end
+    if module_full_name.split('/').first != 'exploit'
+      errors.add(:base, 'spawned_session cannot be set for non-exploit modules. Use target_session.')
     end
   end
 
@@ -178,15 +163,8 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   def no_target_session_for_exploits
     return true unless target_session.present? # nothing to do unless target_session is set
 
-    if module_name.present?
-      if module_name.split('/').first == 'exploit'
-        errors.add(:base, 'target_session cannot be set for exploit modules. Use spawned_session.')
-      end
-
-    elsif module_detail.present?
-      if module_detail.mtype == 'exploit'
-        errors.add(:base, 'target_session cannot be set for exploit modules. Use spawned_session.')
-      end
+    if module_full_name.split('/').first == 'exploit'
+      errors.add(:base, 'target_session cannot be set for exploit modules. Use spawned_session.')
     end
   end
 

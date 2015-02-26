@@ -71,12 +71,6 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Module::Mixin>]
   has_many :mixins,    :class_name => 'Mdm::Module::Mixin',    :dependent => :destroy
 
-  # @!attribute [rw] mixins
-  #   Records of this module content having been attempted as part of Metasploit usage
-  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
-  has_many :module_runs,
-           class_name: 'MetasploitDataModels::ModuleRun',
-           inverse_of: :module_detail
 
   # @!attribute [rw] platforms
   #   Platforms supported by this module.
