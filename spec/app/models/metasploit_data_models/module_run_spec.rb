@@ -30,24 +30,51 @@ describe MetasploitDataModels::ModuleRun do
 
   context "validations" do
     describe "when a target_session is set on the module run" do
+      before(:each) do
+        module_run.target_session = FactoryGirl.build(:mdm_session)
+      end
+
       context "when the module is an exploit" do
-        before(:each) do
-          module_run.target_session = FactoryGirl.build(:mdm_session)
-          module_run.module_full_name = 'exploit/windows/mah-crazy-exploit'
+        context "and that exploit IS NOT local" do
+          before(:each) do
+            module_run.module_full_name = 'exploit/windows/mah-crazy-exploit'
+          end
+
+          it { is_expected.to_not be_valid }
         end
 
-        it { is_expected.to_not be_valid }
+        context "and that exploit IS local" do
+          before(:each) do
+            module_run.module_full_name = 'exploit/windows/local/mah-crazy-exploit'
+          end
+
+          it { is_expected.to be_valid }
+        end
       end
     end
 
     describe "when a spawned_session is set on the module run" do
       before(:each) do
         module_run.spawned_session  = FactoryGirl.build(:mdm_session)
-        module_run.module_full_name = 'post/multi/gather/steal-minecraft-maps'
       end
 
       context "when the module is not an exploit" do
-        it { is_expected.to_not be_valid }
+
+        context "and it IS NOT a login scanner" do
+          before(:each) do
+            module_run.module_full_name = 'post/multi/gather/steal-minecraft-maps'
+          end
+
+          it { is_expected.to_not be_valid }
+        end
+
+        context "and it IS a login scanner" do
+          before(:each) do
+            module_run.module_full_name = 'auxiliary/scanner/ssh/ssh_login'
+          end
+
+          it { is_expected.to be_valid }
+        end
       end
     end
 

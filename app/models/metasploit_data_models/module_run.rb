@@ -104,7 +104,12 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
 
 
 
-  # Declares this model to implement a polymorphic relationship with other models.
+  # @!attribute [rw] trackable
+  #
+  #  A polymorphic association that is tracked as being related to this module run.
+  #  {Mdm::Host} and {Mdm::Vuln} can each have {ModuleRun} objects.
+  #
+  #  @return [Mdm::Host, Mdm::Vuln]
   belongs_to :trackable, polymorphic: true
 
 
@@ -129,7 +134,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
             presence: true
 
   # spawned_session is only valid for *exploit modules*
-  validate :no_spawned_session_for_non_exploits
+  validate :no_spawned_session_for_non_exploits_except_logins
 
   # target_session is only valid for *non-exploit modules*
   validate :no_target_session_for_exploits
@@ -141,6 +146,13 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   validates :status,
             inclusion: VALID_STATUSES
 
+  # Splits strings formatted like Msf::Module#fullname into components
+  # @example module_name = "exploit/windows/multi/mah-rad-exploit"
+  #   module_name_components  # => ["exploit","windows","multi","mah-rad-exploit"]
+  # @return [Array]
+  def module_name_components
+    module_full_name.split('/')
+  end
 
   private
 
@@ -153,11 +165,14 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   end
 
   # Mark the object as invalid if there is a spawned_session but the module is *not* an exploit
+  # and not an aux module with the word "login" in the final portion of `module_full_name`
+  #
   # @return [void]
-  def no_spawned_session_for_non_exploits
-    return true unless spawned_session.present? # nothing to do unless spawned_session is set
+  def no_spawned_session_for_non_exploits_except_logins
+    return true unless spawned_session.present?
+    return true if module_name_components.last.include?("login")
 
-    if module_full_name.split('/').first != 'exploit'
+    if module_name_components.first != 'exploit'
       errors.add(:base, 'spawned_session cannot be set for non-exploit modules. Use target_session.')
     end
   end
@@ -167,9 +182,11 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   def no_target_session_for_exploits
     return true unless target_session.present? # nothing to do unless target_session is set
 
-    if module_full_name.split('/').first == 'exploit'
+    if module_name_components.first == 'exploit'
+      return true if module_name_components[2] == 'local'
       errors.add(:base, 'target_session cannot be set for exploit modules. Use spawned_session.')
     end
   end
+
 
 end
