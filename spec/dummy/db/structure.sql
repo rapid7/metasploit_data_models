@@ -419,7 +419,8 @@ CREATE TABLE loots (
     updated_at timestamp without time zone NOT NULL,
     content_type character varying(255),
     name text,
-    info text
+    info text,
+    module_run_id integer
 );
 
 
@@ -730,6 +731,49 @@ CREATE SEQUENCE module_refs_id_seq
 --
 
 ALTER SEQUENCE module_refs_id_seq OWNED BY module_refs.id;
+
+
+--
+-- Name: module_runs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE module_runs (
+    id integer NOT NULL,
+    attempted_at timestamp without time zone,
+    fail_detail text,
+    fail_reason character varying(255),
+    module_detail_id integer,
+    module_full_name text,
+    port integer,
+    proto character varying(255),
+    session_id integer,
+    status character varying(255),
+    trackable_id integer,
+    trackable_type character varying(255),
+    user_id integer,
+    username character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE module_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE module_runs_id_seq OWNED BY module_runs.id;
 
 
 --
@@ -1109,7 +1153,8 @@ CREATE TABLE sessions (
     closed_at timestamp without time zone,
     close_reason character varying(255),
     local_id integer,
-    last_seen timestamp without time zone
+    last_seen timestamp without time zone,
+    module_run_id integer
 );
 
 
@@ -1956,6 +2001,13 @@ ALTER TABLE ONLY module_refs ALTER COLUMN id SET DEFAULT nextval('module_refs_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY module_runs ALTER COLUMN id SET DEFAULT nextval('module_runs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY module_targets ALTER COLUMN id SET DEFAULT nextval('module_targets_id_seq'::regclass);
 
 
@@ -2316,6 +2368,14 @@ ALTER TABLE ONLY module_refs
 
 
 --
+-- Name: module_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY module_runs
+    ADD CONSTRAINT module_runs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: module_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2590,6 +2650,13 @@ CREATE UNIQUE INDEX index_hosts_on_workspace_id_and_address ON hosts USING btree
 
 
 --
+-- Name: index_loots_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_loots_on_module_run_id ON loots USING btree (module_run_id);
+
+
+--
 -- Name: index_module_actions_on_module_detail_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2727,6 +2794,13 @@ CREATE INDEX index_services_on_proto ON services USING btree (proto);
 --
 
 CREATE INDEX index_services_on_state ON services USING btree (state);
+
+
+--
+-- Name: index_sessions_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_module_run_id ON sessions USING btree (module_run_id);
 
 
 --
@@ -3009,6 +3083,12 @@ INSERT INTO schema_migrations (version) VALUES ('20150205192745');
 INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219173821');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219215039');
+
+INSERT INTO schema_migrations (version) VALUES ('20150226151459');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
