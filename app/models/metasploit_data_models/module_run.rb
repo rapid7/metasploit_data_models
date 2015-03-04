@@ -147,7 +147,9 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
             inclusion: VALID_STATUSES
 
   # Splits strings formatted like Msf::Module#fullname into components
-  # @example module_name = "exploit/windows/multi/mah-rad-exploit"
+  #
+  # @example
+  #   module_name = "exploit/windows/multi/mah-rad-exploit"
   #   module_name_components  # => ["exploit","windows","multi","mah-rad-exploit"]
   # @return [Array]
   def module_name_components
