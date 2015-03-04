@@ -66,7 +66,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] clients
   #   Users connected to this host
   #
-  #   @return [Array<Mdm::Client>]
+  #   @return [ActiveRecord::Relation<Mdm::Client>]
   has_many :clients,
            class_name: 'Mdm::Client',
            dependent: :destroy,
@@ -84,7 +84,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] task_hosts
   #   Details about what Tasks touched this host
   #
-  #   @return [Array<Mdm::TaskHost>]
+  #   @return [ActiveRecord::Relation<Mdm::TaskHost>]
   has_many :task_hosts,
            class_name: 'Mdm::TaskHost',
            dependent: :destroy,
@@ -93,7 +93,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] exploit_attempts
   #   Attempts to run exploits against this host.
   #
-  #   @return [Array<Mdm::ExploitAttempt]
+  #   @return [ActiveRecord::Relation<Mdm::ExploitAttempt]
   has_many :exploit_attempts,
            class_name: 'Mdm::ExploitAttempt',
            dependent: :destroy,
@@ -108,7 +108,7 @@ class Mdm::Host < ActiveRecord::Base
            inverse_of: :host
 
   # @!attribute [rw] host_details
-  #   @return [Array<Mdm::HostDetail>]
+  #   @return [ActiveRecord::Relation<Mdm::HostDetail>]
   has_many :host_details,
            class_name: 'Mdm::HostDetail',
            dependent: :destroy,
@@ -138,7 +138,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] notes
   #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
-  #   @return [Array<Mdm::Note>]
+  #   @return [ActiveRecord::Relation<Mdm::Note>]
   has_many :notes,
            class_name: 'Mdm::Note',
            inverse_of: :host,
@@ -149,7 +149,7 @@ class Mdm::Host < ActiveRecord::Base
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
   #   and {Mdm::Service#proto protocol}.
   #
-  #   @return [Array<Mdm::Service>]
+  #   @return [ActiveRecord::Relation<Mdm::Service>]
   has_many :services,
            class_name: 'Mdm::Service',
            dependent: :destroy,
@@ -160,7 +160,7 @@ class Mdm::Host < ActiveRecord::Base
   #   Sessions that are open or previously were open on the host ordered by {Mdm::Session#opened_at when the session was
   #   opened}
   #
-  #   @return [Array<Mdm::Session]
+  #   @return [ActiveRecord::Relation<Mdm::Session]
   has_many :sessions,
            class_name: 'Mdm::Session',
            dependent: :destroy,
@@ -170,7 +170,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [rw] vulns
   #   Vulnerabilities found on the host.
   #
-  #   @return [Array<Mdm::Vuln>]
+  #   @return [ActiveRecord::Relation<Mdm::Vuln>]
   has_many :vulns,
            class_name: 'Mdm::Vuln',
            dependent: :delete_all,
@@ -191,7 +191,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] tags
   #   The tags on this host.  Tags are used to filter hosts.
   #
-  #   @return [Array<Mdm::Tag>]
+  #   @return [ActiveRecord::Relation<Mdm::Tag>]
   #   @see #hosts_tags
   has_many :tags, :class_name => 'Mdm::Tag', :through => :hosts_tags
 
@@ -202,14 +202,14 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] creds
   #   Credentials captured from {#services}.
   #
-  #   @return [Array<Mdm::Cred>]
+  #   @return [ActiveRecord::Relation<Mdm::Cred>]
   #   @see #services
   has_many :creds, :class_name => 'Mdm::Cred', :through => :services
 
   # @!attribute [r] service_notes
   #   {Mdm::Note Notes} about {#services} running on this host.
   #
-  #   @return [Array<Mdm::Note>]
+  #   @return [ActiveRecord::Relation<Mdm::Note>]
   #   @see #services
   has_many :service_notes,
            class_name: 'Mdm::Note',
@@ -219,9 +219,19 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] web_sites
   #   {Mdm::WebSite Web sites} running on top of {#services} on this host.
   #
-  #   @return [Array<Mdm::WebSite>]
+  #   @return [ActiveRecord::Relation<Mdm::WebSite>]
   #   @see services
   has_many :web_sites, :class_name => 'Mdm::WebSite', :through => :services
+
+  # @!attribute [r] module_runs
+  #   Records of Metasploit modules being run on/against this {Mdm::Host}
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
+  #   @see services
+  has_many :module_runs,
+           class_name: 'MetasploitDataModels::ModuleRun',
+           as: :trackable
+
 
   #
   # through: :task_hosts
@@ -243,7 +253,7 @@ class Mdm::Host < ActiveRecord::Base
   #   Join model between {#vulns} and {#refs}.  Use either of those asssociations instead of this join model.
   #
   #   @todo https://www.pivotaltracker.com/story/show/49004623
-  #   @return [Array<Mdm::VulnRef>]
+  #   @return [ActiveRecord::Relation<Mdm::VulnRef>]
   #   @see #refs
   #   @see #vulns
 	has_many :vuln_refs, :class_name => 'Mdm::VulnRef', :source => :vulns_refs, :through => :vulns
@@ -255,7 +265,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] refs
   #   External references, such as CVE, to vulnerabilities found on this host.
   #
-  #   @return [Array<Mdm::Ref>]
+  #   @return [ActiveRecord::Relation<Mdm::Ref>]
   #   @see #vuln_refs
 	has_many :refs, :class_name => 'Mdm::Ref', :through => :vuln_refs
 
@@ -266,7 +276,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] module_refs
   #   {Mdm::Module::Ref References for modules} for {Mdm::Ref references for vulnerabilities}.
   #
-  #   @return [Array<Mdm::Module::Ref>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Ref>]
 	has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
 
 	#
@@ -276,7 +286,7 @@ class Mdm::Host < ActiveRecord::Base
   # @!attribute [r] module_details
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
-  #   @return [Array<Mdm::Module::Detail]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
 	has_many :module_details,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,

@@ -25,31 +25,34 @@ describe Mdm::Session do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:opened_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:closed_at).of_type(:datetime) }
-      it { should have_db_column(:last_seen).of_type(:datetime) }
+      it { is_expected.to have_db_column(:closed_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:last_seen).of_type(:datetime) }
+      it { is_expected.to have_db_column(:opened_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:stype).of_type(:string) }
-      it { should have_db_column(:via_exploit).of_type(:string) }
-      it { should have_db_column(:via_payload).of_type(:string) }
-      it { should have_db_column(:desc).of_type(:string) }
-      it { should have_db_column(:port).of_type(:integer) }
-      it { should have_db_column(:platform).of_type(:string) }
-      it { should have_db_column(:datastore).of_type(:text) }
-      it { should have_db_column(:local_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:datastore).of_type(:text) }
+      it { is_expected.to have_db_column(:desc).of_type(:string) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:local_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:module_run_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:platform).of_type(:string) }
+      it { is_expected.to have_db_column(:port).of_type(:integer) }
+      it { is_expected.to have_db_column(:stype).of_type(:string) }
+      it { is_expected.to have_db_column(:via_exploit).of_type(:string) }
+      it { is_expected.to have_db_column(:via_payload).of_type(:string) }
     end
   end
 
   context 'associations' do
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }
-    it { should have_many(:routes).class_name('Mdm::Route').dependent(:delete_all) }
-    it { should have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
-    it { should have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy)}
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_sessions)}
+    it { is_expected.to have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:originating_module_run).class_name('MetasploitDataModels::ModuleRun') }
+    it { is_expected.to have_many(:routes).class_name('Mdm::Route').dependent(:delete_all) }
+    it { is_expected.to have_many(:target_module_runs).class_name('MetasploitDataModels::ModuleRun') }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_sessions)}
+    it { is_expected.to have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy) }
+    it { is_expected.to have_one(:workspace).class_name('Mdm::Workspace').through(:host) }
   end
 
   context 'scopes' do

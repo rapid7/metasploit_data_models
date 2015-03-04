@@ -10,9 +10,14 @@ class Mdm::User < ActiveRecord::Base
            foreign_key: 'owner_id',
            inverse_of: :owner
 
+  has_many :module_runs,
+           class_name: 'MetasploitDataModels::ModuleRun',
+           inverse_of: :user
+
   has_many :tags,
            class_name: 'Mdm::Tag',
            inverse_of: :user
+
 
   has_and_belongs_to_many :workspaces, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::Workspace'
 
