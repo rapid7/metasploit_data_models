@@ -21,6 +21,7 @@ describe Mdm::Note do
       it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
       it { should have_db_column(:host_id).of_type(:integer) }
       it { should have_db_column(:service_id).of_type(:integer) }
+      it { should have_db_column(:vuln_id).of_type(:integer) }
       it { should have_db_column(:ntype).of_type(:string) }
       it { should have_db_column(:critical).of_type(:boolean) }
       it { should have_db_column(:seen).of_type(:boolean) }
@@ -44,6 +45,7 @@ describe Mdm::Note do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
     it { should belong_to(:host).class_name('Mdm::Host') }
     it { should belong_to(:service).class_name('Mdm::Service') }
+    it { should belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
   context 'scopes' do
