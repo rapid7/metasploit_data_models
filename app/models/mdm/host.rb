@@ -245,9 +245,9 @@ class Mdm::Host < ActiveRecord::Base
            class_name: 'Mdm::Task',
            through: :task_hosts
 
-	#
-	# Through vulns
-	#
+  #
+  # Through vulns
+  #
 
   # @!attribute [r] vuln_refs
   #   Join model between {#vulns} and {#refs}.  Use either of those asssociations instead of this join model.
@@ -256,38 +256,38 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::VulnRef>]
   #   @see #refs
   #   @see #vulns
-	has_many :vuln_refs, :class_name => 'Mdm::VulnRef', :source => :vulns_refs, :through => :vulns
+  has_many :vuln_refs, :class_name => 'Mdm::VulnRef', :source => :vulns_refs, :through => :vulns
 
-	#
-	# Through vuln_refs
-	#
+  #
+  # Through vuln_refs
+  #
 
   # @!attribute [r] refs
   #   External references, such as CVE, to vulnerabilities found on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Ref>]
   #   @see #vuln_refs
-	has_many :refs, :class_name => 'Mdm::Ref', :through => :vuln_refs
+  has_many :refs, :class_name => 'Mdm::Ref', :through => :vuln_refs
 
-	#
-	# Through refs
-	#
+  #
+  # Through refs
+  #
 
   # @!attribute [r] module_refs
   #   {Mdm::Module::Ref References for modules} for {Mdm::Ref references for vulnerabilities}.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Ref>]
-	has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
+  has_many :module_refs, :class_name => 'Mdm::Module::Ref', :through => :refs
 
-	#
-	# Through module_refs
-	#
+  #
+  # Through module_refs
+  #
 
   # @!attribute [r] module_details
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
-	has_many :module_details,
+  has_many :module_details,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,
            :through => :module_refs,
@@ -581,4 +581,3 @@ class Mdm::Host < ActiveRecord::Base
 
   Metasploit::Concern.run(self)
 end
-
