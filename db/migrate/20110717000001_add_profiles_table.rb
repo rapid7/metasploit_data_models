@@ -1,7 +1,7 @@
 class AddProfilesTable < ActiveRecord::Migration
 	def self.up
 		create_table :profiles do |t|
-			t.timestamps
+			t.timestamps null: false
 			t.boolean :active, :default => true
 			t.text :name
 			t.text :owner

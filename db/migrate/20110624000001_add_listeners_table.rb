@@ -1,7 +1,7 @@
 class AddListenersTable < ActiveRecord::Migration
 	def self.up
 		create_table :listeners do |t|
-			t.timestamps
+			t.timestamps null: false
 			t.integer :workspace_id, :null => false, :default => 1
 			t.integer :task_id
 			t.boolean :enabled, :default => true
