@@ -65,6 +65,17 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Module::Mixin>]
   has_many :authors,   :class_name => 'Mdm::Module::Author',   :dependent => :destroy
 
+  # @!attribute [rw] matches
+  #   Matches for this module
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::AutomaticExploitation::Match>]
+  has_many :matches,
+           :class_name => 'MetasploitDataModels::AutomaticExploitation::Match',
+           :dependent => :destroy,
+           :primary_key => :fullname,
+           :foreign_key => :module_fullname,
+           :inverse_of => :module_detail
+
   # @!attribute [rw] mixins
   #   Mixins used by this module.
   #
