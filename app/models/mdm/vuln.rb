@@ -62,10 +62,11 @@ class Mdm::Vuln < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Note>]
   has_many :notes,
+           -> { order('notes.created_at') },
            class_name: 'Mdm::Note',
            inverse_of: :vuln,
-           dependent: :delete_all,
-           order: 'notes.created_at'
+           dependent: :delete_all
+
 
   #
   # Through :vuln_refs
