@@ -139,7 +139,7 @@ CREATE TABLE automatic_exploitation_matches (
     match_set_id integer,
     matchable_type character varying(255),
     matchable_id integer,
-    module_fullname character varying(255)
+    module_fullname text
 );
 
 
