@@ -138,7 +138,8 @@ CREATE TABLE automatic_exploitation_matches (
     updated_at timestamp without time zone NOT NULL,
     match_set_id integer,
     matchable_type character varying(255),
-    matchable_id integer
+    matchable_id integer,
+    module_fullname text
 );
 
 
@@ -2816,6 +2817,13 @@ CREATE INDEX index_automatic_exploitation_match_sets_on_workspace_id ON automati
 
 
 --
+-- Name: index_automatic_exploitation_matches_on_module_fullname; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_matches_on_module_fullname ON automatic_exploitation_matches USING btree (module_fullname);
+
+
+--
 -- Name: index_automatic_exploitation_matches_on_ref_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3316,6 +3324,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150219173821');
 INSERT INTO schema_migrations (version) VALUES ('20150219215039');
 
 INSERT INTO schema_migrations (version) VALUES ('20150226151459');
+
+INSERT INTO schema_migrations (version) VALUES ('20150312155312');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
