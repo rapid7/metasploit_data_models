@@ -188,7 +188,7 @@ module Mdm::Host::OperatingSystemNormalization
     # Handle cases where the flavor contains the base name (legacy parsing, etc)
     # TODO: Remove this once we are sure it is no longer needed
     if host.os_name && host.os_flavor && host.os_flavor.index(host.os_name)
-      dlog("Host #{host.address} has os_flavor that contains os_name")
+      dlog("Host #{host.address.to_s} has os_flavor that contains os_name")
       dlog("os_flavor: #{host.os_flavor}")
       dlog("os_name: #{host.os_name}")
       host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip

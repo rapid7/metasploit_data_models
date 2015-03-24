@@ -40,7 +40,7 @@ class Mdm::WebSite < ActiveRecord::Base
 
   def to_url(ignore_vhost=false)
     proto = self.service.name == "https" ? "https" : "http"
-    host = ignore_vhost ? self.service.host.address : self.vhost
+    host = ignore_vhost ? self.service.host.address.to_s : self.vhost
     port = self.service.port
 
     if Rex::Socket.is_ipv6?(host)

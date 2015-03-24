@@ -550,7 +550,7 @@ describe Mdm::Workspace do
         web_forms = workspace.web_unique_forms([selected_address])
 
         web_forms.all? { |web_form|
-          web_form.web_site.service.host.address.should == selected_address
+          web_form.web_site.service.host.address.to_s.should == selected_address
         }.should be_true
       end
     end
