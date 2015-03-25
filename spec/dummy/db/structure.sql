@@ -2956,6 +2956,20 @@ CREATE INDEX index_module_refs_on_name ON module_refs USING btree (name);
 
 
 --
+-- Name: index_module_runs_on_session_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_module_runs_on_session_id ON module_runs USING btree (session_id);
+
+
+--
+-- Name: index_module_runs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_module_runs_on_user_id ON module_runs USING btree (user_id);
+
+
+--
 -- Name: index_module_targets_on_module_detail_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 

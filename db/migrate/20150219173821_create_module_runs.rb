@@ -16,5 +16,8 @@ class CreateModuleRuns < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :module_runs, :session_id
+    add_index :module_runs, :user_id
   end
 end
