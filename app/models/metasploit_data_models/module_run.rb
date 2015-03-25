@@ -135,12 +135,15 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
 
 
   #
+  #
   # Validations
   #
+  #
 
-  # When the module was run
-  validates :attempted_at,
-            presence: true
+  #
+  # Method Validations
+  #
+
 
   # spawned_session is only valid for *exploit modules*
   validate :no_spawned_session_for_non_exploits_except_logins
@@ -151,6 +154,13 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   # Can't save without information on what module has run
   validate :module_information_is_present
 
+  #
+  # Attribute Validations
+  #
+
+  # When the module was run
+  validates :attempted_at,
+            presence: true
   # Result of running the module
   validates :status,
             inclusion: VALID_STATUSES
