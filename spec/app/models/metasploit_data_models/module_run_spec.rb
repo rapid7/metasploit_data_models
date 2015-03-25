@@ -8,8 +8,7 @@ describe MetasploitDataModels::ModuleRun do
     it { is_expected.to have_db_column(:attempted_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:fail_detail).of_type(:text) }
     it { is_expected.to have_db_column(:fail_reason).of_type(:string) }
-    it { is_expected.to have_db_column(:module_detail_id).of_type(:integer) }
-    it { is_expected.to have_db_column(:module_full_name).of_type(:text) }
+    it { is_expected.to have_db_column(:module_fullname).of_type(:text) }
     it { is_expected.to have_db_column(:port).of_type(:integer) }
     it { is_expected.to have_db_column(:proto).of_type(:string) }
     it { is_expected.to have_db_column(:session_id).of_type(:integer) }
@@ -24,6 +23,7 @@ describe MetasploitDataModels::ModuleRun do
     it { is_expected.to belong_to(:user).class_name('Mdm::User') }
     it { is_expected.to belong_to(:target_session).class_name('Mdm::Session') }
     it { is_expected.to belong_to(:trackable) }
+    it { is_expected.to belong_to(:module_detail).class_name('Mdm::Module::Detail') }
     it { is_expected.to have_many(:loots).class_name('Mdm::Loot') }
     it { is_expected.to have_one(:spawned_session).class_name('Mdm::Session') }
   end
@@ -37,7 +37,7 @@ describe MetasploitDataModels::ModuleRun do
       context "when the module is an exploit" do
         context "and that exploit IS NOT local" do
           before(:each) do
-            module_run.module_full_name = 'exploit/windows/mah-crazy-exploit'
+            module_run.module_fullname = 'exploit/windows/mah-crazy-exploit'
           end
 
           it { is_expected.to_not be_valid }
@@ -45,7 +45,7 @@ describe MetasploitDataModels::ModuleRun do
 
         context "and that exploit IS local" do
           before(:each) do
-            module_run.module_full_name = 'exploit/windows/local/mah-crazy-exploit'
+            module_run.module_fullname = 'exploit/windows/local/mah-crazy-exploit'
           end
 
           it { is_expected.to be_valid }
@@ -62,7 +62,7 @@ describe MetasploitDataModels::ModuleRun do
 
         context "and it IS NOT a login scanner" do
           before(:each) do
-            module_run.module_full_name = 'post/multi/gather/steal-minecraft-maps'
+            module_run.module_fullname = 'post/multi/gather/steal-minecraft-maps'
           end
 
           it { is_expected.to_not be_valid }
@@ -70,7 +70,7 @@ describe MetasploitDataModels::ModuleRun do
 
         context "and it IS a login scanner" do
           before(:each) do
-            module_run.module_full_name = 'auxiliary/scanner/ssh/ssh_login'
+            module_run.module_fullname = 'auxiliary/scanner/ssh/ssh_login'
           end
 
           it { is_expected.to be_valid }
@@ -87,7 +87,7 @@ describe MetasploitDataModels::ModuleRun do
     describe "content information" do
       context "when there is no module_name" do
         before(:each) do
-          module_run.module_full_name = nil
+          module_run.module_fullname = nil
         end
 
         it { is_expected.to_not be_valid }

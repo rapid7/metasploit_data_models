@@ -24,7 +24,7 @@ FactoryGirl.define do
     fail_detail "Failed to execute payload froamasher"
     status MetasploitDataModels::ModuleRun::SUCCEED
     username "joefoo"
-    module_full_name "exploit/windows/happy-stack-smasher"
+    module_fullname "exploit/windows/happy-stack-smasher"
   end
 end
 

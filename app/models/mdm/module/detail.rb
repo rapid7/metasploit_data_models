@@ -82,6 +82,15 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Module::Mixin>]
   has_many :mixins,    :class_name => 'Mdm::Module::Mixin',    :dependent => :destroy
 
+  # @!attribute [rw] module_runs
+  #   Records of times when this module has been used
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
+  has_many :matches,
+           :class_name => 'MetasploitDataModels::ModuleRun',
+           :primary_key => :fullname,
+           :foreign_key => :module_fullname,
+           :inverse_of => :module_detail
 
   # @!attribute [rw] platforms
   #   Platforms supported by this module.

@@ -78,6 +78,15 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
            class_name: 'Mdm::Loot',
            inverse_of: :module_run
 
+  # @!attribute [rw] module_detail
+  #  The cached module information
+  #
+  #  @return [ActiveRecord::Relation<Mdm::Module::Detail>]
+  belongs_to :module_detail,
+             class_name: 'Mdm::Module::Detail',
+             inverse_of: :module_detail,
+             foreign_key: :module_fullname,
+             primary_key: :fullname
 
   # @!attribute [rw] spawned_session
   #
@@ -153,7 +162,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #   module_name_components  # => ["exploit","windows","multi","mah-rad-exploit"]
   # @return [Array]
   def module_name_components
-    module_full_name.split('/')
+    module_fullname.split('/')
   end
 
   private
@@ -161,13 +170,13 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   # Mark the object as invalid if there is no associated #module_name or {Mdm::ModuleDetail}
   # @return [void]
   def module_information_is_present
-    if module_full_name.blank?
-      errors.add(:base, "One of module_name or module_detail_id must be set")
+    if module_fullname.blank?
+      errors.add(:base, "module_fullname cannot be blank")
     end
   end
 
   # Mark the object as invalid if there is a spawned_session but the module is *not* an exploit
-  # and not an aux module with the word "login" in the final portion of `module_full_name`
+  # and not an aux module with the word "login" in the final portion of `module_fullname`
   #
   # @return [void]
   def no_spawned_session_for_non_exploits_except_logins
