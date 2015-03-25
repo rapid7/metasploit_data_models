@@ -84,7 +84,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #  @return [ActiveRecord::Relation<Mdm::Module::Detail>]
   belongs_to :module_detail,
              class_name: 'Mdm::Module::Detail',
-             inverse_of: :module_detail,
+             inverse_of: :module_runs,
              foreign_key: :module_fullname,
              primary_key: :fullname
 

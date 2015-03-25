@@ -21,11 +21,16 @@ describe MetasploitDataModels::ModuleRun do
 
   context "associations" do
     it { is_expected.to belong_to(:user).class_name('Mdm::User') }
+    it { is_expected.to belong_to(:user).inverse_of(:module_runs) }
     it { is_expected.to belong_to(:target_session).class_name('Mdm::Session') }
+    it { is_expected.to belong_to(:target_session).inverse_of(:target_module_runs) }
     it { is_expected.to belong_to(:trackable) }
     it { is_expected.to belong_to(:module_detail).class_name('Mdm::Module::Detail') }
+    it { is_expected.to belong_to(:module_detail).inverse_of(:module_runs) }
     it { is_expected.to have_many(:loots).class_name('Mdm::Loot') }
+    it { is_expected.to have_many(:loots).inverse_of(:module_run) }
     it { is_expected.to have_one(:spawned_session).class_name('Mdm::Session') }
+    it { is_expected.to have_one(:spawned_session).inverse_of(:originating_module_run) }
   end
 
   context "validations" do

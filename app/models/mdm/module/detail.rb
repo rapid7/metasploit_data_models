@@ -86,7 +86,7 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   Records of times when this module has been used
   #
   #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
-  has_many :matches,
+  has_many :module_runs,
            :class_name => 'MetasploitDataModels::ModuleRun',
            :primary_key => :fullname,
            :foreign_key => :module_fullname,
