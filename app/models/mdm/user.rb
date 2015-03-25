@@ -5,6 +5,14 @@ class Mdm::User < ActiveRecord::Base
   # Relations
   #
 
+  has_many :automatic_exploitation_runs,
+           class_name: 'MetasploitDataModels::AutomaticExploitation::Run',
+           inverse_of: :user
+
+  has_many :automatic_exploitation_match_sets,
+           class_name: 'MetasploitDataModels::AutomaticExploitation::MatchSet',
+           inverse_of: :user
+
   has_many :owned_workspaces,
            class_name: 'Mdm::Workspace',
            foreign_key: 'owner_id',
