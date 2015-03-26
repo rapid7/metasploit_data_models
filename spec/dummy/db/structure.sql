@@ -2802,6 +2802,20 @@ ALTER TABLE ONLY workspaces
 
 
 --
+-- Name: index_automatic_exploitation_match_results_on_match_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_results_on_match_id ON automatic_exploitation_match_results USING btree (match_id);
+
+
+--
+-- Name: index_automatic_exploitation_match_results_on_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_results_on_run_id ON automatic_exploitation_match_results USING btree (run_id);
+
+
+--
 -- Name: index_automatic_exploitation_match_sets_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2827,6 +2841,27 @@ CREATE INDEX index_automatic_exploitation_matches_on_module_fullname ON automati
 --
 
 CREATE INDEX index_automatic_exploitation_matches_on_ref_id ON automatic_exploitation_matches USING btree (module_detail_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_match_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_match_set_id ON automatic_exploitation_runs USING btree (match_set_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_user_id ON automatic_exploitation_runs USING btree (user_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_workspace_id ON automatic_exploitation_runs USING btree (workspace_id);
 
 
 --
@@ -3339,6 +3374,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150219215039');
 INSERT INTO schema_migrations (version) VALUES ('20150226151459');
 
 INSERT INTO schema_migrations (version) VALUES ('20150312155312');
+
+INSERT INTO schema_migrations (version) VALUES ('20150326183742');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
