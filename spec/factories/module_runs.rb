@@ -19,12 +19,22 @@ FactoryGirl.define do
 
     attempted_at Time.now
     session_id 1
-    port { generate(:port) }
-    proto "http"
-    fail_detail "Failed to execute payload froamasher"
+    port { generate :port }
+    proto "tcp"
+    fail_detail { generate :module_run_fail_detail }
     status MetasploitDataModels::ModuleRun::SUCCEED
     username "joefoo"
-    module_fullname "exploit/windows/happy-stack-smasher"
+    module_fullname { generate :module_run_module_fullname }
   end
+
+  sequence :module_run_module_fullname do |n|
+    "exploit/windows/happy-stack-smasher-#{n}"
+  end
+
+  sequence :module_run_fail_detail do |n|
+    "MetasploitDataModels::ModuleRun#fail_detail #{n}"
+  end
+
+
 end
 
