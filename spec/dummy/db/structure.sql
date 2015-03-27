@@ -61,6 +61,141 @@ ALTER SEQUENCE api_keys_id_seq OWNED BY api_keys.id;
 
 
 --
+-- Name: automatic_exploitation_match_results; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_match_results (
+    id integer NOT NULL,
+    match_id integer,
+    run_id integer,
+    state character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: automatic_exploitation_match_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_match_results_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_match_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_match_results_id_seq OWNED BY automatic_exploitation_match_results.id;
+
+
+--
+-- Name: automatic_exploitation_match_sets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_match_sets (
+    id integer NOT NULL,
+    workspace_id integer,
+    user_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: automatic_exploitation_match_sets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_match_sets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_match_sets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_match_sets_id_seq OWNED BY automatic_exploitation_match_sets.id;
+
+
+--
+-- Name: automatic_exploitation_matches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_matches (
+    id integer NOT NULL,
+    module_detail_id integer,
+    state character varying(255),
+    nexpose_data_vulnerability_definition_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    match_set_id integer,
+    matchable_type character varying(255),
+    matchable_id integer,
+    module_fullname text
+);
+
+
+--
+-- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_matches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_matches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_matches_id_seq OWNED BY automatic_exploitation_matches.id;
+
+
+--
+-- Name: automatic_exploitation_runs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE automatic_exploitation_runs (
+    id integer NOT NULL,
+    workspace_id integer,
+    user_id integer,
+    match_set_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: automatic_exploitation_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE automatic_exploitation_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: automatic_exploitation_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE automatic_exploitation_runs_id_seq OWNED BY automatic_exploitation_runs.id;
+
+
+--
 -- Name: clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -419,7 +554,8 @@ CREATE TABLE loots (
     updated_at timestamp without time zone NOT NULL,
     content_type character varying(255),
     name text,
-    info text
+    info text,
+    module_run_id integer
 );
 
 
@@ -730,6 +866,48 @@ CREATE SEQUENCE module_refs_id_seq
 --
 
 ALTER SEQUENCE module_refs_id_seq OWNED BY module_refs.id;
+
+
+--
+-- Name: module_runs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE module_runs (
+    id integer NOT NULL,
+    attempted_at timestamp without time zone,
+    fail_detail text,
+    fail_reason character varying(255),
+    module_fullname text,
+    port integer,
+    proto character varying(255),
+    session_id integer,
+    status character varying(255),
+    trackable_id integer,
+    trackable_type character varying(255),
+    user_id integer,
+    username character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE module_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE module_runs_id_seq OWNED BY module_runs.id;
 
 
 --
@@ -1109,7 +1287,8 @@ CREATE TABLE sessions (
     closed_at timestamp without time zone,
     close_reason character varying(255),
     local_id integer,
-    last_seen timestamp without time zone
+    last_seen timestamp without time zone,
+    module_run_id integer
 );
 
 
@@ -1823,6 +2002,34 @@ ALTER TABLE ONLY api_keys ALTER COLUMN id SET DEFAULT nextval('api_keys_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY automatic_exploitation_match_results ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_match_results_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY automatic_exploitation_match_sets ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_match_sets_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY automatic_exploitation_matches ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_matches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY automatic_exploitation_runs ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_runs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
 
 
@@ -1950,6 +2157,13 @@ ALTER TABLE ONLY module_platforms ALTER COLUMN id SET DEFAULT nextval('module_pl
 --
 
 ALTER TABLE ONLY module_refs ALTER COLUMN id SET DEFAULT nextval('module_refs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY module_runs ALTER COLUMN id SET DEFAULT nextval('module_runs_id_seq'::regclass);
 
 
 --
@@ -2164,6 +2378,38 @@ ALTER TABLE ONLY api_keys
 
 
 --
+-- Name: automatic_exploitation_match_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_match_results
+    ADD CONSTRAINT automatic_exploitation_match_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: automatic_exploitation_match_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_match_sets
+    ADD CONSTRAINT automatic_exploitation_match_sets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: automatic_exploitation_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_matches
+    ADD CONSTRAINT automatic_exploitation_matches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: automatic_exploitation_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY automatic_exploitation_runs
+    ADD CONSTRAINT automatic_exploitation_runs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2313,6 +2559,14 @@ ALTER TABLE ONLY module_platforms
 
 ALTER TABLE ONLY module_refs
     ADD CONSTRAINT module_refs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: module_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY module_runs
+    ADD CONSTRAINT module_runs_pkey PRIMARY KEY (id);
 
 
 --
@@ -2548,6 +2802,69 @@ ALTER TABLE ONLY workspaces
 
 
 --
+-- Name: index_automatic_exploitation_match_results_on_match_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_results_on_match_id ON automatic_exploitation_match_results USING btree (match_id);
+
+
+--
+-- Name: index_automatic_exploitation_match_results_on_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_results_on_run_id ON automatic_exploitation_match_results USING btree (run_id);
+
+
+--
+-- Name: index_automatic_exploitation_match_sets_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_sets_on_user_id ON automatic_exploitation_match_sets USING btree (user_id);
+
+
+--
+-- Name: index_automatic_exploitation_match_sets_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_match_sets_on_workspace_id ON automatic_exploitation_match_sets USING btree (workspace_id);
+
+
+--
+-- Name: index_automatic_exploitation_matches_on_module_fullname; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_matches_on_module_fullname ON automatic_exploitation_matches USING btree (module_fullname);
+
+
+--
+-- Name: index_automatic_exploitation_matches_on_ref_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_matches_on_ref_id ON automatic_exploitation_matches USING btree (module_detail_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_match_set_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_match_set_id ON automatic_exploitation_runs USING btree (match_set_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_user_id ON automatic_exploitation_runs USING btree (user_id);
+
+
+--
+-- Name: index_automatic_exploitation_runs_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_automatic_exploitation_runs_on_workspace_id ON automatic_exploitation_runs USING btree (workspace_id);
+
+
+--
 -- Name: index_hosts_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2587,6 +2904,13 @@ CREATE INDEX index_hosts_on_state ON hosts USING btree (state);
 --
 
 CREATE UNIQUE INDEX index_hosts_on_workspace_id_and_address ON hosts USING btree (workspace_id, address);
+
+
+--
+-- Name: index_loots_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_loots_on_module_run_id ON loots USING btree (module_run_id);
 
 
 --
@@ -2667,6 +2991,20 @@ CREATE INDEX index_module_refs_on_name ON module_refs USING btree (name);
 
 
 --
+-- Name: index_module_runs_on_session_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_module_runs_on_session_id ON module_runs USING btree (session_id);
+
+
+--
+-- Name: index_module_runs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_module_runs_on_user_id ON module_runs USING btree (user_id);
+
+
+--
 -- Name: index_module_targets_on_module_detail_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2727,6 +3065,13 @@ CREATE INDEX index_services_on_proto ON services USING btree (proto);
 --
 
 CREATE INDEX index_services_on_state ON services USING btree (state);
+
+
+--
+-- Name: index_sessions_on_module_run_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_module_run_id ON sessions USING btree (module_run_id);
 
 
 --
@@ -3000,6 +3345,18 @@ INSERT INTO schema_migrations (version) VALUES ('20130604145732');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717150737');
 
+INSERT INTO schema_migrations (version) VALUES ('20131002004641');
+
+INSERT INTO schema_migrations (version) VALUES ('20131002164449');
+
+INSERT INTO schema_migrations (version) VALUES ('20131008213344');
+
+INSERT INTO schema_migrations (version) VALUES ('20131011184338');
+
+INSERT INTO schema_migrations (version) VALUES ('20131017150735');
+
+INSERT INTO schema_migrations (version) VALUES ('20131021185657');
+
 INSERT INTO schema_migrations (version) VALUES ('20140905031549');
 
 INSERT INTO schema_migrations (version) VALUES ('20150112203945');
@@ -3009,6 +3366,16 @@ INSERT INTO schema_migrations (version) VALUES ('20150205192745');
 INSERT INTO schema_migrations (version) VALUES ('20150209195939');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212214222');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219173821');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219215039');
+
+INSERT INTO schema_migrations (version) VALUES ('20150226151459');
+
+INSERT INTO schema_migrations (version) VALUES ('20150312155312');
+
+INSERT INTO schema_migrations (version) VALUES ('20150326183742');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

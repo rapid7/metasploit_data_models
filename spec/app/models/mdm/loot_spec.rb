@@ -7,6 +7,7 @@ describe Mdm::Loot do
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
     it { should belong_to(:service).class_name('Mdm::Service') }
     it { should belong_to(:host).class_name('Mdm::Host') }
+    it { should belong_to(:module_run).class_name('MetasploitDataModels::ModuleRun') }
   end
 
   context 'database' do

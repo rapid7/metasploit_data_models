@@ -1,9 +1,9 @@
 class PasswordIsStrongValidator < ActiveModel::EachValidator
   COMMON_PASSWORDS = %w{
-			password pass root admin metasploit
-			msf 123456 qwerty abc123 letmein monkey link182 demo
-			changeme test1234 rapid7
-		}
+      password pass root admin metasploit
+      msf 123456 qwerty abc123 letmein monkey link182 demo
+      changeme test1234 rapid7
+    }
 
   SPECIAL_CHARS = %q{!@"#$%&'()*+,-./:;<=>?[\\]^_`{|}~ }
 

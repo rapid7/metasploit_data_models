@@ -102,7 +102,7 @@ describe Mdm::Host do
     end
   end
 
-	context 'associations' do
+  context 'associations' do
     it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
     it { should have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
     it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
@@ -110,6 +110,7 @@ describe Mdm::Host do
     it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
     it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
     it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
+    it { should have_many(:module_runs).class_name('MetasploitDataModels::ModuleRun') }
     it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
     it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
 
@@ -208,9 +209,9 @@ describe Mdm::Host do
     it { should have_many(:vuln_refs).class_name('Mdm::VulnRef') }
     it { should have_many(:web_sites).class_name('Mdm::WebSite').through(:services) }
     it { should belong_to(:workspace).class_name('Mdm::Workspace') }
-	end
+  end
 
-	context 'CONSTANTS' do
+  context 'CONSTANTS' do
     context 'ARCHITECTURES' do
       subject(:architectures) do
         described_class::ARCHITECTURES
@@ -285,30 +286,30 @@ describe Mdm::Host do
 
     end
 
-		context 'SEARCH_FIELDS' do
-			subject(:search_fields) do
-				described_class::SEARCH_FIELDS
-			end
+    context 'SEARCH_FIELDS' do
+      subject(:search_fields) do
+        described_class::SEARCH_FIELDS
+      end
 
-			it 'should be an Array<String>' do
-				search_fields.should be_an Array
+      it 'should be an Array<String>' do
+        search_fields.should be_an Array
 
-				search_fields.each { |search_field|
-					search_field.should be_a String
-				}
-			end
+        search_fields.each { |search_field|
+          search_field.should be_a String
+        }
+      end
 
-			it 'should cast address to text' do
-				search_fields.should include('address::text')
-			end
+      it 'should cast address to text' do
+        search_fields.should include('address::text')
+      end
 
-			it { should include('comments') }
-			it { should include('mac') }
-			it { should include('name') }
-			it { should include('os_flavor') }
-			it { should include('os_name') }
-			it { should include('os_sp') }
-			it { should include('purpose') }
+      it { should include('comments') }
+      it { should include('mac') }
+      it { should include('name') }
+      it { should include('os_flavor') }
+      it { should include('os_name') }
+      it { should include('os_sp') }
+      it { should include('purpose') }
     end
 
     it 'should define STATES in any order' do

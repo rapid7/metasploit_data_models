@@ -49,44 +49,65 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # @!attribute [rw] actions
   #   Auxiliary actions to perform when this running this module.
   #
-  #   @return [Array<Mdm::Module::Action>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Action>]
   has_many :actions,   :class_name => 'Mdm::Module::Action',   :dependent => :destroy
 
   # @!attribute [rw] archs
   #   Architectures supported by this module.
   #
-  #   @return [Array<Mdm::Module::Arch>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Arch>]
   has_many :archs,     :class_name => 'Mdm::Module::Arch',     :dependent => :destroy
 
   # @!attribute [rw] authors
   #   Authors (and their emails) of this module.  Usually includes the original discoverer who wrote the
   #   proof-of-concept and then the people that ported the proof-of-concept to metasploit-framework.
   #
-  #   @return [Array<Mdm::Module::Mixin>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Mixin>]
   has_many :authors,   :class_name => 'Mdm::Module::Author',   :dependent => :destroy
+
+  # @!attribute [rw] matches
+  #   Matches for this module
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::AutomaticExploitation::Match>]
+  has_many :matches,
+           :class_name => 'MetasploitDataModels::AutomaticExploitation::Match',
+           :dependent => :destroy,
+           :primary_key => :fullname,
+           :foreign_key => :module_fullname,
+           :inverse_of => :module_detail
 
   # @!attribute [rw] mixins
   #   Mixins used by this module.
   #
-  #   @return [Array<Mdm::Module::Mixin>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Mixin>]
   has_many :mixins,    :class_name => 'Mdm::Module::Mixin',    :dependent => :destroy
+
+  # @!attribute [rw] module_runs
+  #   Records of times when this module has been used
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
+  has_many :module_runs,
+           :class_name => 'MetasploitDataModels::ModuleRun',
+           :primary_key => :fullname,
+           :foreign_key => :module_fullname,
+           :inverse_of => :module_detail
 
   # @!attribute [rw] platforms
   #   Platforms supported by this module.
   #
-  #   @return [Array<Mdm::Module::Platform>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Platform>]
   has_many :platforms, :class_name => 'Mdm::Module::Platform', :dependent => :destroy
 
   # @!attribute [rw] refs
   #   External references to the vulnerabilities this module exploits.
   #
-  #   @return [Array<Mdm::Module::Ref>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Ref>]
   has_many :refs,      :class_name => 'Mdm::Module::Ref',      :dependent => :destroy
 
   # @!attribute [rw] targets
   #   Names of targets with different configurations that can be exploited by this module.
   #
-  #   @return [Array<Mdm::Module::Target>]
+  #   @return [ActiveRecord::Relation<Mdm::Module::Target>]
   has_many :targets,   :class_name => 'Mdm::Module::Target',   :dependent => :destroy
 
   #
