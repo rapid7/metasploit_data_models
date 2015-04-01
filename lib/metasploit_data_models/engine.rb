@@ -10,7 +10,14 @@ module MetasploitDataModels
       g.test_framework :rspec, :fixture => false
     end
 
-    config.paths.add 'lib', autoload: true
+    # Remove ActiveSupport::Dependencies loading paths to save time during constant resolution and to ensure that
+    # metasploit_data_models is properly declaring all autoloads and not falling back on ActiveSupport::Dependencies
+    config.paths.each_value do |path|
+      path.skip_autoload!
+      path.skip_autoload_once!
+      path.skip_eager_load!
+      path.skip_load_path!
+    end
 
     initializer 'metasploit_data_models.prepend_factory_path', :after => 'factory_girl.set_factory_paths' do
       if defined? FactoryGirl
