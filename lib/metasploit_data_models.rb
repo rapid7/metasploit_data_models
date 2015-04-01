@@ -31,6 +31,7 @@ module MetasploitDataModels
   extend ActiveSupport::Autoload
 
   autoload :AutomaticExploitation
+  autoload :ChangeRequiredColumnsToNullFalse
   autoload :ModuleRun
   autoload :Search
 
