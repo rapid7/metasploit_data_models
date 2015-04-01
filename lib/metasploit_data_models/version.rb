@@ -6,7 +6,9 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 23
     # The patch number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 2
+    PATCH = 3
+    # The pre-release version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers.
+    PRERELEASE = 'autoload'
 
     # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
     # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
