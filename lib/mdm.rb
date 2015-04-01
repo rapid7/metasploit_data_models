@@ -10,6 +10,27 @@ module Mdm
   autoload :Host
   autoload :HostDetail
   autoload :HostTag
+  autoload :Listener
+  autoload :Loot
+  autoload :Module
+  autoload :NexposeConsole
+  autoload :Note
+  autoload :Ref
+  autoload :Route
+  autoload :Service
+  autoload :Session
+  autoload :SessionEvent
+  autoload :Tag
+  autoload :User
+  autoload :Vuln
+  autoload :VulnAttempt
+  autoload :VulnDetail
+  autoload :VulnRef
+  autoload :WebForm
+  autoload :WebPage
+  autoload :WebSite
+  autoload :WebVuln
+  autoload :Workspace
 
   # Causes the model_name for all Mdm modules to not include the Mdm:: prefix in their name.
   #

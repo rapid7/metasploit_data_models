@@ -28,6 +28,12 @@ require 'metasploit_data_models/version'
 autoload :Mdm, 'mdm'
 
 module MetasploitDataModels
+  extend ActiveSupport::Autoload
+
+  autoload :AutomaticExploitation
+  autoload :ModuleRun
+  autoload :Search
+
   def self.root
     unless instance_variable_defined? :@root
       lib_pathname = Pathname.new(__FILE__).dirname
