@@ -21,8 +21,6 @@ require 'arel-helpers'
 # Project
 #
 
-require 'metasploit_data_models/base64_serializer'
-require 'metasploit_data_models/serialized_prefs'
 require 'metasploit_data_models/version'
 
 autoload :Mdm, 'mdm'
@@ -31,10 +29,13 @@ module MetasploitDataModels
   extend ActiveSupport::Autoload
 
   autoload :AutomaticExploitation
+  autoload :Base64Serializer
   autoload :ChangeRequiredColumnsToNullFalse
   autoload :IPAddress
+  autoload :Match
   autoload :ModuleRun
   autoload :Search
+  autoload :SerializedPrefs
 
   def self.root
     unless instance_variable_defined? :@root

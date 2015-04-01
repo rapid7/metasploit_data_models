@@ -3,5 +3,7 @@
 module MetasploitDataModels::IPAddress
   extend ActiveSupport::Autoload
 
+  autoload :CIDR
+  autoload :Range
   autoload :V4
 end

@@ -1,5 +1,3 @@
-require 'metasploit_data_models/ip_address/cidr'
-
 # An IPv4 CIDR (Classless InterDomain Routing) block composed of a
 # {MetasploitDataModels::IPAddress::V4::Single IPv4} {MetasploitDataModels::IPAddress::CIDR#address address} and
 # {MetasploitDataModels::IPAddress::CIDR#prefix_length prefix_length} written in the form `'a.b.c.d/prefix_length'`.

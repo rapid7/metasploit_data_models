@@ -1,5 +1,3 @@
-require 'metasploit_data_models/ip_address/range'
-
 # A range of complete IPv4 addresses, separated by a `-`.
 class MetasploitDataModels::IPAddress::V4::Range < Metasploit::Model::Base
   extend MetasploitDataModels::Match::Child
