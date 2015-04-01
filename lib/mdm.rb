@@ -1,5 +1,16 @@
 # Namespace for models
 module Mdm
+  extend ActiveSupport::Autoload
+
+  autoload :Client
+  autoload :Cred
+  autoload :Event
+  autoload :ExploitAttempt
+  autoload :ExploitedHost
+  autoload :Host
+  autoload :HostDetail
+  autoload :HostTag
+
   # Causes the model_name for all Mdm modules to not include the Mdm:: prefix in their name.
   #
   # This has been supported since ActiveSupport 3.2.1.  In ActiveSupport 3.1.0, it checked for _railtie.  Before that
