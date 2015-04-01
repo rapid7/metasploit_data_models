@@ -1,3 +1,4 @@
+# Namespace for IPv4 Address format models.
 module MetasploitDataModels::IPAddress::V4
   extend ActiveSupport::Autoload
 
