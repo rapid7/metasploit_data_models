@@ -2,6 +2,7 @@
 module Mdm
   extend ActiveSupport::Autoload
 
+  autoload :ApiKey
   autoload :Client
   autoload :Cred
   autoload :Event
@@ -12,15 +13,23 @@ module Mdm
   autoload :HostTag
   autoload :Listener
   autoload :Loot
+  autoload :Macro
+  autoload :ModRef
   autoload :Module
   autoload :NexposeConsole
   autoload :Note
+  autoload :Profile
   autoload :Ref
   autoload :Route
   autoload :Service
   autoload :Session
   autoload :SessionEvent
   autoload :Tag
+  autoload :Task
+  autoload :TaskCred
+  autoload :TaskHost
+  autoload :TaskService
+  autoload :TaskSession
   autoload :User
   autoload :Vuln
   autoload :VulnAttempt
@@ -30,6 +39,8 @@ module Mdm
   autoload :WebPage
   autoload :WebSite
   autoload :WebVuln
+  autoload :WmapRequest
+  autoload :WmapTarget
   autoload :Workspace
 
   # Causes the model_name for all Mdm modules to not include the Mdm:: prefix in their name.

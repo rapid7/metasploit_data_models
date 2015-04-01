@@ -32,6 +32,7 @@ module MetasploitDataModels
 
   autoload :AutomaticExploitation
   autoload :ChangeRequiredColumnsToNullFalse
+  autoload :IPAddress
   autoload :ModuleRun
   autoload :Search
 
