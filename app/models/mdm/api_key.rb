@@ -1,5 +1,11 @@
 class Mdm::ApiKey < ActiveRecord::Base
   #
+  # Mass Assignment Security
+  #
+  
+  attr_accessible :token
+  
+  #
   # Validators
   #
 

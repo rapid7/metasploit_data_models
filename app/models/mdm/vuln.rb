@@ -1,6 +1,6 @@
 # A vulnerability found on a {#host} or {#service}.
 class Mdm::Vuln < ActiveRecord::Base
-
+  
   #
   # Associations
   #
@@ -153,6 +153,24 @@ class Mdm::Vuln < ActiveRecord::Base
         :refs
     )
   }
+
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :name, :info, :exploited_at
+  
+  # Foreign Keys
+  
+  attr_accessible :host_id, :service_id
+  
+  # Model Associations
+  
+  attr_accessible :exploit_attempts, :host, :service, :vuln_attempts,
+                  :vuln_details, :vulns_refs, :refs, :module_refs,
+                  :module_details
 
   #
   # Validations
