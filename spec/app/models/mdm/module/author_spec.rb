@@ -39,6 +39,12 @@ describe Mdm::Module::Author do
     end
   end
 
+  context 'mass assignment security' do
+    it { should_not allow_mass_assignment_of(:detail_id) }
+    it { should allow_mass_assignment_of(:email) }
+    it { should allow_mass_assignment_of(:name) }
+  end
+
   context 'validations' do
     it { should validate_presence_of(:detail) }
     it { should_not validate_presence_of(:email) }

@@ -53,6 +53,11 @@ describe Mdm::Module::Ref do
     end
   end
 
+  context 'mass assignment security' do
+    it { should_not allow_mass_assignment_of(:detail_id) }
+    it { should allow_mass_assignment_of(:name) }
+  end
+
   context 'validations' do
     it { should validate_presence_of(:detail) }
     it { should validate_presence_of(:name) }
