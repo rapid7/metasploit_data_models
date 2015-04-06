@@ -1,6 +1,8 @@
-module MetasploitDataModels
-  # Namespace that deals with search {Mdm} models.
-  module Search
+# Namespace that deals with search {Mdm} models.
+module MetasploitDataModels::Search
+  extend ActiveSupport::Autoload
 
-  end
+  autoload :Operation
+  autoload :Operator
+  autoload :Visitor
 end

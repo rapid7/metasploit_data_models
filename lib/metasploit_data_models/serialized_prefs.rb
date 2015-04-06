@@ -1,9 +1,8 @@
-module MetasploitDataModels
-  module SerializedPrefs
-    def serialized_prefs_attr_accessor(*args)
-      args.each do |method_name|
+module MetasploitDataModels::SerializedPrefs
+  def serialized_prefs_attr_accessor(*args)
+    args.each do |method_name|
 
-        method_declarations = <<-RUBY
+      method_declarations = <<-RUBY
           def #{method_name}
             return if not self.prefs
             self.prefs[:#{method_name}]
@@ -14,10 +13,9 @@ module MetasploitDataModels
             temp[:#{method_name}] = value
             self.prefs = temp
           end
-        RUBY
+      RUBY
 
-        class_eval method_declarations, __FILE__, __LINE__
-      end
+      class_eval method_declarations, __FILE__, __LINE__
     end
   end
 end

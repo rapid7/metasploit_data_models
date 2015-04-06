@@ -16,6 +16,14 @@ class Mdm::Workspace < ActiveRecord::Base
   # Relations
   #
 
+  has_many :automatic_exploitation_runs,
+           class_name: 'MetasploitDataModels::AutomaticExploitation::Run',
+           inverse_of: :workspace
+
+  has_many :automatic_exploitation_match_sets,
+           class_name: 'MetasploitDataModels::AutomaticExploitation:MatchSet',
+           inverse_of: :workspace
+
   has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
   has_many :events, :class_name => 'Mdm::Event'
   has_many :hosts, :dependent => :destroy, :class_name => 'Mdm::Host'
@@ -60,7 +68,7 @@ class Mdm::Workspace < ActiveRecord::Base
     allowed = false
     boundaries.each do |boundary_range|
       ok_range = Rex::Socket::RangeWalker.new(boundary)
-      allowed = true if ok_range.include_range? given_range
+      allowed  = true if ok_range.include_range? given_range
     end
     return allowed
   end
@@ -71,9 +79,9 @@ class Mdm::Workspace < ActiveRecord::Base
 
   def creds
     Mdm::Cred.find(
-        :all,
-        :include => {:service => :host},
-        :conditions => ["hosts.workspace_id = ?", self.id]
+      :all,
+      :include    => {:service => :host},
+      :conditions => ["hosts.workspace_id = ?", self.id]
     )
   end
 
@@ -103,9 +111,9 @@ class Mdm::Workspace < ActiveRecord::Base
 
   def host_tags
     Mdm::Tag.find(
-        :all,
-        :include => :hosts,
-        :conditions => ["hosts.workspace_id = ?", self.id]
+      :all,
+      :include    => :hosts,
+      :conditions => ["hosts.workspace_id = ?", self.id]
     )
   end
 

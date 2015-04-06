@@ -10,15 +10,15 @@ class Mdm::Ref < ActiveRecord::Base
   #   {Mdm::Module::Ref Mdm::Module::Refs} with the same name as this ref.
   #
   #   @return [Array<Mdm::Module::Ref>]
-	has_many :module_refs,
-					 :class_name => 'Mdm::Module::Ref',
-					 :foreign_key => :name,
-					 :primary_key => :name
+  has_many :module_refs,
+           :class_name => 'Mdm::Module::Ref',
+           :foreign_key => :name,
+           :primary_key => :name
 
   # @!attribute [rw] vulns_refs
   #   Join model to {Mdm::Vuln Mdm::Vulns}.  Use {#vulns} to get the actual {Mdm::Vuln Mdm::Vulns}.
   #
-	#   @todo MSP-3066
+  #   @todo MSP-3066
   #   @return [Array<Mdm::VulnRef>]
   has_many :vulns_refs,
            :class_name => 'Mdm::VulnRef',

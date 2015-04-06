@@ -36,38 +36,38 @@ FactoryGirl.define do
     }
   end
 
-	sequence :mdm_module_detail_disclosure_date do |n|
-		# @todo https://www.pivotaltracker.com/story/show/48450593
-		Date.today - n
-	end
+  sequence :mdm_module_detail_disclosure_date do |n|
+    # @todo https://www.pivotaltracker.com/story/show/48450593
+    Date.today - n
+  end
 
-	sequence :mdm_module_detail_description do |n|
+  sequence :mdm_module_detail_description do |n|
     "Module Description #{n}"
-	end
+  end
 
-	sequence :mdm_module_detail_license do |n|
-		"Module License v#{n}"
-	end
+  sequence :mdm_module_detail_license do |n|
+    "Module License v#{n}"
+  end
 
-	sequence :mdm_module_detail_privileged, Mdm::Module::Detail::PRIVILEGES.cycle
+  sequence :mdm_module_detail_privileged, Mdm::Module::Detail::PRIVILEGES.cycle
 
-	sequence :mdm_module_detail_mtime do |n|
-		Time.now.utc - n.seconds
-	end
+  sequence :mdm_module_detail_mtime do |n|
+    Time.now.utc - n.seconds
+  end
 
-	ordered_types = Mdm::Module::Detail::DIRECTORY_BY_TYPE.keys.sort
-	sequence :mdm_module_detail_mtype, ordered_types.cycle
+  ordered_types = Mdm::Module::Detail::DIRECTORY_BY_TYPE.keys.sort
+  sequence :mdm_module_detail_mtype, ordered_types.cycle
 
-	sequence :mdm_module_detail_name do |n|
-		"Module Name #{n}"
-	end
+  sequence :mdm_module_detail_name do |n|
+    "Module Name #{n}"
+  end
 
   ordered_ranks = Mdm::Module::Detail::RANK_BY_NAME.values.sort
-	sequence :mdm_module_detail_rank, ordered_ranks.cycle
+  sequence :mdm_module_detail_rank, ordered_ranks.cycle
 
   sequence :mdm_module_detail_refname do |n|
     "module/ref/name#{n}"
   end
 
-	sequence :mdm_module_detail_stance, Mdm::Module::Detail::STANCES.cycle
+  sequence :mdm_module_detail_stance, Mdm::Module::Detail::STANCES.cycle
 end

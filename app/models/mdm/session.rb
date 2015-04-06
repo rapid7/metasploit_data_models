@@ -35,11 +35,28 @@ class Mdm::Session < ActiveRecord::Base
   # @!attribute [rw] routes
   #   Routes tunneled throug this session.
   #
-  #   @return [Array<Mdm::Route>]
+  #   @return [ActiveRecord::Relation<Mdm::Route>]
   has_many :routes,
            class_name: 'Mdm::Route',
            dependent: :delete_all,
            inverse_of: :session
+
+  # @!attribute [rw] originating_module_run
+  #   Records the Metasploit modules run that created this session
+  #
+  #   @return [MetasploitDataModels::ModuleRun]
+  belongs_to :originating_module_run,
+           class_name: 'MetasploitDataModels::ModuleRun',
+           foreign_key: :module_run_id,
+           inverse_of: :spawned_session
+
+  # @!attribute [rw] target_module_runs
+  #   Records the Metasploit modules run on this session
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::ModuleRun>]
+  has_many :target_module_runs,
+           class_name: 'MetasploitDataModels::ModuleRun',
+           inverse_of: :target_session
 
   # @!attribute vuln_attempt
   #   Vulnerability attempt that created this session.

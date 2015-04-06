@@ -1,4 +1,3 @@
-require 'metasploit_data_models/match'
 # Adds a {#match match class method} to the extending class.  The extending class must define `MATCH_REGEXP`.
 #
 # @example Define `match` class method

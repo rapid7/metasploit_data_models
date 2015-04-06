@@ -16,10 +16,10 @@ class Mdm::Module::Ref < ActiveRecord::Base
   #   References with the same name attached to {Mdm::Vuln Mdm::Vulns}.
   #
   #   @return [Array<Mdm::Ref>]
-	has_many :refs,
-					 :class_name => 'Mdm::Ref',
-					 :foreign_key => :name,
-					 :primary_key => :name
+  has_many :refs,
+           :class_name => 'Mdm::Ref',
+           :foreign_key => :name,
+           :primary_key => :name
 
   #
   # Attributes

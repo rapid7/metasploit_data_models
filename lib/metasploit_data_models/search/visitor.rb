@@ -1,8 +1,11 @@
-module MetasploitDataModels
-  module Search
-    # Namespace for all visitors of `Metasploit::Model::Search::Query` that help search {Mdm} models.
-    module Visitor
+# Namespace for all visitors of `Metasploit::Model::Search::Query` that help search {Mdm} models.
+module MetasploitDataModels::Search::Visitor
+  extend ActiveSupport::Autoload
 
-    end
-  end
+  autoload :Attribute
+  autoload :Includes
+  autoload :Joins
+  autoload :Method
+  autoload :Relation
+  autoload :Where
 end

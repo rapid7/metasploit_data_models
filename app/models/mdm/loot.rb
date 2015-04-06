@@ -33,6 +33,15 @@ class Mdm::Loot < ActiveRecord::Base
              class_name: 'Mdm::Host',
              inverse_of: :loots
 
+  # @!attribute [rw] module_run
+  #   The run of Metasploit content that acquired the loot
+  #
+  #   @return [MetasploitDataModels::ModuleRun]
+  belongs_to :module_run,
+             class_name: 'MetasploitDataModels::ModuleRun',
+             foreign_key: :module_run_id,
+             inverse_of: :loots
+
   # @!attribute [rw] service
   #   The service running on the {#host} from which the loot was gathered.
   #
