@@ -11,7 +11,7 @@ class MetasploitDataModels::Engine < Rails::Engine
 
   # Remove ActiveSupport::Dependencies loading paths to save time during constant resolution and to ensure that
   # metasploit_data_models is properly declaring all autoloads and not falling back on ActiveSupport::Dependencies
-  config.paths.values do |path|
+  config.paths.each_value do |path|
     path.skip_autoload!
     path.skip_autoload_once!
     path.skip_eager_load!
