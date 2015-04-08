@@ -5,6 +5,7 @@ gemspec
 
 gem 'metasploit-concern', :github => 'rapid7/metasploit-concern', :branch => 'staging/rails-4.0'
 gem 'metasploit-model', :github => 'rapid7/metasploit-model', :branch => 'staging/rails-4.0'
+gem 'protected_attributes', '~> 1.0.9'
 
 group :development do
   gem 'metasploit-erd', :github => 'rapid7/metasploit-erd', :branch => 'staging/rails-4.0'
