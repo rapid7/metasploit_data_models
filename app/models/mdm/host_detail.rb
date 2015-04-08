@@ -9,6 +9,23 @@ class Mdm::HostDetail < ActiveRecord::Base
              inverse_of: :host_details
 
   #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :src, :nx_site_name, :nx_site_importance, :nx_scan_template
+                  :nx_risk_score
+  
+  # Foreign Keys
+  
+  attr_accessible :host_id, :nx_console_id, :nx_device_id
+  
+  # Model Associations
+  
+  attr_accessible :host
+  
+  #
   # Validations
   #
 

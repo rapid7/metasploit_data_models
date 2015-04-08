@@ -1,7 +1,7 @@
 # A session opened on a {#host} using an {#via_exploit exploit} and controlled through a {#via_payload payload} to
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ActiveRecord::Base
-
+  
   #
   # Associations
   #
@@ -184,6 +184,24 @@ class Mdm::Session < ActiveRecord::Base
       return false
     end
   end
+
+  #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :stype, :via_exploit, :via_payload, :desc, :port, :platform,
+                  :datastore, :opened_at, :closed_at, :close_reason, :last_seen
+  
+  # Foreign Keys
+  
+  attr_accessible :host_id, :local_id
+  
+  # Model Associations
+  
+  attr_accessible :events, :exploit_attempt, :host, :routes, :vuln_attempt,
+                  :workspace, :task_sessions, :tasks
 
   private
 

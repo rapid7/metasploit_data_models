@@ -32,6 +32,18 @@ class Mdm::Module::Ref < ActiveRecord::Base
   #   @return [String]
 
   #
+  # Mass Assignment Security
+  #
+  
+  # Database Columns
+  
+  attr_accessible :name
+  
+  # Model Associations
+  
+  attr_accessible :detail, :refs
+
+  #
   # Validations
   #
 

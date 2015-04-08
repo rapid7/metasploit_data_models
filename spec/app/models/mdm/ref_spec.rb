@@ -70,4 +70,8 @@ describe Mdm::Ref do
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  context 'mass assignment security' do
+    it { should allow_mass_assignment_of(:name) }
+  end
 end
