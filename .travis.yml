@@ -7,3 +7,5 @@ rvm:
   - 2.1
   - jruby-1.7.17
 sudo: false
+addons:
+  postgresql: '9.3'
