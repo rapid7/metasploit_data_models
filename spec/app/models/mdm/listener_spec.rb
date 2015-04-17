@@ -11,8 +11,8 @@ describe Mdm::Listener do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:created_at).of_type(:datetime)}
+      it { should have_db_column(:updated_at).of_type(:datetime)}
     end
 
     context 'columns' do
