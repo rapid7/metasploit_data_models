@@ -53,7 +53,7 @@ class Mdm::Workspace < ActiveRecord::Base
   
   # Foreign Keys
   
-  attr_accessible :owner_id
+  attr_accessible :owner_id, :user_ids
   
   # Model Associations
   
