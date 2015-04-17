@@ -196,7 +196,7 @@ class Mdm::Session < ActiveRecord::Base
   
   # Foreign Keys
   
-  attr_accessible :host_id, :local_id
+  attr_accessible :host_id, :local_id, :campaign_id
   
   # Model Associations
   

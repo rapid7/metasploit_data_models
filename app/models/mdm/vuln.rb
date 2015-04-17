@@ -179,7 +179,7 @@ class Mdm::Vuln < ActiveRecord::Base
   
   attr_accessible :exploit_attempts, :host, :service, :vuln_attempts,
                   :vuln_details, :vulns_refs, :refs, :module_refs,
-                  :module_details
+                  :module_details, :nexpose_vulnerability_definition
 
   #
   # Validations

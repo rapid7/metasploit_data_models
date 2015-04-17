@@ -466,7 +466,7 @@ class Mdm::Host < ActiveRecord::Base
                   :exploited_hosts, :host_details, :hosts_tags, :loots, :notes,
                   :services, :sessions, :vulns, :workspace, :tags, :creds,
                   :service_notes, :web_sites, :tasks, :vuln_refs, :refs,
-                  :module_refs, :module_details
+                  :module_refs, :module_details, :nexpose_asset
   
   #
   # Validations
