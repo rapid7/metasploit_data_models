@@ -9,7 +9,7 @@ class AddCampaignsAndTemplates < ActiveRecord::Migration
 			t.text      :prefs
 			t.integer   :status, :default => 0
 			t.timestamp :started_at
-			t.timestamps null: false
+			t.timestamps
 		end
 
 		create_table :email_templates do |t|

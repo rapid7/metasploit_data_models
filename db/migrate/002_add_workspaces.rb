@@ -3,7 +3,7 @@ class AddWorkspaces < ActiveRecord::Migration
 	def self.up
 		create_table :workspaces do |t|
 			t.string    :name
-			t.timestamps null: false
+			t.timestamps
 		end
 
 		change_table :hosts do |t|
@@ -16,7 +16,7 @@ class AddWorkspaces < ActiveRecord::Migration
 		# This was broken after 018_add_workspace_user_info was introduced
 		# because of the new boundary column.  For some reason, the
 		# find_or_create_by_name that .default eventually calls here tries to
-		# create a record with the boundary field that doesn't exist yet.
+		# create a record with the boundary field that doesn't exist yet.  
 		# See #1724
 		#
 		#w = Msf::DBManager::Workspace.default

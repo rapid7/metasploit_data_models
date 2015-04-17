@@ -8,7 +8,7 @@ class AddLoots < ActiveRecord::Migration
 			t.string    :ltype, :limit => 512
 			t.string    :path, :limit  => 1024
 			t.text      :data
-			t.timestamps null: false
+			t.timestamps
 		end
 	end
 

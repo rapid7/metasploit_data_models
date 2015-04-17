@@ -3,7 +3,7 @@ class CreateTaskCreds < ActiveRecord::Migration
     create_table :task_creds do |t|
       t.references :task, :null => false
       t.references :cred, :null => false
-      t.timestamps null: false
+      t.timestamps
     end
   end
 end

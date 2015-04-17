@@ -7,7 +7,7 @@ class AddReports < ActiveRecord::Migration
 			t.string    :rtype
 			t.string    :path, :limit  => 1024
 			t.text      :options
-			t.timestamps null: false
+			t.timestamps
 		end
 	end
 

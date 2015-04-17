@@ -9,7 +9,7 @@ class AddHostTags < ActiveRecord::Migration
 			t.boolean  :report_summary, :null => false, :default => false
 			t.boolean  :report_detail, :null => false, :default => false
 			t.boolean  :critical, :null => false, :default => false
-			t.timestamps null: false
+			t.timestamps
 		end
 
 		create_table :hosts_tags, :id => false do |t|
