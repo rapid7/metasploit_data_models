@@ -16,19 +16,6 @@ class Mdm::NexposeConsole < ActiveRecord::Base
   before_save :strip_protocol
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :enabled, :owner, :address, :port, :username, :password,
-                  :status, :version, :cert, :cached_sites, :name
-  
-  # Model Associations
-  
-  attr_accessible :vuln_details
-  
-  #
   # Serializations
   #
 

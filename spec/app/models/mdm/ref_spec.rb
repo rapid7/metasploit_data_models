@@ -71,7 +71,4 @@ describe Mdm::Ref do
     end
   end
 
-  context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:name) }
-  end
 end

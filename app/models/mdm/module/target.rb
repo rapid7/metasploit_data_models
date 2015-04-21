@@ -8,18 +8,6 @@ class Mdm::Module::Target < ActiveRecord::Base
   belongs_to :detail, :class_name => 'Mdm::Module::Detail'
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :index, :name
-  
-  # Model Associations
-  
-  attr_accessible :detail
-
-  #
   # Validators
   #
 

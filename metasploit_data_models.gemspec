@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', *rails_version_constraints
   s.add_runtime_dependency 'activesupport', *rails_version_constraints
-  s.add_runtime_dependency 'protected_attributes', '~> 1.0.9'
   s.add_runtime_dependency 'metasploit-concern'
   s.add_runtime_dependency 'metasploit-model'
   s.add_runtime_dependency 'railties', *rails_version_constraints

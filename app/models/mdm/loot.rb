@@ -140,22 +140,6 @@ class Mdm::Loot < ActiveRecord::Base
 
   serialize :data, MetasploitDataModels::Base64Serializer.new
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :ltype, :path, :data, :content_type, :name, :info
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id, :host_id, :service_id
-  
-  # Model Associations
-  
-  attr_accessible :exploit_attempt, :host, :service, :vuln_attempt, :workspace
-  
   private
 
   # Deletes {#path} from disk.

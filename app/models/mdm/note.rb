@@ -103,22 +103,6 @@ class Mdm::Note < ActiveRecord::Base
 
   serialize :data, ::MetasploitDataModels::Base64Serializer.new
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :ntype, :critical, :seen, :data
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id, :service_id, :host_id
-  
-  # Model Associations
-  
-  attr_accessible :host, :service, :workspace
-  
   private
 
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} if the note is a

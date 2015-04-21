@@ -38,22 +38,6 @@ class Mdm::Tag < ActiveRecord::Base
                    type: :string
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :name, :desc, :report_summary, :report_detail, :critical
-  
-  # Foreign Keys
-  
-  attr_accessible :user_id
-  
-  # Model Associations
-  
-  attr_accessible :hosts_tags, :user, :hosts
-  
-  #
   # Validations
   #
 

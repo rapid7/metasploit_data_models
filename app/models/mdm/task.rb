@@ -1,11 +1,5 @@
 class Mdm::Task < ActiveRecord::Base
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :created_by, :module, :completed_at, :path, :info, :description, :progress, :options, :error, :result, :module_uuid, :settings, :presenter
-  
-  #
   # Callbacks
   #
 
@@ -107,9 +101,7 @@ class Mdm::Task < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Session>
   has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
-
-
-
+  
 
   #
   # Serializations

@@ -8,18 +8,6 @@ class Mdm::Module::Author < ActiveRecord::Base
   belongs_to :detail, :class_name => 'Mdm::Module::Detail'
   
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :name, :email
-  
-  # Model Associations
-  
-  attr_accessible :detail
-  
-  #
   # Validations
   #
 

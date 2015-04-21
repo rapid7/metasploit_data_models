@@ -31,18 +31,6 @@ class Mdm::HostTag < ActiveRecord::Base
   after_destroy :destroy_orphan_tag
   
   #
-  # Mass Assignment Security
-  #
-  
-  # Foreign Keys
-  
-  attr_accessible :host_id, :tag_id
-  
-  # Model Associations
-  
-  attr_accessible :host, :tag
-  
-  #
   # Instance Methods
   #
 

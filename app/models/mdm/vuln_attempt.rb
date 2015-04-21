@@ -42,23 +42,6 @@ class Mdm::VulnAttempt < ActiveRecord::Base
   #   @return [false] if {#vuln} was not exploited.
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :attempted_at, :exploited, :fail_reason, :username, :module
-                  :fail_detail
-  
-  # Foreign Keys
-  
-  attr_accessible :vuln_id, :session_id, :loot_id
-  
-  # Model Associations
-  
-  attr_accessible :loot, :session, :vuln
-
-  #
   # Validations
   #
 
