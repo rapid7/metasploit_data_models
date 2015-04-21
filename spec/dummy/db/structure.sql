@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -68,8 +69,8 @@ CREATE TABLE automatic_exploitation_match_results (
     match_id integer,
     run_id integer,
     state character varying(255) NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -100,8 +101,8 @@ CREATE TABLE automatic_exploitation_match_sets (
     id integer NOT NULL,
     workspace_id integer,
     user_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -133,8 +134,8 @@ CREATE TABLE automatic_exploitation_matches (
     module_detail_id integer,
     state character varying(255),
     nexpose_data_vulnerability_definition_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     match_set_id integer,
     matchable_type character varying(255),
     matchable_id integer,
@@ -170,8 +171,8 @@ CREATE TABLE automatic_exploitation_runs (
     workspace_id integer,
     user_id integer,
     match_set_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -885,8 +886,8 @@ CREATE TABLE module_runs (
     trackable_type character varying(255),
     user_id integer,
     username character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
