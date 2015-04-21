@@ -78,8 +78,8 @@ describe Mdm::WebVuln do
       it { should have_db_column(:web_site_id).of_type(:integer).with_options(:null => false) }
 
       context 'timestamps' do
-        it { should have_db_column(:created_at).of_type(:datetime)}
-        it { should have_db_column(:updated_at).of_type(:datetime)}
+        it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+        it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
       end
     end
 

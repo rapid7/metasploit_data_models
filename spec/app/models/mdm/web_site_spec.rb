@@ -13,8 +13,8 @@ describe Mdm::WebSite do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime)}
-      it { should have_db_column(:updated_at).of_type(:datetime)}
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
@@ -42,7 +42,7 @@ describe Mdm::WebSite do
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
-
+  
   context 'associations' do
     it { should belong_to(:service).class_name('Mdm::Service') }
     it { should have_many(:web_forms).class_name('Mdm::WebForm').dependent(:destroy) }

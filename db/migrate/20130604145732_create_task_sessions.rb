@@ -3,7 +3,7 @@ class CreateTaskSessions < ActiveRecord::Migration
     create_table :task_sessions do |t|
       t.references :task, :null => false
       t.references :session, :null => false
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

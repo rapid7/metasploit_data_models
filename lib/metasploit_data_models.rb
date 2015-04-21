@@ -17,7 +17,6 @@ require 'metasploit/concern'
 require 'metasploit/model'
 require 'arel-helpers'
 require 'postgres_ext'
-require 'protected_attributes'
 
 #
 # Project

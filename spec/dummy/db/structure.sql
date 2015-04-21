@@ -3,7 +3,6 @@
 --
 
 SET statement_timeout = 0;
-SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -36,8 +35,8 @@ SET default_with_oids = false;
 CREATE TABLE api_keys (
     id integer NOT NULL,
     token text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -236,8 +235,8 @@ ALTER SEQUENCE clients_id_seq OWNED BY clients.id;
 CREATE TABLE creds (
     id integer NOT NULL,
     service_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     "user" character varying(2048),
     pass character varying(4096),
     active boolean DEFAULT true,
@@ -356,8 +355,8 @@ CREATE TABLE exploited_hosts (
     session_uuid character varying(8),
     name character varying(2048),
     payload character varying(2048),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -505,8 +504,8 @@ ALTER SEQUENCE hosts_tags_id_seq OWNED BY hosts_tags.id;
 
 CREATE TABLE listeners (
     id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     workspace_id integer DEFAULT 1 NOT NULL,
     task_id integer,
     enabled boolean DEFAULT true,
@@ -550,8 +549,8 @@ CREATE TABLE loots (
     ltype character varying(512),
     path character varying(1024),
     data text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     content_type character varying(255),
     name text,
     info text,
@@ -584,8 +583,8 @@ ALTER SEQUENCE loots_id_seq OWNED BY loots.id;
 
 CREATE TABLE macros (
     id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     owner text,
     name text,
     description text,
@@ -947,8 +946,8 @@ ALTER SEQUENCE module_targets_id_seq OWNED BY module_targets.id;
 
 CREATE TABLE nexpose_consoles (
     id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     enabled boolean DEFAULT true,
     owner text,
     address text,
@@ -1026,8 +1025,8 @@ ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
 
 CREATE TABLE profiles (
     id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     active boolean DEFAULT true,
     name text,
     owner text,
@@ -1096,8 +1095,8 @@ CREATE TABLE report_templates (
     created_by character varying(255),
     path character varying(1024),
     name text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1131,8 +1130,8 @@ CREATE TABLE reports (
     rtype character varying(255),
     path character varying(1024),
     options text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     downloaded_at timestamp without time zone,
     task_id integer,
     name character varying(63)
@@ -1323,8 +1322,8 @@ CREATE TABLE tags (
     report_summary boolean DEFAULT false NOT NULL,
     report_detail boolean DEFAULT false NOT NULL,
     critical boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1355,8 +1354,8 @@ CREATE TABLE task_creds (
     id integer NOT NULL,
     task_id integer NOT NULL,
     cred_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1387,8 +1386,8 @@ CREATE TABLE task_hosts (
     id integer NOT NULL,
     task_id integer NOT NULL,
     host_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1419,8 +1418,8 @@ CREATE TABLE task_services (
     id integer NOT NULL,
     task_id integer NOT NULL,
     service_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1451,8 +1450,8 @@ CREATE TABLE task_sessions (
     id integer NOT NULL,
     task_id integer NOT NULL,
     session_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1491,8 +1490,8 @@ CREATE TABLE tasks (
     progress integer,
     options text,
     error text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     result text,
     module_uuid character varying(8),
     settings bytea
@@ -1528,8 +1527,8 @@ CREATE TABLE users (
     crypted_password character varying(255),
     password_salt character varying(255),
     persistence_token character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     fullname character varying(255),
     email character varying(255),
     phone character varying(255),
@@ -1719,8 +1718,8 @@ ALTER SEQUENCE vulns_refs_id_seq OWNED BY vulns_refs.id;
 CREATE TABLE web_forms (
     id integer NOT NULL,
     web_site_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     path text,
     method character varying(1024),
     params text,
@@ -1754,8 +1753,8 @@ ALTER SEQUENCE web_forms_id_seq OWNED BY web_forms.id;
 CREATE TABLE web_pages (
     id integer NOT NULL,
     web_site_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     path text,
     query text,
     code integer NOT NULL,
@@ -1796,8 +1795,8 @@ ALTER SEQUENCE web_pages_id_seq OWNED BY web_pages.id;
 CREATE TABLE web_sites (
     id integer NOT NULL,
     service_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     vhost character varying(2048),
     comments text,
     options text
@@ -1830,8 +1829,8 @@ ALTER SEQUENCE web_sites_id_seq OWNED BY web_sites.id;
 CREATE TABLE web_vulns (
     id integer NOT NULL,
     web_site_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     path text NOT NULL,
     method character varying(1024) NOT NULL,
     params text NOT NULL,
@@ -1963,8 +1962,8 @@ CREATE TABLE workspace_members (
 CREATE TABLE workspaces (
     id integer NOT NULL,
     name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     boundary character varying(4096),
     description character varying(4096),
     owner_id integer,

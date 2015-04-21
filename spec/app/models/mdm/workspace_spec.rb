@@ -75,8 +75,8 @@ describe Mdm::Workspace do
     it { should have_db_column(:owner_id).of_type(:integer) }
 
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime)}
-      it { should have_db_column(:updated_at).of_type(:datetime)}
+      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
   end
 

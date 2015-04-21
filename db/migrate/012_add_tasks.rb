@@ -12,7 +12,7 @@ class AddTasks < ActiveRecord::Migration
 			t.integer   :progress
 			t.text      :options
 			t.text      :error
-			t.timestamps
+			t.timestamps null: false
 		end
 	end
 

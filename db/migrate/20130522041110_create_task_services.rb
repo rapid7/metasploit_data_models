@@ -3,7 +3,7 @@ class CreateTaskServices < ActiveRecord::Migration
     create_table :task_services do |t|
       t.references :task, :null => false
       t.references :service, :null => false
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end
