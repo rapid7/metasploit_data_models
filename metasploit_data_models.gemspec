@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   # ---- Dependencies ----
   # documentation
   s.add_development_dependency 'metasploit-yard', '~> 1.0'
+  s.add_development_dependency 'yard-activerecord', '~> 0.0.14'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
   s.add_development_dependency 'yard-metasploit-erd', '~> 0.1.0'
 
