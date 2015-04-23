@@ -44,7 +44,7 @@ Gem::Specification.new do |s|
   # os fingerprinting
   s.add_runtime_dependency 'recog', '~> 1.0'
 
-  s.add_runtime_dependency 'metasploit-concern', '0.4.0'
+  s.add_runtime_dependency 'metasploit-concern', '0.5.0'
   s.add_runtime_dependency 'metasploit-model', '~> 0.30.0'
   s.add_runtime_dependency 'railties', '< 4.0.0'
 
