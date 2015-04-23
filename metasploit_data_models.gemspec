@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'recog', '~> 1.0'
 
   s.add_runtime_dependency 'metasploit-concern', '0.4.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.29.0'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.30.0'
   s.add_runtime_dependency 'railties', '< 4.0.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
