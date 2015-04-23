@@ -29,6 +29,9 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.1'
 
   # ---- Dependencies ----
+  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  s.add_development_dependency 'yard-metasploit-erd', '~> 0.1.0'
+
   s.add_development_dependency 'rake'
 
   # documentation
