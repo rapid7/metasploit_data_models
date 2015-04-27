@@ -9,7 +9,7 @@ shared_examples_for 'coerces inet column type to string' do |column|
     end
 
     it 'should cast the column as a string when fetching from the database' do
-      expect(subject.send(column)).to equal(address)
+      expect(subject.send(column)).to eq(address)
     end
   end
 end
