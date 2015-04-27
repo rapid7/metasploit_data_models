@@ -69,12 +69,9 @@ class Mdm::Host < ActiveRecord::Base
   #   The IP address of this host. Necessary to avoid coercion to an `IPAddr` object.
   #
   #   @return [String]
-
-  composed_of :address,
-              class_name: 'String',
-              mapping: %w(address to_s),
-              constructor: Proc.new { |address| address.to_s },
-              converter: Proc.new { |address| address }
+  def address
+    self[:address].to_s
+  end
 
   #
   # Associations
