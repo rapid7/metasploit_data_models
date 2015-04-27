@@ -201,6 +201,10 @@ module Mdm::Host::OperatingSystemNormalization
     host.save if host.changed?
   end
 
+  # Recog matches for the `s` service.
+  #
+  # @param s [Mdm::Service]
+  # @return [Array<Hash>] Keys will be host, service, and os attributes
   def recog_matches_for_service(s)
     #
     # We assume that the service.info field contains certain types of probe
@@ -242,6 +246,9 @@ module Mdm::Host::OperatingSystemNormalization
     matches
   end
 
+  # Recog matches for the fingerprint in `note`.
+  #
+  # @return [Array<Hash>] Keys will be host, service, and os attributes
   def recog_matches_for_note(note)
     # Skip notes that are missing the correct structure or have been blacklisted
     return [] if not validate_fingerprint_data(note)
