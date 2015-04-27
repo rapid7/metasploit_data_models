@@ -1,6 +1,6 @@
 class Mdm::Tag < ActiveRecord::Base
   include Metasploit::Model::Search
-  
+
   #
   # Associations
   #

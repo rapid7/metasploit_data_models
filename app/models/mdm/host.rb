@@ -62,6 +62,21 @@ class Mdm::Host < ActiveRecord::Base
   ]
 
   #
+  # Aggregations
+  #
+
+  # @!attribute [rw] address
+  #   The IP address of this host. Necessary to avoid coercion to an `IPAddr` object.
+  #
+  #   @return [String]
+
+  composed_of :address,
+              class_name: 'String',
+              mapping: %w(address to_s),
+              constructor: Proc.new { |address| address.to_s },
+              converter: Proc.new { |address| address }
+
+  #
   # Associations
   #
 
@@ -560,7 +575,7 @@ class Mdm::Host < ActiveRecord::Base
       else
         potential_ip = IPAddr.new(address)
       end
-      
+
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true
