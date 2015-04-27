@@ -24,7 +24,7 @@ class Mdm::TaskHost < ActiveRecord::Base
   #   @return [DateTime]
 
   # @!attribute updated_at
-  #   The last time this task cred was updated.
+  #   The last time this task host was updated.
   #
   #   @return [DateTime]
 
