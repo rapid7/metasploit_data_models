@@ -1,3 +1,5 @@
+addons:
+  postgresql: '9.3'
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - bundle exec rake db:setup
@@ -6,5 +8,4 @@ language: ruby
 rvm:
   - 2.1
 sudo: false
-addons:
-  postgresql: '9.3'
+script: bundle exec rake spec yard
