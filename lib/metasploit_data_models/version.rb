@@ -2,9 +2,9 @@ module MetasploitDataModels
   # Holds components of {VERSION} as defined by {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0}.
   module Version
     # The major version number.
-    MAJOR = 0
+    MAJOR = 1
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 24
+    MINOR = 0
     # The patch number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 0
     # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers.
