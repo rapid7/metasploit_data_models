@@ -3,13 +3,10 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-concern', :github => 'rapid7/metasploit-concern', :branch => 'staging/rails-4.0'
-gem 'metasploit-model', :github => 'rapid7/metasploit-model', :branch => 'staging/rails-4.0'
-
 group :development do
-  gem 'metasploit-erd', :github => 'rapid7/metasploit-erd', :branch => 'staging/rails-4.0'
+  gem 'metasploit-erd', '1.0.0.pre.rails.pre.4.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', :github => 'rapid7/yard-metasploit-erd', :branch => 'staging/rails-4.0'
+  gem 'yard-metasploit-erd', '1.0.0.pre.rails.pre.4.0'
 end
 
 # used by dummy application
