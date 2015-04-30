@@ -4,7 +4,7 @@ require 'metasploit_data_models/version'
 
 Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
-  s.version     = MetasploitDataModels::GEM_VERSION
+  s.version     = MetasploitDataModels::VERSION
   s.authors     = [
       'Samuel Huckins',
       'Luke Imhoff',

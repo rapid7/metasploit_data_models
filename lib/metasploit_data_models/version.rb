@@ -8,7 +8,7 @@ module MetasploitDataModels
     # The patch number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 0
     # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers.
-    PRERELEASE = 'rails-4.0a'
+    PRERELEASE = 'rails-4.0b'
 
     # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
     # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
@@ -25,18 +25,7 @@ module MetasploitDataModels
       version
     end
 
-    # The full gem version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the {PRERELEASE} in the
-    # {http://guides.rubygems.org/specification-reference/#version RubyGems versioning} format.
-    #
-    # @return [String] '{MAJOR}.{MINOR}.{PATCH}' on master.  '{MAJOR}.{MINOR}.{PATCH}.{PRERELEASE}' on any branch
-    #   other than master.
-    def self.gem
-      full.gsub('-', '.pre.')
-    end
   end
-
-  # @see Version.gem
-  GEM_VERSION = Version.gem
 
   # @see Version.full
   VERSION = Version.full
