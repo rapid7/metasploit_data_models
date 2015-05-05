@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Mdm::Module::Target, type: :model do
 
   it_should_behave_like 'Metasploit::Concern.run'

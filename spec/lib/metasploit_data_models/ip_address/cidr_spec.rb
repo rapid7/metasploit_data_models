@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::CIDR do
   subject(:including_class_instance) {
     including_class.new(

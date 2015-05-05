@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
   subject(:range) {
     described_class.new(

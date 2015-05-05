@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe PasswordIsStrongValidator do
 
   subject(:password_validator) do

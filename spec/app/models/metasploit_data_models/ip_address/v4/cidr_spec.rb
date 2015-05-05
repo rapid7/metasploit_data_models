@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
   subject(:cidr) {
     described_class.new(

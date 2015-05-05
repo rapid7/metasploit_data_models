@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::Version do
   context 'CONSTANTS' do
     context 'MAJOR' do

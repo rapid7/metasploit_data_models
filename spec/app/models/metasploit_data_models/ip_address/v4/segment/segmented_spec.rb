@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::V4::Segmented, type: :model do
   context 'CONSTANTS' do
     context 'SEGMENT_COUNT' do

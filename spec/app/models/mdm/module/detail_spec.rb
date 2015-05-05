@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Mdm::Module::Detail, type: :model do
   subject(:detail) do
     FactoryGirl.build(

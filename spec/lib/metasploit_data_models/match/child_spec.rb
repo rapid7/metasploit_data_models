@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::Match::Child do
   let(:extending_class) {
     # capture as local for Class.new block scope

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::Range do
   subject(:range) {
     range_class.new

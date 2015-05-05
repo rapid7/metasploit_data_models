@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :model do
   subject(:nmap) {
     described_class.new(

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::Search::Visitor::Method, type: :model do
   subject(:visitor) do
     described_class.new

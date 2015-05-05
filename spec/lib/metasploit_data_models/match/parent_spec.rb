@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::Match::Parent do
   let(:including_class) {
     described_class = self.described_class

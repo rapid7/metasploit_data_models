@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :model do
   subject(:single) {
     described_class.new(

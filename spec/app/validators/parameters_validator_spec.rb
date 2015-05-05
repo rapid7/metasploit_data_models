@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ParametersValidator do
   subject(:parameters_validator) do
     described_class.new(

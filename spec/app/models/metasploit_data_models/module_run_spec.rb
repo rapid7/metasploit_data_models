@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe MetasploitDataModels::ModuleRun, type: :model do
 
   subject(:module_run){FactoryGirl.build(:metasploit_data_models_module_run)}
