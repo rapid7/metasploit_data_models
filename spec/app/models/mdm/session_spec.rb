@@ -101,17 +101,17 @@ RSpec.describe Mdm::Session, type: :model do
     context '#upgradeable?' do
       it 'should return true for windows shells' do
         win_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
-        win_shell.upgradeable?.should == true
+        expect(win_shell.upgradeable?).to eq(true)
       end
 
       it 'should return false for non-windows shells' do
         linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
-        linux_shell.upgradeable?.should == false
+        expect(linux_shell.upgradeable?).to eq(false)
       end
 
       it 'should return false for Windows Meterpreter Sessions' do
         win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
-        win_meterp.upgradeable?.should == false
+        expect(win_meterp.upgradeable?).to eq(false)
       end
     end
   end

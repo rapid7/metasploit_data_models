@@ -232,14 +232,14 @@ RSpec.describe Mdm::Cred, type: :model do
       it 'should behave the same for public keys as private keys' do
         pubkey2 = FactoryGirl.create(:mdm_cred, :service => service, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
         pubkey3 = FactoryGirl.create(:mdm_cred, :service => service, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_pubkey', :proof => "KEY=66:d4:22:6e:88:d6:74:A1:44:3e:d6:d5:AA:89:73:8b")
-        pubkey2.ssh_key_matches?(ssh_pubkey).should == true
-        pubkey2.ssh_key_matches?(pubkey3).should == false
+        expect(pubkey2.ssh_key_matches?(ssh_pubkey)).to eq(true)
+        expect(pubkey2.ssh_key_matches?(pubkey3)).to eq(false)
       end
 
       it 'should always return false for non ssh key creds' do
         cred2 = FactoryGirl.create(:mdm_cred, :service => other_service, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
         cred3 = FactoryGirl.create(:mdm_cred, :service => other_service, :ptype => 'password', :user => 'msfadmin', :pass => 'msfadmin' )
-        cred2.ssh_key_matches?(cred3).should == false
+        expect(cred2.ssh_key_matches?(cred3)).to eq(false)
       end
     end
 

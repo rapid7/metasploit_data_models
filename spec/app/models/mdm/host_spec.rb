@@ -564,7 +564,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it "should not have an arch key if we don't know the arch" do
           result = host.send(:parse_windows_os_str, 'Windows')
-          result.has_key?('os.arch').should == false
+          expect(result.has_key?('os.arch')).to eq(false)
         end
       end
 
@@ -708,17 +708,17 @@ RSpec.describe Mdm::Host, type: :model do
 
       it 'should return false for an empty hash' do
         fingerprint= FactoryGirl.build(:mdm_note, :data => {})
-        host.validate_fingerprint_data(fingerprint).should == false
+        expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
 
       it 'should return false for postgresql fingerprints' do
         fingerprint= FactoryGirl.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
-        host.validate_fingerprint_data(fingerprint).should == false
+        expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
 
       it 'should return false if the fingerprint does not contain a hash' do
         fingerprint= FactoryGirl.build(:mdm_note, :data => 'this is not a fingerprint')
-        host.validate_fingerprint_data(fingerprint).should == false
+        expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
     end
 
