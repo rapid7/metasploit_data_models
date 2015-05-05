@@ -71,7 +71,7 @@ RSpec.describe Mdm::Tag, type: :model do
     context '#to_s' do
       it 'should return the name of the tag as a string' do
         mytag = FactoryGirl.build(:mdm_tag, :name => 'mytag')
-        mytag.to_s.should == 'mytag'
+        expect(mytag.to_s).to eq('mytag')
       end
     end
   end

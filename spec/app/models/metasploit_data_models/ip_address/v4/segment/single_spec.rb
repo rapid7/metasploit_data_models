@@ -269,7 +269,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should pass through Integer' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
 
@@ -283,7 +283,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should convert String to Integer' do
-        value.should == integer
+        expect(value).to eq(integer)
       end
     end
 
@@ -301,7 +301,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should pass through the full value' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
 
@@ -315,7 +315,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should pass through Float' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
   end

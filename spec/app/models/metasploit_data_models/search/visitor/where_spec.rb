@@ -163,7 +163,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
             end
 
             it 'should match module_instances.name with ILIKE' do
-              visit.to_sql.should == "\"hosts\".\"name\" ILIKE '%#{name}%'"
+              expect(visit.to_sql).to eq("\"hosts\".\"name\" ILIKE '%#{name}%'")
             end
           end
 
@@ -177,7 +177,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
             end
 
             it 'should match module_actions.name with ILIKE' do
-              visit.to_sql.should == "\"services\".\"name\" ILIKE '%#{name}%'"
+              expect(visit.to_sql).to eq("\"services\".\"name\" ILIKE '%#{name}%'")
             end
           end
         end

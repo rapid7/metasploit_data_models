@@ -21,6 +21,6 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
     visitor.should_receive(:visit).with(node).and_call_original
     visitor.stub(:visit).with(operator).and_return(operator_visit)
 
-    visit.should == operator_visit
+    expect(visit).to eq(operator_visit)
   end
 end

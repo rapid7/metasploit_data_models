@@ -30,7 +30,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
 
   context 'CONSTANTS' do
     it 'should define DEFAULT' do
-      described_class::DEFAULT.should == default
+      expect(described_class::DEFAULT).to eq(default)
     end
 
     context 'LOADERS' do
@@ -38,28 +38,28 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
         first = described_class::LOADERS[0]
         deserialized = first.call(base64_marshaled)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
       it 'should fallback to the old YAML format second' do
         second = described_class::LOADERS[1]
         deserialized = second.call(yaml)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
       it 'should finally give up and just return the value' do
         last = described_class::LOADERS.last
         deserialized = last.call(unserialized)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
     end
   end
 
   context '#default' do
     it 'should default to {}' do
-      base64_serializer.default.should == {}
+      expect(base64_serializer.default).to eq({})
     end
 
     it 'should return a duplicate' do
@@ -75,7 +75,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
     it 'should output Base64 encoded marshaled data' do
       dumped = base64_serializer.dump(unserialized)
 
-      dumped.should == base64_marshaled
+      expect(dumped).to eq(base64_marshaled)
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should set default to :default value' do
-        base64_serializer.default.should == attributes[:default]
+        expect(base64_serializer.default).to eq(attributes[:default])
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should default #default to DEFAULT' do
-        base64_serializer.default.should == default
+        expect(base64_serializer.default).to eq(default)
       end
     end
   end
@@ -135,7 +135,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
         base64_serializer.stub(:default => default)
         deserialized = base64_serializer.load(serialized)
 
-        deserialized.should == default
+        expect(deserialized).to eq(default)
       end
     end
 
@@ -143,7 +143,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       it 'should return unserialized' do
         deserialized = base64_serializer.load(base64_marshaled)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
     end
@@ -152,7 +152,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       it 'should return unserialized' do
         deserialized = base64_serializer.load(yaml)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
     end
 
@@ -165,7 +165,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
         it 'should return raw value' do
           deserialized = base64_serializer.load(raw_value)
 
-          deserialized.should == raw_value
+          expect(deserialized).to eq(raw_value)
         end
       end
     end

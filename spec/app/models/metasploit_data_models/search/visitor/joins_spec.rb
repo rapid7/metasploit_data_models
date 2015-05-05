@@ -51,7 +51,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             child_visits.concat(child_visit)
           end
 
-          visit.should == child_visits
+          expect(visit).to eq(child_visits)
         end
       end
     end

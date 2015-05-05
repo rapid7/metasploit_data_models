@@ -32,7 +32,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
 
   context 'CONSTANTS' do
     it 'should define CONFIDENCE_RANGE' do
-      described_class::CONFIDENCE_RANGE.should == confidence_range
+      expect(described_class::CONFIDENCE_RANGE).to eq(confidence_range)
     end
 
     it 'should define METHODS in any order' do
@@ -40,7 +40,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
     end
 
     it 'should define RISK_RANGE' do
-      described_class::RISK_RANGE.should == risk_range
+      expect(described_class::RISK_RANGE).to eq(risk_range)
     end
   end
 
@@ -297,12 +297,12 @@ RSpec.describe Mdm::WebVuln, type: :model do
     end
 
     it 'should default to []' do
-      params.should == default
+      expect(params).to eq(default)
     end
 
     it 'should return default if set to nil' do
       web_vuln.params = nil
-      web_vuln.params.should == default
+      expect(web_vuln.params).to eq(default)
     end
 
     it 'should return default if set to nil and saved' do
@@ -310,7 +310,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
       web_vuln.params = nil
       web_vuln.save!
 
-      web_vuln.params.should == default
+      expect(web_vuln.params).to eq(default)
     end
   end
 end

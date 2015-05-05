@@ -80,7 +80,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
   context 'CONSTANTS' do
     it 'should define the DEFAULT name' do
-      described_class::DEFAULT.should == default
+      expect(described_class::DEFAULT).to eq(default)
     end
   end
 
@@ -226,7 +226,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should return only Mdm::Creds from hosts in workspace' do
         found_creds = workspace.creds
 
-        found_creds.length.should == creds.length
+        expect(found_creds.length).to eq(creds.length)
 
         expect(
             found_creds.all? { |cred|
@@ -371,7 +371,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should return only Mdm::Tags from hosts in the workspace' do
         found_tags = workspace.host_tags
 
-        found_tags.length.should == tags.length
+        expect(found_tags.length).to eq(tags.length)
 
         expect(
             found_tags.all? { |tag|
@@ -404,7 +404,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         it "should remove spaces" do
           normalize
 
-          workspace.boundary.should == stripped_boundary
+          expect(workspace.boundary).to eq(stripped_boundary)
         end
       end
 
@@ -451,7 +451,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should return only Mdm::WebPages from hosts in the workspace' do
         found_web_forms = workspace.web_forms
 
-        found_web_forms.length.should == web_forms.length
+        expect(found_web_forms.length).to eq(web_forms.length)
 
         expect(
             found_web_forms.all? { |web_form|
@@ -486,7 +486,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
         found_web_sites = workspace.web_sites
 
-        found_web_sites.length.should == web_sites.count
+        expect(found_web_sites.length).to eq(web_sites.count)
 
         expect(
             found_web_sites.all? { |web_site|
@@ -527,7 +527,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
         found_web_vulns = workspace.web_vulns
 
-        found_web_vulns.length.should == web_vulns.length
+        expect(found_web_vulns.length).to eq(web_vulns.length)
 
         expect(
             found_web_vulns.all? { |web_vuln|
@@ -556,7 +556,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
         expect(
             web_forms.all? { |web_form|
-              web_form.web_site.service.host.address.should == selected_address
+              expect(web_form.web_site.service.host.address).to eq(selected_address)
             }
         ).to eq(true)
       end

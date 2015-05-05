@@ -27,7 +27,7 @@ RSpec.describe ParametersValidator do
 
   context 'CONSTANTS' do
     it 'should define TYPE_SIGNATURE_SENTENCE' do
-      described_class::TYPE_SIGNATURE_SENTENCE.should == type_signature_sentence
+      expect(described_class::TYPE_SIGNATURE_SENTENCE).to eq(type_signature_sentence)
     end
   end
 

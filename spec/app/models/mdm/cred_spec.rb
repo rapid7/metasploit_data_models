@@ -66,17 +66,19 @@ RSpec.describe Mdm::Cred, type: :model do
 
   context 'constants' do
     it 'should define the key_id regex' do
-      described_class::KEY_ID_REGEX.should == /([0-9a-fA-F:]{47})/
+      expect(described_class::KEY_ID_REGEX).to eq(/([0-9a-fA-F:]{47})/)
     end
 
     it 'should define ptypes to humanize' do
-      described_class::PTYPES.should == {
-          'read/write password' => 'password_rw',
-          'read-only password' => 'password_ro',
-          'SMB hash' => 'smb_hash',
-          'SSH private key' => 'ssh_key',
-          'SSH public key' => 'ssh_pubkey'
-      }
+      expect(described_class::PTYPES).to eq(
+                                             {
+                                                 'read/write password' => 'password_rw',
+                                                 'read-only password' => 'password_ro',
+                                                 'SMB hash' => 'smb_hash',
+                                                 'SSH private key' => 'ssh_key',
+                                                 'SSH public key' => 'ssh_pubkey'
+                                             }
+                                         )
     end
   end
 
@@ -131,44 +133,44 @@ RSpec.describe Mdm::Cred, type: :model do
     context '#ptype_human' do
       it "should return 'read/write password' for 'password_rw'" do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'password_rw')
-        cred.ptype_human.should == 'read/write password'
+        expect(cred.ptype_human).to eq('read/write password')
       end
 
       it "should return 'read-only password' for 'password_ro'" do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'password_ro')
-        cred.ptype_human.should == 'read-only password'
+        expect(cred.ptype_human).to eq('read-only password')
       end
 
       it "should return 'SMB Hash' for 'smb_hash'" do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'smb_hash')
-        cred.ptype_human.should == 'SMB hash'
+        expect(cred.ptype_human).to eq('SMB hash')
       end
 
       it "should return 'SSH private key' for 'ssh_key'" do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'ssh_key')
-        cred.ptype_human.should == 'SSH private key'
+        expect(cred.ptype_human).to eq('SSH private key')
       end
 
       it "should return 'SSH public key' for 'ssh_pubkey'" do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'ssh_pubkey')
-        cred.ptype_human.should == 'SSH public key'
+        expect(cred.ptype_human).to eq('SSH public key')
       end
     end
 
     context '#ssh_key_id' do
       it 'should return nil if not an ssh_key' do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => 'msfadmin', :ptype => 'password_rw')
-        cred.ssh_key_id.should == nil
+        expect(cred.ssh_key_id).to eq(nil)
       end
 
       it 'should return nil if proof does not contain the key id' do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "no key here")
-        cred.ssh_key_id.should == nil
+        expect(cred.ssh_key_id).to eq(nil)
       end
 
       it 'should return the key id for an ssh_key' do
         cred = FactoryGirl.build(:mdm_cred, :user => 'msfadmin', :pass => '/path/to/keyfile', :ptype => 'ssh_key', :proof => "KEY=57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a")
-        cred.ssh_key_id.should == '57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a'
+        expect(cred.ssh_key_id).to eq('57:c3:11:5d:77:c5:63:90:33:2d:c5:c4:99:78:62:7a')
       end
 
     end

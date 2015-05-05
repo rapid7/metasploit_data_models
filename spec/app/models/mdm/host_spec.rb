@@ -187,7 +187,7 @@ RSpec.describe Mdm::Host, type: :model do
                   end
 
                   host.module_details.count.should < module_details.length
-                  module_details.uniq.count.should == host.module_details.count
+                  expect(module_details.uniq.count).to eq(host.module_details.count)
                 end
               end
             end
@@ -444,122 +444,122 @@ RSpec.describe Mdm::Host, type: :model do
     context '#get_arch_from_string' do
       context "should return 'x64'" do
         it "when the string contains 'x64'" do
-          host.send(:get_arch_from_string, 'blahx64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahx64blah')).to eq('x64')
         end
 
         it "when the string contains 'X64'" do
-          host.send(:get_arch_from_string, 'blahX64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahX64blah')).to eq('x64')
         end
 
         it "when the string contains 'x86_64'" do
-          host.send(:get_arch_from_string, 'blahx86_64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahx86_64blah')).to eq('x64')
         end
 
         it "when the string contains 'X86_64'" do
-          host.send(:get_arch_from_string, 'blahX86_64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahX86_64blah')).to eq('x64')
         end
 
         it "when the string contains 'amd64'" do
-          host.send(:get_arch_from_string, 'blahamd64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x64')
         end
 
         it "when the string contains 'AMD64'" do
-          host.send(:get_arch_from_string, 'blahAMD64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahAMD64blah')).to eq('x64')
         end
 
         it "when the string contains 'aMd64'" do
-          host.send(:get_arch_from_string, 'blahamd64blah').should == 'x64'
+          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x64')
         end
       end
 
       context "should return 'x86'" do
         it "when the string contains 'x86'" do
-          host.send(:get_arch_from_string, 'blahx86blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahx86blah')).to eq('x86')
         end
 
         it "when the string contains 'X86'" do
-          host.send(:get_arch_from_string, 'blahX86blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahX86blah')).to eq('x86')
         end
 
         it "when the string contains 'i386'" do
-          host.send(:get_arch_from_string, 'blahi386blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahi386blah')).to eq('x86')
         end
 
         it "when the string contains 'I386'" do
-          host.send(:get_arch_from_string, 'blahI386blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahI386blah')).to eq('x86')
         end
 
         it "when the string contains 'i486'" do
-          host.send(:get_arch_from_string, 'blahi486blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahi486blah')).to eq('x86')
         end
 
         it "when the string contains 'i586'" do
-          host.send(:get_arch_from_string, 'blahi586blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahi586blah')).to eq('x86')
         end
 
         it "when the string contains 'i686'" do
-          host.send(:get_arch_from_string, 'blahi386blah').should == 'x86'
+          expect(host.send(:get_arch_from_string, 'blahi386blah')).to eq('x86')
         end
       end
 
       context "should return 'ppc'" do
         it "when the string contains 'PowerPC'" do
-          host.send(:get_arch_from_string, 'blahPowerPCblah').should == 'ppc'
+          expect(host.send(:get_arch_from_string, 'blahPowerPCblah')).to eq('ppc')
         end
 
         it "when the string contains 'PPC'" do
-          host.send(:get_arch_from_string, 'blahPPCblah').should == 'ppc'
+          expect(host.send(:get_arch_from_string, 'blahPPCblah')).to eq('ppc')
         end
 
         it "when the string contains 'POWER'" do
-          host.send(:get_arch_from_string, 'blahPOWERblah').should == 'ppc'
+          expect(host.send(:get_arch_from_string, 'blahPOWERblah')).to eq('ppc')
         end
 
         it "when the string contains 'ppc'" do
-          host.send(:get_arch_from_string, 'blahppcblah').should == 'ppc'
+          expect(host.send(:get_arch_from_string, 'blahppcblah')).to eq('ppc')
         end
       end
 
       context 'should return nil' do
         it 'when PowerPC is cased incorrectly' do
-          host.send(:get_arch_from_string, 'powerPC').should == nil
-          host.send(:get_arch_from_string, 'Powerpc').should == nil
+          expect(host.send(:get_arch_from_string, 'powerPC')).to eq(nil)
+          expect(host.send(:get_arch_from_string, 'Powerpc')).to eq(nil)
         end
 
         it 'when no recognized arch string is present' do
-          host.send(:get_arch_from_string, 'blahblah').should == nil
+          expect(host.send(:get_arch_from_string, 'blahblah')).to eq(nil)
         end
       end
 
       it "should return 'sparc' if the string contains SPARC, regardless of case" do
-        host.send(:get_arch_from_string, 'blahSPARCblah').should == 'sparc'
-        host.send(:get_arch_from_string, 'blahSPaRCblah').should == 'sparc'
-        host.send(:get_arch_from_string, 'blahsparcblah').should == 'sparc'
+        expect(host.send(:get_arch_from_string, 'blahSPARCblah')).to eq('sparc')
+        expect(host.send(:get_arch_from_string, 'blahSPaRCblah')).to eq('sparc')
+        expect(host.send(:get_arch_from_string, 'blahsparcblah')).to eq('sparc')
       end
 
       it "should return 'arm' if the string contains 'ARM', regardless of case" do
-        host.send(:get_arch_from_string, 'blahARMblah').should == 'arm'
-        host.send(:get_arch_from_string, 'blahArMblah').should == 'arm'
-        host.send(:get_arch_from_string, 'blaharmblah').should == 'arm'
+        expect(host.send(:get_arch_from_string, 'blahARMblah')).to eq('arm')
+        expect(host.send(:get_arch_from_string, 'blahArMblah')).to eq('arm')
+        expect(host.send(:get_arch_from_string, 'blaharmblah')).to eq('arm')
       end
 
       it "should return 'mips' if the string contains 'MIPS', regardless of case" do
-        host.send(:get_arch_from_string, 'blahMIPSblah').should == 'mips'
-        host.send(:get_arch_from_string, 'blahMiPslah').should == 'mips'
-        host.send(:get_arch_from_string, 'blahmipsblah').should == 'mips'
+        expect(host.send(:get_arch_from_string, 'blahMIPSblah')).to eq('mips')
+        expect(host.send(:get_arch_from_string, 'blahMiPslah')).to eq('mips')
+        expect(host.send(:get_arch_from_string, 'blahmipsblah')).to eq('mips')
       end
     end
 
     context '#parse_windows_os_str' do
       it 'should always return the os_name as Windows' do
         result = host.send(:parse_windows_os_str, '')
-        result['os.product'].should == 'Windows'
+        expect(result['os.product']).to eq('Windows')
       end
 
       context 'arch' do
         it 'should return a value for arch if there is one' do
           result = host.send(:parse_windows_os_str, 'Windows x64')
-          result['os.arch'].should == 'x64'
+          expect(result['os.arch']).to eq('x64')
         end
 
         it "should not have an arch key if we don't know the arch" do
@@ -571,12 +571,12 @@ RSpec.describe Mdm::Host, type: :model do
       context 'Service Pack' do
         it 'should be returned if we see Service Pack X' do
           result = host.send(:parse_windows_os_str, 'Windows XP Service Pack 1')
-          result['os.version'].should == 'SP1'
+          expect(result['os.version']).to eq('SP1')
         end
 
         it 'should be returned if we see SPX' do
           result = host.send(:parse_windows_os_str, 'Windows XP SP3')
-          result['os.version'].should == 'SP3'
+          expect(result['os.version']).to eq('SP3')
         end
       end
 
@@ -584,119 +584,119 @@ RSpec.describe Mdm::Host, type: :model do
 
          it "should appear as Windows 95 for 'Windows 95" do
           result = host.send(:parse_windows_os_str, 'Windows 95')
-          result['os.product'].should == 'Windows 95'
+          expect(result['os.product']).to eq('Windows 95')
         end
 
         it "should appear as Windows NT 3.51 for 'Windows NT 3.51" do
           result = host.send(:parse_windows_os_str, 'Windows NT 3.51')
-          result['os.product'].should == 'Windows NT 3.51'
+          expect(result['os.product']).to eq('Windows NT 3.51')
         end
 
         it "should appear as Windows NT 4.0 for 'Windows NT 4.0" do
           result = host.send(:parse_windows_os_str, 'Windows NT 4.0')
-          result['os.product'].should == 'Windows NT 4.0'
+          expect(result['os.product']).to eq('Windows NT 4.0')
         end
 
         it "should appear as Windows 98 for 'Windows 98" do
           result = host.send(:parse_windows_os_str, 'Windows 98')
-          result['os.product'].should == 'Windows 98'
+          expect(result['os.product']).to eq('Windows 98')
         end
 
         it "should appear as Windows ME for 'Windows ME" do
           result = host.send(:parse_windows_os_str, 'Windows ME')
-          result['os.product'].should == 'Windows ME'
+          expect(result['os.product']).to eq('Windows ME')
         end
 
         it "should appear as Windows 2003 for '.NET Server'" do
           result = host.send(:parse_windows_os_str, 'Windows .NET Server')
-          result['os.product'].should == 'Windows Server 2003'
+          expect(result['os.product']).to eq('Windows Server 2003')
         end
 
         it 'should be recognized for Windows XP' do
           result = host.send(:parse_windows_os_str, 'Windows XP')
-          result['os.product'].should == 'Windows XP'
+          expect(result['os.product']).to eq('Windows XP')
         end
 
         it 'should be recognized for Windows Server 2000' do
           result = host.send(:parse_windows_os_str, 'Windows 2000')
-          result['os.product'].should == 'Windows Server 2000'
+          expect(result['os.product']).to eq('Windows Server 2000')
         end
 
         it 'should be recognized for Windows Server 2003' do
           result = host.send(:parse_windows_os_str, 'Windows 2003')
-          result['os.product'].should == 'Windows Server 2003'
+          expect(result['os.product']).to eq('Windows Server 2003')
         end
 
         it 'should be recognized for Windows 2008' do
           result = host.send(:parse_windows_os_str, 'Windows 2008')
-          result['os.product'].should == 'Windows Server 2008'
+          expect(result['os.product']).to eq('Windows Server 2008')
         end
 
         it 'should be recognized for Windows 2012' do
           result = host.send(:parse_windows_os_str, 'Windows 2012')
-          result['os.product'].should == 'Windows Server 2012'
+          expect(result['os.product']).to eq('Windows Server 2012')
         end
 
         it 'should be recognized for Windows Vista' do
           result = host.send(:parse_windows_os_str, 'Windows Vista')
-          result['os.product'].should == 'Windows Vista'
+          expect(result['os.product']).to eq('Windows Vista')
         end
 
         it 'should be recognized for Windows Server 2000' do
           result = host.send(:parse_windows_os_str, 'Windows 2000 Advanced Server')
-          result['os.product'].should == 'Windows Server 2000'
+          expect(result['os.product']).to eq('Windows Server 2000')
         end
 
         it 'should be recognized for Windows 7' do
           result = host.send(:parse_windows_os_str, 'Windows 7')
-          result['os.product'].should == 'Windows 7'
+          expect(result['os.product']).to eq('Windows 7')
         end
 
         it 'should be recognized for Windows 7 Ultimate Edition' do
           result = host.send(:parse_windows_os_str, 'Windows 7 Ultimate Edition')
-          result['os.product'].should == 'Windows 7'
-          result['os.edition'].should == 'Ultimate'
+          expect(result['os.product']).to eq('Windows 7')
+          expect(result['os.edition']).to eq('Ultimate')
         end
 
         it 'should be recognized for Windows 8' do
           result = host.send(:parse_windows_os_str, 'Windows 8')
-          result['os.product'].should == 'Windows 8'
+          expect(result['os.product']).to eq('Windows 8')
         end
 
         it 'should be recognized for Windows 8.1' do
           result = host.send(:parse_windows_os_str, 'Windows 8.1')
-          result['os.product'].should == 'Windows 8.1'
+          expect(result['os.product']).to eq('Windows 8.1')
         end
 
         it 'should be recognized for Windows 8.2' do
           result = host.send(:parse_windows_os_str, 'Windows 8.2')
-          result['os.product'].should == 'Windows 8.2'
+          expect(result['os.product']).to eq('Windows 8.2')
         end
 
         it 'should be recognized as Windows XP, Build 2600, SP3' do
           result = host.send(:parse_windows_os_str, 'Windows XP (Build 2600, Service Pack 3).')
-          result['os.product'].should == 'Windows XP'
-          result['os.build'].should == '2600'
-          result['os.version'].should == 'SP3'
+          expect(result['os.product']).to eq('Windows XP')
+          expect(result['os.build']).to eq('2600')
+          expect(result['os.version']).to eq('SP3')
         end
 
         it 'should be recognized as Windows Server 2003, Build 3790' do
           result = host.send(:parse_windows_os_str, 'Windows .NET Server (Build 3790).')
-          result['os.product'].should == 'Windows Server 2003'
-          result['os.build'].should == '3790'
+          expect(result['os.product']).to eq('Windows Server 2003')
+          expect(result['os.build']).to eq('3790')
         end
 
         it 'should be recognized as Windows Server 2008, Build 6001, SP1' do
           result = host.send(:parse_windows_os_str, 'Windows 2008 (Build 6001, Service Pack 1).')
-          result['os.product'].should == 'Windows Server 2008'
-          result['os.build'].should == '6001'
-          result['os.version'].should == 'SP1'
+          expect(result['os.product']).to eq('Windows Server 2008')
+          expect(result['os.build']).to eq('6001')
+          expect(result['os.version']).to eq('SP1')
         end
 
         it 'should default to Windows <name> if all else fails' do
             result = host.send(:parse_windows_os_str, 'Windows Foobar Service Pack 3')
-            result['os.product'].should == 'Windows Foobar'
-            result['os.version'].should == 'SP3'
+            expect(result['os.product']).to eq('Windows Foobar')
+            expect(result['os.version']).to eq('SP3')
         end
       end
     end
@@ -736,81 +736,81 @@ RSpec.describe Mdm::Host, type: :model do
       it 'should set host.mac when host.mac is present' do
         match = { 'host.mac' => '00:11:22:33:44:55' }
         host.send(:apply_match_to_host, match)
-        host.mac.should == '00:11:22:33:44:55'
+        expect(host.mac).to eq('00:11:22:33:44:55')
       end
 
       it 'should set host.name when host.name is present' do
         match = { 'host.name' => 'webbyweb' }
         host.send(:apply_match_to_host, match)
-        host.name.should == 'webbyweb'
+        expect(host.name).to eq('webbyweb')
       end
 
       it 'should set host.arch when os.arch is present' do
         match = { 'os.arch' => 'x86' }
         host.send(:apply_match_to_host, match)
-        host.arch.should == 'x86'
+        expect(host.arch).to eq('x86')
       end
 
       it 'should set host.name to an escaped hex value when host.name contains high bytes' do
         match = { 'host.name' => "HighBytes\xff\xf0".force_encoding('binary') }
         host.send(:apply_match_to_host, match)
-        host.name.should == "HighBytes\\xff\\xf0"
+        expect(host.name).to eq("HighBytes\\xff\\xf0")
       end
 
       it 'should set host.purpose to client when os.product is Windows XP' do
         match = { 'os.product' => 'Windows XP' }
         host.send(:apply_match_to_host, match)
-        host.os_name.should == 'Windows XP'
-        host.purpose.should == 'client'
+        expect(host.os_name).to eq('Windows XP')
+        expect(host.purpose).to eq('client')
       end
 
       it 'should set host.purpose to server when os.product is Windows 2012' do
         match = { 'os.product' => 'Windows 2012' }
         host.send(:apply_match_to_host, match)
-        host.os_name.should == 'Windows 2012'
-        host.purpose.should == 'server'
+        expect(host.os_name).to eq('Windows 2012')
+        expect(host.purpose).to eq('server')
       end
 
       it 'should set host.purpose to printer when os.device is Print server' do
         match = { 'os.device' => 'Print server' }
         host.send(:apply_match_to_host, match)
-        host.purpose.should == 'printer'
+        expect(host.purpose).to eq('printer')
       end
 
       it 'should set host.os_lang to English when os.language is English' do
         match = { 'os.language' => 'English' }
         host.send(:apply_match_to_host, match)
-        host.os_lang.should == 'English'
+        expect(host.os_lang).to eq('English')
       end
 
       it 'should set host.os_name to Windows 8.1 when os.product is Windows 8.1' do
         match = { 'os.product' => 'Windows 8.1' }
         host.send(:apply_match_to_host, match)
-        host.os_name.should == 'Windows 8.1'
+        expect(host.os_name).to eq('Windows 8.1')
       end
 
       it 'should set host.os_name to Windows when os.product is not set and os.family is Windows' do
         match = { 'os.family' => 'Windows' }
         host.send(:apply_match_to_host, match)
-        host.os_name.should == 'Windows'
+        expect(host.os_name).to eq('Windows')
       end
 
       it 'should set host.os_flavor to Professional when os.edition is Professional' do
         match = { 'os.edition' => 'Professional' }
         host.send(:apply_match_to_host, match)
-        host.os_flavor.should == 'Professional'
+        expect(host.os_flavor).to eq('Professional')
       end
 
       it 'should set host.os_sp to SP2 when os.version is SP2' do
         match = { 'os.version' => 'SP2' }
         host.send(:apply_match_to_host, match)
-        host.os_sp.should == 'SP2'
+        expect(host.os_sp).to eq('SP2')
       end
 
       it 'should set host.os_sp to 3.2.11 when os.version is nil and linux.kernel.version is 3.2.11' do
         match = { 'linux.kernel.version' => '3.2.11' }
         host.send(:apply_match_to_host, match)
-        host.os_sp.should == '3.2.11'
+        expect(host.os_sp).to eq('3.2.11')
       end
     end
 
@@ -819,33 +819,33 @@ RSpec.describe Mdm::Host, type: :model do
       it 'should convert Service Pack X to SPX' do
         match = { 'os.version' => 'Service Pack 2' }
         result = host.send(:normalize_match, match)
-        result['os.version'].should == 'SP2'
+        expect(result['os.version']).to eq('SP2')
       end
 
       it 'should not convert No Service Pack to SP' do
         match = { 'os.version' => 'No Service Pack' }
         result = host.send(:normalize_match, match)
-        result['os.version'].should == 'No Service Pack'
+        expect(result['os.version']).to eq('No Service Pack')
       end
 
       it 'should convert Apple Mac OS X to Mac OS X' do
         match = { 'os.product' => 'Apple Mac OS X' }
         result = host.send(:normalize_match, match)
-        result['os.product'].should == 'Mac OS X'
-        result['os.vendor'].should == 'Apple'
+        expect(result['os.product']).to eq('Mac OS X')
+        expect(result['os.vendor']).to eq('Apple')
       end
 
       it 'should convert Microsoft Windows to Windows' do
         match = { 'os.product' => 'Microsoft Windows 7' }
         result = host.send(:normalize_match, match)
-        result['os.product'].should == 'Windows 7'
-        result['os.vendor'].should == 'Microsoft'
+        expect(result['os.product']).to eq('Windows 7')
+        expect(result['os.vendor']).to eq('Microsoft')
       end
 
       it 'should convert Windows Server 2012 to Windows 2012' do
         match = { 'os.product' => 'Windows Server 2012' }
         result = host.send(:normalize_match, match)
-        result['os.product'].should == 'Windows 2012'
+        expect(result['os.product']).to eq('Windows 2012')
       end
     end
 
@@ -854,55 +854,55 @@ RSpec.describe Mdm::Host, type: :model do
       it 'should detect Windows XP as a client' do
         match = { 'os.product' => 'Windows XP' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'client'
+        expect(result).to eq('client')
       end
 
       it 'should detect Windows 8.1 as a client' do
         match = { 'os.product' => 'Windows 8.1' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'client'
+        expect(result).to eq('client')
       end
 
       it 'should detect Windows 2000 as a server' do
         match = { 'os.product' => 'Windows 2000' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'server'
+        expect(result).to eq('server')
       end
 
       it 'should detect Windows Server 2012 as a server' do
         match = { 'os.product' => 'Windows Server 2012' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'server'
+        expect(result).to eq('server')
       end
 
       it 'should detect Linux as a server' do
         match = { 'os.product' => 'Linux' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'server'
+        expect(result).to eq('server')
       end
 
       it 'should detect JetDirect as a printer' do
         match = { 'os.product' => 'JetDirect', 'os.device' => 'Print server' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'printer'
+        expect(result).to eq('printer')
       end
 
       it 'should detect Unknown Printer as a printer' do
         match = { 'os.product' => 'Unknown Printer' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'printer'
+        expect(result).to eq('printer')
       end
 
       it 'should detect Linksys Router as a router' do
         match = { 'os.product' => 'Linksys', 'os.device' => 'Router' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'router'
+        expect(result).to eq('router')
       end
 
       it 'should detect CheckPoint Firewall-1 as a firewall' do
         match = { 'os.vendor' => 'Check Point', 'os.product' => 'Firewall-1' }
         result = host.send(:guess_purpose_from_match, match)
-        result.should == 'firewall'
+        expect(result).to eq('firewall')
       end
     end
 
@@ -911,22 +911,22 @@ RSpec.describe Mdm::Host, type: :model do
         it 'should return all the correct data for Windows XP SP3 x86' do
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Windows XP'
-          result['os.version'].should == 'SP3'
-          result['os.arch'].should == 'x86'
-          result['host.name'].should == nil
-          result['os.certainty'].to_f.should == 0.8
+          expect(result['os.product']).to eq('Windows XP')
+          expect(result['os.version']).to eq('SP3')
+          expect(result['os.arch']).to eq('x86')
+          expect(result['host.name']).to eq(nil)
+          expect(result['os.certainty'].to_f).to eq(0.8)
         end
 
         it 'should return all the correct data for Windows 2008 SP1 x64' do
           fp_data = { :os => 'Microsoft Windows 2008 SP1', :arch => 'x64'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Windows Server 2008'
-          result['os.version'].should == 'SP1'
-          result['os.arch'].should == 'x64'
-          result['host.name'].should == nil
-          result['os.certainty'].to_f.should == 0.8
+          expect(result['os.product']).to eq('Windows Server 2008')
+          expect(result['os.version']).to eq('SP1')
+          expect(result['os.arch']).to eq('x64')
+          expect(result['host.name']).to eq(nil)
+          expect(result['os.certainty'].to_f).to eq(0.8)
         end
 
         it 'should fingerprint Metasploitable correctly' do
@@ -934,21 +934,21 @@ RSpec.describe Mdm::Host, type: :model do
           fp_data = { :os => 'Linux 2.6.24-16-server (i386)', :name => 'metasploitable'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Linux'
-          result['host.name'].should == 'metasploitable'
-          result['os.version'].should == '2.6.24-16-server'
-          result['os.arch'].should == 'x86'
-          result['os.certainty'].to_f.should == 0.8
+          expect(result['os.product']).to eq('Linux')
+          expect(result['host.name']).to eq('metasploitable')
+          expect(result['os.version']).to eq('2.6.24-16-server')
+          expect(result['os.arch']).to eq('x86')
+          expect(result['os.certainty'].to_f).to eq(0.8)
         end
 
         it 'should just populate os_name if it is unsure' do
           fp_data = { :os => 'Darwin 12.3.0 x86_64 i386'}
           fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Darwin 12.3.0 x86_64 i386'
-          result['os.version'].should == nil
-          result['os.arch'].should == nil
-          result['os.certainty'].should == 0.8
+          expect(result['os.product']).to eq('Darwin 12.3.0 x86_64 i386')
+          expect(result['os.version']).to eq(nil)
+          expect(result['os.arch']).to eq(nil)
+          expect(result['os.certainty']).to eq(0.8)
         end
       end
 
@@ -956,27 +956,27 @@ RSpec.describe Mdm::Host, type: :model do
         it 'should return OS name for a Windows XP fingerprint' do
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Windows XP'
-          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
+          expect(result['os.product']).to eq('Windows XP')
+          expect(result['os.certainty'].to_f).to eq(described_class::MAX_NMAP_CERTAINTY)
         end
 
         it 'should return OS name for a Metasploitable fingerprint' do
           fp_data = {:os_vendor=>"Linux", :os_family=>"Linux", :os_version=>"2.6.X", :os_accuracy=>100}
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Linux'
-          result['os.version'].should == '2.6.X'
-          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
+          expect(result['os.product']).to eq('Linux')
+          expect(result['os.version']).to eq('2.6.X')
+          expect(result['os.certainty'].to_f).to eq(described_class::MAX_NMAP_CERTAINTY)
         end
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
           fp_data = {:os_vendor=>"Apple", :os_family=>"Mac OS X", :os_version=>"10.8.X", :os_accuracy=>100}
           fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Mac OS X'
-          result['os.vendor'].should == 'Apple'
-          result['os.version'].should == '10.8.X'
-          result['os.certainty'].to_f.should == described_class::MAX_NMAP_CERTAINTY
+          expect(result['os.product']).to eq('Mac OS X')
+          expect(result['os.vendor']).to eq('Apple')
+          expect(result['os.version']).to eq('10.8.X')
+          expect(result['os.certainty'].to_f).to eq(described_class::MAX_NMAP_CERTAINTY)
         end
       end
 
@@ -985,19 +985,19 @@ RSpec.describe Mdm::Host, type: :model do
           it 'should return a generic Windows fingerprint with no product info' do
             fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host)
             result = host.send(:normalize_scanner_fp, fingerprint).first
-            result['os.product'].should == 'Windows'
-            result['os.arch'].should == 'x86'
-            result['os.certainty'].to_f.should == 0.67
+            expect(result['os.product']).to eq('Windows')
+            expect(result['os.arch']).to eq('x86')
+            expect(result['os.certainty'].to_f).to eq(0.67)
           end
 
           it 'should recognize a Windows 7 fingerprint' do
             fp_data = {:family=>"Windows", :certainty=>"0.67", :vendor=>"Microsoft", :arch=>"x86", :product => 'Windows 7', :version => 'SP1'}
             fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
             result = host.send(:normalize_scanner_fp, fingerprint).first
-            result['os.product'].should == 'Windows 7'
-            result['os.version'].should == 'SP1'
-            result['os.arch'].should == 'x86'
-            result['os.certainty'].to_f.should == 0.67
+            expect(result['os.product']).to eq('Windows 7')
+            expect(result['os.version']).to eq('SP1')
+            expect(result['os.arch']).to eq('x86')
+            expect(result['os.certainty'].to_f).to eq(0.67)
           end
         end
 
@@ -1005,30 +1005,30 @@ RSpec.describe Mdm::Host, type: :model do
           fp_data = {:family=>"Mac OS X", :certainty=>"0.80", :vendor=>"Apple"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Mac OS X'
-          result['os.vendor'].should == "Apple"
+          expect(result['os.product']).to eq('Mac OS X')
+          expect(result['os.vendor']).to eq("Apple")
         end
 
         it 'should recognize a Cisco fingerprint' do
           fp_data = {:family=>"IOS", :certainty=>"1.00", :vendor=>"Cisco", :version=>"11.2(8)SA2"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'IOS'
-          result['os.vendor'].should == 'Cisco'
+          expect(result['os.product']).to eq('IOS')
+          expect(result['os.vendor']).to eq('Cisco')
         end
 
         it 'should recognize an embedded fingerprint' do
           fp_data = {:family=>"embedded", :certainty=>"1.00", :vendor=>"Footek"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Footek'
+          expect(result['os.product']).to eq('Footek')
         end
 
         it 'should handle an unknown fingerprint' do
           fp_data = {:certainty=>"1.00", :vendor=>"Footek"}
           fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should == 'Footek'
+          expect(result['os.product']).to eq('Footek')
         end
 
 
@@ -1038,18 +1038,18 @@ RSpec.describe Mdm::Host, type: :model do
         it 'should recognize a Windows fingerprint' do
           fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should ==  'Windows Server 2003'
-          result['os.arch'].should == 'x64'
-          result['os.version'].should == 'SP2'
-          result['os.certainty'].to_f.should == 0.8
+          expect(result['os.product']).to eq( 'Windows Server 2003')
+          expect(result['os.arch']).to eq('x64')
+          expect(result['os.version']).to eq('SP2')
+          expect(result['os.certainty'].to_f).to eq(0.8)
         end
 
         it 'should otherwise jsut copy the fingerprint to os_name' do
           fp_data = { :os => 'Linux 2.6.X (i386)'}
           fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
-          result['os.product'].should ==  'Linux 2.6.X (i386)'
-          result['os.certainty'].to_f.should == 0.8
+          expect(result['os.product']).to eq( 'Linux 2.6.X (i386)')
+          expect(result['os.certainty'].to_f).to eq(0.8)
         end
       end
     end

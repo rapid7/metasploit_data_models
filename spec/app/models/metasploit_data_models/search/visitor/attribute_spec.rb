@@ -28,7 +28,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
           end
 
           it "should be #{node_class}#attribute" do
-            name.should == node.attribute
+            expect(name).to eq(node.attribute)
           end
         end
 
@@ -38,7 +38,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
           end
 
           it "should be Class#arel_table for #{node_class}#klass" do
-            relation.should == node.klass.arel_table
+            expect(relation).to eq(node.klass.arel_table)
           end
         end
       end
@@ -68,7 +68,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
         visited = double('Source Operator Visited')
         visitor.stub(:visit).with(source_operator).and_return(visited)
 
-        visit.should == visited
+        expect(visit).to eq(visited)
       end
     end
 

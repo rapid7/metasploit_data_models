@@ -110,7 +110,7 @@ RSpec.describe PasswordIsStrongValidator do
       ]
 
     it 'should return all the expected mutations of a password' do
-      password_validator.send(:mutate_pass, 'metasploit').should == variants
+      expect(password_validator.send(:mutate_pass, 'metasploit')).to eq(variants)
     end
 
   end

@@ -54,9 +54,9 @@ RSpec.describe Mdm::WebSite, type: :model do
         mysite = FactoryGirl.create(:mdm_web_site)
         FactoryGirl.create(:mdm_web_form, :web_site => mysite)
         FactoryGirl.create(:mdm_web_form, :web_site => mysite)
-        mysite.form_count.should == 2
+        expect(mysite.form_count).to eq(2)
         FactoryGirl.create(:mdm_web_form, :web_site => mysite)
-        mysite.form_count.should == 3
+        expect(mysite.form_count).to eq(3)
       end
     end
 
@@ -65,9 +65,9 @@ RSpec.describe Mdm::WebSite, type: :model do
         mysite = FactoryGirl.create(:mdm_web_site)
         FactoryGirl.create(:mdm_web_page, :web_site => mysite)
         FactoryGirl.create(:mdm_web_page, :web_site => mysite)
-        mysite.page_count.should == 2
+        expect(mysite.page_count).to eq(2)
         FactoryGirl.create(:mdm_web_page, :web_site => mysite)
-        mysite.page_count.should == 3
+        expect(mysite.page_count).to eq(3)
       end
     end
 
@@ -76,9 +76,9 @@ RSpec.describe Mdm::WebSite, type: :model do
         mysite = FactoryGirl.create(:mdm_web_site)
         FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
         FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
-        mysite.vuln_count.should == 2
+        expect(mysite.vuln_count).to eq(2)
         FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
-        mysite.vuln_count.should == 3
+        expect(mysite.vuln_count).to eq(3)
       end
     end
   end
