@@ -297,7 +297,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should not extract the number' do
-        value.should_not == integer
+        expect(value).not_to eq(integer)
       end
 
       it 'should pass through the full value' do
@@ -311,7 +311,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       end
 
       it 'should not truncate Float to Integer' do
-        value.should_not == formatted_value.to_i
+        expect(value).not_to eq(formatted_value.to_i)
       end
 
       it 'should pass through Float' do

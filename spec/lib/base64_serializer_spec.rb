@@ -67,7 +67,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       value = double('Value')
       duplicate[:key] = value
 
-      duplicate.should_not == base64_serializer.default
+      expect(duplicate).not_to eq(base64_serializer.default)
     end
   end
 
