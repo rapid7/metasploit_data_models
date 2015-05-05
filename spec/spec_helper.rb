@@ -22,7 +22,6 @@ end
 
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 
 # full backtrace in logs so its easier to trace errors
 Rails.backtrace_cleaner.remove_silencers!
