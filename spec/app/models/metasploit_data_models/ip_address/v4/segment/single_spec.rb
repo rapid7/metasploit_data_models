@@ -192,7 +192,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :model do
         }
 
         specify {
-          expect(succ).not_to raise_error
+          expect {
+            succ
+          }.not_to raise_error
         }
       end
 
