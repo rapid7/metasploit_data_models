@@ -210,7 +210,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         # to_a to make query return instances
         found_creds = workspace.creds.to_a
 
-        expect(found_creds.length).to > 0
+        expect(found_creds.length).to be > 0
         found_cred = found_creds.first
 
       end
@@ -218,7 +218,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should include hosts' do
         found_creds = workspace.creds.to_a
 
-        expect(found_creds.length).to > 0
+        expect(found_creds.length).to be > 0
         found_cred = found_creds.first
         service = found_cred.service
       end
@@ -363,7 +363,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should include hosts' do
         found_tags = workspace.host_tags.to_a
 
-        expect(found_tags.length).to > 0
+        expect(found_tags.length).to be > 0
 
         tag = found_tags.first
       end
@@ -482,7 +482,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
         # there are more web sites than those in the workspace
-        expect(Mdm::WebSite.count).to > web_sites.count
+        expect(Mdm::WebSite.count).to be > web_sites.count
 
         found_web_sites = workspace.web_sites
 
@@ -523,7 +523,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
-        expect(Mdm::WebVuln.count).to > web_vulns.length
+        expect(Mdm::WebVuln.count).to be > web_vulns.length
 
         found_web_vulns = workspace.web_vulns
 

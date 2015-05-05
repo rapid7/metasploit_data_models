@@ -112,7 +112,7 @@ RSpec.describe Mdm::Vuln, type: :model do
                   module_details << module_ref.detail
                 end
 
-                expect(vuln.module_details.count).to < module_details.length
+                expect(vuln.module_details.count).to be < module_details.length
                 expect(module_details.uniq.count).to eq(vuln.module_details.count)
               end
             end

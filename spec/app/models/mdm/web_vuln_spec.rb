@@ -174,7 +174,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
             end
 
             it 'should have length < 2' do
-              expect(web_vuln.params.first.length).to < 2
+              expect(web_vuln.params.first.length).to be < 2
             end
 
             it 'should validate elements of params are not too short' do
@@ -192,7 +192,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
             end
 
             it 'should have length > 2' do
-              expect(web_vuln.params.first.length).to > 2
+              expect(web_vuln.params.first.length).to be > 2
             end
 
             it 'should validate elements of params are not too long' do
