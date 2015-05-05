@@ -195,7 +195,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                expect(results).to =~ [vuln]
+                expect(results).to match_array [vuln]
               end
             end
 
@@ -217,7 +217,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                expect(results).to =~ [vuln]
+                expect(results).to match_array [vuln]
               end
             end
 
@@ -237,7 +237,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                expect(results).to =~ [vuln]
+                expect(results).to match_array [vuln]
               end
             end
 

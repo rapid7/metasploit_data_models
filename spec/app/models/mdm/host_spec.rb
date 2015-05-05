@@ -311,7 +311,7 @@ RSpec.describe Mdm::Host, type: :model do
     end
 
     it 'should define STATES in any order' do
-      expect(described_class::STATES).to =~ states
+      expect(described_class::STATES).to match_array(states)
     end
   end
 

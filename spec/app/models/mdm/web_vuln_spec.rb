@@ -36,7 +36,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
     end
 
     it 'should define METHODS in any order' do
-      expect(described_class::METHODS).to =~ methods
+      expect(described_class::METHODS).to match_array methods
     end
 
     it 'should define RISK_RANGE' do
