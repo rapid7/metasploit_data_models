@@ -43,7 +43,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with Met
       arel_pair = root
     end
 
-    arel_pair.should be_a arel_class
+    expect(arel_pair).to be_a arel_class
 
     expect(arel_pair.left).to eq(child_visits[0])
     expect(arel_pair.right).to eq(child_visits[1])

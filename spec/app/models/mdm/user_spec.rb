@@ -31,7 +31,7 @@ RSpec.describe Mdm::User, type: :model do
   context 'factory' do
     it 'should be valid' do
       user = FactoryGirl.build(:mdm_user)
-      user.should be_valid
+      expect(user).to be_valid
     end
   end
 

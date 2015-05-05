@@ -41,7 +41,7 @@ RSpec.describe Mdm::Host, type: :model do
   context 'factory' do
     it 'should be valid' do
       host = FactoryGirl.build(:mdm_host)
-      host.should be_valid
+        expect(architectures).to include('mips')
     end
   end
 
@@ -186,7 +186,7 @@ RSpec.describe Mdm::Host, type: :model do
                     module_details << module_ref.detail
                   end
 
-                  host.module_details.count.should < module_details.length
+        expect(architectures).to include('mips')
                   expect(module_details.uniq.count).to eq(host.module_details.count)
                 end
               end
@@ -216,70 +216,70 @@ RSpec.describe Mdm::Host, type: :model do
       end
 
       it 'should be an Array<String>' do
-        architectures.should be_an Array
+        expect(architectures).to include('mips')
 
         architectures.each do |architecture|
-          architecture.should be_a String
+        expect(architectures).to include('mips')
         end
       end
 
       it 'should include both endians of ARM' do
-        architectures.should include('armbe')
-        architectures.should include('armle')
+        expect(architectures).to include('mips')
+        expect(architectures).to include('mips')
       end
 
       it 'should include 32-bit and 64-bit versions of Cell Broadband Engine Architecture' do
-        architectures.should include('cbea')
-        architectures.should include('cbea64')
+        expect(architectures).to include('mips')
+        expect(architectures).to include('mips')
       end
 
       it 'should include cmd for command shell' do
-        architectures.should include('cmd')
+        expect(architectures).to include('mips')
       end
 
       it 'should include java for Java Virtual Machine' do
-        architectures.should include('java')
+        expect(architectures).to include('mips')
       end
 
       it 'should include plain and endian-ware MIPS' do
-        architectures.should include('mips')
-        architectures.should include('mipsbe')
-        architectures.should include('mipsle')
+        expect(architectures).to include('mips')
+        expect(architectures).to include('mipsbe')
+        expect(architectures).to include('mipsle')
       end
 
       it 'should include php for PHP code' do
-        architectures.should include('php')
+        expect(architectures).to include('php')
       end
 
       it 'should include 32-bit and 64-bit PowerPC' do
-        architectures.should include('ppc')
-        architectures.should include('ppc64')
+        expect(architectures).to include('ppc')
+        expect(architectures).to include('ppc64')
       end
 
       it 'should include ruby for Ruby code' do
-        architectures.should include('ruby')
+        expect(architectures).to include('ruby')
       end
 
       it 'should include sparc for Sparc' do
-        architectures.should include('sparc')
+        expect(architectures).to include('sparc')
       end
 
       it 'should include tty for Terminals' do
-        architectures.should include('tty')
+        expect(architectures).to include('tty')
       end
 
       it 'should include 32-bit and 64-bit x86' do
-        architectures.should include('x64')
-        architectures.should include('x86')
-        architectures.should include('x86_64')
+        expect(architectures).to include('x64')
+        expect(architectures).to include('x86')
+        expect(architectures).to include('x86_64')
       end
 
       it 'should include blank string to indicate no detection has happened' do
-        architectures.should include('')
+        expect(architectures).to include('')
       end
 
       it 'should include "Unknown" for failed detection attempts' do
-        architectures.should include('Unknown')
+        expect(architectures).to include('Unknown')
       end
 
     end
@@ -290,15 +290,15 @@ RSpec.describe Mdm::Host, type: :model do
       end
 
       it 'should be an Array<String>' do
-        search_fields.should be_an Array
+        expect(search_fields).to be_an Array
 
         search_fields.each { |search_field|
-          search_field.should be_a String
+          expect(search_field).to be_a String
         }
       end
 
       it 'should cast address to text' do
-        search_fields.should include('address::text')
+        expect(search_fields).to include('address::text')
       end
 
       it { should include('comments') }
@@ -311,7 +311,7 @@ RSpec.describe Mdm::Host, type: :model do
     end
 
     it 'should define STATES in any order' do
-      described_class::STATES.should =~ states
+      expect(described_class::STATES).to =~ states
     end
   end
 
@@ -392,7 +392,7 @@ RSpec.describe Mdm::Host, type: :model do
         duplicate_host = FactoryGirl.build(:mdm_host, :address => address, :workspace => workspace)
 
         duplicate_host.should_not be_valid
-        duplicate_host.errors[:address].should include('has already been taken')
+        expect(duplicate_host.errors[:address]).to include('has already been taken')
       end
     end
 
@@ -403,8 +403,8 @@ RSpec.describe Mdm::Host, type: :model do
       context 'with an unknown architecture' do
         let(:arch) { "asdfasdf" }
         it 'should normalize to Unknown' do
-          host.should be_valid
-          host.arch.should be described_class::UNKNOWN_ARCHITECTURE
+          expect(host).to be_valid
+          expect(host.arch).to be described_class::UNKNOWN_ARCHITECTURE
         end
       end
       described_class::ARCHITECTURES.each do |arch|
@@ -429,13 +429,13 @@ RSpec.describe Mdm::Host, type: :model do
 
     context 'searching for an empty string' do
       it 'should return any hosts in the database' do
-        search_for('').should include(subject)
+        expect(search_for('')).to include(subject)
       end
     end
 
     context 'searching for an existing Host\'s name' do
       it 'should return the host' do
-        search_for(subject.name).should include(subject)
+        expect(search_for(subject.name)).to include(subject)
       end
     end
   end

@@ -4,7 +4,7 @@ RSpec.describe Mdm::TaskService, type: :model do
   context 'factory' do
     it 'should be valid' do
       task_service = FactoryGirl.build(:mdm_task_service)
-      task_service.should be_valid
+      expect(task_service).to be_valid
     end
   end
 

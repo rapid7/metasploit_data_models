@@ -31,7 +31,7 @@ RSpec.describe Mdm::Loot, type: :model do
   context 'factory' do
     it 'should be valid' do
       loot = FactoryGirl.build(:mdm_loot)
-      loot.should be_valid
+      expect(loot).to be_valid
     end
   end
 
@@ -51,17 +51,17 @@ RSpec.describe Mdm::Loot, type: :model do
     context 'search' do
       it 'should match on ltype' do
         myloot = FactoryGirl.create(:mdm_loot, :ltype => 'find.this.ltype')
-        Mdm::Loot.search('find.this.ltype').should include(myloot)
+        expect(Mdm::Loot.search('find.this.ltype')).to include(myloot)
       end
 
       it 'should match on name' do
         myloot = FactoryGirl.create(:mdm_loot, :name => 'Find This')
-        Mdm::Loot.search('Find This').should include(myloot)
+        expect(Mdm::Loot.search('Find This')).to include(myloot)
       end
 
       it 'should match on info' do
         myloot = FactoryGirl.create(:mdm_loot, :info => 'Find This')
-        Mdm::Loot.search('Find This').should include(myloot)
+        expect(Mdm::Loot.search('Find This')).to include(myloot)
       end
     end
   end

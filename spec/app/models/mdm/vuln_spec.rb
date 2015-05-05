@@ -112,7 +112,7 @@ RSpec.describe Mdm::Vuln, type: :model do
                   module_details << module_ref.detail
                 end
 
-                vuln.module_details.count.should < module_details.length
+                expect(vuln.module_details.count).to < module_details.length
                 expect(module_details.uniq.count).to eq(vuln.module_details.count)
               end
             end
@@ -195,7 +195,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                results.should =~ [vuln]
+                expect(results).to =~ [vuln]
               end
             end
 
@@ -205,7 +205,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should not match Mdm::Vuln' do
-                results.should be_empty
+                expect(results).to be_empty
               end
             end
           end
@@ -217,7 +217,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                results.should =~ [vuln]
+                expect(results).to =~ [vuln]
               end
             end
 
@@ -227,7 +227,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should not match Mdm::Vuln' do
-                results.should be_empty
+                expect(results).to be_empty
               end
             end
 
@@ -237,7 +237,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should match Mdm::Vuln' do
-                results.should =~ [vuln]
+                expect(results).to =~ [vuln]
               end
             end
 
@@ -247,7 +247,7 @@ RSpec.describe Mdm::Vuln, type: :model do
               end
 
               it 'should not match Mdm::Vuln' do
-                results.should be_empty
+                expect(results).to be_empty
               end
             end
           end
@@ -268,7 +268,7 @@ RSpec.describe Mdm::Vuln, type: :model do
         str = Faker::Lorem.characters(256)
         mdm_vuln.name = str
         mdm_vuln.valid?
-        mdm_vuln.errors[:name][0].should include "is too long"
+        expect(mdm_vuln.errors[:name][0]).to include "is too long"
       end
     end
   end

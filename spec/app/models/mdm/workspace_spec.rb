@@ -12,7 +12,7 @@ RSpec.describe Mdm::Workspace, type: :model do
   context 'factory' do
     it 'should be valid' do
       workspace = FactoryGirl.build(:mdm_workspace)
-      workspace.should be_valid
+      expect(workspace).to be_valid
     end
   end
 
@@ -132,7 +132,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
         it 'should record error that boundary must be a valid IP range', :pending => 'https://www.pivotaltracker.com/story/show/43171927' do
           workspace.should_not be_valid
-          workkspace.errors[:boundary].should include(error)
+          expect(workkspace.errors[:boundary]).to include(error)
         end
       end
     end
@@ -210,7 +210,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         # to_a to make query return instances
         found_creds = workspace.creds.to_a
 
-        found_creds.length.should > 0
+        expect(found_creds.length).to > 0
         found_cred = found_creds.first
 
       end
@@ -218,7 +218,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should include hosts' do
         found_creds = workspace.creds.to_a
 
-        found_creds.length.should > 0
+        expect(found_creds.length).to > 0
         found_cred = found_creds.first
         service = found_cred.service
       end
@@ -252,7 +252,7 @@ RSpec.describe Mdm::Workspace, type: :model do
             workspace = described_class.default
           }.to change(Mdm::Workspace, :count).by(0)
 
-          workspace.should be_default
+          expect(workspace).to be_default
         end
       end
 
@@ -264,7 +264,7 @@ RSpec.describe Mdm::Workspace, type: :model do
             workspace = described_class.default
           }.to change(Mdm::Workspace, :count).by(1)
 
-          workspace.should be_default
+          expect(workspace).to be_default
         end
       end
     end
@@ -363,7 +363,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       it 'should include hosts' do
         found_tags = workspace.host_tags.to_a
 
-        found_tags.length.should > 0
+        expect(found_tags.length).to > 0
 
         tag = found_tags.first
       end
@@ -482,7 +482,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
         # there are more web sites than those in the workspace
-        Mdm::WebSite.count.should > web_sites.count
+        expect(Mdm::WebSite.count).to > web_sites.count
 
         found_web_sites = workspace.web_sites
 
@@ -523,7 +523,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
-        Mdm::WebVuln.count.should > web_vulns.length
+        expect(Mdm::WebVuln.count).to > web_vulns.length
 
         found_web_vulns = workspace.web_vulns
 

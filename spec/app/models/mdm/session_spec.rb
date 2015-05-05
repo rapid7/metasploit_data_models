@@ -4,7 +4,7 @@ RSpec.describe Mdm::Session, type: :model do
   context 'factory' do
     it 'should be valid' do
       session = FactoryGirl.build(:mdm_session)
-      session.should be_valid
+      expect(session).to be_valid
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe Mdm::Session, type: :model do
         alive_session = FactoryGirl.create(:mdm_session)
         dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
         alive_set = Mdm::Session.alive
-        alive_set.should include(alive_session)
+        expect(alive_set).to include(alive_session)
         alive_set.should_not include(dead_session)
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Mdm::Session, type: :model do
         dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
         dead_set = Mdm::Session.dead
         dead_set.should_not include(alive_session)
-        dead_set.should include(dead_session)
+        expect(dead_set).to include(dead_session)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe Mdm::Session, type: :model do
         linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
         win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
         upgrade_set = Mdm::Session.upgradeable
-        upgrade_set.should include(win_shell)
+        expect(upgrade_set).to include(win_shell)
         upgrade_set.should_not include(linux_shell)
         upgrade_set.should_not include(win_meterp)
       end

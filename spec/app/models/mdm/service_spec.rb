@@ -58,7 +58,7 @@ RSpec.describe Mdm::Service, type: :model do
         tcp_service   = FactoryGirl.create(:mdm_service, proto: 'tcp')
         udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
         search_results = Mdm::Service.search('tcp')
-        search_results.should     include(tcp_service)
+        expect(search_results).to     include(tcp_service)
         search_results.should_not include(udp_service)
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe Mdm::Service, type: :model do
   context 'factory' do
     it 'should be valid' do
       service = FactoryGirl.build(:mdm_service)
-      service.should be_valid
+      expect(service).to be_valid
     end
   end
 

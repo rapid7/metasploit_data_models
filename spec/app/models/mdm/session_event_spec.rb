@@ -8,7 +8,7 @@ RSpec.describe Mdm::SessionEvent, type: :model do
   context 'factory' do
     it 'should be valid' do
       session_event = FactoryGirl.build(:mdm_session_event)
-      session_event.should be_valid
+      expect(session_event).to be_valid
     end
   end
 

@@ -94,8 +94,8 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       it 'should contain both Boolean values' do
-        privileges.should include(false)
-        privileges.should include(true)
+        expect(privileges).to include(false)
+        expect(privileges).to include(true)
       end
     end
 

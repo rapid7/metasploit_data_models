@@ -105,7 +105,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should have :default in attributes' do
-        attributes.should have_key(:default)
+        expect(attributes).to have_key(:default)
       end
 
       it 'should set default to :default value' do

@@ -143,7 +143,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             end
 
             it 'should include association' do
-              visit.should include association
+              expect(visit).to include association
             end
           end
 
@@ -213,7 +213,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
               it 'should include common associations' do
                 common_associations.each do |association|
-                  visit.should include(association)
+                  expect(visit).to include(association)
                 end
               end
 

@@ -4,7 +4,7 @@ RSpec.describe Mdm::TaskHost, type: :model do
   context 'factory' do
     it 'should be valid' do
       task_host = FactoryGirl.build(:mdm_task_host)
-      task_host.should be_valid
+      expect(task_host).to be_valid
     end
   end
 

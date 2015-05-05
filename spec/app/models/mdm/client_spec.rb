@@ -21,7 +21,7 @@ RSpec.describe Mdm::Client, type: :model do
   context 'factory' do
     it 'should be valid' do
       client = FactoryGirl.build(:mdm_client)
-      client.should be_valid
+      expect(client).to be_valid
     end
   end
 

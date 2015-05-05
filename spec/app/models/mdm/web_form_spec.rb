@@ -28,7 +28,7 @@ RSpec.describe Mdm::WebForm, type: :model do
   context 'factory' do
     it 'should be valid' do
       web_form = FactoryGirl.build(:mdm_web_form)
-      web_form.should be_valid
+      expect(web_form).to be_valid
     end
   end
 

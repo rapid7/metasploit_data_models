@@ -259,11 +259,11 @@ RSpec.describe Mdm::Cred, type: :model do
       end
 
       it 'should return all ssh private keys with a matching id' do
-        other_ssh_key.ssh_keys.should include(ssh_key)
+        expect(other_ssh_key.ssh_keys).to include(ssh_key)
       end
 
       it 'should return all ssh public keys with a matching id' do
-        other_ssh_key.ssh_keys.should include(ssh_pubkey)
+        expect(other_ssh_key.ssh_keys).to include(ssh_pubkey)
       end
     end
 
@@ -293,7 +293,7 @@ RSpec.describe Mdm::Cred, type: :model do
       end
 
       it 'should return ssh private keys with matching ids' do
-        other_ssh_key.ssh_private_keys.should include(ssh_key)
+        expect(other_ssh_key.ssh_private_keys).to include(ssh_key)
       end
 
       it 'should not return ssh public keys with matching ids' do
@@ -331,7 +331,7 @@ RSpec.describe Mdm::Cred, type: :model do
       end
 
       it 'should return ssh public keys with matching ids' do
-        other_ssh_key.ssh_public_keys.should include(ssh_pubkey)
+        expect(other_ssh_key.ssh_public_keys).to include(ssh_pubkey)
       end
     end
   end
@@ -339,7 +339,7 @@ RSpec.describe Mdm::Cred, type: :model do
   context 'factory' do
     it 'should be valid' do
       cred = FactoryGirl.build(:mdm_cred)
-      cred.should be_valid
+      expect(cred).to be_valid
     end
   end
 

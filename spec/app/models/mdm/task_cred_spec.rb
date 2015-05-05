@@ -4,7 +4,7 @@ RSpec.describe Mdm::TaskCred, type: :model do
   context 'factory' do
     it 'should be valid' do
       task_cred = FactoryGirl.build(:mdm_task_cred)
-      task_cred.should be_valid
+      expect(task_cred).to be_valid
     end
   end
 

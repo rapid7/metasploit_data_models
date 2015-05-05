@@ -4,7 +4,7 @@ RSpec.describe Mdm::Note, type: :model do
   context 'factory' do
     it 'should be valid' do
       note = FactoryGirl.build(:mdm_note)
-      note.should be_valid
+      expect(note).to be_valid
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe Mdm::Note, type: :model do
         flagged_note = FactoryGirl.create(:mdm_note, :critical => true, :seen => false)
         non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => false)
         flagged_set = Mdm::Note.flagged
-        flagged_set.should include(flagged_note)
+        expect(flagged_set).to include(flagged_note)
         flagged_set.should_not include(non_critical_note)
       end
 
@@ -60,7 +60,7 @@ RSpec.describe Mdm::Note, type: :model do
         flagged_note = FactoryGirl.create(:mdm_note, :critical => true, :seen => false)
         non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => true)
         flagged_set = Mdm::Note.flagged
-        flagged_set.should include(flagged_note)
+        expect(flagged_set).to include(flagged_note)
         flagged_set.should_not include(non_critical_note)
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Mdm::Note, type: :model do
         flagged_note = FactoryGirl.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
         webform_note = FactoryGirl.create(:mdm_note, :ntype => 'web.form', :critical => true, :seen => false)
         visible_set = Mdm::Note.visible
-        visible_set.should include(flagged_note)
+        expect(visible_set).to include(flagged_note)
         visible_set.should_not include(webform_note)
       end
     end
@@ -78,7 +78,7 @@ RSpec.describe Mdm::Note, type: :model do
     context 'search' do
       it 'should match on ntype' do
         flagged_note = FactoryGirl.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
-        Mdm::Note.search('flag.me').should include(flagged_note)
+        expect(Mdm::Note.search('flag.me')).to include(flagged_note)
       end
     end
   end

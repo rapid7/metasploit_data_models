@@ -4,7 +4,7 @@ RSpec.describe Mdm::TaskSession, type: :model do
   context 'factory' do
     it 'should be valid' do
       task_session = FactoryGirl.build(:mdm_task_session)
-      task_session.should be_valid
+      expect(task_session).to be_valid
     end
   end
 

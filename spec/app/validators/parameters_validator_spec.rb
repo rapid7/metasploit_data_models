@@ -46,7 +46,7 @@ RSpec.describe ParametersValidator do
     end
 
     it 'should include prefix' do
-      error_at.should include(prefix)
+      expect(error_at).to include(prefix)
     end
 
     it 'should include location_clause in same sentence as prefix' do
@@ -56,11 +56,11 @@ RSpec.describe ParametersValidator do
           :index => index
       )
 
-      error_at.should include("#{prefix} #{location_clause}.")
+      expect(error_at).to include("#{prefix} #{location_clause}.")
     end
 
     it 'should include TYPE_SIGNATURE_SENTENCE' do
-      error_at.should include(type_signature_sentence)
+      expect(error_at).to include(type_signature_sentence)
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe ParametersValidator do
     it 'should include extreme in prefix' do
       parameters_validator.should_receive(:error_at) do |*args|
         options = args.first
-        options[:prefix].should include(extreme.to_s)
+        expect(options[:prefix]).to include(extreme.to_s)
       end
 
       length_error_at
@@ -98,11 +98,11 @@ RSpec.describe ParametersValidator do
     end
 
     it 'should include numerical index' do
-      location_clause.should include("at index #{index}")
+      expect(location_clause).to include("at index #{index}")
     end
 
     it 'should include inspect of element' do
-      location_clause.should include(element.inspect)
+      expect(location_clause).to include(element.inspect)
     end
   end
 
@@ -225,7 +225,7 @@ RSpec.describe ParametersValidator do
                   it 'should not record error' do
                     validate_each
 
-                    errors.should be_blank
+                    expect(errors).to be_blank
                   end
                 end
               end
@@ -262,7 +262,7 @@ RSpec.describe ParametersValidator do
                 it 'should not record error' do
                   validate_each
 
-                  errors.should be_blank
+                  expect(errors).to be_blank
                 end
               end
 
@@ -334,7 +334,7 @@ RSpec.describe ParametersValidator do
 
       it 'should include TYPE_SIGNATURE_SENTENCE' do
         errors.each do |error|
-          error.should include(type_signature_sentence)
+          expect(error).to include(type_signature_sentence)
         end
       end
     end

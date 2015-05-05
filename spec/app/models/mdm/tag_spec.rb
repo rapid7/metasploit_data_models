@@ -33,7 +33,7 @@ RSpec.describe Mdm::Tag, type: :model do
         desc = SecureRandom.hex(9001) #over 9000?!
         large_tag = FactoryGirl.build(:mdm_tag, :desc => desc)
         large_tag.should_not be_valid
-        large_tag.errors[:desc].should include('desc must be less than 8k.')
+        expect(large_tag.errors[:desc]).to include('desc must be less than 8k.')
       end
     end
 
@@ -41,28 +41,28 @@ RSpec.describe Mdm::Tag, type: :model do
       it 'must be present' do
         nameless_tag = FactoryGirl.build(:mdm_tag, :name => nil)
         nameless_tag.should_not be_valid
-        nameless_tag.errors[:name].should include("can't be blank")
+        expect(nameless_tag.errors[:name]).to include("can't be blank")
       end
 
       it 'may only contain alphanumerics, dot, dashes, and underscores' do
         mytag = FactoryGirl.build(:mdm_tag, :name => 'A.1-B_2')
-        mytag.should be_valid
+        expect(mytag).to be_valid
         #Test for various bad inputs we should never allow
         mytag = FactoryGirl.build(:mdm_tag, :name => "A'1")
         mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A;1")
         mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A%1")
         mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A=1")
         mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "#A1")
         mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
       end
     end
   end

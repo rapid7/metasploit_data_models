@@ -8,7 +8,7 @@ RSpec.describe Mdm::Route, type: :model do
   context 'factory' do
     it 'should be valid' do
       route = FactoryGirl.build(:mdm_route)
-      route.should be_valid
+      expect(route).to be_valid
     end
   end
 

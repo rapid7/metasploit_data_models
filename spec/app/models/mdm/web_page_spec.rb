@@ -36,7 +36,7 @@ RSpec.describe Mdm::WebPage, type: :model do
   context 'factory' do
     it 'should be valid' do
       web_page = FactoryGirl.build(:mdm_web_page)
-      web_page.should be_valid
+      expect(web_page).to be_valid
     end
   end
 

@@ -27,7 +27,7 @@ RSpec.describe Mdm::VulnRef, type: :model do
   context 'factory' do
     it 'should be valid' do
       vuln_ref = FactoryGirl.build(:mdm_vuln_ref)
-      vuln_ref.should be_valid
+      expect(vuln_ref).to be_valid
     end
   end
 
