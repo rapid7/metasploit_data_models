@@ -47,7 +47,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
           children.each_with_index do |child, i|
             child_visit = ["Visited Child #{i}"]
-            visitor.stub(:visit).with(child).and_return(child_visit)
+            allow(visitor).to receive(:visit).with(child).and_return(child_visit)
             child_visits.concat(child_visit)
           end
 

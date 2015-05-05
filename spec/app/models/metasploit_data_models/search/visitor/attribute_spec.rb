@@ -66,7 +66,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
         visitor.should_receive(:visit).with(node).and_call_original
 
         visited = double('Source Operator Visited')
-        visitor.stub(:visit).with(source_operator).and_return(visited)
+        allow(visitor).to receive(:visit).with(source_operator).and_return(visited)
 
         expect(visit).to eq(visited)
       end

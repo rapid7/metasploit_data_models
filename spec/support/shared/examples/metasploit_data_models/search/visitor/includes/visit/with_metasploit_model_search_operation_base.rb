@@ -19,7 +19,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
   it 'should return operator visit' do
     operator_visit = ["Visited Operator"]
     visitor.should_receive(:visit).with(node).and_call_original
-    visitor.stub(:visit).with(operator).and_return(operator_visit)
+    allow(visitor).to receive(:visit).with(operator).and_return(operator_visit)
 
     expect(visit).to eq(operator_visit)
   end

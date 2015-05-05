@@ -132,7 +132,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
 
       it 'should return #default' do
         default = double('Default')
-        base64_serializer.stub(:default => default)
+        allow(base64_serializer).to receive(:default).and_return(default)
         deserialized = base64_serializer.load(serialized)
 
         expect(deserialized).to eq(default)

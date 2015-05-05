@@ -25,7 +25,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equ
 
   it 'should call eq on Arel::Attributes::Attribute from attribute_visitor' do
     attribute = double('Visited Operator')
-    visitor.attribute_visitor.stub(:visit).with(operator).and_return(attribute)
+    allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
 
     attribute.should_receive(:eq).with(value)
 

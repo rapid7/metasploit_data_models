@@ -46,7 +46,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           end
 
           before(:each) do
-            query.stub(:valid? => query)
+            allow(query).to receive(:valid?).and_return(query)
 
             visitor.valid?
           end
@@ -103,7 +103,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
         visited = double('Visited')
-        includes_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(includes_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
         expect_any_instance_of(ActiveRecord::Relation).to receive(:includes).with(visited).and_return(query.klass.scoped)
 
@@ -124,7 +124,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
       it 'should pass visited to ActiveRecord::Relation#joins' do
         visited = double('Visited')
-        joins_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(joins_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
         expect_any_instance_of(ActiveRecord::Relation).to receive(:joins).with(visited).and_return(query.klass.scoped)
 
@@ -145,7 +145,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
         visited = double('Visited')
-        where_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(where_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
         expect_any_instance_of(ActiveRecord::Relation).to receive(:where).with(visited).and_return(query.klass.scoped)
 

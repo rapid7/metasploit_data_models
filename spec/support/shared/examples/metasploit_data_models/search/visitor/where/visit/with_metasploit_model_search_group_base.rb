@@ -26,12 +26,12 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with Met
   end
 
   it "should combine children AREL with #{arel_class}" do
-    visitor.stub(:visit).with(node).and_call_original
+    allow(visitor).to receive(:visit).with(node).and_call_original
     child_visits = []
 
     children.each_with_index do |child, i|
       child_visit = Arel::Nodes::Equality.new(i, i)
-      visitor.stub(:visit).with(child).and_return(child_visit)
+      allow(visitor).to receive(:visit).with(child).and_return(child_visit)
       child_visits << child_visit
     end
 

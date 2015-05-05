@@ -290,7 +290,7 @@ RSpec.describe Mdm::Workspace, type: :model do
     context '#each_cred' do
       it 'should pass each of the #creds to the block' do
         creds = FactoryGirl.create_list(:mdm_cred, 2)
-        workspace.stub(:creds => creds)
+        allow(workspace).to receive(:creds).and_return(creds)
 
         expect { |block|
           workspace.each_cred(&block)
@@ -301,7 +301,7 @@ RSpec.describe Mdm::Workspace, type: :model do
     context '#each_host_tag' do
       it 'should pass each of the #host_tags to the block' do
         tags = FactoryGirl.create_list(:mdm_tag, 2)
-        workspace.stub(:host_tags => tags)
+        expect(workspace).to receive(:host_tags).and_return(tags)
 
         expect { |block|
           workspace.each_host_tag(&block)

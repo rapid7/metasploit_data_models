@@ -703,7 +703,7 @@ RSpec.describe Mdm::Host, type: :model do
 
     context '#validate_fingerprint_data' do
       before(:each) do
-        host.stub(:dlog)
+        allow(host).to receive(:dlog)
       end
 
       it 'should return false for an empty hash' do
