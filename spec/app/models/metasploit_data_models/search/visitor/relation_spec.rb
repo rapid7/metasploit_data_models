@@ -57,7 +57,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             end
 
             it 'should not record error' do
-              errors.should_not include(error)
+              expect(errors).not_to include(error)
             end
           end
 
@@ -67,7 +67,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             end
 
             it 'should record error' do
-              errors.should_not include(error)
+              expect(errors).not_to include(error)
             end
           end
         end
@@ -78,7 +78,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           end
 
           it 'should not record error' do
-            errors.should_not include(error)
+            expect(errors).not_to include(error)
           end
         end
       end

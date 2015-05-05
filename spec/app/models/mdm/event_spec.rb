@@ -43,7 +43,7 @@ RSpec.describe Mdm::Event, type: :model do
         non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro', :critical => false, :seen => false)
         flagged_set = Mdm::Event.flagged
         expect(flagged_set).to include(flagged_event)
-        flagged_set.should_not include(non_critical_event)
+        expect(flagged_set).not_to include(non_critical_event)
       end
 
       it 'should exclude seen events' do
@@ -51,7 +51,7 @@ RSpec.describe Mdm::Event, type: :model do
         non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro', :critical => false, :seen => true)
         flagged_set = Mdm::Event.flagged
         expect(flagged_set).to include(flagged_event)
-        flagged_set.should_not include(non_critical_event)
+        expect(flagged_set).not_to include(non_critical_event)
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Mdm::Event, type: :model do
         non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro')
         flagged_set = Mdm::Event.module_run
         expect(flagged_set).to include(flagged_event)
-        flagged_set.should_not include(non_critical_event)
+        expect(flagged_set).not_to include(non_critical_event)
       end
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe Mdm::Event, type: :model do
   context 'validations' do
     it 'should require name' do
       unnamed_event = FactoryGirl.build(:mdm_event, :name => nil)
-      unnamed_event.should_not be_valid
+      expect(unnamed_event).not_to be_valid
       expect(unnamed_event.errors[:name]).to include("can't be blank")
     end
   end

@@ -116,7 +116,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
 
     context 'params' do
       it 'should not validate presence of params because it default to [] and can never be nil' do
-        web_vuln.should_not validate_presence_of(:params)
+        expect(web_vuln).not_to validate_presence_of(:params)
       end
 
       context 'validates parameters' do
@@ -127,8 +127,8 @@ RSpec.describe Mdm::WebVuln, type: :model do
         it 'should validate params is an Array' do
           web_vuln.params = ''
 
-          web_vuln.params.should_not be_an Array
-          web_vuln.should_not be_valid
+          expect(web_vuln.params).not_to be_an Array
+          expect(web_vuln).not_to be_valid
           expect(web_vuln.errors[:params]).to include(
                                               "is not an Array.  #{type_signature_sentence}"
                                           )
@@ -156,11 +156,11 @@ RSpec.describe Mdm::WebVuln, type: :model do
             end
 
             it 'should not be an Array' do
-              web_vuln.params.first.should_not be_an Array
+              expect(web_vuln.params.first).not_to be_an Array
             end
 
             it 'should validate elements of params are Arrays' do
-              web_vuln.should_not be_valid
+              expect(web_vuln).not_to be_valid
               expect(web_vuln.errors[:params]).to include(
                                                   "has non-Array at index #{index} (#{element.inspect}).  " \
                                                   "#{type_signature_sentence}"
@@ -178,7 +178,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
             end
 
             it 'should validate elements of params are not too short' do
-              web_vuln.should_not be_valid
+              expect(web_vuln).not_to be_valid
               expect(web_vuln.errors[:params]).to include(
                                                   "has too few elements at index #{index} (#{element.inspect}).  " \
                                                   "#{type_signature_sentence}"
@@ -196,7 +196,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
             end
 
             it 'should validate elements of params are not too long' do
-              web_vuln.should_not be_valid
+              expect(web_vuln).not_to be_valid
               expect(web_vuln.errors[:params]).to include(
                                                   "has too many elements at index #{index} (#{element.inspect}).  " \
                                                   "#{type_signature_sentence}"
@@ -220,7 +220,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
                 end
 
                 it 'should validate that parameter name is not empty' do
-                  web_vuln.should_not be_valid
+                  expect(web_vuln).not_to be_valid
                   expect(web_vuln.errors[:params]).to include(
                                                       "has blank parameter name at index #{index} " \
                                                       "(#{element.inspect}).  " \
@@ -236,11 +236,11 @@ RSpec.describe Mdm::WebVuln, type: :model do
               end
 
               it 'should not have String for parameter name' do
-                web_vuln.params.first.first.should_not be_a String
+                expect(web_vuln.params.first.first).not_to be_a String
               end
 
               it 'should validate that parameter name is a String' do
-                web_vuln.should_not be_valid
+                expect(web_vuln).not_to be_valid
                 expect(web_vuln.errors[:params]).to include(
                                                     "has non-String parameter name (#{parameter_name.inspect}) " \
                                                     "at index #{index} (#{element.inspect}).  " \
@@ -261,11 +261,11 @@ RSpec.describe Mdm::WebVuln, type: :model do
               end
 
               it 'should not have String for parameter name' do
-                web_vuln.params.first.second.should_not be_a String
+                expect(web_vuln.params.first.second).not_to be_a String
               end
 
               it 'should validate that parameter value is a String' do
-                web_vuln.should_not be_valid
+                expect(web_vuln).not_to be_valid
                 expect(web_vuln.errors[:params]).to include(
                                                     "has non-String parameter value (#{parameter_value}) " \
                                                     "at index #{index} (#{element.inspect}).  " \

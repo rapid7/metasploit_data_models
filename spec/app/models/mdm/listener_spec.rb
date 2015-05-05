@@ -49,31 +49,31 @@ RSpec.describe Mdm::Listener, type: :model do
     context 'port' do
       it 'should require a port' do
         portless_listener = FactoryGirl.build(:mdm_listener, :port => nil)
-        portless_listener.should_not be_valid
+        expect(portless_listener).not_to be_valid
         expect(portless_listener.errors[:port]).to include("can't be blank")
       end
 
       it 'should not be valid for out-of-range numbers' do
         out_of_range = FactoryGirl.build(:mdm_listener, :port => 70000)
-        out_of_range.should_not be_valid
+        expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for port 0' do
         out_of_range = FactoryGirl.build(:mdm_listener, :port => 0)
-        out_of_range.should_not be_valid
+        expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for decimal numbers' do
         out_of_range = FactoryGirl.build(:mdm_listener, :port => 5.67)
-        out_of_range.should_not be_valid
+        expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("must be an integer")
       end
 
       it 'should not be valid for a negative number' do
         out_of_range = FactoryGirl.build(:mdm_listener, :port => -8)
-        out_of_range.should_not be_valid
+        expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
     end
@@ -81,7 +81,7 @@ RSpec.describe Mdm::Listener, type: :model do
     context 'address' do
       it 'should require an address' do
         addressless_listener = FactoryGirl.build(:mdm_listener, :address => nil)
-        addressless_listener.should_not be_valid
+        expect(addressless_listener).not_to be_valid
         expect(addressless_listener.errors[:address]).to include("can't be blank")
       end
 
@@ -97,7 +97,7 @@ RSpec.describe Mdm::Listener, type: :model do
 
       it 'should not be valid for strings not conforming to IPv4 or IPv6' do
         invalid_listener = FactoryGirl.build(:mdm_listener, :address => '1234-fark')
-        invalid_listener.should_not be_valid
+        expect(invalid_listener).not_to be_valid
       end
 
     end

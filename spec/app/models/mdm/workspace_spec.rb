@@ -111,7 +111,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         end
 
         it 'should not record an error' do
-          workspace.errors[:boundary].should_not include(error)
+          expect(workspace.errors[:boundary]).not_to include(error)
         end
       end
 
@@ -121,7 +121,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         end
 
         it 'should not record an error' do
-          workspace.errors[:boundary].should_not include(error)
+          expect(workspace.errors[:boundary]).not_to include(error)
         end
       end
 
@@ -131,7 +131,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         end
 
         it 'should record error that boundary must be a valid IP range', :pending => 'https://www.pivotaltracker.com/story/show/43171927' do
-          workspace.should_not be_valid
+          expect(workspace).not_to be_valid
           expect(workkspace.errors[:boundary]).to include(error)
         end
       end

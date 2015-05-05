@@ -53,7 +53,7 @@ RSpec.describe Mdm::Note, type: :model do
         non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => false)
         flagged_set = Mdm::Note.flagged
         expect(flagged_set).to include(flagged_note)
-        flagged_set.should_not include(non_critical_note)
+        expect(flagged_set).not_to include(non_critical_note)
       end
 
       it 'should exclude seen notes' do
@@ -61,7 +61,7 @@ RSpec.describe Mdm::Note, type: :model do
         non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => true)
         flagged_set = Mdm::Note.flagged
         expect(flagged_set).to include(flagged_note)
-        flagged_set.should_not include(non_critical_note)
+        expect(flagged_set).not_to include(non_critical_note)
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Mdm::Note, type: :model do
         webform_note = FactoryGirl.create(:mdm_note, :ntype => 'web.form', :critical => true, :seen => false)
         visible_set = Mdm::Note.visible
         expect(visible_set).to include(flagged_note)
-        visible_set.should_not include(webform_note)
+        expect(visible_set).not_to include(webform_note)
       end
     end
 

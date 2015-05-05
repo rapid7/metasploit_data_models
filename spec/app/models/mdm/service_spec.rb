@@ -42,14 +42,14 @@ RSpec.describe Mdm::Service, type: :model do
     context "inactive" do
       it "should exclude open services" do
         open_service = FactoryGirl.create(:mdm_service, :state => 'open')
-        Mdm::Service.inactive.should_not include(open_service)
+        expect(Mdm::Service.inactive).not_to include(open_service)
       end
     end
 
     context "with_state open" do
       it "should exclude closed services" do
         closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
-        Mdm::Service.with_state('open').should_not include(closed_service)
+        expect(Mdm::Service.with_state('open')).not_to include(closed_service)
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Mdm::Service, type: :model do
         udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
         search_results = Mdm::Service.search('tcp')
         expect(search_results).to     include(tcp_service)
-        search_results.should_not include(udp_service)
+        expect(search_results).not_to include(udp_service)
       end
     end
   end

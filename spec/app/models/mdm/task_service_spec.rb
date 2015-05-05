@@ -44,7 +44,7 @@ RSpec.describe Mdm::TaskService, type: :model do
       service = FactoryGirl.build(:mdm_service)
       FactoryGirl.create(:mdm_task_service, :task => task, :service => service)
       task_service2 = FactoryGirl.build(:mdm_task_service, :task => task, :service => service)
-      task_service2.should_not be_valid
+      expect(task_service2).not_to be_valid
     end
   end
 end

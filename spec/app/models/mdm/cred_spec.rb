@@ -297,7 +297,7 @@ RSpec.describe Mdm::Cred, type: :model do
       end
 
       it 'should not return ssh public keys with matching ids' do
-        other_ssh_key.ssh_private_keys.should_not include(ssh_pubkey)
+        expect(other_ssh_key.ssh_private_keys).not_to include(ssh_pubkey)
       end
     end
 
@@ -327,7 +327,7 @@ RSpec.describe Mdm::Cred, type: :model do
       end
 
       it 'should not return ssh private keys with matching ids' do
-        other_ssh_key.ssh_public_keys.should_not include(ssh_key)
+        expect(other_ssh_key.ssh_public_keys).not_to include(ssh_key)
       end
 
       it 'should return ssh public keys with matching ids' do

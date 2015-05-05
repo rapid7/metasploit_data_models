@@ -44,7 +44,7 @@ RSpec.describe Mdm::TaskCred, type: :model do
       cred = FactoryGirl.build(:mdm_cred)
       FactoryGirl.create(:mdm_task_cred, :task => task, :cred => cred)
       task_cred2 = FactoryGirl.build(:mdm_task_cred, :task => task, :cred => cred)
-      task_cred2.should_not be_valid
+      expect(task_cred2).not_to be_valid
     end
   end
 

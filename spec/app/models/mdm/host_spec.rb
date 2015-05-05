@@ -391,7 +391,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         duplicate_host = FactoryGirl.build(:mdm_host, :address => address, :workspace => workspace)
 
-        duplicate_host.should_not be_valid
+        expect(duplicate_host).not_to be_valid
         expect(duplicate_host.errors[:address]).to include('has already been taken')
       end
     end

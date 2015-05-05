@@ -219,7 +219,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
               it 'should not include disjoint associations' do
                 disjoint_associations.each do |association|
-                  visit.should_not include(association)
+                  expect(visit).not_to include(association)
                 end
               end
             end

@@ -44,7 +44,7 @@ RSpec.describe Mdm::TaskHost, type: :model do
       host = FactoryGirl.build(:mdm_host)
       FactoryGirl.create(:mdm_task_host, :task => task, :host => host)
       task_host2 = FactoryGirl.build(:mdm_task_host, :task => task, :host => host)
-      task_host2.should_not be_valid
+      expect(task_host2).not_to be_valid
     end
   end
 end

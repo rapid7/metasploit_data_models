@@ -32,7 +32,7 @@ RSpec.describe Mdm::Tag, type: :model do
       it 'should not ba valid for a length over 8k' do
         desc = SecureRandom.hex(9001) #over 9000?!
         large_tag = FactoryGirl.build(:mdm_tag, :desc => desc)
-        large_tag.should_not be_valid
+        expect(large_tag).not_to be_valid
         expect(large_tag.errors[:desc]).to include('desc must be less than 8k.')
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe Mdm::Tag, type: :model do
     context 'name' do
       it 'must be present' do
         nameless_tag = FactoryGirl.build(:mdm_tag, :name => nil)
-        nameless_tag.should_not be_valid
+        expect(nameless_tag).not_to be_valid
         expect(nameless_tag.errors[:name]).to include("can't be blank")
       end
 
@@ -49,19 +49,19 @@ RSpec.describe Mdm::Tag, type: :model do
         expect(mytag).to be_valid
         #Test for various bad inputs we should never allow
         mytag = FactoryGirl.build(:mdm_tag, :name => "A'1")
-        mytag.should_not be_valid
+        expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A;1")
-        mytag.should_not be_valid
+        expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A%1")
-        mytag.should_not be_valid
+        expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "A=1")
-        mytag.should_not be_valid
+        expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
         mytag = FactoryGirl.build(:mdm_tag, :name => "#A1")
-        mytag.should_not be_valid
+        expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include('must be alphanumeric, dots, dashes, or underscores')
       end
     end

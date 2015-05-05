@@ -39,7 +39,7 @@ RSpec.describe Mdm::TaskSession, type: :model do
       session = FactoryGirl.build(:mdm_session)
       FactoryGirl.create(:mdm_task_session, :task => task, :session => session)
       task_session2 = FactoryGirl.build(:mdm_task_session, :task => task, :session => session)
-      task_session2.should_not be_valid
+      expect(task_session2).not_to be_valid
     end
   end
 

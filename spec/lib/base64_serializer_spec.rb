@@ -115,7 +115,7 @@ RSpec.describe MetasploitDataModels::Base64Serializer do
 
     context 'without :default' do
       it 'should not have :default in attributes' do
-        attributes.should_not have_key(:default)
+        expect(attributes).not_to have_key(:default)
       end
 
       it 'should default #default to DEFAULT' do

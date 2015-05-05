@@ -26,7 +26,7 @@ RSpec.describe Mdm::VulnAttempt, type: :model do
   context 'validations' do
     it 'should require a vuln_id' do
       orphan_detail = FactoryGirl.build(:mdm_vuln_detail, :vuln => nil)
-      orphan_detail.should_not be_valid
+      expect(orphan_detail).not_to be_valid
       expect(orphan_detail.errors[:vuln_id]).to include("can't be blank")
     end
   end

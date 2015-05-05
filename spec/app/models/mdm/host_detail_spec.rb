@@ -21,7 +21,7 @@ RSpec.describe Mdm::HostDetail, type: :model do
   context 'validations' do
     it 'should only be valid with a host_id' do
       orphan_detail = FactoryGirl.build(:mdm_host_detail, :host => nil)
-      orphan_detail.should_not be_valid
+      expect(orphan_detail).not_to be_valid
       expect(orphan_detail.errors[:host_id]).to include("can't be blank")
     end
   end

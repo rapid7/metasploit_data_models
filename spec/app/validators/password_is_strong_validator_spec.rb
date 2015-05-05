@@ -224,7 +224,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
@@ -238,7 +238,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
@@ -252,7 +252,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
@@ -266,7 +266,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must not contain the username"' do
@@ -280,7 +280,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must not be a common password"' do
@@ -294,7 +294,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must not be a common password"' do
@@ -308,7 +308,7 @@ RSpec.describe PasswordIsStrongValidator do
 
       it 'should record an error' do
         validate_each
-        errors.should_not be_empty
+        expect(errors).not_to be_empty
       end
 
       it 'should have an error of "must not be a predictable sequence of characters"' do

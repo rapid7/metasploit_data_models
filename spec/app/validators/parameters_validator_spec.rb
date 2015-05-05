@@ -154,7 +154,7 @@ RSpec.describe ParametersValidator do
             it 'should record error' do
               validate_each
 
-              errors.should_not be_empty
+              expect(errors).not_to be_empty
             end
           end
 
@@ -176,7 +176,7 @@ RSpec.describe ParametersValidator do
             it 'should record error' do
               validate_each
 
-              errors.should_not be_empty
+              expect(errors).not_to be_empty
             end
           end
 
@@ -213,7 +213,7 @@ RSpec.describe ParametersValidator do
                   it 'should record error' do
                     validate_each
 
-                    errors.should_not be_empty
+                    expect(errors).not_to be_empty
                   end
                 end
 
@@ -248,7 +248,7 @@ RSpec.describe ParametersValidator do
                 it 'should record error' do
                   validate_each
 
-                  errors.should_not be_empty
+                  expect(errors).not_to be_empty
                 end
               end
             end
@@ -284,7 +284,7 @@ RSpec.describe ParametersValidator do
                 it 'should record error' do
                   validate_each
 
-                  errors.should_not be_empty
+                  expect(errors).not_to be_empty
                 end
               end
             end
@@ -309,7 +309,7 @@ RSpec.describe ParametersValidator do
           it 'should record error' do
             validate_each
 
-            errors.should_not be_empty
+            expect(errors).not_to be_empty
           end
         end
       end
