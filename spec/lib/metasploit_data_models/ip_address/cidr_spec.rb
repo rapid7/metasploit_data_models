@@ -220,9 +220,17 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
       Class.new(Metasploit::Model::Base) {
         attr_accessor :value
       }.tap { |address_class|
+        outer_segment_class = self.segment_class
 
-        allow(address_class).to receive(:segment_class).and_return(segment_class)
-        allow(address_class).to receive(:segment_count).and_return(segment_count)
+        address_class.define_singleton_method(:segment_class) do
+          outer_segment_class
+        end
+
+        outer_segment_count = self.segment_count
+
+        address_class.define_singleton_method(:segument_count) do
+          outer_segment_count
+        end
       }
     }
 
