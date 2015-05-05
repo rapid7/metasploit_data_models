@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
+RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
   subject(:visitor) do
     described_class.new
   end

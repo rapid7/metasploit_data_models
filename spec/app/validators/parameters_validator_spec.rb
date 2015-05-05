@@ -1,4 +1,4 @@
-describe ParametersValidator do
+RSpec.describe ParametersValidator do
   subject(:parameters_validator) do
     described_class.new(
         :attributes => attributes

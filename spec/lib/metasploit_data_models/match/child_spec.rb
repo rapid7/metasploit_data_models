@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Match::Child do
+RSpec.describe MetasploitDataModels::Match::Child do
   let(:extending_class) {
     # capture as local for Class.new block scope
     described_class = self.described_class

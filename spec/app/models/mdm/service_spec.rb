@@ -1,4 +1,4 @@
-describe Mdm::Service, type: :model do
+RSpec.describe Mdm::Service, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'CONSTANTS' do

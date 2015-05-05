@@ -1,4 +1,4 @@
-describe MetasploitDataModels::ModuleRun, type: :model do
+RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
   subject(:module_run){FactoryGirl.build(:metasploit_data_models_module_run)}
 

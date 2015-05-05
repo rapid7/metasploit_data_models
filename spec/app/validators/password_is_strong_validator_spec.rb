@@ -1,4 +1,4 @@
-describe PasswordIsStrongValidator do
+RSpec.describe PasswordIsStrongValidator do
 
   subject(:password_validator) do
     described_class.new(

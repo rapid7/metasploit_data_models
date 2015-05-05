@@ -1,4 +1,4 @@
-describe Mdm::Module::Mixin, type: :model do
+RSpec.describe Mdm::Module::Mixin, type: :model do
 
   it_should_behave_like 'Metasploit::Concern.run'
 

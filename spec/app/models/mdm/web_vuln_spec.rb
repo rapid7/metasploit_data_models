@@ -1,4 +1,4 @@
-describe Mdm::WebVuln, type: :model do
+RSpec.describe Mdm::WebVuln, type: :model do
   let(:confidence_range) do
     0 .. 100
   end

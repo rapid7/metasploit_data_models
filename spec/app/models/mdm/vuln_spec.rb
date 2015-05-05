@@ -1,4 +1,4 @@
-describe Mdm::Vuln, type: :model do
+RSpec.describe Mdm::Vuln, type: :model do
   subject(:vuln) do
     FactoryGirl.build(:mdm_vuln)
   end

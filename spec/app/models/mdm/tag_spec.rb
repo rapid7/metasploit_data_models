@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'securerandom'
 
-describe Mdm::Tag, type: :model do
+RSpec.describe Mdm::Tag, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do

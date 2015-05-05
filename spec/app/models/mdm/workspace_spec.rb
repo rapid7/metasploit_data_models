@@ -1,4 +1,4 @@
-describe Mdm::Workspace, type: :model do
+RSpec.describe Mdm::Workspace, type: :model do
   subject(:workspace) do
     FactoryGirl.build(:mdm_workspace)
   end

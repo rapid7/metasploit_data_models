@@ -1,4 +1,4 @@
-describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
+RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
   subject(:cidr) {
     described_class.new(
         value: formatted_value

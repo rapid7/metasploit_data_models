@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Version do
+RSpec.describe MetasploitDataModels::Version do
   context 'CONSTANTS' do
     context 'MAJOR' do
       subject(:major) do

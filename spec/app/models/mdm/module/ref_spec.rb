@@ -1,4 +1,4 @@
-describe Mdm::Module::Ref, type: :model do
+RSpec.describe Mdm::Module::Ref, type: :model do
 
   it_should_behave_like 'Metasploit::Concern.run'
 

@@ -1,4 +1,4 @@
-describe Mdm::Host, type: :model do
+RSpec.describe Mdm::Host, type: :model do
   subject(:host) do
     FactoryGirl.build(:mdm_host)
   end

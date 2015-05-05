@@ -1,4 +1,4 @@
-describe Mdm::Ref, type: :model do
+RSpec.describe Mdm::Ref, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do

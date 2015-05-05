@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Search::Operation::IPAddress, type: :model do
+RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model do
   subject(:operation) {
     described_class.new(
         operator: operator,

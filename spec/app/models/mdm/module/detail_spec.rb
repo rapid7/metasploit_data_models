@@ -1,4 +1,4 @@
-describe Mdm::Module::Detail, type: :model do
+RSpec.describe Mdm::Module::Detail, type: :model do
   subject(:detail) do
     FactoryGirl.build(
         :mdm_module_detail,

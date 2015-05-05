@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Search::Operation::Port::Number, type: :model do
+RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :model do
   context 'CONSTANTS' do
     context 'BITS' do
       subject(:bits) {

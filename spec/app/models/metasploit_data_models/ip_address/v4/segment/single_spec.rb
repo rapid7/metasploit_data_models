@@ -1,4 +1,4 @@
-describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :model do
+RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :model do
   subject(:single) {
     described_class.new(
         value: formatted_value

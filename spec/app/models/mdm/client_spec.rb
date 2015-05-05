@@ -1,4 +1,4 @@
-describe Mdm::Client, type: :model do
+RSpec.describe Mdm::Client, type: :model do
 
   it_should_behave_like 'Metasploit::Concern.run'
 

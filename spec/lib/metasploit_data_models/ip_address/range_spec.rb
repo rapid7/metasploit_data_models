@@ -1,4 +1,4 @@
-describe MetasploitDataModels::IPAddress::Range do
+RSpec.describe MetasploitDataModels::IPAddress::Range do
   subject(:range) {
     range_class.new
   }

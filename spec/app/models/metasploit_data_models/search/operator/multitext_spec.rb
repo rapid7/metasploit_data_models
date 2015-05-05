@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Search::Operator::Multitext, type: :model do
+RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model do
   subject(:multitext_operator) {
     described_class.new(
         attributes

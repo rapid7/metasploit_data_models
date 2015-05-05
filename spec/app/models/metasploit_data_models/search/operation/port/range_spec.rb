@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Search::Operation::Port::Range, type: :model do
+RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :model do
   subject(:port_range_operation) {
     described_class.new(
         value: formatted_value

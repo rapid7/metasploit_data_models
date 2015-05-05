@@ -1,4 +1,4 @@
-describe MetasploitDataModels::Match::Parent do
+RSpec.describe MetasploitDataModels::Match::Parent do
   let(:including_class) {
     described_class = self.described_class
 

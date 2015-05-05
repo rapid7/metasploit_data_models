@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe MetasploitDataModels::Base64Serializer do
+RSpec.describe MetasploitDataModels::Base64Serializer do
   let(:base64_marshaled) do
     marshaled = Marshal.dump(unserialized)
 
