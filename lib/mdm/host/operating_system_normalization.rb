@@ -185,15 +185,6 @@ module Mdm::Host::OperatingSystemNormalization
     # Merge and normalize the best match to the host object
     apply_match_to_host(match) if match
 
-    # Handle cases where the flavor contains the base name (legacy parsing, etc)
-    # TODO: Remove this once we are sure it is no longer needed
-    if host.os_name && host.os_flavor && host.os_flavor.index(host.os_name)
-      dlog("Host #{host.address} has os_flavor that contains os_name")
-      dlog("os_flavor: #{host.os_flavor}")
-      dlog("os_name: #{host.os_name}")
-      host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip
-    end
-
     # Set some sane defaults if needed
     host.os_name ||= 'Unknown'
     host.purpose ||= 'device'
@@ -302,7 +293,6 @@ module Mdm::Host::OperatingSystemNormalization
       # name collision seems silly.
       return false
     else
-      dlog("Could not validate fingerprint data: #{fp.inspect}")
       return false
     end
   end

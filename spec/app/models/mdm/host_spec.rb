@@ -702,10 +702,6 @@ RSpec.describe Mdm::Host, type: :model do
     end
 
     context '#validate_fingerprint_data' do
-      before(:each) do
-        allow(host).to receive(:dlog)
-      end
-
       it 'should return false for an empty hash' do
         fingerprint= FactoryGirl.build(:mdm_note, :data => {})
         expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
