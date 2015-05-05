@@ -81,10 +81,6 @@ RSpec.describe Mdm::Cred, type: :model do
   end
 
   context 'methods' do
-    #
-    # lets
-    #
-
     let(:host) {
       FactoryGirl.create(
           :mdm_host,
@@ -131,14 +127,6 @@ RSpec.describe Mdm::Cred, type: :model do
     let(:workspace) {
       FactoryGirl.create(:mdm_workspace)
     }
-
-    #
-    # Callbacks
-    #
-
-    before(:each) do
-      Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
-    end
 
     context '#ptype_human' do
       it "should return 'read/write password' for 'password_rw'" do

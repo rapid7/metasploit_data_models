@@ -117,6 +117,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     # Rex is only available when testing with metasploit-framework or pro, so stub out the methods that require it
-    Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
+    allow_any_instance_of(Mdm::Workspace).to receive(:valid_ip_or_range?).and_return(true)
   end
 end
