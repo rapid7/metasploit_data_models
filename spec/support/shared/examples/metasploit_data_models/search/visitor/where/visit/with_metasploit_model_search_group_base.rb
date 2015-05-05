@@ -16,10 +16,10 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with Met
   end
 
   it 'should visit each child' do
-    visitor.should_receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(node).and_call_original
 
     children.each do |child|
-      visitor.should_receive(:visit).with(child).and_return(Arel::Nodes::Equality.new(1, 1))
+      expect(visitor).to receive(:visit).with(child).and_return(Arel::Nodes::Equality.new(1, 1))
     end
 
     visit

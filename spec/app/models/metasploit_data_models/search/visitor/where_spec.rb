@@ -82,7 +82,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
       end
 
       it 'should visit operation.operator with attribute_visitor' do
-        visitor.attribute_visitor.should_receive(:visit).with(operator).and_call_original
+        expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
 
         visit
       end
@@ -91,7 +91,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
         attribute = double('Visited Operator')
         allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
 
-        attribute.should_receive(:matches).with("%#{value}%")
+        expect(attribute).to receive(:matches).with("%#{value}%")
 
         visit
       end

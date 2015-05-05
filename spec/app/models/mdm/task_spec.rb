@@ -61,7 +61,7 @@ RSpec.describe Mdm::Task, type: :model do
     context 'before_destroy' do
       it 'should call #delete_file' do
         task = FactoryGirl.create(:mdm_task)
-        task.should_receive(:delete_file)
+        expect(task).to receive(:delete_file)
         task.destroy
       end
     end

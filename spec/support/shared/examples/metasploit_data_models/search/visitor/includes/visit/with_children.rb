@@ -13,10 +13,10 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
 
   it 'should visit each child' do
     # needed for call to visit subject
-    visitor.should_receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(node).and_call_original
 
     children.each do |child|
-      visitor.should_receive(:visit).with(child).and_return([])
+      expect(visitor).to receive(:visit).with(child).and_return([])
     end
 
     visit
@@ -25,7 +25,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
   it 'should return Array of all child visits' do
     child_visits = []
 
-    visitor.should_receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(node).and_call_original
 
     children.each_with_index do |child, i|
       child_visit = ["Visited Child #{i}"]

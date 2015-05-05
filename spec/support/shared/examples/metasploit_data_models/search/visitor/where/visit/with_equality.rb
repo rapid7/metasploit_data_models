@@ -18,7 +18,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equ
   end
 
   it 'should visit operation.operator with attribute_visitor' do
-    visitor.attribute_visitor.should_receive(:visit).with(operator).and_call_original
+    expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
 
     visit
   end
@@ -27,7 +27,7 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equ
     attribute = double('Visited Operator')
     allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
 
-    attribute.should_receive(:eq).with(value)
+    expect(attribute).to receive(:eq).with(value)
 
     visit
   end

@@ -68,7 +68,7 @@ RSpec.describe Mdm::Service, type: :model do
     context 'after_save' do
       it 'should call #normalize_host_os' do
         svc = FactoryGirl.create(:mdm_service)
-        svc.should_receive(:normalize_host_os)
+        expect(svc).to receive(:normalize_host_os)
         svc.run_callbacks(:save)
       end
     end

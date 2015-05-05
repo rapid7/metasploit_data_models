@@ -58,7 +58,7 @@ RSpec.describe Mdm::Workspace, type: :model do
     context 'before_save' do
       context '#normalize' do
         it 'should be called' do
-          workspace.should_receive(:normalize)
+          expect(workspace).to receive(:normalize)
           workspace.run_callbacks(:save, false)
         end
       end
@@ -100,7 +100,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should validate using #valid_ip_or_range?' do
-        workspace.should_receive(:valid_ip_or_range?).with(boundary).and_return(false)
+        expect(workspace).to receive(:valid_ip_or_range?).with(boundary).and_return(false)
 
         workspace.valid?
       end

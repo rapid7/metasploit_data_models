@@ -56,14 +56,14 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
       end
 
       it 'should visit Metasploit::Model::Search::Operator::Association#source_operator' do
-        visitor.should_receive(:visit).with(node).and_call_original
-        visitor.should_receive(:visit).with(source_operator)
+        expect(visitor).to receive(:visit).with(node).and_call_original
+        expect(visitor).to receive(:visit).with(source_operator)
 
         visit
       end
 
       it 'should return visit of Metasploit::Model::Search::Operator::Association#source_operator' do
-        visitor.should_receive(:visit).with(node).and_call_original
+        expect(visitor).to receive(:visit).with(node).and_call_original
 
         visited = double('Source Operator Visited')
         allow(visitor).to receive(:visit).with(source_operator).and_return(visited)

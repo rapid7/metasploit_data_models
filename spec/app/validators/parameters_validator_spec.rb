@@ -79,7 +79,7 @@ RSpec.describe ParametersValidator do
     end
 
     it 'should include extreme in prefix' do
-      parameters_validator.should_receive(:error_at) do |*args|
+      expect(parameters_validator).to receive(:error_at) do |*args|
         options = args.first
         expect(options[:prefix]).to include(extreme.to_s)
       end
@@ -142,7 +142,7 @@ RSpec.describe ParametersValidator do
             end
 
             it 'should call #length_error_at with :extreme => :few' do
-              parameters_validator.should_receive(:length_error_at).with(
+              expect(parameters_validator).to receive(:length_error_at).with(
                   hash_including(
                       :extreme => :few
                   )
@@ -164,7 +164,7 @@ RSpec.describe ParametersValidator do
             end
 
             it 'should call #length_error_at with :extreme => :many' do
-              parameters_validator.should_receive(:length_error_at).with(
+              expect(parameters_validator).to receive(:length_error_at).with(
                   hash_including(
                       :extreme => :many
                   )
@@ -201,7 +201,7 @@ RSpec.describe ParametersValidator do
                   end
 
                   it 'should call error_at with blank parameter name prefix' do
-                    parameters_validator.should_receive(:error_at).with(
+                    expect(parameters_validator).to receive(:error_at).with(
                         hash_including(
                           :prefix => 'has blank parameter name'
                         )
@@ -236,7 +236,7 @@ RSpec.describe ParametersValidator do
                 end
 
                 it 'should call error_at with non-String prefix' do
-                  parameters_validator.should_receive(:error_at).with(
+                  expect(parameters_validator).to receive(:error_at).with(
                       hash_including(
                           :prefix => "has non-String parameter name (#{parameter_name.inspect})"
                       )
@@ -272,7 +272,7 @@ RSpec.describe ParametersValidator do
                 end
 
                 it 'should call error_at with non-String prefix' do
-                  parameters_validator.should_receive(:error_at).with(
+                  expect(parameters_validator).to receive(:error_at).with(
                       hash_including(
                           :prefix => "has non-String parameter value (#{parameter_value.inspect})"
                       )
@@ -297,7 +297,7 @@ RSpec.describe ParametersValidator do
           end
 
           it 'should use #error_at with has non-Array for prefix' do
-            parameters_validator.should_receive(:error_at).with(
+            expect(parameters_validator).to receive(:error_at).with(
                 hash_including(
                     :prefix => 'has non-Array'
                 )

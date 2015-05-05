@@ -91,7 +91,7 @@ RSpec.describe Mdm::Session, type: :model do
     context 'before_destroy' do
       it 'should call #stop' do
         mysession = FactoryGirl.create(:mdm_session)
-        mysession.should_receive(:stop)
+        expect(mysession).to receive(:stop)
         mysession.destroy
       end
     end

@@ -96,7 +96,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        includes_visitor.should_receive(:visit).with(query.tree)
+        expect(includes_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
@@ -117,7 +117,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        joins_visitor.should_receive(:visit).with(query.tree)
+        expect(joins_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
@@ -138,7 +138,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        where_visitor.should_receive(:visit).with(query.tree)
+        expect(where_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
