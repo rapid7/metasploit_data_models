@@ -57,8 +57,8 @@ describe MetasploitDataModels::Search::Operation::IPAddress, type: :model do
           end
         end
 
-        context 'with Nmap', pending: 'MSP-10712' do
-          context 'with valid segment range' do
+        context 'with Nmap' do
+          context 'with valid segment range', pending: 'MSP-10712' do
             let(:formatted_value) {
               '1-2.3.4.5'
             }

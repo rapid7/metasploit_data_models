@@ -101,7 +101,7 @@ describe Mdm::Workspace, type: :model do
         workspace.valid?
       end
 
-      it 'should validate using #valid_ip_or_range?', :pending => 'https://www.pivotaltracker.com/story/show/43244445'  do
+      it 'should validate using #valid_ip_or_range?' do
         workspace.should_receive(:valid_ip_or_range?).with(boundary).and_return(false)
 
         workspace.valid?
