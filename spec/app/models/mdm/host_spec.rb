@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Host do
+describe Mdm::Host, type: :model do
   subject(:host) do
     FactoryGirl.build(:mdm_host)
   end

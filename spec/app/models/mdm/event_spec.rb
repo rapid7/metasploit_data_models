@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Event do
+describe Mdm::Event, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do

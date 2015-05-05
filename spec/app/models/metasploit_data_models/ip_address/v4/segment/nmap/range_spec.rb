@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range do
+describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: :model do
   subject(:range) {
     described_class.new(
         value: formatted_value

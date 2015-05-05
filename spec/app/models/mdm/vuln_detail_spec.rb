@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::VulnDetail do
+describe Mdm::VulnDetail, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'association' do

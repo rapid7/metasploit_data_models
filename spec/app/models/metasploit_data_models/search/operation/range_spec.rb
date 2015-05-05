@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Operation::Range do
+describe MetasploitDataModels::Search::Operation::Range, type: :model do
   subject(:range_operation) {
     described_class.new(attributes)
   }

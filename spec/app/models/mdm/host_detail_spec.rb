@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::HostDetail do
+describe Mdm::HostDetail, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do

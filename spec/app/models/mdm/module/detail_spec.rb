@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Module::Detail do
+describe Mdm::Module::Detail, type: :model do
   subject(:detail) do
     FactoryGirl.build(
         :mdm_module_detail,

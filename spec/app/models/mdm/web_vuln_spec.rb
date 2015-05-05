@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::WebVuln do
+describe Mdm::WebVuln, type: :model do
   let(:confidence_range) do
     0 .. 100
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Note do
+describe Mdm::Note, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do

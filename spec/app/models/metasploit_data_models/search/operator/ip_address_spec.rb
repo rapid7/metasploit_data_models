@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Operator::IPAddress do
+describe MetasploitDataModels::Search::Operator::IPAddress, type: :model do
   subject(:operator) {
     described_class.new
   }

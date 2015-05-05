@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Loot do
+describe Mdm::Loot, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do

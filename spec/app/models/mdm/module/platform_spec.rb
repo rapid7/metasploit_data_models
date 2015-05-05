@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Module::Platform do
+describe Mdm::Module::Platform, type: :model do
 
   it_should_behave_like 'Metasploit::Concern.run'
 

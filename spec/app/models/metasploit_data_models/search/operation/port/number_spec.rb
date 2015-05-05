@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Operation::Port::Number do
+describe MetasploitDataModels::Search::Operation::Port::Number, type: :model do
   context 'CONSTANTS' do
     context 'BITS' do
       subject(:bits) {

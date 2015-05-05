@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Visitor::Where do
+describe MetasploitDataModels::Search::Visitor::Where, type: :model do
   subject(:visitor) do
     described_class.new
   end

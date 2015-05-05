@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Operation::Port::Range do
+describe MetasploitDataModels::Search::Operation::Port::Range, type: :model do
   subject(:port_range_operation) {
     described_class.new(
         value: formatted_value

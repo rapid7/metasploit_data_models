@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::VulnRef do
+describe Mdm::VulnRef, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factories' do

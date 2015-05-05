@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mdm::Vuln do
+describe Mdm::Vuln, type: :model do
   subject(:vuln) do
     FactoryGirl.build(:mdm_vuln)
   end

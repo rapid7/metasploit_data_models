@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetasploitDataModels::Search::Operator::Port::List do
+describe MetasploitDataModels::Search::Operator::Port::List, type: :model do
   subject(:port_list_operator) {
     described_class.new(
         klass: klass
