@@ -138,7 +138,7 @@ describe Mdm::Cred do
     # Callbacks
     #
 
-    before(:all) do
+    before(:each) do
       Mdm::Workspace.any_instance.stub(:valid_ip_or_range? => true)
     end
 

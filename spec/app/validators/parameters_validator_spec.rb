@@ -327,9 +327,11 @@ describe ParametersValidator do
       end
 
       it 'should error that attribute is not an array' do
-        errors.any? { |error|
-          error.include? 'is not an Array.'
-        }.should be_true
+        expect(
+            errors.any? { |error|
+              error.include? 'is not an Array.'
+            }
+        ).to eq(true)
       end
 
       it 'should include TYPE_SIGNATURE_SENTENCE' do

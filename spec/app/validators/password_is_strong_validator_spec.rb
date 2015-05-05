@@ -20,23 +20,23 @@ describe PasswordIsStrongValidator do
   context '#contains_repetition?' do
 
     it 'should return true for aaaa' do
-      password_validator.send(:contains_repetition?, 'aaaa').should be_true
+      expect(password_validator.send(:contains_repetition?, 'aaaa')).to eq(true)
     end
 
     it 'should return true for ababab' do
-      password_validator.send(:contains_repetition?, 'ababab').should be_true
+      expect(password_validator.send(:contains_repetition?, 'ababab')).to eq(true)
     end
 
     it 'should return true for abcabcabc' do
-      password_validator.send(:contains_repetition?, 'abcabcabc').should be_true
+      expect(password_validator.send(:contains_repetition?, 'abcabcabc')).to eq(true)
     end
 
     it 'should return true for abcdabcd' do
-      password_validator.send(:contains_repetition?, 'abcdabcd').should be_true
+      expect(password_validator.send(:contains_repetition?, 'abcdabcd')).to eq(true)
     end
 
     it 'should return false for abcd1234abcd' do
-      password_validator.send(:contains_repetition?, 'abcd1234abcd').should be_false
+      expect(password_validator.send(:contains_repetition?, 'abcd1234abcd')).to eq(false)
     end
 
   end
@@ -123,81 +123,81 @@ describe PasswordIsStrongValidator do
     PasswordIsStrongValidator::COMMON_PASSWORDS.each do |password|
 
       it "should return true for #{password}"  do
-        password_validator.send(:is_common_password?, password).should be_true
+        expect(password_validator.send(:is_common_password?, password)).to eq(true)
       end
 
       it "should return true for #{password}!"  do
-        password_validator.send(:is_common_password?, "#{password}!").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}!")).to eq(true)
       end
 
       it "should return true for #{password}1"  do
-        password_validator.send(:is_common_password?, "#{password}1").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}1")).to eq(true)
       end
 
       it "should return true for #{password}9"  do
-        password_validator.send(:is_common_password?, "#{password}1").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}1")).to eq(true)
       end
 
       it "should return true for #{password}99"  do
-        password_validator.send(:is_common_password?, "#{password}12").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}12")).to eq(true)
       end
 
       it "should return true for #{password}123"  do
-        password_validator.send(:is_common_password?, "#{password}123").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}123")).to eq(true)
       end
 
       it "should return true for #{password}123!" do
-        password_validator.send(:is_common_password?, "#{password}123!").should be_true
+        expect(password_validator.send(:is_common_password?, "#{password}123!")).to eq(true)
       end
 
     end
 
     it "should return true for r00t" do
-      password_validator.send(:is_common_password?, "r00t").should be_true
+      expect(password_validator.send(:is_common_password?, "r00t")).to eq(true)
     end
 
     it "should return true for m3t@spl0it" do
-      password_validator.send(:is_common_password?, "m3t@spl0it").should be_true
+      expect(password_validator.send(:is_common_password?, "m3t@spl0it")).to eq(true)
     end
 
     it "should return true for m3t@spl0it123!" do
-      password_validator.send(:is_common_password?, "m3t@spl0it123!").should be_true
+      expect(password_validator.send(:is_common_password?, "m3t@spl0it123!")).to eq(true)
     end
   end
 
   context '#contains_username' do
 
     it 'should return true if username and password are the same' do
-      password_validator.send(:contains_username?, 'admin', 'admin').should be_true
+      expect(password_validator.send(:contains_username?, 'admin', 'admin')).to eq(true)
     end
 
     it 'should return true if the password contains the username as part of it' do
-      password_validator.send(:contains_username?, 'admin', '123admin123').should be_true
+      expect(password_validator.send(:contains_username?, 'admin', '123admin123')).to eq(true)
     end
 
     it 'should return false otherwise' do
-      password_validator.send(:contains_username?, 'admin', 'foobar').should be_false
+      expect(password_validator.send(:contains_username?, 'admin', 'foobar')).to eq(false)
     end
   end
 
   context '#is_simple?' do
 
     it "should return true if no number" do
-      password_validator.send(:is_simple?, "b@carat").should be_true
+      expect(password_validator.send(:is_simple?, "b@carat")).to eq(true)
     end
 
     it "should return true if no special char" do
-      password_validator.send(:is_simple?, "bacarat4").should be_true
+      expect(password_validator.send(:is_simple?, "bacarat4")).to eq(true)
     end
 
     it "should return true if no letters" do
-      password_validator.send(:is_simple?, "1337").should be_true
+      expect(password_validator.send(:is_simple?, "1337")).to eq(true)
     end
 
     PasswordIsStrongValidator::SPECIAL_CHARS.each_char do |char|
 
       it "should return false with a #{char}" do
-        password_validator.send(:is_simple?, "bacarat4#{char}").should be_false
+        expect(password_validator.send(:is_simple?, "bacarat4#{char}")).to eq(false)
       end
     end
   end
@@ -231,7 +231,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
         validate_each
-        errors.include?("must contain letters, numbers, and at least one special character").should be_true
+        expect(errors.include?("must contain letters, numbers, and at least one special character")).to eq(true)
       end
     end
 
@@ -245,7 +245,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
         validate_each
-        errors.include?("must contain letters, numbers, and at least one special character").should be_true
+        expect(errors.include?("must contain letters, numbers, and at least one special character")).to eq(true)
       end
     end
 
@@ -259,7 +259,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must contain letters, numbers, and at least one special character"' do
         validate_each
-        errors.include?("must contain letters, numbers, and at least one special character").should be_true
+        expect(errors.include?("must contain letters, numbers, and at least one special character")).to eq(true)
       end
     end
 
@@ -273,7 +273,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must not contain the username"' do
         validate_each
-        errors.include?("must not contain the username").should be_true
+        expect(errors.include?("must not contain the username")).to eq(true)
       end
     end
 
@@ -287,7 +287,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must not be a common password"' do
         validate_each
-        errors.include?("must not be a common password").should be_true
+        expect(errors.include?("must not be a common password")).to eq(true)
       end
     end
 
@@ -301,7 +301,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must not be a common password"' do
         validate_each
-        errors.include?("must not be a common password").should be_true
+        expect(errors.include?("must not be a common password")).to eq(true)
       end
     end
 
@@ -315,7 +315,7 @@ describe PasswordIsStrongValidator do
 
       it 'should have an error of "must not be a predictable sequence of characters"' do
         validate_each
-        errors.include?("must not be a predictable sequence of characters").should be_true
+        expect(errors.include?("must not be a predictable sequence of characters")).to eq(true)
       end
     end
 

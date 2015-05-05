@@ -27,7 +27,14 @@ describe Mdm::Module::Author do
       end
 
       it { should be_valid }
-      its(:email) { should_not be_nil }
+
+      context 'email' do
+        subject(:email) {
+          full_mdm_module_author.email
+        }
+
+        it { is_expected.not_to be_nil }
+      end
     end
 
     context 'mdm_module_author' do

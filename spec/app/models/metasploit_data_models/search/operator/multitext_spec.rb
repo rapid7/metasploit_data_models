@@ -82,7 +82,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
       }
 
       it 'generates a single union for quoted words as a single argument' do
-        expect(children).to have(1).items
+        expect(children.length).to eq(1)
 
         child = children.first
 

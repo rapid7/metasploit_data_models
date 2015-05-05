@@ -6,7 +6,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
     end
 
     it 'should return true for supports_stance?' do
-      detail.supports_stance?.should be_true
+      expect(detail.supports_stance?).to eq(true)
     end
 
     context 'with nil stance' do

@@ -870,9 +870,29 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       visitor.visitor_by_relation_method
     end
 
-    its([:joins]) { should be_a MetasploitDataModels::Search::Visitor::Joins }
-    its([:includes]) { should be_a MetasploitDataModels::Search::Visitor::Includes }
-    its([:where]) { should be_a MetasploitDataModels::Search::Visitor::Where }
+    context 'joins' do
+      subject(:joins) {
+        visitor_by_relation_method[:joins]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Joins }
+    end
+
+    context 'includes' do
+      subject(:includes) {
+        visitor_by_relation_method[:includes]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Includes }
+    end
+
+    context 'where' do
+      subject(:where) {
+        visitor_by_relation_method[:where]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Where }
+    end
   end
 
   context 'visitor_class_by_relation_method' do
@@ -880,8 +900,28 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       described_class.visitor_class_by_relation_method
     end
 
-    its([:joins]) { should == MetasploitDataModels::Search::Visitor::Joins }
-    its([:includes]) { should == MetasploitDataModels::Search::Visitor::Includes }
-    its([:where]) { should == MetasploitDataModels::Search::Visitor::Where }
+    context 'joins' do
+      subject(:joins) {
+        visitor_class_by_relation_method[:joins]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Joins) }
+    end
+
+    context 'includes' do
+      subject(:includes) {
+        visitor_class_by_relation_method[:includes]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Includes) }
+    end
+
+    context 'where' do
+      subject(:where) {
+        visitor_class_by_relation_method[:where]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Where) }
+    end
   end
 end

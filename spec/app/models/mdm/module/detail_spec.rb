@@ -65,12 +65,29 @@ describe Mdm::Module::Detail do
         described_class::DIRECTORY_BY_TYPE
       end
 
-      its(['auxiliary']) { should == 'auxiliary' }
-      its(['encoder']) { should == 'encoders' }
-      its(['exploit']) { should == 'exploits' }
-      its(['nop']) { should == 'nops' }
-      its(['payload']) { should == 'payloads' }
-      its(['post']) { should == 'post' }
+      it "maps 'auxiliary' to 'auxiliary'" do
+        expect(directory_by_type['auxiliary']).to eq('auxiliary')
+      end
+      
+      it "maps 'encoder' to 'encoders'" do
+        expect(directory_by_type['encoder']).to eq('encoders')
+      end
+      
+      it "maps 'exploit' to 'exploits'" do
+        expect(directory_by_type['exploit']).to eq('exploits')
+      end
+      
+      it "maps 'nop' to 'nops'" do
+        expect(directory_by_type['nop']).to eq('nops')
+      end
+      
+      it "maps 'payload' to 'payloads'" do
+        expect(directory_by_type['payload']).to eq('payloads')
+      end
+      
+      it "maps 'post' to 'post'" do
+        expect(directory_by_type['post']).to eq('post')
+      end
     end
 
     context 'PRIVILEGES' do
@@ -89,13 +106,33 @@ describe Mdm::Module::Detail do
         described_class::RANK_BY_NAME
       end
 
-      its(['Manual']) { should == 0 }
-      its(['Low']) { should == 100 }
-      its(['Average']) { should == 200 }
-      its(['Normal']) { should == 300 }
-      its(['Good']) { should == 400 }
-      its(['Great']) { should == 500 }
-      its(['Excellent']) { should == 600 }
+      it "maps 'Manual' to 0" do
+        expect(rank_by_name['Manual']).to eq(0)
+      end
+
+      it "maps 'Low' to 100" do
+        expect(rank_by_name['Low']).to eq(100)
+      end
+
+      it "maps 'Average' to 200" do
+        expect(rank_by_name['Average']).to eq(200)
+      end
+
+      it "maps 'Normal' to 300" do
+        expect(rank_by_name['Normal']).to eq(300)
+      end
+
+      it "maps 'Good' to 400" do
+        expect(rank_by_name['Good']).to eq(400)
+      end
+
+      it "maps 'Great' to 500" do
+        expect(rank_by_name['Great']).to eq(500)
+      end
+
+      it "maps 'Excellent' to 600" do
+        expect(rank_by_name['Excellent']).to eq(600)
+      end
     end
 
     context 'STANCES' do
@@ -154,8 +191,21 @@ describe Mdm::Module::Detail do
 
           it { should be_valid }
 
-          its(:stance) { should_not be_nil }
-          its(:supports_stance?) { should be_true }
+          context '#stance' do
+            subject(:stance) {
+              mdm_module_detail.stance
+            }
+
+            it { is_expected.not_to be_nil }
+          end
+
+          context '#supports_stance?' do
+            subject(:supports_stance?) {
+              mdm_module_detail.supports_stance?
+            }
+
+            it { is_expected.to eq(true) }
+          end
         end
 
         context 'without supports_stance?' do
@@ -165,8 +215,21 @@ describe Mdm::Module::Detail do
 
           it { should be_valid }
 
-          its(:stance) { should be_nil }
-          its(:supports_stance?) { should be_false }
+          context '#stance' do
+            subject(:stance) {
+              mdm_module_detail.stance
+            }
+
+            it { is_expected.to be_nil }
+          end
+
+          context '#supports_stance?' do
+            subject(:supports_stance?) {
+              mdm_module_detail.supports_stance?
+            }
+
+            it { is_expected.to eq(false) }
+          end
         end
       end
     end
@@ -227,7 +290,11 @@ describe Mdm::Module::Detail do
 
         it { should be_valid }
 
-        its(:name) { should == name }
+        context '#name' do
+          it 'is name passed to add_action' do
+            expect(module_action.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -255,7 +322,11 @@ describe Mdm::Module::Detail do
 
         it { should be_valid }
 
-        its(:name) { should == name }
+        context '#name' do
+          it 'is name passed to add_arch' do
+            expect(module_arch.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -288,8 +359,17 @@ describe Mdm::Module::Detail do
 
           it { should be_valid }
 
-          its(:email) { should == email }
-          its(:name) { should == name }
+          context '#email' do
+            it 'is email passed to add_author' do
+              expect(module_author.email).to eq(email)
+            end
+          end
+
+          context '#name' do
+            it 'is name passed to add_author' do
+              expect(module_author.name).to eq(name)
+            end
+          end
         end
       end
 
@@ -313,8 +393,19 @@ describe Mdm::Module::Detail do
 
           it { should be_valid }
 
-          its(:email) { should be_nil }
-          its(:name) { should == name }
+          context '#email' do
+            subject(:module_author_email) {
+              module_author.email
+            }
+
+            it { is_expected.to be_nil }
+          end
+
+          context '#name' do
+            it 'is name passed to add_author' do
+              expect(module_author.name).to eq(name)
+            end
+          end
         end
       end
     end
@@ -335,14 +426,19 @@ describe Mdm::Module::Detail do
       end
 
       context 'new Mdm::ModuleMixin' do
-        subject do
+        subject(:mdm_module_mixin) do
           add_mixin
 
           detail.mixins.last
         end
 
         it { should be_valid }
-        its(:name) { should == name }
+
+        context '#name' do
+          it 'is name passed to add_mixin' do
+            expect(mdm_module_mixin.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -369,7 +465,12 @@ describe Mdm::Module::Detail do
         end
 
         it { should be_valid }
-        its(:name) { should == name }
+
+        context '#name' do
+          it 'is name passed to add_platform' do
+            expect(module_platform.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -396,7 +497,12 @@ describe Mdm::Module::Detail do
         end
 
         it { should be_valid }
-        its(:name) { should == name }
+
+        context '#name' do
+          it 'is name passed to add_ref' do
+            expect(module_ref.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -427,7 +533,12 @@ describe Mdm::Module::Detail do
         end
 
         it { should be_valid }
-        its(:name) { should == name }
+
+        context '#name' do
+          it 'is name passed to add_target' do
+            expect(module_target.name).to eq(name)
+          end
+        end
       end
     end
   end

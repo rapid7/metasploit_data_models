@@ -230,9 +230,11 @@ describe Mdm::Workspace do
 
         found_creds.length.should == creds.length
 
-        found_creds.all? { |cred|
-          cred.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_creds.all? { |cred|
+              cred.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -279,13 +281,11 @@ describe Mdm::Workspace do
           workspace.name = default
         end
 
-        it {
-          should be_true
-        }
+        it { is_expected.to eq(true) }
       end
 
       context 'without DEFAULT name' do
-        it { should be_false }
+        it { is_expected.to eq(false) }
       end
     end
 
@@ -375,11 +375,13 @@ describe Mdm::Workspace do
 
         found_tags.length.should == tags.length
 
-        found_tags.all? { |tag|
-          tag.hosts.any? { |host|
-            host.workspace == workspace
-          }
-        }.should be_true
+        expect(
+            found_tags.all? { |tag|
+              tag.hosts.any? { |host|
+                host.workspace == workspace
+              }
+            }
+        ).to eq(true)
       end
     end
 
@@ -453,9 +455,11 @@ describe Mdm::Workspace do
 
         found_web_forms.length.should == web_forms.length
 
-        found_web_forms.all? { |web_form|
-          web_form.web_site.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_web_forms.all? { |web_form|
+              web_form.web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -486,9 +490,11 @@ describe Mdm::Workspace do
 
         found_web_sites.length.should == web_sites.count
 
-        found_web_sites.all? { |web_site|
-          web_site.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_web_sites.all? { |web_site|
+              web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -525,10 +531,11 @@ describe Mdm::Workspace do
 
         found_web_vulns.length.should == web_vulns.length
 
-        found_web_vulns.all? { |web_vuln|
-          web_vuln.web_site.service.host.workspace == workspace
-        }.should be_true
-
+        expect(
+            found_web_vulns.all? { |web_vuln|
+              web_vuln.web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -549,9 +556,11 @@ describe Mdm::Workspace do
       it "should reject #unique_web_forms from host addresses that aren't in addresses" do
         web_forms = workspace.web_unique_forms([selected_address])
 
-        web_forms.all? { |web_form|
-          web_form.web_site.service.host.address.should == selected_address
-        }.should be_true
+        expect(
+            web_forms.all? { |web_form|
+              web_form.web_site.service.host.address.should == selected_address
+            }
+        ).to eq(true)
       end
     end
   end

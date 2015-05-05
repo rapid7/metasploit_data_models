@@ -159,15 +159,22 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       single <=> other
     }
 
+    let(:formatted_value) {
+      '1'
+    }
+
     let(:other) {
       double('Other')
     }
 
     it 'compares #values' do
       other_value = double('other.value')
+      single_value = double('single.value')
 
       expect(other).to receive(:value).and_return(other_value)
-      expect(single.value).to receive(:<=>).with(other_value)
+      # have to use a double because can't expect().to receive on an Integer
+      expect(single).to receive(:value).and_return(single_value)
+      expect(single_value).to receive(:<=>).with(other_value)
 
       compare
     end
