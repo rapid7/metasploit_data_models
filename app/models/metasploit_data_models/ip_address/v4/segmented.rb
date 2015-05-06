@@ -67,7 +67,7 @@ class MetasploitDataModels::IPAddress::V4::Segmented < Metasploit::Model::Base
   #
   # @return [Regexp]
   def self.regexp
-    unless @regexp
+    unless instance_variable_defined? :@regexp
       separated_segment_count = SEGMENT_COUNT - 1
 
       @regexp = %r{
