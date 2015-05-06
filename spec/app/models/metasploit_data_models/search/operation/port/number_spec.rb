@@ -5,7 +5,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :mod
         described_class::BITS
       }
 
-      it { should == 16 }
+      it { is_expected.to eq(16) }
     end
 
     context 'MAXIMUM' do
@@ -13,7 +13,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :mod
         described_class::MAXIMUM
       }
 
-      it { should == 65535 }
+      it { is_expected.to eq(65535) }
     end
 
     context 'MINIMUM' do
@@ -21,7 +21,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :mod
         described_class::MINIMUM
       }
 
-      it { should == 0 }
+      it { is_expected.to eq(0) }
     end
 
     context 'RANGE' do
@@ -29,11 +29,11 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :mod
         described_class::RANGE
       }
 
-      it { should == (0..65535) }
+      it { is_expected.to eq((0..65535)) }
     end
   end
 
   context 'validations' do
-    it { should ensure_inclusion_of(:value).in_range(described_class::RANGE) }
+    it { is_expected.to ensure_inclusion_of(:value).in_range(described_class::RANGE) }
   end
 end

@@ -43,7 +43,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '1.2.3.4/8'
             }
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
 
           context 'without valid prefix_length' do
@@ -51,7 +51,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '1.2.3.4/36'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
 
@@ -61,7 +61,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '1-2.3.4.5'
             }
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
 
           context 'without valid segment range' do
@@ -69,7 +69,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '2-1.3.4.5'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
 
@@ -79,7 +79,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '2.2.2.2-1.1.1.1'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
 
           context 'without ordered range' do
@@ -87,7 +87,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
               '1.1.1.1-2.2.2.2'
             }
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
         end
 
@@ -105,7 +105,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           nil
         }
 
-        it { should include blank_error }
+        it { is_expected.to include blank_error }
         it { should_not include invalid_error }
       end
 
@@ -114,7 +114,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           ''
         }
 
-        it { should include blank_error }
+        it { is_expected.to include blank_error }
         it { should_not include invalid_error }
       end
 
@@ -123,7 +123,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           'non_matching_value'
         }
 
-        it { should include invalid_error }
+        it { is_expected.to include invalid_error }
       end
     end
   end
@@ -139,7 +139,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           '1.2.3.4/8'
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::CIDR }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::CIDR }
       end
 
       context 'with Nmap', pending: 'MSP-10712' do
@@ -147,7 +147,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           '1.2.3.4-5'
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::Nmap }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Nmap }
       end
 
       context 'with Range' do
@@ -155,7 +155,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           '1.1.1.1-2.2.2.2'
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::Range }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Range }
       end
 
       context 'with address' do
@@ -163,7 +163,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
           '1.2.3.4'
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::Single }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Single }
       end
     end
 

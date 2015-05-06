@@ -29,7 +29,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
   context 'validations' do
     context 'query' do
-      it { should validate_presence_of(:query) }
+      it { is_expected.to validate_presence_of(:query) }
 
       context 'valid' do
         let(:error) do

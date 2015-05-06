@@ -5,25 +5,25 @@ RSpec.describe Mdm::Tag, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
-    it { should have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
-    it { should belong_to(:user).class_name('Mdm::User') }
+    it { is_expected.to have_many(:hosts_tags).class_name('Mdm::HostTag') }
+    it { is_expected.to have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
+    it { is_expected.to belong_to(:user).class_name('Mdm::User') }
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:user_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:desc).of_type(:text) }
-      it { should have_db_column(:report_summary).of_type(:boolean).with_options(:null => false, :default =>false) }
-      it { should have_db_column(:report_detail).of_type(:boolean).with_options(:null => false, :default =>false) }
-      it { should have_db_column(:critical).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:desc).of_type(:text) }
+      it { is_expected.to have_db_column(:report_summary).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:report_detail).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:critical).of_type(:boolean).with_options(:null => false, :default =>false) }
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.describe Mdm::Tag, type: :model do
         FactoryGirl.build(:mdm_tag)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 

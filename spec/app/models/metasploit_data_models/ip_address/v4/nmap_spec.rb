@@ -39,7 +39,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Nmap, type: :model do
             '1.2.3.4'
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
       end
 
@@ -55,7 +55,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Nmap, type: :model do
           )
         }
 
-        it { should include length_error }
+        it { is_expected.to include length_error }
       end
     end
   end
@@ -84,7 +84,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Nmap, type: :model do
         nil
       }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'with matching formatted value' do

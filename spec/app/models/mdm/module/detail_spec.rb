@@ -48,13 +48,13 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
-    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
-    it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
-    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
-    it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
-    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
-    it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
+    it { is_expected.to have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
+    it { is_expected.to have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
+    it { is_expected.to have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
+    it { is_expected.to have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
+    it { is_expected.to have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
+    it { is_expected.to have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
+    it { is_expected.to have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
   end
 
   context 'CONSTANTS' do
@@ -138,34 +138,34 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         described_class::STANCES
       end
 
-      it { should include('aggressive') }
-      it { should include('passive') }
+      it { is_expected.to include('aggressive') }
+      it { is_expected.to include('passive') }
     end
   end
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:default_target).of_type(:integer) }
-      it { should have_db_column(:description).of_type(:text) }
-      it { should have_db_column(:disclosure_date).of_type(:datetime)}
-      it { should have_db_column(:file).of_type(:text) }
-      it { should have_db_column(:fullname).of_type(:text) }
-      it { should have_db_column(:license).of_type(:string) }
-      it { should have_db_column(:mtime).of_type(:datetime) }
-      it { should have_db_column(:mtype).of_type(:string) }
-      it { should have_db_column(:name).of_type(:text) }
-      it { should have_db_column(:privileged).of_type(:boolean) }
-      it { should have_db_column(:rank).of_type(:integer) }
-      it { should have_db_column(:ready).of_type(:boolean) }
-      it { should have_db_column(:refname).of_type(:text) }
-      it { should have_db_column(:stance).of_type(:string).with_options(:null => true) }
+      it { is_expected.to have_db_column(:default_target).of_type(:integer) }
+      it { is_expected.to have_db_column(:description).of_type(:text) }
+      it { is_expected.to have_db_column(:disclosure_date).of_type(:datetime)}
+      it { is_expected.to have_db_column(:file).of_type(:text) }
+      it { is_expected.to have_db_column(:fullname).of_type(:text) }
+      it { is_expected.to have_db_column(:license).of_type(:string) }
+      it { is_expected.to have_db_column(:mtime).of_type(:datetime) }
+      it { is_expected.to have_db_column(:mtype).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:text) }
+      it { is_expected.to have_db_column(:privileged).of_type(:boolean) }
+      it { is_expected.to have_db_column(:rank).of_type(:integer) }
+      it { is_expected.to have_db_column(:ready).of_type(:boolean) }
+      it { is_expected.to have_db_column(:refname).of_type(:text) }
+      it { is_expected.to have_db_column(:stance).of_type(:string).with_options(:null => true) }
     end
 
     context 'indices' do
-      it { should have_db_index(:description) }
-      it { should have_db_index(:mtype) }
-      it { should have_db_index(:name) }
-      it { should have_db_index(:refname) }
+      it { is_expected.to have_db_index(:description) }
+      it { is_expected.to have_db_index(:mtype) }
+      it { is_expected.to have_db_index(:name) }
+      it { is_expected.to have_db_index(:refname) }
     end
   end
 
@@ -175,7 +175,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         FactoryGirl.build(:mdm_module_detail)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       context 'stance' do
         subject(:mdm_module_detail) do
@@ -187,7 +187,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
             'exploit'
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
           context '#stance' do
             subject(:stance) {
@@ -211,7 +211,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
             'post'
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
           context '#stance' do
             subject(:stance) {
@@ -234,17 +234,17 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   end
 
   context 'validations' do
-    it { should ensure_inclusion_of(:mtype).in_array(types) }
+    it { is_expected.to ensure_inclusion_of(:mtype).in_array(types) }
 
     # Because the boolean field will cast most strings to false,
     # ensure_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
 
     context 'rank' do
-      it { should validate_numericality_of(:rank).only_integer }
-      it { should ensure_inclusion_of(:rank).in_array(ranks) }
+      it { is_expected.to validate_numericality_of(:rank).only_integer }
+      it { is_expected.to ensure_inclusion_of(:rank).in_array(ranks) }
     end
 
-    it { should validate_presence_of(:refname) }
+    it { is_expected.to validate_presence_of(:refname) }
 
     context 'stance' do
       context 'mtype' do
@@ -286,7 +286,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.actions.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_action' do
@@ -318,7 +318,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.archs.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_arch' do
@@ -355,7 +355,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
             detail.authors.last
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
           context '#email' do
             it 'is email passed to add_author' do
@@ -389,7 +389,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
             detail.authors.last
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
           context '#email' do
             subject(:module_author_email) {
@@ -430,7 +430,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.mixins.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_mixin' do
@@ -462,7 +462,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.platforms.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_platform' do
@@ -494,7 +494,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.refs.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_ref' do
@@ -530,7 +530,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
           detail.targets.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
         context '#name' do
           it 'is name passed to add_target' do

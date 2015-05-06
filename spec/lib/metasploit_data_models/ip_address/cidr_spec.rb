@@ -78,7 +78,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
         described_class::SEPARATOR
       }
 
-      it { should == '/' }
+      it { is_expected.to eq('/') }
     end
   end
 
@@ -116,7 +116,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
             false
           }
 
-          it { should include(invalid_error) }
+          it { is_expected.to include(invalid_error) }
         end
       end
 
@@ -129,7 +129,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
           I18n.translate!('errors.messages.blank')
         }
 
-        it { should include(blank_error) }
+        it { is_expected.to include(blank_error) }
       end
     end
 
@@ -164,7 +164,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
         end
       }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -206,8 +206,8 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
         regexp.names
       }
 
-      it { should include 'address' }
-      it { should include 'prefix_length' }
+      it { is_expected.to include 'address' }
+      it { is_expected.to include 'prefix_length' }
     end
   end
 

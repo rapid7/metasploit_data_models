@@ -20,7 +20,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
       node_class = options.fetch(:node_class)
 
       context "with #{node_class}" do
-        it { should be_a Arel::Attributes::Attribute }
+        it { is_expected.to be_a Arel::Attributes::Attribute }
 
         context '#name' do
           subject(:name) do

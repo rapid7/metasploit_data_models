@@ -2,27 +2,27 @@ RSpec.describe Mdm::Listener, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should belong_to(:workspace).class_name('Mdm::Workspace') }
-    it { should belong_to(:task).class_name('Mdm::Task') }
+    it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { is_expected.to belong_to(:task).class_name('Mdm::Task') }
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
-      it { should have_db_column(:task_id).of_type(:integer) }
-      it { should have_db_column(:enabled).of_type(:boolean).with_options(:default => true) }
-      it { should have_db_column(:owner).of_type(:text) }
-      it { should have_db_column(:payload).of_type(:text) }
-      it { should have_db_column(:address).of_type(:text) }
-      it { should have_db_column(:port).of_type(:integer) }
-      it { should have_db_column(:options).of_type(:binary) }
-      it { should have_db_column(:macro).of_type(:text) }
+      it { is_expected.to have_db_column(:workspace_id).of_type(:integer).with_options(:null => false, :default =>1) }
+      it { is_expected.to have_db_column(:task_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:enabled).of_type(:boolean).with_options(:default => true) }
+      it { is_expected.to have_db_column(:owner).of_type(:text) }
+      it { is_expected.to have_db_column(:payload).of_type(:text) }
+      it { is_expected.to have_db_column(:address).of_type(:text) }
+      it { is_expected.to have_db_column(:port).of_type(:integer) }
+      it { is_expected.to have_db_column(:options).of_type(:binary) }
+      it { is_expected.to have_db_column(:macro).of_type(:text) }
     end
   end
 

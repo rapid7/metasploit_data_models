@@ -14,7 +14,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         nil
       end
 
-      it { should be_invalid }
+      it { is_expected.to be_invalid }
     end
 
     context "with 'aggresive' stance" do
@@ -22,7 +22,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         'aggressive'
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context "with 'passive' stance" do
@@ -30,7 +30,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         'passive'
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 end

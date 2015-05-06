@@ -15,7 +15,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
         described_class::SEPARATOR
       }
 
-      it { should == ',' }
+      it { is_expected.to eq(',') }
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
     }
 
     context 'default' do
-      it { should == :port }
+      it { is_expected.to eq(:port) }
     end
 
     context 'setter' do
@@ -85,7 +85,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
               operation_range.value
             }
 
-            it { should be_a Range }
+            it { is_expected.to be_a Range }
           end
         end
       end
@@ -119,7 +119,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
               operation_range.value
             }
 
-            it { should be_an Integer }
+            it { is_expected.to be_an Integer }
           end
         end
       end
@@ -157,6 +157,6 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
       described_class.operator_name
     }
 
-    it { should == 'port_list' }
+    it { is_expected.to eq('port_list') }
   end
 end

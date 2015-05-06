@@ -2,24 +2,24 @@ RSpec.describe Mdm::Event, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
   context 'database' do
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime) }
-      it { should have_db_column(:updated_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:workspace_id).of_type(:integer) }
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:critical).of_type(:boolean) }
-      it { should have_db_column(:seen).of_type(:boolean) }
-      it { should have_db_column(:username).of_type(:string) }
-      it { should have_db_column(:info).of_type(:text) }
+      it { is_expected.to have_db_column(:workspace_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:critical).of_type(:boolean) }
+      it { is_expected.to have_db_column(:seen).of_type(:boolean) }
+      it { is_expected.to have_db_column(:username).of_type(:string) }
+      it { is_expected.to have_db_column(:info).of_type(:text) }
     end
   end
 

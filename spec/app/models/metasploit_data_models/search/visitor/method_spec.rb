@@ -19,7 +19,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Method, type: :model do
         Metasploit::Model::Search::Group::Intersection
       end
 
-      it { should == :and }
+      it { is_expected.to eq(:and) }
     end
 
     context 'with Metasploit::Model::Search::Operation::Group::Intersection' do
@@ -27,7 +27,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Method, type: :model do
         Metasploit::Model::Search::Operation::Group::Intersection
       end
 
-      it { should == :and }
+      it { is_expected.to eq(:and) }
     end
 
     context 'with Metasploit::Model::Search::Group::Union' do
@@ -35,7 +35,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Method, type: :model do
         Metasploit::Model::Search::Group::Union
       end
 
-      it { should == :or }
+      it { is_expected.to eq(:or) }
     end
 
     context 'with Metasploit::Model::Search::Operation::Group::Union' do
@@ -43,7 +43,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Method, type: :model do
         Metasploit::Model::Search::Operation::Group::Union
       end
 
-      it { should == :or }
+      it { is_expected.to eq(:or) }
     end
   end
 end

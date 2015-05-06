@@ -11,13 +11,13 @@ RSpec.describe Mdm::TaskHost, type: :model do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:host_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer).with_options(:null => false) }
     end
   end
 
@@ -34,8 +34,8 @@ RSpec.describe Mdm::TaskHost, type: :model do
   end
 
   context "Associations" do
-    it { should belong_to(:task).class_name('Mdm::Task') }
-    it { should belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:task).class_name('Mdm::Task') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
   end
 
   context "validations" do

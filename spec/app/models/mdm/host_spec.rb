@@ -50,7 +50,7 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'Constants' do
     subject(:max_nmap_certainty) { described_class::MAX_NMAP_CERTAINTY }
-    it { should eq(0.84) }
+    it { is_expected.to eq(0.84) }
   end
 
   context '#destroy' do
@@ -104,19 +104,19 @@ RSpec.describe Mdm::Host, type: :model do
   end
 
   context 'associations' do
-    it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
-    it { should have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
-    it { should have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
-    it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
-    it { should have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
-    it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
-    it { should have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
-    it { should have_many(:module_runs).class_name('MetasploitDataModels::ModuleRun') }
-    it { should have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
+    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:services) }
+    it { is_expected.to have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
+    it { is_expected.to have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
+    it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
+    it { is_expected.to have_many(:host_details).class_name('Mdm::HostDetail').dependent(:destroy) }
+    it { is_expected.to have_many(:hosts_tags).class_name('Mdm::HostTag') }
+    it { is_expected.to have_many(:loots).class_name('Mdm::Loot').dependent(:destroy).order('loots.created_at DESC') }
+    it { is_expected.to have_many(:module_runs).class_name('MetasploitDataModels::ModuleRun') }
+    it { is_expected.to have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_hosts) }
 
     context 'module_details' do
-      it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
+      it { is_expected.to have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
 
       context 'with Mdm::Vulns' do
         let!(:vulns) do
@@ -199,17 +199,17 @@ RSpec.describe Mdm::Host, type: :model do
       end
     end
 
-    it { should have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
-    it { should have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
-    it { should have_many(:refs).class_name('Mdm::Ref').through(:vuln_refs) }
-    it { should have_many(:services).class_name('Mdm::Service').dependent(:destroy).order('services.port, services.proto') }
-    it { should have_many(:service_notes).through(:services) }
-    it { should have_many(:sessions).class_name('Mdm::Session').dependent(:destroy).order('sessions.opened_at') }
-    it { should have_many(:tags).class_name('Mdm::Tag').through(:hosts_tags) }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:delete_all) }
-    it { should have_many(:vuln_refs).class_name('Mdm::VulnRef') }
-    it { should have_many(:web_sites).class_name('Mdm::WebSite').through(:services) }
-    it { should belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { is_expected.to have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
+    it { is_expected.to have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
+    it { is_expected.to have_many(:refs).class_name('Mdm::Ref').through(:vuln_refs) }
+    it { is_expected.to have_many(:services).class_name('Mdm::Service').dependent(:destroy).order('services.port, services.proto') }
+    it { is_expected.to have_many(:service_notes).through(:services) }
+    it { is_expected.to have_many(:sessions).class_name('Mdm::Session').dependent(:destroy).order('sessions.opened_at') }
+    it { is_expected.to have_many(:tags).class_name('Mdm::Tag').through(:hosts_tags) }
+    it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').dependent(:delete_all) }
+    it { is_expected.to have_many(:vuln_refs).class_name('Mdm::VulnRef') }
+    it { is_expected.to have_many(:web_sites).class_name('Mdm::WebSite').through(:services) }
+    it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
   context 'CONSTANTS' do
@@ -304,13 +304,13 @@ RSpec.describe Mdm::Host, type: :model do
         expect(search_fields).to include('address::text')
       end
 
-      it { should include('comments') }
-      it { should include('mac') }
-      it { should include('name') }
-      it { should include('os_flavor') }
-      it { should include('os_name') }
-      it { should include('os_sp') }
-      it { should include('purpose') }
+      it { is_expected.to include('comments') }
+      it { is_expected.to include('mac') }
+      it { is_expected.to include('name') }
+      it { is_expected.to include('os_flavor') }
+      it { is_expected.to include('os_name') }
+      it { is_expected.to include('os_sp') }
+      it { is_expected.to include('purpose') }
     end
 
     it 'should define STATES in any order' do
@@ -320,44 +320,44 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:address).of_type(:string).with_options(:null => false) }
-      it { should have_db_column(:arch).of_type(:string) }
-      it { should have_db_column(:comm).of_type(:string) }
-      it { should have_db_column(:comments).of_type(:text) }
-      it { should have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }
-      it { should have_db_column(:mac).of_type(:string) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:os_flavor).of_type(:string) }
-      it { should have_db_column(:os_lang).of_type(:string) }
-      it { should have_db_column(:os_name).of_type(:string) }
-      it { should have_db_column(:os_sp).of_type(:string) }
-      it { should have_db_column(:purpose).of_type(:text) }
-      it { should have_db_column(:scope).of_type(:text) }
-      it { should have_db_column(:state).of_type(:string) }
-      it { should have_db_column(:virtual_host).of_type(:text) }
-      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:address).of_type(:string).with_options(:null => false) }
+      it { is_expected.to have_db_column(:arch).of_type(:string) }
+      it { is_expected.to have_db_column(:comm).of_type(:string) }
+      it { is_expected.to have_db_column(:comments).of_type(:text) }
+      it { is_expected.to have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }
+      it { is_expected.to have_db_column(:mac).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:os_flavor).of_type(:string) }
+      it { is_expected.to have_db_column(:os_lang).of_type(:string) }
+      it { is_expected.to have_db_column(:os_name).of_type(:string) }
+      it { is_expected.to have_db_column(:os_sp).of_type(:string) }
+      it { is_expected.to have_db_column(:purpose).of_type(:text) }
+      it { is_expected.to have_db_column(:scope).of_type(:text) }
+      it { is_expected.to have_db_column(:state).of_type(:string) }
+      it { is_expected.to have_db_column(:virtual_host).of_type(:text) }
+      it { is_expected.to have_db_column(:workspace_id).of_type(:integer).with_options(:null => false) }
 
       context 'counter caches' do
-        it { should have_db_column(:exploit_attempt_count).of_type(:integer).with_options(:default => 0) }
-        it { should have_db_column(:host_detail_count).of_type(:integer).with_options(:default => 0) }
-        it { should have_db_column(:note_count).of_type(:integer).with_options(:default => 0) }
-        it { should have_db_column(:service_count).of_type(:integer).with_options(:default => 0) }
-        it { should have_db_column(:vuln_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:exploit_attempt_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:host_detail_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:note_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:service_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:vuln_count).of_type(:integer).with_options(:default => 0) }
       end
 
       context 'timestamps' do
-        it { should have_db_column(:created_at).of_type(:datetime) }
-        it { should have_db_column(:updated_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
       end
     end
 
     context 'indices' do
-      it { should have_db_index([:workspace_id, :address]).unique(true) }
-      it { should have_db_index(:name) }
-      it { should have_db_index(:os_flavor) }
-      it { should have_db_index(:os_name) }
-      it { should have_db_index(:purpose) }
-      it { should have_db_index(:state) }
+      it { is_expected.to have_db_index([:workspace_id, :address]).unique(true) }
+      it { is_expected.to have_db_index(:name) }
+      it { is_expected.to have_db_index(:os_flavor) }
+      it { is_expected.to have_db_index(:os_name) }
+      it { is_expected.to have_db_index(:purpose) }
+      it { is_expected.to have_db_index(:state) }
     end
   end
 
@@ -367,7 +367,7 @@ RSpec.describe Mdm::Host, type: :model do
         FactoryGirl.build(:full_mdm_host)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'mdm_host' do
@@ -375,14 +375,14 @@ RSpec.describe Mdm::Host, type: :model do
         FactoryGirl.build(:mdm_host)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 
   context 'validations' do
     context 'address' do
-      it { should ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
-      it { should validate_presence_of(:address) }
+      it { is_expected.to ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
+      it { is_expected.to validate_presence_of(:address) }
 
       # can't use validate_uniqueness_of(:address).scoped_to(:workspace_id) because it will attempt to set workspace_id
       # to `nil`, which will make the `:null => false` constraint on hosts.workspace_id to fail.
@@ -413,12 +413,12 @@ RSpec.describe Mdm::Host, type: :model do
       described_class::ARCHITECTURES.each do |arch|
         context "with known architecture '#{arch}'" do
           let(:arch) { arch }
-          it { should be_valid }
+          it { is_expected.to be_valid }
         end
       end
     end
-    it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
-    it { should validate_presence_of(:workspace) }
+    it { is_expected.to ensure_inclusion_of(:state).in_array(states).allow_nil }
+    it { is_expected.to validate_presence_of(:workspace) }
   end
 
   context 'search scope' do

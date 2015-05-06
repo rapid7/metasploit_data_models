@@ -2,26 +2,26 @@ RSpec.describe Mdm::Cred, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context "Associations" do
-    it { should have_many(:task_creds).class_name('Mdm::TaskCred').dependent(:destroy) }
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_creds) }
-    it { should belong_to(:service).class_name('Mdm::Service') }
+    it { is_expected.to have_many(:task_creds).class_name('Mdm::TaskCred').dependent(:destroy) }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_creds) }
+    it { is_expected.to belong_to(:service).class_name('Mdm::Service') }
   end
 
   context 'database' do
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime) }
-      it { should have_db_column(:updated_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:service_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:user).of_type(:string) }
-      it { should have_db_column(:pass).of_type(:string) }
-      it { should have_db_column(:active).of_type(:boolean).with_options(:default => true) }
-      it { should have_db_column(:proof).of_type(:string) }
-      it { should have_db_column(:ptype).of_type(:string) }
-      it { should have_db_column(:source_id).of_type(:integer) }
-      it { should have_db_column(:source_type).of_type(:string) }
+      it { is_expected.to have_db_column(:service_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:user).of_type(:string) }
+      it { is_expected.to have_db_column(:pass).of_type(:string) }
+      it { is_expected.to have_db_column(:active).of_type(:boolean).with_options(:default => true) }
+      it { is_expected.to have_db_column(:proof).of_type(:string) }
+      it { is_expected.to have_db_column(:ptype).of_type(:string) }
+      it { is_expected.to have_db_column(:source_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:source_type).of_type(:string) }
     end
   end
 

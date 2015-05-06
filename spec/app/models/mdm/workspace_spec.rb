@@ -38,20 +38,20 @@ RSpec.describe Mdm::Workspace, type: :model do
   end
 
   context 'associations' do
-    it { should have_many(:clients).class_name('Mdm::Client').through(:hosts) }
-    it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
-    it { should have_many(:events).class_name('Mdm::Event') }
-    it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
-    it { should have_many(:hosts).class_name('Mdm::Host') }
-    it { should have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
-    it { should have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
-    it { should have_many(:notes).class_name('Mdm::Note') }
-    it { should belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
-    it { should have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
-    it { should have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
-    it { should have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
-    it { should have_and_belong_to_many(:users).class_name('Mdm::User') }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:hosts) }
+    it { is_expected.to have_many(:clients).class_name('Mdm::Client').through(:hosts) }
+    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:services) }
+    it { is_expected.to have_many(:events).class_name('Mdm::Event') }
+    it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
+    it { is_expected.to have_many(:hosts).class_name('Mdm::Host') }
+    it { is_expected.to have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
+    it { is_expected.to have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
+    it { is_expected.to have_many(:notes).class_name('Mdm::Note') }
+    it { is_expected.to belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
+    it { is_expected.to have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
+    it { is_expected.to have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
+    it { is_expected.to have_and_belong_to_many(:users).class_name('Mdm::User') }
+    it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').through(:hosts) }
   end
 
   context 'callbacks' do
@@ -66,15 +66,15 @@ RSpec.describe Mdm::Workspace, type: :model do
   end
 
   context 'columns' do
-    it { should have_db_column(:boundary).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
-    it { should have_db_column(:description).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
-    it { should have_db_column(:limit_to_network).of_type(:boolean).with_options(:default => false, :null => false) }
-    it { should have_db_column(:name).of_type(:string) }
-    it { should have_db_column(:owner_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:boundary).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
+    it { is_expected.to have_db_column(:description).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
+    it { is_expected.to have_db_column(:limit_to_network).of_type(:boolean).with_options(:default => false, :null => false) }
+    it { is_expected.to have_db_column(:name).of_type(:string) }
+    it { is_expected.to have_db_column(:owner_id).of_type(:integer) }
 
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
   end
 
@@ -138,13 +138,13 @@ RSpec.describe Mdm::Workspace, type: :model do
     end
 
     context 'description' do
-      it { should ensure_length_of(:description).is_at_most(4 * (2 ** 10)) }
+      it { is_expected.to ensure_length_of(:description).is_at_most(4 * (2 ** 10)) }
     end
 
     context 'name' do
-      it { should ensure_length_of(:name).is_at_most(2**8 - 1) }
-      it { should validate_presence_of :name }
-      it { should validate_uniqueness_of :name }
+      it { is_expected.to ensure_length_of(:name).is_at_most(2**8 - 1) }
+      it { is_expected.to validate_presence_of :name }
+      it { is_expected.to validate_uniqueness_of :name }
     end
   end
 

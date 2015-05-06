@@ -10,7 +10,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
       visitor.attribute_visitor
     end
 
-    it { should be_a MetasploitDataModels::Search::Visitor::Attribute }
+    it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Attribute }
   end
 
   context '#method_visitor' do
@@ -18,7 +18,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
       visitor.method_visitor
     end
 
-    it { should be_a MetasploitDataModels::Search::Visitor::Method }
+    it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Method }
   end
 
   context '#visit' do

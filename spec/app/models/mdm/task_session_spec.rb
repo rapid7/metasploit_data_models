@@ -11,13 +11,13 @@ RSpec.describe Mdm::TaskSession, type: :model do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:session_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:session_id).of_type(:integer).with_options(:null => false) }
     end
   end
 

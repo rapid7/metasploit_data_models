@@ -10,8 +10,8 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
   }
 
   context 'validations' do
-    it { should ensure_length_of(:operator_names).is_at_least(2) }
-    it { should validate_presence_of :name }
+    it { is_expected.to ensure_length_of(:operator_names).is_at_least(2) }
+    it { is_expected.to validate_presence_of :name }
   end
 
   context '#children' do
@@ -43,7 +43,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
         nil
       }
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with empty String' do
@@ -51,7 +51,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
         ''
       }
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'without quotes' do
@@ -99,7 +99,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
     }
 
     context 'default' do
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'setter' do
@@ -121,7 +121,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
   end
 

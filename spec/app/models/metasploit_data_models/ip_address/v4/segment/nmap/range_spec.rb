@@ -45,7 +45,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
             nil
           }
 
-          it { should include presence_error }
+          it { is_expected.to include presence_error }
         end
 
         context 'with MetasploitDataModels::IPAddress::V4::Segment' do
@@ -62,7 +62,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
               '256-257'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
       end
@@ -79,7 +79,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
             nil
           }
 
-          it { should include presence_error }
+          it { is_expected.to include presence_error }
         end
 
         context 'with MetasploitDataModels::IPAddress::V4::Segment' do
@@ -96,7 +96,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
               '257-256'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
       end
@@ -145,7 +145,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
             '2-1'
           }
 
-          it { should include error }
+          it { is_expected.to include error }
         end
       end
     end
@@ -204,7 +204,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
         '1..2'
       }
 
-      it { should == '-' }
+      it { is_expected.to eq('-') }
     end
   end
 
@@ -219,14 +219,14 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
           '1-2'
         }
 
-        it { should be_a Range }
+        it { is_expected.to be_a Range }
 
         context 'Range#begin' do
           subject(:range_begin) {
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             it "is value before '-'" do
@@ -240,7 +240,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             it "is value after '-'" do
@@ -255,21 +255,21 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
           '-'
         }
 
-        it { should be_a Range }
+        it { is_expected.to be_a Range }
 
         context 'Range#begin' do
           subject(:range_begin) {
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             subject(:begin_value) {
               range_begin.value
             }
 
-            it { should == '' }
+            it { is_expected.to eq('') }
           end
         end
 
@@ -278,14 +278,14 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
             subject(:end_value) {
               range_end.value
             }
 
-            it { should == '' }
+            it { is_expected.to eq('') }
           end
         end
       end

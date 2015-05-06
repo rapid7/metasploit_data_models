@@ -9,14 +9,14 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
     nil
   }
 
-  it { should be_a MetasploitDataModels::IPAddress::CIDR }
+  it { is_expected.to be_a MetasploitDataModels::IPAddress::CIDR }
 
   context 'address_class' do
     subject(:address_class) {
       described_class.address_class
     }
 
-    it { should == MetasploitDataModels::IPAddress::V4::Single }
+    it { is_expected.to eq(MetasploitDataModels::IPAddress::V4::Single) }
   end
 
   context 'validations' do
@@ -33,7 +33,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
         "#{formatted_address}/#{formatted_prefix_length}"
       }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'with IPv4 address' do
@@ -53,7 +53,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
             cidr.errors[:address]
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
 
         context 'on #prefix_length' do
@@ -65,7 +65,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
             I18n.translate!('errors.messages.not_a_number')
           }
 
-          it { should include(blank_error) }
+          it { is_expected.to include(blank_error) }
         end
       end
     end
@@ -99,7 +99,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
             I18n.translate!('errors.messages.invalid')
           }
 
-          it { should include(invalid_error) }
+          it { is_expected.to include(invalid_error) }
         end
 
         context 'on #prefix_length' do
@@ -111,7 +111,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
             I18n.translate!('errors.messages.less_than_or_equal_to', count: 32)
           }
 
-          it { should include(too_big_error) }
+          it { is_expected.to include(too_big_error) }
         end
       end
     end

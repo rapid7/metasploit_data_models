@@ -17,7 +17,7 @@ RSpec.describe MetasploitDataModels::Match::Parent do
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe MetasploitDataModels::Match::Parent do
         match_child
       end
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -94,7 +94,7 @@ RSpec.describe MetasploitDataModels::Match::Parent do
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with class names' do

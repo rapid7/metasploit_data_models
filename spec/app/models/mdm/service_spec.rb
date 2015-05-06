@@ -7,8 +7,8 @@ RSpec.describe Mdm::Service, type: :model do
         described_class::PROTOS
       }
 
-      it { should include 'tcp' }
-      it { should include 'udp' }
+      it { is_expected.to include 'tcp' }
+      it { is_expected.to include 'udp' }
     end
 
     context 'STATES' do
@@ -16,26 +16,26 @@ RSpec.describe Mdm::Service, type: :model do
         described_class::STATES
       }
 
-      it { should include 'closed' }
-      it { should include 'filtered' }
-      it { should include 'open' }
-      it { should include 'unknown' }
+      it { is_expected.to include 'closed' }
+      it { is_expected.to include 'filtered' }
+      it { is_expected.to include 'open' }
+      it { is_expected.to include 'unknown' }
     end
   end
 
   context "Associations" do
 
-    it { should have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
-    it { should have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
-    it { should have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
-    it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
-    it { should have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
-    it { should have_many(:web_sites).class_name('Mdm::WebSite').dependent(:destroy) }
-    it { should have_many(:web_pages).class_name('Mdm::WebPage').through(:web_sites) }
-    it { should have_many(:web_forms).class_name('Mdm::WebForm').through(:web_sites) }
-    it { should have_many(:web_vulns).class_name('Mdm::WebVuln').through(:web_sites) }
-    it { should belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
+    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
+    it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
+    it { is_expected.to have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
+    it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
+    it { is_expected.to have_many(:web_sites).class_name('Mdm::WebSite').dependent(:destroy) }
+    it { is_expected.to have_many(:web_pages).class_name('Mdm::WebPage').through(:web_sites) }
+    it { is_expected.to have_many(:web_forms).class_name('Mdm::WebForm').through(:web_sites) }
+    it { is_expected.to have_many(:web_vulns).class_name('Mdm::WebVuln').through(:web_sites) }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
   end
 
   context 'scopes' do
@@ -96,24 +96,24 @@ RSpec.describe Mdm::Service, type: :model do
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime) }
-      it { should have_db_column(:updated_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:port).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:proto).of_type(:string).with_options(:null => false) }
-      it { should have_db_column(:state).of_type(:string) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:info).of_type(:text) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:port).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:proto).of_type(:string).with_options(:null => false) }
+      it { is_expected.to have_db_column(:state).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:info).of_type(:text) }
     end
 
     context 'indices' do
-      it { should have_db_index(:name) }
-      it { should have_db_index(:port) }
-      it { should have_db_index(:proto) }
-      it { should have_db_index(:state) }
+      it { is_expected.to have_db_index(:name) }
+      it { is_expected.to have_db_index(:port) }
+      it { is_expected.to have_db_index(:proto) }
+      it { is_expected.to have_db_index(:state) }
     end
   end
 
@@ -149,8 +149,8 @@ RSpec.describe Mdm::Service, type: :model do
       FactoryGirl.build(:mdm_service)
     }
 
-    it { should validate_numericality_of(:port).only_integer }
-    it { should ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
+    it { is_expected.to validate_numericality_of(:port).only_integer }
+    it { is_expected.to ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
 
     context 'when a duplicate service already exists' do
       let(:service1) { FactoryGirl.create(:mdm_service)}

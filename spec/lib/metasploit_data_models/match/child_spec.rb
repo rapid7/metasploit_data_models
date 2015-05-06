@@ -52,7 +52,7 @@ RSpec.describe MetasploitDataModels::Match::Child do
           '1,2-3'
         end
 
-        it { should be_nil }
+        it { is_expected.to be_nil }
       end
     end
   end

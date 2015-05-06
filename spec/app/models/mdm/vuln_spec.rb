@@ -42,7 +42,7 @@ RSpec.describe Mdm::Vuln, type: :model do
     it { is_expected.to have_many(:notes).class_name('Mdm::Note').dependent(:delete_all).order('notes.created_at') }
 
     context 'module_details' do
-      it { should have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
+      it { is_expected.to have_many(:module_details).class_name('Mdm::Module::Detail').through(:module_refs) }
 
       context 'with Mdm::Refs' do
         let(:names) do
@@ -124,20 +124,20 @@ RSpec.describe Mdm::Vuln, type: :model do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:exploited_at).of_type(:datetime) }
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:info).of_type(:string) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:service_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:exploited_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:info).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:service_id).of_type(:integer) }
 
       context 'counter caches' do
-        it { should have_db_column(:vuln_attempt_count).of_type(:integer).with_options(:default => 0) }
-        it { should have_db_column(:vuln_detail_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:vuln_attempt_count).of_type(:integer).with_options(:default => 0) }
+        it { is_expected.to have_db_column(:vuln_detail_count).of_type(:integer).with_options(:default => 0) }
       end
 
       context 'timestamps' do
-        it { should have_db_column(:created_at).of_type(:datetime) }
-        it { should have_db_column(:updated_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
       end
     end
   end
@@ -148,7 +148,7 @@ RSpec.describe Mdm::Vuln, type: :model do
         FactoryGirl.build(:mdm_host_vuln)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'mdm_service_vuln' do
@@ -156,7 +156,7 @@ RSpec.describe Mdm::Vuln, type: :model do
         FactoryGirl.build(:mdm_service_vuln)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'mdm_vuln' do
@@ -164,7 +164,7 @@ RSpec.describe Mdm::Vuln, type: :model do
         FactoryGirl.build(:mdm_vuln)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 
@@ -257,7 +257,7 @@ RSpec.describe Mdm::Vuln, type: :model do
   end
 
   context 'validations' do
-    it { should validate_presence_of :name }
+    it { is_expected.to validate_presence_of :name }
 
     context "invalid" do
       let(:mdm_vuln) do

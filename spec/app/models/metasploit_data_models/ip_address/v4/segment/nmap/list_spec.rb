@@ -66,7 +66,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
         described_class::SEPARATOR
       }
 
-      it { should == ',' }
+      it { is_expected.to eq(',') }
     end
   end
 
@@ -89,7 +89,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
           nil
         }
 
-        it { should include blank_error }
+        it { is_expected.to include blank_error }
       end
 
       context 'with matching String' do
@@ -98,7 +98,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
             '1,2-3'
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
 
         context 'with invalid MetasploitDataModels::IPAddress::V4::Nmap::Range' do
@@ -129,7 +129,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
           'non_matching_string'
         }
 
-        it { should include array_error }
+        it { is_expected.to include array_error }
       end
     end
   end
@@ -183,7 +183,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
           value.first
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
         context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
           it 'is value from formatted_value' do
@@ -215,7 +215,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
           value.first
         }
 
-        it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range }
+        it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range }
 
         context 'MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range#value' do
           subject(:element_value) {
@@ -227,7 +227,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
               element_value.begin
             }
 
-            it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+            it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
             context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
               it 'is beginning of formatted value' do
@@ -241,7 +241,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
               element_value.end
             }
 
-            it { should be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
+            it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Segment::Single }
 
             context 'MetasploitDataModels::IPAddress::V4::Segment::Single#value' do
               it 'is beginning of formatted value' do

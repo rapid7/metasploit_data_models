@@ -14,7 +14,7 @@ shared_examples_for 'Mdm::Module::Detail does not support stance with mtype' do 
         nil
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 end

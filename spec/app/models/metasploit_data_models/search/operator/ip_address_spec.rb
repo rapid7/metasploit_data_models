@@ -12,6 +12,6 @@ RSpec.describe MetasploitDataModels::Search::Operator::IPAddress, type: :model d
       nil
     }
 
-    it { should be_a MetasploitDataModels::Search::Operation::IPAddress }
+    it { is_expected.to be_a MetasploitDataModels::Search::Operation::IPAddress }
   end
 end

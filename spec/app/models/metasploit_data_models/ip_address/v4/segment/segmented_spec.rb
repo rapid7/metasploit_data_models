@@ -5,7 +5,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segmented, type: :model do
         described_class::SEGMENT_COUNT
       }
 
-      it { should == 4 }
+      it { is_expected.to eq(4) }
     end
 
     context 'SEPARATOR' do
@@ -13,7 +13,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segmented, type: :model do
         described_class::SEPARATOR
       }
 
-      it { should == '.' }
+      it { is_expected.to eq('.') }
     end
   end
 
@@ -22,6 +22,6 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segmented, type: :model do
       described_class.segment_count
     }
 
-    it { should == 4 }
+    it { is_expected.to eq(4) }
   end
 end

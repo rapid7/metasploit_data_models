@@ -9,7 +9,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
     '1'
   }
 
-  it { should be_a MetasploitDataModels::Search::Operation::Range }
+  it { is_expected.to be_a MetasploitDataModels::Search::Operation::Range }
 
   context 'validations' do
     before(:each) do
@@ -28,7 +28,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
               '1-2'
             }
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
 
           # this can't actually happen because the minimum is 0 and a negative number can't be parsed, but validation
@@ -62,7 +62,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
               1
             }
 
-            it { should include error }
+            it { is_expected.to include error }
           end
 
           context 'without Range#begin covered by MetasploitDataModels::Search::Operation::Port::Number::RANGE' do
@@ -84,7 +84,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
               MetasploitDataModels::Search::Operation::Port::Number::MAXIMUM + 1
             }
 
-            it { should include error }
+            it { is_expected.to include error }
           end
         end
 
@@ -117,8 +117,8 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
             'b'
           }
 
-          it { should include begin_error }
-          it { should include end_error }
+          it { is_expected.to include begin_error }
+          it { is_expected.to include end_error }
         end
       end
 
@@ -131,7 +131,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
           '1'
         }
 
-        it { should include(error) }
+        it { is_expected.to include(error) }
       end
     end
   end

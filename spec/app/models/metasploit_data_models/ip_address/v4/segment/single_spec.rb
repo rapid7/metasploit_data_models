@@ -10,7 +10,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
   }
 
   context 'validations' do
-    it { should validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
+    it { is_expected.to validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
   end
 
   it 'can be used in a Range' do
@@ -135,7 +135,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
       described_class.bits
     }
 
-    it { should == 8 }
+    it { is_expected.to eq(8) }
   end
 
   context 'match_regexp' do
@@ -205,7 +205,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
           1
         }
 
-        it { should be_a described_class }
+        it { is_expected.to be_a described_class }
 
         context 'succ.value' do
           it 'is succ of #value' do
@@ -219,7 +219,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
           'a'
         }
 
-        it { should be_a described_class }
+        it { is_expected.to be_a described_class }
 
         context 'succ.value' do
           it 'is succ of #value' do

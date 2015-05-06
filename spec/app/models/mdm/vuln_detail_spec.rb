@@ -2,36 +2,36 @@ RSpec.describe Mdm::VulnDetail, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'association' do
-    it { should belong_to(:vuln).class_name('Mdm::Vuln') }
+    it { is_expected.to belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:nx_published).of_type(:datetime) }
-      it { should have_db_column(:nx_added).of_type(:datetime) }
-      it { should have_db_column(:nx_modified).of_type(:datetime) }
-      it { should have_db_column(:nx_vulnerable_since).of_type(:datetime) }
+      it { is_expected.to have_db_column(:nx_published).of_type(:datetime) }
+      it { is_expected.to have_db_column(:nx_added).of_type(:datetime) }
+      it { is_expected.to have_db_column(:nx_modified).of_type(:datetime) }
+      it { is_expected.to have_db_column(:nx_vulnerable_since).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:vuln_id).of_type(:integer)}
-      it { should have_db_column(:cvss_score).of_type(:float) }
-      it { should have_db_column(:cvss_vector).of_type(:string) }
-      it { should have_db_column(:title).of_type(:string) }
-      it { should have_db_column(:description).of_type(:text) }
-      it { should have_db_column(:solution).of_type(:text) }
-      it { should have_db_column(:proof).of_type(:binary) }
-      it { should have_db_column(:nx_console_id).of_type(:integer) }
-      it { should have_db_column(:nx_device_id).of_type(:integer) }
-      it { should have_db_column(:nx_severity).of_type(:float) }
-      it { should have_db_column(:nx_pci_severity).of_type(:float) }
-      it { should have_db_column(:nx_tags).of_type(:text) }
-      it { should have_db_column(:nx_vuln_status).of_type(:text) }
-      it { should have_db_column(:nx_proof_key).of_type(:text) }
-      it { should have_db_column(:src).of_type(:string) }
-      it { should have_db_column(:nx_scan_id).of_type(:integer) }
-      it { should have_db_column(:nx_pci_compliance_status).of_type(:string) }
+      it { is_expected.to have_db_column(:vuln_id).of_type(:integer)}
+      it { is_expected.to have_db_column(:cvss_score).of_type(:float) }
+      it { is_expected.to have_db_column(:cvss_vector).of_type(:string) }
+      it { is_expected.to have_db_column(:title).of_type(:string) }
+      it { is_expected.to have_db_column(:description).of_type(:text) }
+      it { is_expected.to have_db_column(:solution).of_type(:text) }
+      it { is_expected.to have_db_column(:proof).of_type(:binary) }
+      it { is_expected.to have_db_column(:nx_console_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:nx_device_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:nx_severity).of_type(:float) }
+      it { is_expected.to have_db_column(:nx_pci_severity).of_type(:float) }
+      it { is_expected.to have_db_column(:nx_tags).of_type(:text) }
+      it { is_expected.to have_db_column(:nx_vuln_status).of_type(:text) }
+      it { is_expected.to have_db_column(:nx_proof_key).of_type(:text) }
+      it { is_expected.to have_db_column(:src).of_type(:string) }
+      it { is_expected.to have_db_column(:nx_scan_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:nx_pci_compliance_status).of_type(:string) }
     end
   end
 

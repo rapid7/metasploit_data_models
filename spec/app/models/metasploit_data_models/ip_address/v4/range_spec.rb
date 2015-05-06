@@ -45,7 +45,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             nil
           }
 
-          it { should include presence_error }
+          it { is_expected.to include presence_error }
         end
 
         context 'with MetasploitDataModels::IPAddress::V4::Single' do
@@ -62,7 +62,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
               '256.256.256.256-257.257.257.257'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
       end
@@ -79,7 +79,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             nil
           }
 
-          it { should include presence_error }
+          it { is_expected.to include presence_error }
         end
 
         context 'with MetasploitDataModels::IPAddress::V4::Single' do
@@ -96,7 +96,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
               '257.257.257.257-256.256.256.256'
             }
 
-            it { should include invalid_error }
+            it { is_expected.to include invalid_error }
           end
         end
       end
@@ -145,7 +145,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             '2.2.2.2-1.1.1.1'
           }
 
-          it { should include error }
+          it { is_expected.to include error }
         end
       end
     end
@@ -204,7 +204,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
         '1..2'
       }
 
-      it { should == '-' }
+      it { is_expected.to eq('-') }
     end
   end
 
@@ -219,14 +219,14 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
           '1.1.1.1-2.2.2.2'
         }
 
-        it { should be_a Range }
+        it { is_expected.to be_a Range }
 
         context 'Range#begin' do
           subject(:range_begin) {
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Single }
 
           it "is value before '-'" do
             expect(range_begin).to eq(MetasploitDataModels::IPAddress::V4::Single.new(value: '1.1.1.1'))
@@ -238,7 +238,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Single }
 
           it "is value after '-'" do
             expect(range_end).to eq(MetasploitDataModels::IPAddress::V4::Single.new(value: '2.2.2.2'))
@@ -251,21 +251,21 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
           '-'
         }
 
-        it { should be_a Range }
+        it { is_expected.to be_a Range }
 
         context 'Range#begin' do
           subject(:range_begin) {
             value.begin
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Single#value' do
             subject(:begin_value) {
               range_begin.value
             }
 
-            it { should == '' }
+            it { is_expected.to eq('') }
           end
         end
 
@@ -274,14 +274,14 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             value.end
           }
 
-          it { should be_a MetasploitDataModels::IPAddress::V4::Single }
+          it { is_expected.to be_a MetasploitDataModels::IPAddress::V4::Single }
 
           context 'MetasploitDataModels::IPAddress::V4::Single#value' do
             subject(:end_value) {
               range_end.value
             }
 
-            it { should == '' }
+            it { is_expected.to eq('') }
           end
         end
       end

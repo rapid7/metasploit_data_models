@@ -2,7 +2,7 @@ RSpec.describe Mdm::Route, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should belong_to(:session).class_name('Mdm::Session') }
+    it { is_expected.to belong_to(:session).class_name('Mdm::Session') }
   end
 
   context 'factory' do
@@ -26,9 +26,9 @@ RSpec.describe Mdm::Route, type: :model do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:session_id).of_type(:integer) }
-      it { should have_db_column(:subnet).of_type(:string) }
-      it { should have_db_column(:netmask).of_type(:string) }
+      it { is_expected.to have_db_column(:session_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:subnet).of_type(:string) }
+      it { is_expected.to have_db_column(:netmask).of_type(:string) }
     end
   end
 

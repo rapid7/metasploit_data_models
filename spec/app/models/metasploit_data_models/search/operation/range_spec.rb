@@ -9,7 +9,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
         described_class::SEPARATOR
       }
 
-      it { should == '-' }
+      it { is_expected.to eq('-') }
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
               '2-1'
             }
 
-            it { should include error }
+            it { is_expected.to include error }
           end
         end
 
@@ -111,7 +111,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
             '1-2'
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
 
         context 'without Range' do
@@ -123,7 +123,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
             '1..2'
           }
 
-          it { should include error }
+          it { is_expected.to include error }
         end
       end
     end
