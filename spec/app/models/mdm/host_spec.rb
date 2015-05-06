@@ -39,9 +39,12 @@ RSpec.describe Mdm::Host, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do
-    it 'should be valid' do
-      host = FactoryGirl.build(:mdm_host)
-        expect(architectures).to include('mips')
+    context 'mdm_host' do
+      subject(:mdm_host) {
+        FactoryGirl.build(:mdm_host)
+      }
+
+      it { is_expected.to be_valid }
     end
   end
 
