@@ -55,7 +55,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
               '1-2'
             }
 
-            it { should_not include(error) }
+            it { is_expected.not_to include(error) }
           end
 
           context 'with begin same as end' do
@@ -70,7 +70,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
               '1-1'
             }
 
-            it { should_not include(error) }
+            it { is_expected.not_to include(error) }
           end
 
           context 'with begin after end' do
@@ -101,7 +101,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
             '1..2'
           }
 
-          it { should_not include(error) }
+          it { is_expected.not_to include(error) }
         end
       end
 

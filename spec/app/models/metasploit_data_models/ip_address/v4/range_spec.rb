@@ -54,7 +54,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
               '1.1.1.1-256.256.256.256'
             }
 
-            it { should_not include invalid_error }
+            it { is_expected.not_to include invalid_error }
           end
 
           context 'without valid' do
@@ -88,7 +88,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
               '256.256.256.256-1.1.1.1'
             }
 
-            it { should_not include invalid_error }
+            it { is_expected.not_to include invalid_error }
           end
 
           context 'without valid' do
@@ -120,7 +120,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
           nil
         }
 
-        it { should_not include error }
+        it { is_expected.not_to include error }
       end
 
       context 'with incomparables' do
@@ -128,7 +128,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
           'a-1'
         }
 
-        it { should_not include error }
+        it { is_expected.not_to include error }
       end
 
       context 'with numbers' do
@@ -137,7 +137,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
             '1.1.1.1-2.2.2.2'
           }
 
-          it { should_not include error }
+          it { is_expected.not_to include error }
         end
 
         context 'out of order' do
@@ -292,7 +292,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
         '1'
       end
 
-      it { should_not be_a Range }
+      it { is_expected.not_to be_a Range }
     end
   end
 end

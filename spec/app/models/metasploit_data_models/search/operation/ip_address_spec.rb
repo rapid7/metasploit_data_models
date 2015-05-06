@@ -106,7 +106,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
         }
 
         it { is_expected.to include blank_error }
-        it { should_not include invalid_error }
+        it { is_expected.not_to include invalid_error }
       end
 
       context 'with empty string' do
@@ -115,7 +115,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
         }
 
         it { is_expected.to include blank_error }
-        it { should_not include invalid_error }
+        it { is_expected.not_to include invalid_error }
       end
 
       context 'without matching formatted value' do

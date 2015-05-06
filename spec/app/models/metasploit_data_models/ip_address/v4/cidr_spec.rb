@@ -41,7 +41,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
         formatted_address
       }
 
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
 
       context 'errors' do
         before(:each) do
@@ -83,7 +83,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
         '48'
       }
 
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
 
       context 'errors' do
         before(:each) do

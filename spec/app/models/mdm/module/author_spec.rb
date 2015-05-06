@@ -45,14 +45,14 @@ RSpec.describe Mdm::Module::Author, type: :model do
   end
 
   context 'mass assignment security' do
-    it { should_not allow_mass_assignment_of(:detail_id) }
+    it { is_expected.not_to allow_mass_assignment_of(:detail_id) }
     it { is_expected.to allow_mass_assignment_of(:email) }
     it { is_expected.to allow_mass_assignment_of(:name) }
   end
 
   context 'validations' do
     it { is_expected.to validate_presence_of(:detail) }
-    it { should_not validate_presence_of(:email) }
+    it { is_expected.not_to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:name) }
   end
 end

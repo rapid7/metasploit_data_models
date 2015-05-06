@@ -29,7 +29,7 @@ RSpec.describe Mdm::Module::Target, type: :model do
   end
 
   context 'mass assignment security' do
-    it { should_not allow_mass_assignment_of(:detail_id) }
+    it { is_expected.not_to allow_mass_assignment_of(:detail_id) }
     it { is_expected.to allow_mass_assignment_of(:index) }
     it { is_expected.to allow_mass_assignment_of(:name) }
   end

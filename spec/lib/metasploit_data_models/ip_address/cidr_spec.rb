@@ -108,7 +108,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
             true
           }
 
-          it { should_not include(invalid_error) }
+          it { is_expected.not_to include(invalid_error) }
         end
 
         context 'without valid' do
