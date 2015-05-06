@@ -228,7 +228,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
 
         outer_segment_count = self.segment_count
 
-        address_class.define_singleton_method(:segument_count) do
+        address_class.define_singleton_method(:segment_count) do
           outer_segment_count
         end
       }
