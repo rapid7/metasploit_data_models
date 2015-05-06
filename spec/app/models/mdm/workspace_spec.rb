@@ -306,6 +306,14 @@ RSpec.describe Mdm::Workspace, type: :model do
     end
 
     context '#host_tags' do
+      subject(:host_tags) do
+        workspace.host_tags
+      end
+
+      #
+      # lets
+      #
+
       let(:other_tags) do
         FactoryGirl.create_list(
             :mdm_tag,
@@ -320,15 +328,11 @@ RSpec.describe Mdm::Workspace, type: :model do
         )
       end
 
-      subject(:host_tags) do
-        workspace.host_tags
-      end
-
       #
       # Let!s (let + before(:each))
       #
 
-      let!(:host_tags) do
+      let!(:first_host_tags) do
         host_tags = []
 
         hosts.zip(tags) do |host, tag|
@@ -340,7 +344,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         host_tags
       end
 
-      let!(:other_host_tags) do
+      let!(:second_host_tags) do
         host_tags = []
 
         other_hosts.zip(other_tags) do |host, tag|
@@ -357,12 +361,10 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return only Mdm::Tags from hosts in the workspace' do
-        found_tags = workspace.host_tags
-
-        expect(found_tags.length).to eq(tags.length)
+        expect(host_tags.length).to eq(tags.length)
 
         expect(
-            found_tags.all? { |tag|
+            host_tags.all? { |tag|
               tag.hosts.any? { |host|
                 host.workspace == workspace
               }
