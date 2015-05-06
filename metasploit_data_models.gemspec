@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.1'
 
   # ---- Dependencies ----
+  s.add_development_dependency 'metasploit-version', '~> 0.1.3'
   s.add_development_dependency 'rake'
 
   # documentation
