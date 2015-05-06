@@ -111,8 +111,8 @@ describe Mdm::WebVuln do
 
   context 'validations' do
     it { should validate_presence_of :category }
-    it { should ensure_inclusion_of(:confidence).in_range(confidence_range) }
-    it { should ensure_inclusion_of(:method).in_array(methods) }
+    it { should validate_inclusion_of(:confidence).in_range(confidence_range) }
+    it { should validate_inclusion_of(:method).in_array(methods) }
     it { should validate_presence_of :name }
     it { should validate_presence_of :path }
 
@@ -281,7 +281,7 @@ describe Mdm::WebVuln do
     end
 
     it { should validate_presence_of :proof }
-    it { should ensure_inclusion_of(:risk).in_range(risk_range) }
+    it { should validate_inclusion_of(:risk).in_range(risk_range) }
     it { should validate_presence_of :web_site }
   end
 

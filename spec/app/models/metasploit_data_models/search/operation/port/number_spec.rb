@@ -36,6 +36,6 @@ describe MetasploitDataModels::Search::Operation::Port::Number do
   end
 
   context 'validations' do
-    it { should ensure_inclusion_of(:value).in_range(described_class::RANGE) }
+    it { should validate_inclusion_of(:value).in_range(described_class::RANGE) }
   end
 end
