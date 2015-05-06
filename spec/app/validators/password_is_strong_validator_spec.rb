@@ -210,13 +210,23 @@ RSpec.describe PasswordIsStrongValidator do
       password_validator.validate_each(record, attribute, value)
     end
 
-    let(:record) do
-      Object.new.tap { |object|
-        object.extend ActiveModel::Validations
-        object.class.module_eval { attr_accessor :username }
-        object.username = 'admin'
+    let(:record) {
+      record_class.new.tap { |instance|
+        instance.username = 'admin'
       }
-    end
+    }
+
+    let(:record_class) {
+      Class.new do
+        include ActiveModel::Validations
+
+        #
+        # Attributes
+        #
+
+        attr_accessor :username
+      end
+    }
 
 
     context 'with a password with no special char' do
