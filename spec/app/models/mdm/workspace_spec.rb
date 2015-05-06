@@ -211,16 +211,12 @@ RSpec.describe Mdm::Workspace, type: :model do
         found_creds = workspace.creds.to_a
 
         expect(found_creds.length).to be > 0
-        found_cred = found_creds.first
 
-      end
-
-      it 'should include hosts' do
-        found_creds = workspace.creds.to_a
-
-        expect(found_creds.length).to be > 0
-        found_cred = found_creds.first
-        service = found_cred.service
+        expect(
+            found_creds.none? { |found_cred|
+              found_cred.service.nil?
+            }
+        ).to eq(true)
       end
 
       it 'should return only Mdm::Creds from hosts in workspace' do
@@ -358,14 +354,6 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       it 'should return an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
         should be_a ActiveRecord::Relation
-      end
-
-      it 'should include hosts' do
-        found_tags = workspace.host_tags.to_a
-
-        expect(found_tags.length).to be > 0
-
-        tag = found_tags.first
       end
 
       it 'should return only Mdm::Tags from hosts in the workspace' do
