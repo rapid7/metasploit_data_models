@@ -173,14 +173,14 @@ describe Mdm::Module::Detail do
   end
 
   context 'validations' do
-    it { should ensure_inclusion_of(:mtype).in_array(types) }
+    it { should validate_inclusion_of(:mtype).in_array(types) }
 
     # Because the boolean field will cast most strings to false,
-    # ensure_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
+    # validate_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
 
     context 'rank' do
       it { should validate_numericality_of(:rank).only_integer }
-      it { should ensure_inclusion_of(:rank).in_array(ranks) }
+      it { should validate_inclusion_of(:rank).in_array(ranks) }
     end
 
     it { should validate_presence_of(:refname) }

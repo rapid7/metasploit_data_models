@@ -152,7 +152,7 @@ describe Mdm::Service do
     }
 
     it { should validate_numericality_of(:port).only_integer }
-    it { should ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
+    it { should validate_inclusion_of(:proto).in_array(described_class::PROTOS) }
 
     context 'when a duplicate service already exists' do
       let(:service1) { FactoryGirl.create(:mdm_service)}

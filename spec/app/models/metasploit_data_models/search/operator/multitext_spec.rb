@@ -12,7 +12,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
   }
 
   context 'validations' do
-    it { should ensure_length_of(:operator_names).is_at_least(2) }
+    it { should validate_length_of(:operator_names).is_at_least(2) }
     it { should validate_presence_of :name }
   end
 

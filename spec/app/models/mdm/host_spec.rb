@@ -380,7 +380,7 @@ describe Mdm::Host do
 
   context 'validations' do
     context 'address' do
-      it { should ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
+      it { should validate_exclusion_of(:address).in_array(['127.0.0.1']) }
       it { should validate_presence_of(:address) }
 
       # can't use validate_uniqueness_of(:address).scoped_to(:workspace_id) because it will attempt to set workspace_id
@@ -416,7 +416,7 @@ describe Mdm::Host do
         end
       end
     end
-    it { should ensure_inclusion_of(:state).in_array(states).allow_nil }
+    it { should validate_inclusion_of(:state).in_array(states).allow_nil }
     it { should validate_presence_of(:workspace) }
   end
 
