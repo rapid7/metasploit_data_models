@@ -29,6 +29,12 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.1'
 
   # ---- Dependencies ----
+  # documentation
+  s.add_development_dependency 'metasploit-yard', '~> 1.0'
+  s.add_development_dependency 'yard-activerecord', '~> 0.0.14'
+  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  s.add_development_dependency 'yard-metasploit-erd', '~> 0.1.0'
+
   s.add_development_dependency 'rake'
 
   # documentation
@@ -44,8 +50,8 @@ Gem::Specification.new do |s|
   # os fingerprinting
   s.add_runtime_dependency 'recog', '~> 1.0'
 
-  s.add_runtime_dependency 'metasploit-concern', '0.4.0'
-  s.add_runtime_dependency 'metasploit-model', '~> 0.29.0'
+  s.add_runtime_dependency 'metasploit-concern', '0.5.0'
+  s.add_runtime_dependency 'metasploit-model', '~> 0.30.0'
   s.add_runtime_dependency 'railties', '< 4.0.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
