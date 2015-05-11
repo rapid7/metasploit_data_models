@@ -3,11 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-group :development do
-  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', '~> 0.0.2'
-end
-
 # used by dummy application
 group :development, :test do
   # Upload coverage reports to coveralls.io
