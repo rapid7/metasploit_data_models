@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Operation::Range do
+RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
   subject(:range_operation) {
     described_class.new(attributes)
   }
@@ -11,7 +9,7 @@ describe MetasploitDataModels::Search::Operation::Range do
         described_class::SEPARATOR
       }
 
-      it { should == '-' }
+      it { is_expected.to eq('-') }
     end
   end
 
@@ -57,7 +55,7 @@ describe MetasploitDataModels::Search::Operation::Range do
               '1-2'
             }
 
-            it { should_not include(error) }
+            it { is_expected.not_to include(error) }
           end
 
           context 'with begin same as end' do
@@ -72,7 +70,7 @@ describe MetasploitDataModels::Search::Operation::Range do
               '1-1'
             }
 
-            it { should_not include(error) }
+            it { is_expected.not_to include(error) }
           end
 
           context 'with begin after end' do
@@ -87,7 +85,7 @@ describe MetasploitDataModels::Search::Operation::Range do
               '2-1'
             }
 
-            it { should include error }
+            it { is_expected.to include error }
           end
         end
 
@@ -103,7 +101,7 @@ describe MetasploitDataModels::Search::Operation::Range do
             '1..2'
           }
 
-          it { should_not include(error) }
+          it { is_expected.not_to include(error) }
         end
       end
 
@@ -113,7 +111,7 @@ describe MetasploitDataModels::Search::Operation::Range do
             '1-2'
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
 
         context 'without Range' do
@@ -125,7 +123,7 @@ describe MetasploitDataModels::Search::Operation::Range do
             '1..2'
           }
 
-          it { should include error }
+          it { is_expected.to include error }
         end
       end
     end

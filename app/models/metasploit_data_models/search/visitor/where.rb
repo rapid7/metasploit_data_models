@@ -32,7 +32,7 @@ class MetasploitDataModels::Search::Visitor::Where
     }
   end
 
-  visit *EQUALITY_OPERATION_CLASS_NAMES do |operation|
+  visit(*EQUALITY_OPERATION_CLASS_NAMES) do |operation|
     attribute = attribute_visitor.visit operation.operator
 
     attribute.eq(operation.value)

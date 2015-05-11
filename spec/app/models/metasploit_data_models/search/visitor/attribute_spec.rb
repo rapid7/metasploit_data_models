@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Visitor::Attribute do
+RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
   subject(:visitor) do
     described_class.new
   end
@@ -22,7 +20,7 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
       node_class = options.fetch(:node_class)
 
       context "with #{node_class}" do
-        it { should be_a Arel::Attributes::Attribute }
+        it { is_expected.to be_a Arel::Attributes::Attribute }
 
         context '#name' do
           subject(:name) do
@@ -30,7 +28,7 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
           end
 
           it "should be #{node_class}#attribute" do
-            name.should == node.attribute
+            expect(name).to eq(node.attribute)
           end
         end
 
@@ -40,7 +38,7 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
           end
 
           it "should be Class#arel_table for #{node_class}#klass" do
-            relation.should == node.klass.arel_table
+            expect(relation).to eq(node.klass.arel_table)
           end
         end
       end
@@ -58,19 +56,19 @@ describe MetasploitDataModels::Search::Visitor::Attribute do
       end
 
       it 'should visit Metasploit::Model::Search::Operator::Association#source_operator' do
-        visitor.should_receive(:visit).with(node).and_call_original
-        visitor.should_receive(:visit).with(source_operator)
+        expect(visitor).to receive(:visit).with(node).and_call_original
+        expect(visitor).to receive(:visit).with(source_operator)
 
         visit
       end
 
       it 'should return visit of Metasploit::Model::Search::Operator::Association#source_operator' do
-        visitor.should_receive(:visit).with(node).and_call_original
+        expect(visitor).to receive(:visit).with(node).and_call_original
 
         visited = double('Source Operator Visited')
-        visitor.stub(:visit).with(source_operator).and_return(visited)
+        allow(visitor).to receive(:visit).with(source_operator).and_return(visited)
 
-        visit.should == visited
+        expect(visit).to eq(visited)
       end
     end
 

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Operator::IPAddress do
+RSpec.describe MetasploitDataModels::Search::Operator::IPAddress, type: :model do
   subject(:operator) {
     described_class.new
   }
@@ -14,6 +12,6 @@ describe MetasploitDataModels::Search::Operator::IPAddress do
       nil
     }
 
-    it { should be_a MetasploitDataModels::Search::Operation::IPAddress }
+    it { is_expected.to be_a MetasploitDataModels::Search::Operation::IPAddress }
   end
 end

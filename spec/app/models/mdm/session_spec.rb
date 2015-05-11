@@ -1,12 +1,10 @@
-require 'spec_helper'
-
-describe Mdm::Session do
+RSpec.describe Mdm::Session, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do
     it 'should be valid' do
       session = FactoryGirl.build(:mdm_session)
-      session.should be_valid
+      expect(session).to be_valid
     end
   end
 
@@ -61,8 +59,8 @@ describe Mdm::Session do
         alive_session = FactoryGirl.create(:mdm_session)
         dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
         alive_set = Mdm::Session.alive
-        alive_set.should include(alive_session)
-        alive_set.should_not include(dead_session)
+        expect(alive_set).to include(alive_session)
+        expect(alive_set).not_to include(dead_session)
       end
     end
 
@@ -71,8 +69,8 @@ describe Mdm::Session do
         alive_session = FactoryGirl.create(:mdm_session)
         dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
         dead_set = Mdm::Session.dead
-        dead_set.should_not include(alive_session)
-        dead_set.should include(dead_session)
+        expect(dead_set).not_to include(alive_session)
+        expect(dead_set).to include(dead_session)
       end
     end
 
@@ -82,9 +80,9 @@ describe Mdm::Session do
         linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
         win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
         upgrade_set = Mdm::Session.upgradeable
-        upgrade_set.should include(win_shell)
-        upgrade_set.should_not include(linux_shell)
-        upgrade_set.should_not include(win_meterp)
+        expect(upgrade_set).to include(win_shell)
+        expect(upgrade_set).not_to include(linux_shell)
+        expect(upgrade_set).not_to include(win_meterp)
       end
     end
   end
@@ -93,7 +91,7 @@ describe Mdm::Session do
     context 'before_destroy' do
       it 'should call #stop' do
         mysession = FactoryGirl.create(:mdm_session)
-        mysession.should_receive(:stop)
+        expect(mysession).to receive(:stop)
         mysession.destroy
       end
     end
@@ -103,17 +101,17 @@ describe Mdm::Session do
     context '#upgradeable?' do
       it 'should return true for windows shells' do
         win_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
-        win_shell.upgradeable?.should == true
+        expect(win_shell.upgradeable?).to eq(true)
       end
 
       it 'should return false for non-windows shells' do
         linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
-        linux_shell.upgradeable?.should == false
+        expect(linux_shell.upgradeable?).to eq(false)
       end
 
       it 'should return false for Windows Meterpreter Sessions' do
         win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
-        win_meterp.upgradeable?.should == false
+        expect(win_meterp.upgradeable?).to eq(false)
       end
     end
   end

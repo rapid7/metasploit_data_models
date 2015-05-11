@@ -1,6 +1,4 @@
-require "spec_helper"
-
-describe IPAddr do
+RSpec.describe IPAddr do
   subject(:ip_address) { IPAddr.new('10.0.0.1') }
   
   describe '#==' do

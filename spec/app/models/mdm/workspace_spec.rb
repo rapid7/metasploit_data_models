@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mdm::Workspace do
+RSpec.describe Mdm::Workspace, type: :model do
   subject(:workspace) do
     FactoryGirl.build(:mdm_workspace)
   end
@@ -14,7 +12,7 @@ describe Mdm::Workspace do
   context 'factory' do
     it 'should be valid' do
       workspace = FactoryGirl.build(:mdm_workspace)
-      workspace.should be_valid
+      expect(workspace).to be_valid
     end
   end
 
@@ -40,27 +38,27 @@ describe Mdm::Workspace do
   end
 
   context 'associations' do
-    it { should have_many(:clients).class_name('Mdm::Client').through(:hosts) }
-    it { should have_many(:creds).class_name('Mdm::Cred').through(:services) }
-    it { should have_many(:events).class_name('Mdm::Event') }
-    it { should have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
-    it { should have_many(:hosts).class_name('Mdm::Host') }
-    it { should have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
-    it { should have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
-    it { should have_many(:notes).class_name('Mdm::Note') }
-    it { should belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
-    it { should have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
-    it { should have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
-    it { should have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
-    it { should have_and_belong_to_many(:users).class_name('Mdm::User') }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:hosts) }
+    it { is_expected.to have_many(:clients).class_name('Mdm::Client').through(:hosts) }
+    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:services) }
+    it { is_expected.to have_many(:events).class_name('Mdm::Event') }
+    it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
+    it { is_expected.to have_many(:hosts).class_name('Mdm::Host') }
+    it { is_expected.to have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
+    it { is_expected.to have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
+    it { is_expected.to have_many(:notes).class_name('Mdm::Note') }
+    it { is_expected.to belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
+    it { is_expected.to have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
+    it { is_expected.to have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
+    it { is_expected.to have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
+    it { is_expected.to have_and_belong_to_many(:users).class_name('Mdm::User') }
+    it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').through(:hosts) }
   end
 
   context 'callbacks' do
     context 'before_save' do
       context '#normalize' do
         it 'should be called' do
-          workspace.should_receive(:normalize)
+          expect(workspace).to receive(:normalize)
           workspace.run_callbacks(:save)
         end
       end
@@ -68,21 +66,21 @@ describe Mdm::Workspace do
   end
 
   context 'columns' do
-    it { should have_db_column(:boundary).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
-    it { should have_db_column(:description).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
-    it { should have_db_column(:limit_to_network).of_type(:boolean).with_options(:default => false, :null => false) }
-    it { should have_db_column(:name).of_type(:string) }
-    it { should have_db_column(:owner_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:boundary).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
+    it { is_expected.to have_db_column(:description).of_type(:string).with_options(:limit => 4 * (2 ** 10)) }
+    it { is_expected.to have_db_column(:limit_to_network).of_type(:boolean).with_options(:default => false, :null => false) }
+    it { is_expected.to have_db_column(:name).of_type(:string) }
+    it { is_expected.to have_db_column(:owner_id).of_type(:integer) }
 
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
   end
 
   context 'CONSTANTS' do
     it 'should define the DEFAULT name' do
-      described_class::DEFAULT.should == default
+      expect(described_class::DEFAULT).to eq(default)
     end
   end
 
@@ -101,8 +99,8 @@ describe Mdm::Workspace do
         workspace.valid?
       end
 
-      it 'should validate using #valid_ip_or_range?', :pending => 'https://www.pivotaltracker.com/story/show/43244445'  do
-        workspace.should_receive(:valid_ip_or_range?).with(boundary).and_return(false)
+      it 'should validate using #valid_ip_or_range?' do
+        expect(workspace).to receive(:valid_ip_or_range?).with(boundary).and_return(false)
 
         workspace.valid?
       end
@@ -113,7 +111,7 @@ describe Mdm::Workspace do
         end
 
         it 'should not record an error' do
-          workspace.errors[:boundary].should_not include(error)
+          expect(workspace.errors[:boundary]).not_to include(error)
         end
       end
 
@@ -123,7 +121,7 @@ describe Mdm::Workspace do
         end
 
         it 'should not record an error' do
-          workspace.errors[:boundary].should_not include(error)
+          expect(workspace.errors[:boundary]).not_to include(error)
         end
       end
 
@@ -133,20 +131,20 @@ describe Mdm::Workspace do
         end
 
         it 'should record error that boundary must be a valid IP range', :pending => 'https://www.pivotaltracker.com/story/show/43171927' do
-          workspace.should_not be_valid
-          workkspace.errors[:boundary].should include(error)
+          expect(workspace).not_to be_valid
+          expect(workkspace.errors[:boundary]).to include(error)
         end
       end
     end
 
     context 'description' do
-      it { should ensure_length_of(:description).is_at_most(4 * (2 ** 10)) }
+      it { is_expected.to ensure_length_of(:description).is_at_most(4 * (2 ** 10)) }
     end
 
     context 'name' do
-      it { should ensure_length_of(:name).is_at_most(2**8 - 1) }
-      it { should validate_presence_of :name }
-      it { should validate_uniqueness_of :name }
+      it { is_expected.to ensure_length_of(:name).is_at_most(2**8 - 1) }
+      it { is_expected.to validate_presence_of :name }
+      it { is_expected.to validate_uniqueness_of :name }
     end
   end
 
@@ -212,27 +210,25 @@ describe Mdm::Workspace do
         # to_a to make query return instances
         found_creds = workspace.creds.to_a
 
-        found_creds.length.should > 0
-        found_cred = found_creds.first
+        expect(found_creds.length).to be > 0
 
-      end
-
-      it 'should include hosts' do
-        found_creds = workspace.creds.to_a
-
-        found_creds.length.should > 0
-        found_cred = found_creds.first
-        service = found_cred.service
+        expect(
+            found_creds.none? { |found_cred|
+              found_cred.service.nil?
+            }
+        ).to eq(true)
       end
 
       it 'should return only Mdm::Creds from hosts in workspace' do
         found_creds = workspace.creds
 
-        found_creds.length.should == creds.length
+        expect(found_creds.length).to eq(creds.length)
 
-        found_creds.all? { |cred|
-          cred.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_creds.all? { |cred|
+              cred.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -252,7 +248,7 @@ describe Mdm::Workspace do
             workspace = described_class.default
           }.to change(Mdm::Workspace, :count).by(0)
 
-          workspace.should be_default
+          expect(workspace).to be_default
         end
       end
 
@@ -264,7 +260,7 @@ describe Mdm::Workspace do
             workspace = described_class.default
           }.to change(Mdm::Workspace, :count).by(1)
 
-          workspace.should be_default
+          expect(workspace).to be_default
         end
       end
     end
@@ -279,20 +275,18 @@ describe Mdm::Workspace do
           workspace.name = default
         end
 
-        it {
-          should be_true
-        }
+        it { is_expected.to eq(true) }
       end
 
       context 'without DEFAULT name' do
-        it { should be_false }
+        it { is_expected.to eq(false) }
       end
     end
 
     context '#each_cred' do
       it 'should pass each of the #creds to the block' do
         creds = FactoryGirl.create_list(:mdm_cred, 2)
-        workspace.stub(:creds => creds)
+        allow(workspace).to receive(:creds).and_return(creds)
 
         expect { |block|
           workspace.each_cred(&block)
@@ -303,7 +297,7 @@ describe Mdm::Workspace do
     context '#each_host_tag' do
       it 'should pass each of the #host_tags to the block' do
         tags = FactoryGirl.create_list(:mdm_tag, 2)
-        workspace.stub(:host_tags => tags)
+        expect(workspace).to receive(:host_tags).and_return(tags)
 
         expect { |block|
           workspace.each_host_tag(&block)
@@ -312,6 +306,14 @@ describe Mdm::Workspace do
     end
 
     context '#host_tags' do
+      subject(:host_tags) do
+        workspace.host_tags
+      end
+
+      #
+      # lets
+      #
+
       let(:other_tags) do
         FactoryGirl.create_list(
             :mdm_tag,
@@ -326,15 +328,11 @@ describe Mdm::Workspace do
         )
       end
 
-      subject(:host_tags) do
-        workspace.host_tags
-      end
-
       #
       # Let!s (let + before(:each))
       #
 
-      let!(:host_tags) do
+      let!(:first_host_tags) do
         host_tags = []
 
         hosts.zip(tags) do |host, tag|
@@ -346,7 +344,7 @@ describe Mdm::Workspace do
         host_tags
       end
 
-      let!(:other_host_tags) do
+      let!(:second_host_tags) do
         host_tags = []
 
         other_hosts.zip(other_tags) do |host, tag|
@@ -362,24 +360,16 @@ describe Mdm::Workspace do
         should be_a ActiveRecord::Relation
       end
 
-      it 'should include hosts' do
-        found_tags = workspace.host_tags.to_a
-
-        found_tags.length.should > 0
-
-        tag = found_tags.first
-      end
-
       it 'should return only Mdm::Tags from hosts in the workspace' do
-        found_tags = workspace.host_tags
+        expect(host_tags.length).to eq(tags.length)
 
-        found_tags.length.should == tags.length
-
-        found_tags.all? { |tag|
-          tag.hosts.any? { |host|
-            host.workspace == workspace
-          }
-        }.should be_true
+        expect(
+            host_tags.all? { |tag|
+              tag.hosts.any? { |host|
+                host.workspace == workspace
+              }
+            }
+        ).to eq(true)
       end
     end
 
@@ -404,7 +394,7 @@ describe Mdm::Workspace do
         it "should remove spaces" do
           normalize
 
-          workspace.boundary.should == stripped_boundary
+          expect(workspace.boundary).to eq(stripped_boundary)
         end
       end
 
@@ -451,11 +441,13 @@ describe Mdm::Workspace do
       it 'should return only Mdm::WebPages from hosts in the workspace' do
         found_web_forms = workspace.web_forms
 
-        found_web_forms.length.should == web_forms.length
+        expect(found_web_forms.length).to eq(web_forms.length)
 
-        found_web_forms.all? { |web_form|
-          web_form.web_site.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_web_forms.all? { |web_form|
+              web_form.web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -480,15 +472,17 @@ describe Mdm::Workspace do
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
         # there are more web sites than those in the workspace
-        Mdm::WebSite.count.should > web_sites.count
+        expect(Mdm::WebSite.count).to be > web_sites.count
 
         found_web_sites = workspace.web_sites
 
-        found_web_sites.length.should == web_sites.count
+        expect(found_web_sites.length).to eq(web_sites.count)
 
-        found_web_sites.all? { |web_site|
-          web_site.service.host.workspace == workspace
-        }.should be_true
+        expect(
+            found_web_sites.all? { |web_site|
+              web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -519,16 +513,17 @@ describe Mdm::Workspace do
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
-        Mdm::WebVuln.count.should > web_vulns.length
+        expect(Mdm::WebVuln.count).to be > web_vulns.length
 
         found_web_vulns = workspace.web_vulns
 
-        found_web_vulns.length.should == web_vulns.length
+        expect(found_web_vulns.length).to eq(web_vulns.length)
 
-        found_web_vulns.all? { |web_vuln|
-          web_vuln.web_site.service.host.workspace == workspace
-        }.should be_true
-
+        expect(
+            found_web_vulns.all? { |web_vuln|
+              web_vuln.web_site.service.host.workspace == workspace
+            }
+        ).to eq(true)
       end
     end
 
@@ -549,9 +544,11 @@ describe Mdm::Workspace do
       it "should reject #unique_web_forms from host addresses that aren't in addresses" do
         web_forms = workspace.web_unique_forms([selected_address])
 
-        web_forms.all? { |web_form|
-          web_form.web_site.service.host.address.to_s.should == selected_address
-        }.should be_true
+        expect(
+            web_forms.all? { |web_form|
+              expect(web_form.web_site.service.host.address.to_s).to eq(selected_address)
+            }
+        ).to eq(true)
       end
     end
   end
