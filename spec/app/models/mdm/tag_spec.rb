@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'securerandom'
 
 RSpec.describe Mdm::Tag, type: :model do

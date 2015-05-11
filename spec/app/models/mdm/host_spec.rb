@@ -320,22 +320,22 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:address).of_type(:inet).with_options(:null => false) }
-      it { should have_db_column(:arch).of_type(:string) }
-      it { should have_db_column(:comm).of_type(:string) }
-      it { should have_db_column(:comments).of_type(:text) }
-      it { should have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }
-      it { should have_db_column(:mac).of_type(:string) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:os_flavor).of_type(:string) }
-      it { should have_db_column(:os_lang).of_type(:string) }
-      it { should have_db_column(:os_name).of_type(:string) }
-      it { should have_db_column(:os_sp).of_type(:string) }
-      it { should have_db_column(:purpose).of_type(:text) }
-      it { should have_db_column(:scope).of_type(:text) }
-      it { should have_db_column(:state).of_type(:string) }
-      it { should have_db_column(:virtual_host).of_type(:text) }
-      it { should have_db_column(:workspace_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:address).of_type(:inet).with_options(:null => false) }
+      it { is_expected.to have_db_column(:arch).of_type(:string) }
+      it { is_expected.to have_db_column(:comm).of_type(:string) }
+      it { is_expected.to have_db_column(:comments).of_type(:text) }
+      it { is_expected.to have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }
+      it { is_expected.to have_db_column(:mac).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:os_flavor).of_type(:string) }
+      it { is_expected.to have_db_column(:os_lang).of_type(:string) }
+      it { is_expected.to have_db_column(:os_name).of_type(:string) }
+      it { is_expected.to have_db_column(:os_sp).of_type(:string) }
+      it { is_expected.to have_db_column(:purpose).of_type(:text) }
+      it { is_expected.to have_db_column(:scope).of_type(:text) }
+      it { is_expected.to have_db_column(:state).of_type(:string) }
+      it { is_expected.to have_db_column(:virtual_host).of_type(:text) }
+      it { is_expected.to have_db_column(:workspace_id).of_type(:integer).with_options(:null => false) }
 
       context 'counter caches' do
         it { is_expected.to have_db_column(:exploit_attempt_count).of_type(:integer).with_options(:default => 0) }
@@ -381,7 +381,7 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'validations' do
     context 'address' do
-      it { is_expected.to ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
+      it { is_expected.to validate_exclusion_of(:address).in_array(['127.0.0.1']) }
       it { is_expected.to validate_presence_of(:address) }
 
       # can't use validate_uniqueness_of(:address).scoped_to(:workspace_id) because it will attempt to set workspace_id
@@ -417,6 +417,7 @@ RSpec.describe Mdm::Host, type: :model do
         end
       end
     end
+
     it { is_expected.to validate_inclusion_of(:state).in_array(states).allow_nil }
     it { is_expected.to validate_presence_of(:workspace) }
   end
