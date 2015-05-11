@@ -21,12 +21,6 @@ class Mdm::Module::Mixin < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
-  #
   # Validation
   #
 

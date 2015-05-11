@@ -1,7 +1,7 @@
 # A user of metasploit-framework or metasploit-pro.
 class Mdm::User < ActiveRecord::Base
   extend MetasploitDataModels::SerializedPrefs
-
+  
   #
   # Associations
   #
@@ -35,7 +35,10 @@ class Mdm::User < ActiveRecord::Base
 
   # {Mdm::Workspace Workspace} where this user has access.  If a user is an {#admin administrator} they have access
   # to all workspaces even if they are not a member of that workspace.
-  has_and_belongs_to_many :workspaces, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::Workspace'
+  has_and_belongs_to_many :workspaces,
+                          -> { uniq },
+                          class_name: 'Mdm::Workspace',
+                          join_table: 'workspace_members'
 
   #
   # Attributes

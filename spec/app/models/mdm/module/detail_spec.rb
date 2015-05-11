@@ -234,14 +234,14 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to ensure_inclusion_of(:mtype).in_array(types) }
+    it { is_expected.to validate_inclusion_of(:mtype).in_array(types) }
 
     # Because the boolean field will cast most strings to false,
-    # ensure_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
+    # validate_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
 
     context 'rank' do
       it { is_expected.to validate_numericality_of(:rank).only_integer }
-      it { is_expected.to ensure_inclusion_of(:rank).in_array(ranks) }
+      it { is_expected.to validate_inclusion_of(:rank).in_array(ranks) }
     end
 
     it { is_expected.to validate_presence_of(:refname) }

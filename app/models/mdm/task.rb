@@ -69,20 +69,8 @@ class Mdm::Task < ActiveRecord::Base
   # Session this task touched
   has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
 
-  #
-  # Attributes
-  #
 
-  # @!attribute completed_at
-  #   When this task completed.
-  #
-  #   @return [DateTime] when this task completed
-  #   @return [nil] this task is still running.
 
-  # @!attribute created_at
-  #   When this task was created.
-  #
-  #   @return [DateTime]
 
   # @!attribute created_by
   #   {Mdm::User#username Name of user} that created this task.

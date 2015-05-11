@@ -1,5 +1,6 @@
 # Data gathered or derived from the {#host} or {#service} such as its {#ntype fingerprint}.
 class Mdm::Note < ActiveRecord::Base
+  
   #
   # Associations
   #
@@ -84,10 +85,9 @@ class Mdm::Note < ActiveRecord::Base
   # Scopes
   #
 
-  scope :flagged, where('critical = true AND seen = false')
+  scope :flagged, -> { where('critical = true AND seen = false') }
 
-  notes = self.arel_table
-  scope :visible, where(notes[:ntype].not_in(['web.form', 'web.url', 'web.vuln']))
+  scope :visible, -> { where(Mdm::Note[:ntype].not_in(['web.form', 'web.url', 'web.vuln'])) }
 
   scope :search, lambda { |*args|
     where(["(data NOT ILIKE 'BAh7%' AND data LIKE ?)" +

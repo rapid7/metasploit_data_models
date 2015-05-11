@@ -68,8 +68,4 @@ RSpec.describe Mdm::Ref, type: :model do
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
-
-  context 'mass assignment security' do
-    it { is_expected.to allow_mass_assignment_of(:name) }
-  end
 end

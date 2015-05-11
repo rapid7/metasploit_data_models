@@ -1,5 +1,6 @@
 # A vulnerability found on a {#host} or {#service}.
 class Mdm::Vuln < ActiveRecord::Base
+  
   #
   # Associations
   #
@@ -61,10 +62,11 @@ class Mdm::Vuln < ActiveRecord::Base
   #
   #   @return [<ActiveRecord::RelationMdm::Note>]
   has_many :notes,
+           -> { order('notes.created_at') },
            class_name: 'Mdm::Note',
            inverse_of: :vuln,
-           dependent: :delete_all,
-           order: 'notes.created_at'
+           dependent: :delete_all
+
 
   #
   # Through :vuln_refs
@@ -104,11 +106,10 @@ class Mdm::Vuln < ActiveRecord::Base
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail>]
   has_many :module_details,
-           :class_name => 'Mdm::Module::Detail',
-           :source => :detail,
-           :through => :module_refs,
-           :uniq => true
-
+            -> { uniq },
+            :class_name => 'Mdm::Module::Detail',
+            :source => :detail,
+            :through => :module_refs
   #
   # Attributes
   #

@@ -38,20 +38,26 @@ RSpec.describe Mdm::Event, type: :model do
 
   context 'scopes' do
     context 'flagged' do
-      it 'should exclude non-critical events' do
-        flagged_event = FactoryGirl.create(:mdm_event, :name => 'flagme', :critical => true, :seen => false)
-        non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro', :critical => false, :seen => false)
-        flagged_set = Mdm::Event.flagged
-        expect(flagged_set).to include(flagged_event)
-        expect(flagged_set).not_to include(non_critical_event)
+      let(:workspace) {FactoryGirl.create(:mdm_workspace)}
+      let(:flagged_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'flagme', :critical => true, :seen => false) }
+      let(:non_critical_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'dontflagmebro', :critical => false, :seen => false) }
+
+      before(:each) do
+        flagged_event
+        non_critical_event
       end
 
-      it 'should exclude seen events' do
-        flagged_event = FactoryGirl.create(:mdm_event, :name => 'flagme', :critical => true, :seen => false)
-        non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro', :critical => false, :seen => true)
-        flagged_set = Mdm::Event.flagged
-        expect(flagged_set).to include(flagged_event)
-        expect(flagged_set).not_to include(non_critical_event)
+      it 'should included critical unseen events' do
+        expect(Mdm::Event.flagged).to eq [flagged_event]
+      end
+      it 'should exclude non-critical events' do
+        expect(Mdm::Event.flagged).not_to include(non_critical_event)
+      end
+
+      it 'should exclude critical seen events' do
+        flagged_event.seen = true
+        flagged_event.save
+        expect(Mdm::Event.flagged).not_to include(flagged_event)
       end
     end
 

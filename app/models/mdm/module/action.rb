@@ -4,7 +4,7 @@
 # {Mdm::Module::Action actions} with the same {Mdm::Module::Action#name name}, no similarity should be assumed between
 # those two {Mdm::Module::Action actions} or {Mdm::Module::Detail Metasploit Modules}.
 class Mdm::Module::Action < ActiveRecord::Base
-  self.table_name = 'module_actions'
+  self.table_name = 'module_actions'  
 
   #
   # Associations
@@ -21,12 +21,6 @@ class Mdm::Module::Action < ActiveRecord::Base
   #   The name of this action.
   #
   #   @return [String]
-
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
 
   #
   # Validations

@@ -2,7 +2,7 @@
 # {Mdm::Module} namespace.
 class Mdm::Module::Detail < ActiveRecord::Base
   self.table_name = 'module_details'
-
+  
   #
   # CONSTANTS
   #

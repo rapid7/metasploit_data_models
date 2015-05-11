@@ -24,13 +24,6 @@ class Mdm::Module::Author < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :email
-  attr_accessible :name
-
-  #
   # Validations
   #
 

@@ -44,11 +44,5 @@ class Mdm::Ref < ActiveRecord::Base
   #
   #   @return [String]
 
-  #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
   Metasploit::Concern.run(self)
 end

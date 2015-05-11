@@ -62,6 +62,18 @@ class Mdm::Host < ActiveRecord::Base
   ]
 
   #
+  # Aggregations
+  #
+
+  # @!attribute [rw] address
+  #   The IP address of this host. Necessary to avoid coercion to an `IPAddr` object.
+  #
+  #   @return [String]
+  def address
+    self[:address].to_s
+  end
+
+  #
   # Associations
   #
 
@@ -132,20 +144,20 @@ class Mdm::Host < ActiveRecord::Base
   #   @todo MSP-3065
   #   @return [ActiveRecord::Relation<Mdm::Loot>]
   has_many :loots,
-           class_name: 'Mdm::Loot',
-           dependent: :destroy,
-           inverse_of: :host,
-           order: 'loots.created_at DESC'
+            -> { order('loots.created_at DESC')},
+            class_name: 'Mdm::Loot',
+            dependent: :destroy,
+            inverse_of: :host
 
   # @!attribute [rw] notes
   #   Notes about the host entered by a user with {Mdm::Note#created_at oldest notes} first.
   #
   #   @return [ActiveRecord::Relation<Mdm::Note>]
   has_many :notes,
-           class_name: 'Mdm::Note',
-           inverse_of: :host,
-           dependent: :delete_all,
-           order: 'notes.created_at'
+            -> { order('notes.created_at') },
+            class_name: 'Mdm::Note',
+            inverse_of: :host,
+            dependent: :delete_all
 
   # @!attribute [rw] services
   #   The services running on {Mdm::Service#port ports} on the host with services ordered by {Mdm::Service#port port}
@@ -153,10 +165,10 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [ActiveRecord::Relation<Mdm::Service>]
   has_many :services,
-           class_name: 'Mdm::Service',
-           dependent: :destroy,
-           inverse_of: :host,
-           order: 'services.port, services.proto'
+            -> { order('services.port, services.proto') },
+            class_name: 'Mdm::Service',
+            dependent: :destroy,
+            inverse_of: :host
 
   # @!attribute [rw] sessions
   #   Sessions that are open or previously were open on the host ordered by {Mdm::Session#opened_at when the session was
@@ -164,10 +176,10 @@ class Mdm::Host < ActiveRecord::Base
   #
   #   @return [ActiveRecord::Relation<Mdm::Session]
   has_many :sessions,
-           class_name: 'Mdm::Session',
-           dependent: :destroy,
-           inverse_of: :host,
-           order: 'sessions.opened_at'
+            -> { order('sessions.opened_at') },
+            class_name: 'Mdm::Session',
+            dependent: :destroy,
+            inverse_of: :host
 
   # @!attribute [rw] vulns
   #   Vulnerabilities found on the host.
@@ -452,7 +464,7 @@ class Mdm::Host < ActiveRecord::Base
 
   validates :address,
             :exclusion => {
-                :in => ['127.0.0.1']
+                :in => [IPAddr.new('127.0.0.1')]
             },
             :ip_format => true,
             :presence => true,
@@ -476,8 +488,8 @@ class Mdm::Host < ActiveRecord::Base
   # Scopes
   #
 
-  scope :alive, where({'hosts.state' => 'alive'})
-  scope :flagged, where('notes.critical = true AND notes.seen = false').includes(:notes)
+  scope :alive, -> { where({'hosts.state' => 'alive'}) }
+  scope :flagged, -> { where('notes.critical = true AND notes.seen = false').includes(:notes) }
   scope :search,
         lambda { |*args|
           # @todo replace with AREL
@@ -555,7 +567,12 @@ class Mdm::Host < ActiveRecord::Base
   # @return [void]
   def ip_address_invalid?
     begin
-      potential_ip = IPAddr.new(address)
+      if address.is_a? IPAddr
+        potential_ip = address.dup
+      else
+        potential_ip = IPAddr.new(address)
+      end
+
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true

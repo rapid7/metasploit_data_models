@@ -1,5 +1,6 @@
 # Records framework events to the database.
 class Mdm::Event < ActiveRecord::Base
+    
   #
   # Associations
   #
@@ -17,7 +18,7 @@ class Mdm::Event < ActiveRecord::Base
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
              inverse_of: :events
-
+  
   #
   # Attributes
   #
@@ -59,8 +60,8 @@ class Mdm::Event < ActiveRecord::Base
   # Scopes
   #
 
-  scope :flagged, where(:critical => true, :seen => false)
-  scope :module_run, where(:name => 'module_run')
+  scope :flagged, -> { where(:critical => true, :seen => false) }
+  scope :module_run, -> { where(:name => 'module_run') }
 
   #
   # Serializations

@@ -320,7 +320,7 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'database' do
     context 'columns' do
-      it { is_expected.to have_db_column(:address).of_type(:string).with_options(:null => false) }
+      it { is_expected.to have_db_column(:address).of_type(:inet).with_options(:null => false) }
       it { is_expected.to have_db_column(:arch).of_type(:string) }
       it { is_expected.to have_db_column(:comm).of_type(:string) }
       it { is_expected.to have_db_column(:comments).of_type(:text) }
@@ -381,7 +381,7 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'validations' do
     context 'address' do
-      it { is_expected.to ensure_exclusion_of(:address).in_array(['127.0.0.1']) }
+      it { is_expected.to validate_exclusion_of(:address).in_array(['127.0.0.1']) }
       it { is_expected.to validate_presence_of(:address) }
 
       # can't use validate_uniqueness_of(:address).scoped_to(:workspace_id) because it will attempt to set workspace_id
@@ -417,7 +417,8 @@ RSpec.describe Mdm::Host, type: :model do
         end
       end
     end
-    it { is_expected.to ensure_inclusion_of(:state).in_array(states).allow_nil }
+
+    it { is_expected.to validate_inclusion_of(:state).in_array(states).allow_nil }
     it { is_expected.to validate_presence_of(:workspace) }
   end
 

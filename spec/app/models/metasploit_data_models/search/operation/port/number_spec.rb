@@ -34,6 +34,6 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Number, type: :mod
   end
 
   context 'validations' do
-    it { is_expected.to ensure_inclusion_of(:value).in_range(described_class::RANGE) }
+    it { is_expected.to validate_inclusion_of(:value).in_range(described_class::RANGE) }
   end
 end

@@ -59,7 +59,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       context '#normalize' do
         it 'should be called' do
           expect(workspace).to receive(:normalize)
-          workspace.run_callbacks(:save, false)
+          workspace.run_callbacks(:save)
         end
       end
     end
@@ -546,7 +546,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
         expect(
             web_forms.all? { |web_form|
-              expect(web_form.web_site.service.host.address).to eq(selected_address)
+              expect(web_form.web_site.service.host.address.to_s).to eq(selected_address)
             }
         ).to eq(true)
       end

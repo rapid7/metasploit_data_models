@@ -1,7 +1,7 @@
 class AddNexposeConsolesTable < ActiveRecord::Migration
 	def self.up
 		create_table :nexpose_consoles do |t|
-			t.timestamps
+			t.timestamps null: false
 			t.boolean :enabled, :default => true
 			t.text :owner
 			t.text :address

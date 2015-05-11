@@ -11,6 +11,7 @@
 #     end
 #   end
 class Mdm::WebVuln < ActiveRecord::Base
+  
   #
   # CONSTANTS
   #

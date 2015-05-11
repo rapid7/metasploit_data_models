@@ -1,5 +1,6 @@
 # Web page requested from a {#web_site}.
 class Mdm::WebPage < ActiveRecord::Base
+  
   #
   # Associations
   #
@@ -81,7 +82,7 @@ class Mdm::WebPage < ActiveRecord::Base
   #
   # @return [Hash{String => String}]
   serialize :headers, MetasploitDataModels::Base64Serializer.new
-
+    
   Metasploit::Concern.run(self)
 end
 

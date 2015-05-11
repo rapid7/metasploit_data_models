@@ -1,5 +1,6 @@
 # An attempt to exploit a {#vuln}.
 class Mdm::VulnAttempt < ActiveRecord::Base
+  
   #
   # Associations
   #

@@ -1,6 +1,7 @@
 # A session opened on a {#host} using an {#via_exploit exploit} and controlled through a {#via_payload payload} to
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ActiveRecord::Base
+  
   #
   # Associations
   #
@@ -10,10 +11,10 @@ class Mdm::Session < ActiveRecord::Base
   #
   #   @return [Array<Mdm::Event>]
   has_many :events,
-           class_name: 'Mdm::SessionEvent',
-           dependent: :delete_all,
-           inverse_of: :session,
-           order: 'created_at'
+            -> { order('created_at') },
+            class_name: 'Mdm::SessionEvent',
+            dependent: :delete_all,
+            inverse_of: :session
 
   # @!attribute exploit_attempt
   #   Exploit attempt that created this session.
@@ -162,9 +163,9 @@ class Mdm::Session < ActiveRecord::Base
   # Scopes
   #
 
-  scope :alive, where('closed_at IS NULL')
-  scope :dead, where('closed_at IS NOT NULL')
-  scope :upgradeable, where("closed_at IS NULL AND stype = 'shell' and platform ILIKE '%win%'")
+  scope :alive, -> { where('closed_at IS NULL') }
+  scope :dead, -> { where('closed_at IS NOT NULL') }
+  scope :upgradeable, -> { where("closed_at IS NULL AND stype = 'shell' and platform ILIKE '%win%'") }
 
   #
   # Serializations

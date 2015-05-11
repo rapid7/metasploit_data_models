@@ -18,12 +18,6 @@ class Mdm::Module::Arch < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
-  #
   # Validations
   #
 

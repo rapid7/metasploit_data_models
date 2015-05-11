@@ -26,7 +26,7 @@ class Mdm::HostTag < ActiveRecord::Base
 
   # @see http://stackoverflow.com/a/11694704
   after_destroy :destroy_orphan_tag
-
+  
   #
   # Instance Methods
   #

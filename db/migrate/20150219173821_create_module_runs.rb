@@ -14,7 +14,7 @@ class CreateModuleRuns < ActiveRecord::Migration
       t.integer :user_id
       t.string :username
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :module_runs, :session_id

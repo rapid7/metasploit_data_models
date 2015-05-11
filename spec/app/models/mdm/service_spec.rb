@@ -150,7 +150,7 @@ RSpec.describe Mdm::Service, type: :model do
     }
 
     it { is_expected.to validate_numericality_of(:port).only_integer }
-    it { is_expected.to ensure_inclusion_of(:proto).in_array(described_class::PROTOS) }
+    it { is_expected.to validate_inclusion_of(:proto).in_array(described_class::PROTOS) }
 
     context 'when a duplicate service already exists' do
       let(:service1) { FactoryGirl.create(:mdm_service)}

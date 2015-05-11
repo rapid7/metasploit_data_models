@@ -1,5 +1,6 @@
 # A listener spawned by a {#task} that is waiting for connection on {#address}:{#port}.
 class Mdm::Listener < ActiveRecord::Base
+  
   #
   # Associations
   #

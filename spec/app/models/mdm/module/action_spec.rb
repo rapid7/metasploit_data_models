@@ -27,11 +27,6 @@ RSpec.describe Mdm::Module::Action, type: :model do
     end
   end
 
-  context 'mass assignment security' do
-    it { is_expected.not_to allow_mass_assignment_of(:detail_id) }
-    it { is_expected.to allow_mass_assignment_of(:name) }
-  end
-
   context 'validations' do
     it { is_expected.to validate_presence_of(:detail) }
     it { is_expected.to validate_presence_of(:name) }

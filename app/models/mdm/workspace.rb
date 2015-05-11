@@ -44,11 +44,17 @@ class Mdm::Workspace < ActiveRecord::Base
   belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
 
   # Tasks run inside this workspace.
-  has_many :tasks, :dependent => :destroy, :class_name => 'Mdm::Task', :order => 'created_at DESC'
+  has_many :tasks,
+           -> { order('created_at DESC') },
+           class_name: 'Mdm::Task',
+           dependent: :destroy
 
   # Users that are allowed to use this workspace.  Does not necessarily include all users, as an {Mdm::User#admin
   # administrator} can access any workspace, even ones where they are not a member.
-  has_and_belongs_to_many :users, :join_table => 'workspace_members', :uniq => true, :class_name => 'Mdm::User'
+  has_and_belongs_to_many :users,
+                          -> { uniq },
+                          class_name: 'Mdm::User',
+                          join_table: 'workspace_members'
 
   #
   # through: :hosts
@@ -308,7 +314,7 @@ class Mdm::Workspace < ActiveRecord::Base
   def web_unique_forms(addrs=nil)
     forms = unique_web_forms
     if addrs
-      forms.reject! { |f| not addrs.include?(f.web_site.service.host.address) }
+      forms.reject!{|f| not addrs.include?( f.web_site.service.host.address.to_s ) }
     end
     forms
   end

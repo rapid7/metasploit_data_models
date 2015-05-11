@@ -1,5 +1,6 @@
 # Events that occurred when using a {#session}.
 class Mdm::SessionEvent < ActiveRecord::Base
+  
   #
   # Associations
   #

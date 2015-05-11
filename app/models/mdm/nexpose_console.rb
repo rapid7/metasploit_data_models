@@ -1,5 +1,6 @@
 # A connection to Nexpose from Metasploit.
 class Mdm::NexposeConsole < ActiveRecord::Base
+  
   #
   # Associations
   #

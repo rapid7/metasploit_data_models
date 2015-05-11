@@ -40,20 +40,20 @@ Complete these steps on DESTINATION
 
 The entries in the [CHANGELOG.md](CHANGELOG.md) can be used to help determine how the `VERSION` should be bumped.
 
-### Compatible changes
+### Bug fixes
 
-If the [CHANGELOG.md](CHANGELOG.md) contains only Enhancements, Bug Fixes, and/or Deprecations for the Next Release then
-increment [`PATCH`](lib/metasploit_data_models/version.rb).
+If the [CHANGELOG.md](CHANGELOG.md) contains only Bug Fixes for the Next Release, then increment
+[`PATCH`](lib/metasploit_data_models/version.rb).
 
-### Incompatible changes
+### Compatible API changes
 
-If the [CHANGELOG.md](CHANGELOG.md) contains any Incompatible Changes for the Next Release, then you can either (1)
-decide to remain pre-1.0.0 or (2) advance to 1.0.0.
+If the [CHANGELOG.md](CHANGELOG.md) contains any Enhancements or Deprecations, then increment
+[`MINOR`](lib/metasploit_data_models/version.rb) and reset [`PATCH`](lib/metasploit_data_models/version.rb) to `0`.
 
-1. To remain pre-1..0.0, then increment [`MINOR`](lib/metasploit_data_models/version.rb) and reset
-   [`PATCH`](lib/metasploit_data_models/version.rb) to `0`.
-2. To advance to 1.0.0, increment [`MAJOR`](lib/metasploit_data_models/version.rb) and reset
-   [`MINOR`](lib/metasploit_data_models/version.rb and [`PATCH`](lib/metasploit_data_models/version.rb) to `0`.
+### Incompatible API changes
+
+If the [CHANGELOG.md](CHANGELOG.md) contains any Incompatible Change, then increment [`MAJOR`](lib/metasploit_data_models/version.rb) and
+reset [`MINOR`](lib/metasploit_data_models/version.rb and [`PATCH`](lib/metasploit_data_models/version.rb) to `0`.
 
 ## Setup [CHANGELOG.md](CHANGELOG.md) for next release
 

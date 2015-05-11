@@ -19,12 +19,6 @@ class Mdm::Module::Platform < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :name
-
-  #
   # Validations
   #
 

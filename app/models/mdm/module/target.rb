@@ -26,13 +26,6 @@ class Mdm::Module::Target < ActiveRecord::Base
   #   @return [String]
 
   #
-  # Mass Assignment Security
-  #
-
-  attr_accessible :index
-  attr_accessible :name
-
-  #
   # Validators
   #
 
