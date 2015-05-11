@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::IPAddress::V4::Single do
+RSpec.describe MetasploitDataModels::IPAddress::V4::Single, type: :model do
   subject(:single) {
     described_class.new(
         value: formatted_value
@@ -22,7 +20,7 @@ describe MetasploitDataModels::IPAddress::V4::Single do
           '1.2.3.4'
         }
 
-        it { should be_empty }
+        it { is_expected.to be_empty }
       end
 
       context 'without segments' do
@@ -37,7 +35,7 @@ describe MetasploitDataModels::IPAddress::V4::Single do
           )
         }
 
-        it { should include length_error }
+        it { is_expected.to include length_error }
       end
     end
   end
@@ -142,7 +140,7 @@ describe MetasploitDataModels::IPAddress::V4::Single do
         nil
       }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'with matching formatted value' do

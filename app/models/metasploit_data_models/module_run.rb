@@ -34,7 +34,7 @@ class MetasploitDataModels::ModuleRun < ActiveRecord::Base
   #   @return [String]
 
   # @!attribute [rw] fail_reason
-  #   One of the values of the constants in {Msf::Module::Failure}
+  #   One of the values of the constants in `Msf::Module::Failure`
   #   @return [String]
 
   # @!attribute [rw] module_name

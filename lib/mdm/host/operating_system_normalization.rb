@@ -185,15 +185,6 @@ module Mdm::Host::OperatingSystemNormalization
     # Merge and normalize the best match to the host object
     apply_match_to_host(match) if match
 
-    # Handle cases where the flavor contains the base name (legacy parsing, etc)
-    # TODO: Remove this once we are sure it is no longer needed
-    if host.os_name && host.os_flavor && host.os_flavor.index(host.os_name)
-      dlog("Host #{host.address.to_s} has os_flavor that contains os_name")
-      dlog("os_flavor: #{host.os_flavor}")
-      dlog("os_name: #{host.os_name}")
-      host.os_flavor = host.os_flavor.gsub(host.os_name, '').strip
-    end
-
     # Set some sane defaults if needed
     host.os_name ||= 'Unknown'
     host.purpose ||= 'device'
@@ -201,6 +192,10 @@ module Mdm::Host::OperatingSystemNormalization
     host.save if host.changed?
   end
 
+  # Recog matches for the `s` service.
+  #
+  # @param s [Mdm::Service]
+  # @return [Array<Hash>] Keys will be host, service, and os attributes
   def recog_matches_for_service(s)
     #
     # We assume that the service.info field contains certain types of probe
@@ -242,6 +237,9 @@ module Mdm::Host::OperatingSystemNormalization
     matches
   end
 
+  # Recog matches for the fingerprint in `note`.
+  #
+  # @return [Array<Hash>] Keys will be host, service, and os attributes
   def recog_matches_for_note(note)
     # Skip notes that are missing the correct structure or have been blacklisted
     return [] if not validate_fingerprint_data(note)
@@ -302,7 +300,6 @@ module Mdm::Host::OperatingSystemNormalization
       # name collision seems silly.
       return false
     else
-      dlog("Could not validate fingerprint data: #{fp.inspect}")
       return false
     end
   end

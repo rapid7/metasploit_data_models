@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Visitor::Includes do
+RSpec.describe MetasploitDataModels::Search::Visitor::Includes, type: :model do
   subject(:visitor) do
     described_class.new
   end
@@ -122,7 +120,7 @@ describe MetasploitDataModels::Search::Visitor::Includes do
         Metasploit::Model::Search::Operator::Attribute.new
       end
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with MetasploitDataModels::Search::Operator::Port::List' do
@@ -130,7 +128,7 @@ describe MetasploitDataModels::Search::Visitor::Includes do
         MetasploitDataModels::Search::Operator::Port::List.new
       end
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with Metasploit::Model::Search::Query#tree' do
@@ -160,7 +158,7 @@ describe MetasploitDataModels::Search::Visitor::Includes do
               "name:\"#{name}\""
             end
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
 
           context 'with services.name' do
@@ -172,7 +170,7 @@ describe MetasploitDataModels::Search::Visitor::Includes do
               "services.name:\"#{name}\""
             end
 
-            it { should include :services }
+            it { is_expected.to include :services }
           end
         end
       end

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe MetasploitDataModels::Base64Serializer do
+RSpec.describe MetasploitDataModels::Base64Serializer do
   let(:base64_marshaled) do
     marshaled = Marshal.dump(unserialized)
 
@@ -30,7 +30,7 @@ describe MetasploitDataModels::Base64Serializer do
 
   context 'CONSTANTS' do
     it 'should define DEFAULT' do
-      described_class::DEFAULT.should == default
+      expect(described_class::DEFAULT).to eq(default)
     end
 
     context 'LOADERS' do
@@ -38,36 +38,36 @@ describe MetasploitDataModels::Base64Serializer do
         first = described_class::LOADERS[0]
         deserialized = first.call(base64_marshaled)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
       it 'should fallback to the old YAML format second' do
         second = described_class::LOADERS[1]
         deserialized = second.call(yaml)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
       it 'should finally give up and just return the value' do
         last = described_class::LOADERS.last
         deserialized = last.call(unserialized)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
     end
   end
 
   context '#default' do
     it 'should default to {}' do
-      base64_serializer.default.should == {}
+      expect(base64_serializer.default).to eq({})
     end
 
     it 'should return a duplicate' do
       duplicate = base64_serializer.default
-      value = mock('Value')
+      value = double('Value')
       duplicate[:key] = value
 
-      duplicate.should_not == base64_serializer.default
+      expect(duplicate).not_to eq(base64_serializer.default)
     end
   end
 
@@ -75,7 +75,7 @@ describe MetasploitDataModels::Base64Serializer do
     it 'should output Base64 encoded marshaled data' do
       dumped = base64_serializer.dump(unserialized)
 
-      dumped.should == base64_marshaled
+      expect(dumped).to eq(base64_marshaled)
     end
   end
 
@@ -105,21 +105,21 @@ describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should have :default in attributes' do
-        attributes.should have_key(:default)
+        expect(attributes).to have_key(:default)
       end
 
       it 'should set default to :default value' do
-        base64_serializer.default.should == attributes[:default]
+        expect(base64_serializer.default).to eq(attributes[:default])
       end
     end
 
     context 'without :default' do
       it 'should not have :default in attributes' do
-        attributes.should_not have_key(:default)
+        expect(attributes).not_to have_key(:default)
       end
 
       it 'should default #default to DEFAULT' do
-        base64_serializer.default.should == default
+        expect(base64_serializer.default).to eq(default)
       end
     end
   end
@@ -131,11 +131,11 @@ describe MetasploitDataModels::Base64Serializer do
       end
 
       it 'should return #default' do
-        default = mock('Default')
-        base64_serializer.stub(:default => default)
+        default = double('Default')
+        allow(base64_serializer).to receive(:default).and_return(default)
         deserialized = base64_serializer.load(serialized)
 
-        deserialized.should == default
+        expect(deserialized).to eq(default)
       end
     end
 
@@ -143,7 +143,7 @@ describe MetasploitDataModels::Base64Serializer do
       it 'should return unserialized' do
         deserialized = base64_serializer.load(base64_marshaled)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
 
     end
@@ -152,7 +152,7 @@ describe MetasploitDataModels::Base64Serializer do
       it 'should return unserialized' do
         deserialized = base64_serializer.load(yaml)
 
-        deserialized.should == unserialized
+        expect(deserialized).to eq(unserialized)
       end
     end
 
@@ -165,7 +165,7 @@ describe MetasploitDataModels::Base64Serializer do
         it 'should return raw value' do
           deserialized = base64_serializer.load(raw_value)
 
-          deserialized.should == raw_value
+          expect(deserialized).to eq(raw_value)
         end
       end
     end

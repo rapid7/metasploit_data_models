@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Visitor::Joins do
+RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
   subject(:visitor) do
     described_class.new
   end
@@ -33,10 +31,10 @@ describe MetasploitDataModels::Search::Visitor::Joins do
 
         it 'should visit each child' do
           # needed for call to visit subject
-          visitor.should_receive(:visit).with(node).and_call_original
+          expect(visitor).to receive(:visit).with(node).and_call_original
 
           children.each do |child|
-            visitor.should_receive(:visit).with(child).and_return([])
+            expect(visitor).to receive(:visit).with(child).and_return([])
           end
 
           visit
@@ -45,15 +43,15 @@ describe MetasploitDataModels::Search::Visitor::Joins do
         it 'should return Array of all child visits' do
           child_visits = []
 
-          visitor.should_receive(:visit).with(node).and_call_original
+          expect(visitor).to receive(:visit).with(node).and_call_original
 
           children.each_with_index do |child, i|
             child_visit = ["Visited Child #{i}"]
-            visitor.stub(:visit).with(child).and_return(child_visit)
+            allow(visitor).to receive(:visit).with(child).and_return(child_visit)
             child_visits.concat(child_visit)
           end
 
-          visit.should == child_visits
+          expect(visit).to eq(child_visits)
         end
       end
     end
@@ -81,7 +79,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               }
             end
 
-            it { should == [] }
+            it { is_expected.to eq([]) }
           end
 
           context 'with association and attribute' do
@@ -117,7 +115,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               ]
             end
 
-            it { should == [] }
+            it { is_expected.to eq([]) }
           end
 
           context 'with the same child join for all' do
@@ -145,7 +143,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
             end
 
             it 'should include association' do
-              visit.should include association
+              expect(visit).to include association
             end
           end
 
@@ -215,13 +213,13 @@ describe MetasploitDataModels::Search::Visitor::Joins do
 
               it 'should include common associations' do
                 common_associations.each do |association|
-                  visit.should include(association)
+                  expect(visit).to include(association)
                 end
               end
 
               it 'should not include disjoint associations' do
                 disjoint_associations.each do |association|
-                  visit.should_not include(association)
+                  expect(visit).not_to include(association)
                 end
               end
             end
@@ -231,7 +229,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
                 []
               end
 
-              it { should == [] }
+              it { is_expected.to eq([]) }
             end
           end
         end
@@ -241,7 +239,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
             []
           end
 
-          it { should == [] }
+          it { is_expected.to eq([]) }
         end
       end
     end
@@ -339,7 +337,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
         Metasploit::Model::Search::Operator::Attribute.new
       end
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with MetasploitDataModels::Search::Operator::Port::List' do
@@ -347,7 +345,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
         MetasploitDataModels::Search::Operator::Port::List.new
       end
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with Metasploit::Model::Search::Query#tree' do
@@ -377,7 +375,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               "name:\"#{name}\""
             end
 
-            it { should be_empty }
+            it { is_expected.to be_empty }
           end
 
           context 'with services.name' do
@@ -389,7 +387,7 @@ describe MetasploitDataModels::Search::Visitor::Joins do
               "services.name:\"#{name}\""
             end
 
-            it { should include :services }
+            it { is_expected.to include :services }
           end
         end
       end

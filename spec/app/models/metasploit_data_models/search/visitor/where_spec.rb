@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Visitor::Where do
+RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
   subject(:visitor) do
     described_class.new
   end
@@ -12,7 +10,7 @@ describe MetasploitDataModels::Search::Visitor::Where do
       visitor.attribute_visitor
     end
 
-    it { should be_a MetasploitDataModels::Search::Visitor::Attribute }
+    it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Attribute }
   end
 
   context '#method_visitor' do
@@ -20,7 +18,7 @@ describe MetasploitDataModels::Search::Visitor::Where do
       visitor.method_visitor
     end
 
-    it { should be_a MetasploitDataModels::Search::Visitor::Method }
+    it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Method }
   end
 
   context '#visit' do
@@ -84,16 +82,16 @@ describe MetasploitDataModels::Search::Visitor::Where do
       end
 
       it 'should visit operation.operator with attribute_visitor' do
-        visitor.attribute_visitor.should_receive(:visit).with(operator).and_call_original
+        expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
 
         visit
       end
 
       it 'should call matches on Arel::Attributes::Attribute from attribute_visitor' do
         attribute = double('Visited Operator')
-        visitor.attribute_visitor.stub(:visit).with(operator).and_return(attribute)
+        allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
 
-        attribute.should_receive(:matches).with("%#{value}%")
+        expect(attribute).to receive(:matches).with("%#{value}%")
 
         visit
       end
@@ -165,7 +163,7 @@ describe MetasploitDataModels::Search::Visitor::Where do
             end
 
             it 'should match module_instances.name with ILIKE' do
-              visit.to_sql.should == "\"hosts\".\"name\" ILIKE '%#{name}%'"
+              expect(visit.to_sql).to eq("\"hosts\".\"name\" ILIKE '%#{name}%'")
             end
           end
 
@@ -179,7 +177,7 @@ describe MetasploitDataModels::Search::Visitor::Where do
             end
 
             it 'should match module_actions.name with ILIKE' do
-              visit.to_sql.should == "\"services\".\"name\" ILIKE '%#{name}%'"
+              expect(visit.to_sql).to eq("\"services\".\"name\" ILIKE '%#{name}%'")
             end
           end
         end

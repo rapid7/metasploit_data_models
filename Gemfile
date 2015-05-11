@@ -3,6 +3,8 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
+gem 'metasploit-model', github: 'rapid7/metasploit-model', ref: '3d5a07b'
+
 group :development do
   gem 'metasploit-erd', '1.0.0.pre.rails.pre.4.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
@@ -18,7 +20,7 @@ group :development, :test do
   gem 'factory_girl', '>= 4.1.0'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
-  
+
   rails_version_constraint = [
       '>= 4.0.9',
       '< 4.1.0'
@@ -35,11 +37,9 @@ group :test do
   gem 'shoulda-matchers'
   # code coverage of tests
   gem 'simplecov', :require => false
-  # @todo Update specs for rspec 3.0.0 compatibility and remove this gem in favor of just rspec-rails
-  gem 'rspec-core', '< 3.0.0'
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
   # named subject from the outer context without causing a stack overflow.
-  gem 'rspec-rails', '>= 2.12.0'
+  gem 'rspec-rails', '~> 3.2'
   # used for building markup for webpage factories
   gem 'builder'
 end

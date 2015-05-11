@@ -1,25 +1,23 @@
-require 'spec_helper'
-
-describe Mdm::TaskHost do
+RSpec.describe Mdm::TaskHost, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do
     it 'should be valid' do
       task_host = FactoryGirl.build(:mdm_task_host)
-      task_host.should be_valid
+      expect(task_host).to be_valid
     end
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
-      it { should have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:host_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer).with_options(:null => false) }
     end
   end
 
@@ -36,8 +34,8 @@ describe Mdm::TaskHost do
   end
 
   context "Associations" do
-    it { should belong_to(:task).class_name('Mdm::Task') }
-    it { should belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:task).class_name('Mdm::Task') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
   end
 
   context "validations" do
@@ -46,7 +44,7 @@ describe Mdm::TaskHost do
       host = FactoryGirl.build(:mdm_host)
       FactoryGirl.create(:mdm_task_host, :task => task, :host => host)
       task_host2 = FactoryGirl.build(:mdm_task_host, :task => task, :host => host)
-      task_host2.should_not be_valid
+      expect(task_host2).not_to be_valid
     end
   end
 end
