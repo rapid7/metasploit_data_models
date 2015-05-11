@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activerecord', *rails_version_constraints
   s.add_runtime_dependency 'activesupport', *rails_version_constraints
   s.add_runtime_dependency 'metasploit-concern', '~> 1.0'
-  s.add_runtime_dependency 'metasploit-model', '1.0.0.pre.1.pre.0.pre.0.pre.plus'
+  s.add_runtime_dependency 'metasploit-model', '~> 1.0'
   s.add_runtime_dependency 'railties', *rails_version_constraints
 
   # os fingerprinting
