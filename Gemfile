@@ -6,9 +6,9 @@ gemspec
 gem 'metasploit-model', github: 'rapid7/metasploit-model', ref: '3d5a07b'
 
 group :development do
-  gem 'metasploit-erd', '1.0.0.pre.rails.pre.4.0'
+  gem 'metasploit-erd', '~> 1.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', '1.0.0.pre.rails.pre.4.0'
+  gem 'yard-metasploit-erd', '~> 1.0'
 end
 
 # used by dummy application
