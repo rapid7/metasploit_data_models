@@ -1,18 +1,31 @@
 module MetasploitDataModels
   # Holds components of {VERSION} as defined by {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0}.
   module Version
+    #
+    # CONSTANTS
+    #
+
     # The major version number.
     MAJOR = 0
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 24
-    # The patch number, scoped to the {MAJOR} and {MINOR} version numbers.
+    # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 2
+    # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers.
+    PRERELEASE = 'metasploit-version'
 
-    # The full version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the `PRERELEASE` in the
+    #
+    # Module Methods
+    #
+
+    # The full version string, including the {MetasploitDataModels::Version::MAJOR},
+    # {MetasploitDataModels::Version::MINOR}, {MetasploitDataModels::Version::PATCH}, and optionally, the
+    # `MetasploitDataModels::Version::PRERELEASE` in the
     # {http://semver.org/spec/v2.0.0.html semantic versioning v2.0.0} format.
     #
-    # @return [String] '{MAJOR}.{MINOR}.{PATCH}' on master.  '{MAJOR}.{MINOR}.{PATCH}-PRERELEASE' on any branch
-    #   other than master.
+    # @return [String] '{MetasploitDataModels::Version::MAJOR}.{MetasploitDataModels::Version::MINOR}.{MetasploitDataModels::Version::PATCH}'
+    #   on master. '{MetasploitDataModels::Version::MAJOR}.{MetasploitDataModels::Version::MINOR}.{MetasploitDataModels::Version::PATCH}-PRERELEASE'
+    #   on any branch other than master.
     def self.full
       version = "#{MAJOR}.#{MINOR}.#{PATCH}"
 
@@ -23,19 +36,22 @@ module MetasploitDataModels
       version
     end
 
-    # The full gem version string, including the {MAJOR}, {MINOR}, {PATCH}, and optionally, the {PRERELEASE} in the
+    # The full gem version string, including the {MetasploitDataModels::Version::MAJOR},
+    # {MetasploitDataModels::Version::MINOR}, {MetasploitDataModels::Version::PATCH}, and optionally, the
+    # `MetasploitDataModels::Version::PRERELEASE` in the
     # {http://guides.rubygems.org/specification-reference/#version RubyGems versioning} format.
     #
-    # @return [String] '{MAJOR}.{MINOR}.{PATCH}' on master.  '{MAJOR}.{MINOR}.{PATCH}.{PRERELEASE}' on any branch
-    #   other than master.
+    # @return [String] '{MetasploitDataModels::Version::MAJOR}.{MetasploitDataModels::Version::MINOR}.{MetasploitDataModels::Version::PATCH}'
+    #   on master.  '{MetasploitDataModels::Version::MAJOR}.{MetasploitDataModels::Version::MINOR}.{MetasploitDataModels::Version::PATCH}.PRERELEASE'
+    #   on any branch other than master.
     def self.gem
       full.gsub('-', '.pre.')
     end
   end
 
-  # @see Version.gem
+  # (see Version.gem)
   GEM_VERSION = Version.gem
 
-  # @see Version.full
+  # (see Version.full)
   VERSION = Version.full
 end
