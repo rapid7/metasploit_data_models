@@ -1,42 +1,40 @@
-require 'spec_helper'
-
-describe Mdm::VulnAttempt do
+RSpec.describe Mdm::VulnAttempt, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'association' do
-    it { should belong_to(:vuln).class_name('Mdm::Vuln') }
+    it { is_expected.to belong_to(:vuln).class_name('Mdm::Vuln') }
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:attempted_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:attempted_at).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:vuln_id).of_type(:integer) }
-      it { should have_db_column(:exploited).of_type(:boolean) }
-      it { should have_db_column(:fail_reason).of_type(:string) }
-      it { should have_db_column(:username).of_type(:string) }
-      it { should have_db_column(:module).of_type(:text) }
-      it { should have_db_column(:session_id).of_type(:integer) }
-      it { should have_db_column(:loot_id).of_type(:integer) }
-      it { should have_db_column(:fail_detail).of_type(:text) }
+      it { is_expected.to have_db_column(:vuln_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:exploited).of_type(:boolean) }
+      it { is_expected.to have_db_column(:fail_reason).of_type(:string) }
+      it { is_expected.to have_db_column(:username).of_type(:string) }
+      it { is_expected.to have_db_column(:module).of_type(:text) }
+      it { is_expected.to have_db_column(:session_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:loot_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:fail_detail).of_type(:text) }
     end
   end
 
   context 'validations' do
     it 'should require a vuln_id' do
       orphan_detail = FactoryGirl.build(:mdm_vuln_detail, :vuln => nil)
-      orphan_detail.should_not be_valid
-      orphan_detail.errors[:vuln_id].should include("can't be blank")
+      expect(orphan_detail).not_to be_valid
+      expect(orphan_detail.errors[:vuln_id]).to include("can't be blank")
     end
   end
 
   context 'factory' do
     it 'should be valid' do
       vuln_attempt = FactoryGirl.build(:mdm_vuln_attempt)
-      vuln_attempt.should be_valid
+      expect(vuln_attempt).to be_valid
     end
   end
 

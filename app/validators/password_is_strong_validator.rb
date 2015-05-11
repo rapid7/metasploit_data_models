@@ -43,7 +43,7 @@ class PasswordIsStrongValidator < ActiveModel::EachValidator
   end
 
   def contains_username?(username, password)
-    password =~ /#{username}/i
+    !!(password =~ /#{username}/i)
   end
 
   def is_common_password?(password)

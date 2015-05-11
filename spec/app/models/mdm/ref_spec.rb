@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mdm::Ref do
+RSpec.describe Mdm::Ref, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
@@ -29,23 +27,23 @@ describe Mdm::Ref do
     end
 
     # @todo https://www.pivotaltracker.com/story/show/48915453
-    it { should have_many(:vulns_refs).class_name('Mdm::VulnRef') }
-    it { should have_many(:vulns).class_name('Mdm::Vuln').through(:vulns_refs) }
+    it { is_expected.to have_many(:vulns_refs).class_name('Mdm::VulnRef') }
+    it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').through(:vulns_refs) }
   end
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:ref_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:ref_id).of_type(:integer) }
 
       context 'timestamps' do
-        it { should have_db_column(:created_at).of_type(:datetime) }
-        it { should have_db_column(:updated_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+        it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
       end
     end
 
     context 'indices' do
-      it { should have_db_index(:name) }
+      it { is_expected.to have_db_index(:name) }
     end
   end
 
@@ -55,7 +53,7 @@ describe Mdm::Ref do
         FactoryGirl.build :mdm_ref
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 
@@ -72,6 +70,6 @@ describe Mdm::Ref do
   end
 
   context 'mass assignment security' do
-    it { should allow_mass_assignment_of(:name) }
+    it { is_expected.to allow_mass_assignment_of(:name) }
   end
 end

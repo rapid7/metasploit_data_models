@@ -27,11 +27,9 @@ group :test do
   gem 'shoulda-matchers'
   # code coverage of tests
   gem 'simplecov', :require => false
-  # @todo Update specs for rspec 3.0.0 compatibility and remove this gem in favor of just rspec-rails
-  gem 'rspec-core', '< 3.0.0'
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
   # named subject from the outer context without causing a stack overflow.
-  gem 'rspec-rails', '>= 2.12.0'
+  gem 'rspec-rails', '~> 3.2'
   # used for building markup for webpage factories
   gem 'builder'
 end

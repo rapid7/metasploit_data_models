@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe ParametersValidator do
+RSpec.describe ParametersValidator do
   subject(:parameters_validator) do
     described_class.new(
         :attributes => attributes
@@ -29,7 +27,7 @@ describe ParametersValidator do
 
   context 'CONSTANTS' do
     it 'should define TYPE_SIGNATURE_SENTENCE' do
-      described_class::TYPE_SIGNATURE_SENTENCE.should == type_signature_sentence
+      expect(described_class::TYPE_SIGNATURE_SENTENCE).to eq(type_signature_sentence)
     end
   end
 
@@ -48,7 +46,7 @@ describe ParametersValidator do
     end
 
     it 'should include prefix' do
-      error_at.should include(prefix)
+      expect(error_at).to include(prefix)
     end
 
     it 'should include location_clause in same sentence as prefix' do
@@ -58,11 +56,11 @@ describe ParametersValidator do
           :index => index
       )
 
-      error_at.should include("#{prefix} #{location_clause}.")
+      expect(error_at).to include("#{prefix} #{location_clause}.")
     end
 
     it 'should include TYPE_SIGNATURE_SENTENCE' do
-      error_at.should include(type_signature_sentence)
+      expect(error_at).to include(type_signature_sentence)
     end
   end
 
@@ -81,9 +79,9 @@ describe ParametersValidator do
     end
 
     it 'should include extreme in prefix' do
-      parameters_validator.should_receive(:error_at) do |*args|
+      expect(parameters_validator).to receive(:error_at) do |*args|
         options = args.first
-        options[:prefix].should include(extreme.to_s)
+        expect(options[:prefix]).to include(extreme.to_s)
       end
 
       length_error_at
@@ -100,11 +98,11 @@ describe ParametersValidator do
     end
 
     it 'should include numerical index' do
-      location_clause.should include("at index #{index}")
+      expect(location_clause).to include("at index #{index}")
     end
 
     it 'should include inspect of element' do
-      location_clause.should include(element.inspect)
+      expect(location_clause).to include(element.inspect)
     end
   end
 
@@ -144,7 +142,7 @@ describe ParametersValidator do
             end
 
             it 'should call #length_error_at with :extreme => :few' do
-              parameters_validator.should_receive(:length_error_at).with(
+              expect(parameters_validator).to receive(:length_error_at).with(
                   hash_including(
                       :extreme => :few
                   )
@@ -156,7 +154,7 @@ describe ParametersValidator do
             it 'should record error' do
               validate_each
 
-              errors.should_not be_empty
+              expect(errors).not_to be_empty
             end
           end
 
@@ -166,7 +164,7 @@ describe ParametersValidator do
             end
 
             it 'should call #length_error_at with :extreme => :many' do
-              parameters_validator.should_receive(:length_error_at).with(
+              expect(parameters_validator).to receive(:length_error_at).with(
                   hash_including(
                       :extreme => :many
                   )
@@ -178,7 +176,7 @@ describe ParametersValidator do
             it 'should record error' do
               validate_each
 
-              errors.should_not be_empty
+              expect(errors).not_to be_empty
             end
           end
 
@@ -203,7 +201,7 @@ describe ParametersValidator do
                   end
 
                   it 'should call error_at with blank parameter name prefix' do
-                    parameters_validator.should_receive(:error_at).with(
+                    expect(parameters_validator).to receive(:error_at).with(
                         hash_including(
                           :prefix => 'has blank parameter name'
                         )
@@ -215,7 +213,7 @@ describe ParametersValidator do
                   it 'should record error' do
                     validate_each
 
-                    errors.should_not be_empty
+                    expect(errors).not_to be_empty
                   end
                 end
 
@@ -227,7 +225,7 @@ describe ParametersValidator do
                   it 'should not record error' do
                     validate_each
 
-                    errors.should be_blank
+                    expect(errors).to be_blank
                   end
                 end
               end
@@ -238,7 +236,7 @@ describe ParametersValidator do
                 end
 
                 it 'should call error_at with non-String prefix' do
-                  parameters_validator.should_receive(:error_at).with(
+                  expect(parameters_validator).to receive(:error_at).with(
                       hash_including(
                           :prefix => "has non-String parameter name (#{parameter_name.inspect})"
                       )
@@ -250,7 +248,7 @@ describe ParametersValidator do
                 it 'should record error' do
                   validate_each
 
-                  errors.should_not be_empty
+                  expect(errors).not_to be_empty
                 end
               end
             end
@@ -264,7 +262,7 @@ describe ParametersValidator do
                 it 'should not record error' do
                   validate_each
 
-                  errors.should be_blank
+                  expect(errors).to be_blank
                 end
               end
 
@@ -274,7 +272,7 @@ describe ParametersValidator do
                 end
 
                 it 'should call error_at with non-String prefix' do
-                  parameters_validator.should_receive(:error_at).with(
+                  expect(parameters_validator).to receive(:error_at).with(
                       hash_including(
                           :prefix => "has non-String parameter value (#{parameter_value.inspect})"
                       )
@@ -286,7 +284,7 @@ describe ParametersValidator do
                 it 'should record error' do
                   validate_each
 
-                  errors.should_not be_empty
+                  expect(errors).not_to be_empty
                 end
               end
             end
@@ -299,7 +297,7 @@ describe ParametersValidator do
           end
 
           it 'should use #error_at with has non-Array for prefix' do
-            parameters_validator.should_receive(:error_at).with(
+            expect(parameters_validator).to receive(:error_at).with(
                 hash_including(
                     :prefix => 'has non-Array'
                 )
@@ -311,7 +309,7 @@ describe ParametersValidator do
           it 'should record error' do
             validate_each
 
-            errors.should_not be_empty
+            expect(errors).not_to be_empty
           end
         end
       end
@@ -327,14 +325,16 @@ describe ParametersValidator do
       end
 
       it 'should error that attribute is not an array' do
-        errors.any? { |error|
-          error.include? 'is not an Array.'
-        }.should be_true
+        expect(
+            errors.any? { |error|
+              error.include? 'is not an Array.'
+            }
+        ).to eq(true)
       end
 
       it 'should include TYPE_SIGNATURE_SENTENCE' do
         errors.each do |error|
-          error.should include(type_signature_sentence)
+          expect(error).to include(type_signature_sentence)
         end
       end
     end

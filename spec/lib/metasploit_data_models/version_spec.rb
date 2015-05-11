@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Version do
+RSpec.describe MetasploitDataModels::Version do
   context 'CONSTANTS' do
     context 'MAJOR' do
       subject(:major) do
@@ -17,7 +15,7 @@ describe MetasploitDataModels::Version do
         described_class::MINOR
       end
 
-      it { should be_a Integer }
+      it { is_expected.to be_a Integer }
     end
 
     context 'PATCH' do
@@ -25,7 +23,7 @@ describe MetasploitDataModels::Version do
         described_class::PATCH
       end
 
-      it { should be_a Integer }
+      it { is_expected.to be_a Integer }
     end
 
     pull_request = ENV['TRAVIS_PULL_REQUEST']

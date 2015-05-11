@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::IPAddress::V4::Segment::Single do
+RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :model do
   subject(:single) {
     described_class.new(
         value: formatted_value
@@ -12,7 +10,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
   }
 
   context 'validations' do
-    it { should validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
+    it { is_expected.to validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
   end
 
   it 'can be used in a Range' do
@@ -137,7 +135,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       described_class.bits
     }
 
-    it { should == 8 }
+    it { is_expected.to eq(8) }
   end
 
   context 'match_regexp' do
@@ -159,15 +157,22 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       single <=> other
     }
 
+    let(:formatted_value) {
+      '1'
+    }
+
     let(:other) {
       double('Other')
     }
 
     it 'compares #values' do
       other_value = double('other.value')
+      single_value = double('single.value')
 
       expect(other).to receive(:value).and_return(other_value)
-      expect(single.value).to receive(:<=>).with(other_value)
+      # have to use a double because can't expect().to receive on an Integer
+      expect(single).to receive(:value).and_return(single_value)
+      expect(single_value).to receive(:<=>).with(other_value)
 
       compare
     end
@@ -185,7 +190,9 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
         }
 
         specify {
-          expect(succ).not_to raise_error
+          expect {
+            succ
+          }.not_to raise_error
         }
       end
 
@@ -198,7 +205,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
           1
         }
 
-        it { should be_a described_class }
+        it { is_expected.to be_a described_class }
 
         context 'succ.value' do
           it 'is succ of #value' do
@@ -212,7 +219,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
           'a'
         }
 
-        it { should be_a described_class }
+        it { is_expected.to be_a described_class }
 
         context 'succ.value' do
           it 'is succ of #value' do
@@ -262,7 +269,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       end
 
       it 'should pass through Integer' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
 
@@ -276,7 +283,7 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       end
 
       it 'should convert String to Integer' do
-        value.should == integer
+        expect(value).to eq(integer)
       end
     end
 
@@ -290,11 +297,11 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       end
 
       it 'should not extract the number' do
-        value.should_not == integer
+        expect(value).not_to eq(integer)
       end
 
       it 'should pass through the full value' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
 
@@ -304,11 +311,11 @@ describe MetasploitDataModels::IPAddress::V4::Segment::Single do
       end
 
       it 'should not truncate Float to Integer' do
-        value.should_not == formatted_value.to_i
+        expect(value).not_to eq(formatted_value.to_i)
       end
 
       it 'should pass through Float' do
-        value.should == formatted_value
+        expect(value).to eq(formatted_value)
       end
     end
   end
