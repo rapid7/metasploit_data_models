@@ -3,8 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-model', github: 'rapid7/metasploit-model', ref: 'd25cd50353aa6a25fb1b84b158737810c77bad50'
-
 group :development do
   gem 'metasploit-erd', '~> 1.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
