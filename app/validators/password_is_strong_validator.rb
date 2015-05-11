@@ -1,12 +1,21 @@
+# Validates that
 class PasswordIsStrongValidator < ActiveModel::EachValidator
+  #
+  # CONSTANTS
+  #
+
+  # Known passwords that should NOT be allowed and should be considered weak.
   COMMON_PASSWORDS = %w{
       password pass root admin metasploit
       msf 123456 qwerty abc123 letmein monkey link182 demo
       changeme test1234 rapid7
     }
 
+  # Special characters that are considered to strength passwords and are required once in a strong password.
   SPECIAL_CHARS = %q{!@"#$%&'()*+,-./:;<=>?[\\]^_`{|}~ }
 
+  # Validates that the `attribute`'s `value` on `record` contains letters, numbers, and at least one special character
+  # without containing the `record.username`, any {COMMON_PASSWORDS} or repetition.
   def validate_each(record, attribute, value)
     return if value.blank?
 

@@ -1,9 +1,21 @@
 # Validates that attribute's value is Array<Array(String, String)> which is the only valid type signature for serialized
 # parameters.
 class ParametersValidator < ActiveModel::EachValidator
+  #
+  # CONSTANTS
+  #
+
   # Sentence explaining the valid type signature for parameters.
   TYPE_SIGNATURE_SENTENCE = 'Valid parameters are an Array<Array(String, String)>.'
 
+  #
+  # Instance Methods
+  #
+
+  # Validates that `attribute`'s `value` on `record` is `Array<Array(String, String)>` which is the only valid type
+  # signature for serialized parameters.
+  #
+  # @return [void]
   def validate_each(record, attribute, value)
     if value.is_a? Array
       value.each_with_index do |element, index|

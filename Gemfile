@@ -6,9 +6,9 @@ gemspec
 gem 'metasploit-model', github: 'rapid7/metasploit-model', ref: 'd25cd50353aa6a25fb1b84b158737810c77bad50'
 
 group :development do
-  gem 'metasploit-erd', '1.0.0.pre.rails.pre.4.0'
+  gem 'metasploit-erd', '~> 1.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', '1.0.0.pre.rails.pre.4.0'
+  gem 'yard-metasploit-erd', '~> 1.0'
 end
 
 # used by dummy application
@@ -20,7 +20,7 @@ group :development, :test do
   gem 'factory_girl', '>= 4.1.0'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
-  
+
   rails_version_constraint = [
       '>= 4.0.9',
       '< 4.1.0'

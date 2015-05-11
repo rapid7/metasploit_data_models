@@ -1,3 +1,4 @@
+# Join model between {Mdm::Host} and {Mdm::Tag}.
 class Mdm::HostTag < ActiveRecord::Base
   self.table_name = "hosts_tags"
 
@@ -5,20 +6,16 @@ class Mdm::HostTag < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute host
-  #   Host with {#tag}.
+  # Host with {#tag}.
   #
-  #   @todo MSP-2723
-  #   @return [Mdm::Host]
+  # @todo MSP-2723
   belongs_to :host,
              class_name: 'Mdm::Host',
              inverse_of: :hosts_tags
 
-  # @!attribute tag
-  #   Tag on {#host}.
+  # Tag on {#host}.
   #
-  #   @todo MSP-2723
-  #   @return [Mdm::Tag]
+  # @todo MSP-2723
   belongs_to :tag,
              class_name: 'Mdm::Tag',
              inverse_of: :hosts_tags
@@ -44,6 +41,7 @@ class Mdm::HostTag < ActiveRecord::Base
     tag.destroy_if_orphaned
   end
 
+  # switch back to public for load hooks
   public
 
   Metasploit::Concern.run(self)
