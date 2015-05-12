@@ -40,8 +40,14 @@ Make your changes or however many commits you like, committing each with `git co
 
 ### Pre-Pull Request Testing
 
+#### Specs
 1. Run specs one last time before opening the Pull Request: `rake spec`
 2. Verify there was no failures.
+
+#### Documentation
+1. Generate yard documentation to ensure all new code is documented: `rake yard`
+2. Verify there were no `[warn]`ings.
+3. Verify there were no undocumented objects.
 
 ### Push
 
@@ -60,6 +66,11 @@ Push your branch to your fork on github: `git push TYPE/ISSUE/SUMMARY`
 ## `rake spec`
 - [ ] `rake spec`
 - [ ] VERIFY no failures
+
+## `rake yard`
+- [ ] `rake yard`
+- [ ] VERIFY no `[warn]`ings
+- [ ] VERIFY no undocumented objects
 ```
 
 You should also include at least one scenario to manually check the changes outside of specs.
