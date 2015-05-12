@@ -39,17 +39,18 @@ class Mdm::WmapTarget < ActiveRecord::Base
   #
   #   @return [DateTime]
 
-  Metasploit::Concern.run(self)
-
   #
-  # Attributes
+  # Instance Methods
   #
 
-  # @!attribute [rw] address
-  #   The IP address for this target. Necessary to avoid coercion to an `IPAddr` object.
+  # @note Necessary to avoid coercion to an `IPAddr` object.
   #
-  #   @return [String]
+  # The IP address for this target.
+  #
+  # @return [String]
   def address
     self[:address].to_s
   end
+
+  Metasploit::Concern.run(self)
 end
