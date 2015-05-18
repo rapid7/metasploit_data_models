@@ -30,6 +30,14 @@ class Mdm::Vuln < ActiveRecord::Base
              class_name: 'Mdm::Service',
              inverse_of: :vulns
 
+  # @!attribute [rw] origin
+  #   A polymorphic association to the origin that found
+  #   the vulnerability.
+  #
+  #   @return [ActiveRecord::Relation<origin>]
+  belongs_to :origin,
+             polymorphic: true
+
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
   #
