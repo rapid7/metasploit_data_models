@@ -1659,7 +1659,9 @@ CREATE TABLE vulns (
     info character varying(65536),
     exploited_at timestamp without time zone,
     vuln_detail_count integer DEFAULT 0,
-    vuln_attempt_count integer DEFAULT 0
+    vuln_attempt_count integer DEFAULT 0,
+    origin_id integer,
+    origin_type character varying(255)
 );
 
 
@@ -3082,6 +3084,13 @@ CREATE INDEX index_vulns_on_name ON vulns USING btree (name);
 
 
 --
+-- Name: index_vulns_on_origin_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vulns_on_origin_id ON vulns USING btree (origin_id);
+
+
+--
 -- Name: index_web_forms_on_path; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3380,6 +3389,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150317145455');
 INSERT INTO schema_migrations (version) VALUES ('20150326183742');
 
 INSERT INTO schema_migrations (version) VALUES ('20150421211719');
+
+INSERT INTO schema_migrations (version) VALUES ('20150514182921');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
