@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'railties', *rails_version_constraints
 
   # os fingerprinting
-  s.add_runtime_dependency 'recog', '~> 1.0'
+  s.add_runtime_dependency 'recog', '~> 2.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
