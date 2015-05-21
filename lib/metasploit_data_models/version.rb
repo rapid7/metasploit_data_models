@@ -13,7 +13,7 @@ module MetasploitDataModels
     PATCH = 0
 
     # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers.
-    PRERELEASE = 'polymorphic-vuln-import'
+
     #
     # Module Methods
     #
