@@ -70,12 +70,6 @@ reset [`MINOR`](lib/metasploit_data_models/version.rb and [`PATCH`](lib/metasplo
 
 ## Release to rubygems.org
 
-## jruby
-- [ ] `rvm use jruby@metasploit_data_models`
-- [ ] `rm Gemfile.lock`
-- [ ] `bundle install`
-- [ ] `rake release`
-
 ## ruby-2.1
 - [ ] `rvm use ruby-2.1@metasploit_data_models`
 - [ ] `rm Gemfile.lock`
