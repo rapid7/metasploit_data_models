@@ -11,8 +11,6 @@ module MetasploitDataModels
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 1
-    # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version number.
-    PRERELEASE = 'vv-push-validation-fix'
 
     #
     # Module Methods
