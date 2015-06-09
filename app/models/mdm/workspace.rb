@@ -235,15 +235,21 @@ class Mdm::Workspace < ActiveRecord::Base
   #
   # @return [ActiveRecord::Relation<Mdm::WebForm>]
   def web_forms
-    query = <<-EOQ
-          SELECT DISTINCT web_forms.*
-          FROM hosts, services, web_sites, web_forms
-          WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_forms.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebForm.find_by_sql(query)
+    # query = <<-EOQ
+    #       SELECT DISTINCT web_forms.*
+    #       FROM hosts, services, web_sites, web_forms
+    #       WHERE hosts.workspace_id = #{id} AND
+    #         services.host_id = hosts.id AND
+    #         web_sites.service_id = services.id AND
+    #         web_forms.web_site_id = web_sites.id
+    # EOQ
+    # Mdm::WebForm.find_by_sql(query)
+    Mdm::WebForm.joins(
+      Mdm::WebForm.join_association(:web_site),
+      Mdm::WebSite.join_association(:service),
+      Mdm::Service.join_association(:host),
+      Mdm::Host.join_association(:workspace)
+    ).where(Mdm::Workspace[:id].eq(id)).uniq
   end
 
 
@@ -251,59 +257,78 @@ class Mdm::Workspace < ActiveRecord::Base
   #
   # @return [ActiveRecord::Relation<Mdm::WebPage>]
   def web_pages
-    query = <<-EOQ
-          SELECT DISTINCT web_pages.*
-            FROM hosts, services, web_sites, web_pages
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_pages.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebPage.find_by_sql(query)
+    # query = <<-EOQ
+    #       SELECT DISTINCT web_pages.*
+    #         FROM hosts, services, web_sites, web_pages
+    #         WHERE hosts.workspace_id = #{id} AND
+    #         services.host_id = hosts.id AND
+    #         web_sites.service_id = services.id AND
+    #         web_pages.web_site_id = web_sites.id
+    # EOQ
+    # Mdm::WebPage.find_by_sql(query)
+    Mdm::WebPage.joins(
+      Mdm::WebPage.join_association(:web_site),
+      Mdm::WebSite.join_association(:service),
+      Mdm::Service.join_association(:host),
+      Mdm::Host.join_association(:workspace)
+    ).where(Mdm::Workspace[:id].eq(id)).uniq
   end
 
   # Web sites running on {#services}.
   #
   # @return [ActiveRecord::Relation<Mdm::WebSite>]
   def web_sites
-    query = <<-EOQ
-          SELECT DISTINCT web_sites.*
-            FROM hosts, services, web_sites
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id
-    EOQ
-    Mdm::WebSite.find_by_sql(query)
+    # query = <<-EOQ
+    #       SELECT DISTINCT web_sites.*
+    #         FROM hosts, services, web_sites
+    #         WHERE hosts.workspace_id = #{id} AND
+    #         services.host_id = hosts.id AND
+    #         web_sites.service_id = services.id
+    # EOQ
+    # Mdm::WebSite.find_by_sql(query)
+    Mdm::WebSite.joins(
+      Mdm::WebSite.join_association(:service),
+      Mdm::Service.join_association(:host),
+      Mdm::Host.join_association(:workspace)
+    ).where(Mdm::Workspace[:id].eq(id)).uniq
+    
   end
 
   # Web vulnerability found on {#web_sites}.
   #
   # @return [ActiveRecord::Relation<Mdm::WebVuln>]
   def web_vulns
-    query = <<-EOQ
-          SELECT DISTINCT web_vulns.*
-          FROM hosts, services, web_sites, web_vulns
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_vulns.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebVuln.find_by_sql(query)
+    # query = <<-EOQ
+    #       SELECT DISTINCT web_vulns.*
+    #       FROM hosts, services, web_sites, web_vulns
+    #         WHERE hosts.workspace_id = #{id} AND
+    #         services.host_id = hosts.id AND
+    #         web_sites.service_id = services.id AND
+    #         web_vulns.web_site_id = web_sites.id
+    # EOQ
+    # Mdm::WebVuln.find_by_sql(query)
+    Mdm::WebVuln.joins(
+      Mdm::WebVuln.join_association(:web_site),
+      Mdm::WebSite.join_association(:service),
+      Mdm::Service.join_association(:host),
+      Mdm::Host.join_association(:workspace)
+    ).where(Mdm::Workspace[:id].eq(id)).uniq
   end
 
   # Web forms on {#web_sites}.
   #
   # @return [ActiveRecord::Relation<Mdm::WebForm>]
   def unique_web_forms
-    query = <<-EOQ
-          SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query
-            FROM hosts, services, web_sites, web_forms
-            WHERE hosts.workspace_id = #{id} AND
-            services.host_id = hosts.id AND
-            web_sites.service_id = services.id AND
-            web_forms.web_site_id = web_sites.id
-    EOQ
-    Mdm::WebForm.find_by_sql(query)
+    # query = <<-EOQ
+    #       SELECT DISTINCT web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query
+    #         FROM hosts, services, web_sites, web_forms
+    #         WHERE hosts.workspace_id = #{id} AND
+    #         services.host_id = hosts.id AND
+    #         web_sites.service_id = services.id AND
+    #         web_forms.web_site_id = web_sites.id
+    # EOQ
+    # Mdm::WebForm.find_by_sql(query)
+    web_forms.select('web_forms.id, web_forms.web_site_id, web_forms.path, web_forms.method, web_forms.query')
   end
 
   # {#unique_web_forms} hosted on `addrs`.
