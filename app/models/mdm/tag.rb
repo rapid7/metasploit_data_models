@@ -86,7 +86,7 @@ class Mdm::Tag < ActiveRecord::Base
             }
   validates :name,
             :format => {
-                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => "must be alphanumeric, dots, dashes, or underscores"
+                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => "Tag names can only contain alphanumeric characters, dots, dashes, and underscores."
             },
             :presence => true
 
