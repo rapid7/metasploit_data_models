@@ -2,6 +2,9 @@
 class Mdm::Tag < ActiveRecord::Base
   include Metasploit::Model::Search
 
+  TAG_CHAR_VALIDATION_MSG = "Tag names can only contain alphanumeric characters, dots, dashes, and underscores."
+
+  TAG_LENGTH_VALIDATION_MSG = "desc must be less than 8k."
   #
   # Associations
   #
@@ -82,11 +85,11 @@ class Mdm::Tag < ActiveRecord::Base
   validates :desc,
             :length => {
                 :maximum => ((8 * (2 ** 10)) - 1),
-                :message => "desc must be less than 8k."
+                :message => TAG_LENGTH_VALIDATION_MSG
             }
   validates :name,
             :format => {
-                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => "Tag names can only contain alphanumeric characters, dots, dashes, and underscores."
+                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => TAG_CHAR_VALIDATION_MSG
             },
             :presence => true
 
