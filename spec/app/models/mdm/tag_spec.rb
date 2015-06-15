@@ -37,7 +37,7 @@ RSpec.describe Mdm::Tag, type: :model do
     end
 
     context 'name' do
-      let(:error_msg) {Mdm::Tag::TAG_CHAR_VALIDATION_MSG}
+      let(:error_msg) {I18n.t('activerecord.ancestors.mdm/tag.model.errors.messages.character')}
       it 'must be present' do
         nameless_tag = FactoryGirl.build(:mdm_tag, :name => nil)
         expect(nameless_tag).not_to be_valid

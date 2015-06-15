@@ -85,11 +85,11 @@ class Mdm::Tag < ActiveRecord::Base
   validates :desc,
             :length => {
                 :maximum => ((8 * (2 ** 10)) - 1),
-                :message => TAG_LENGTH_VALIDATION_MSG
+                :message => I18n.t('activerecord.ancestors.mdm/tag.model.errors.messages.length')
             }
   validates :name,
             :format => {
-                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => TAG_CHAR_VALIDATION_MSG
+                :with => /\A[A-Za-z0-9\x2e\x2d_]+\z/, :message => I18n.t('activerecord.ancestors.mdm/tag.model.errors.messages.character')
             },
             :presence => true
 

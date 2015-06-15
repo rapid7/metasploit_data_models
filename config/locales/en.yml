@@ -26,6 +26,12 @@ en:
               os_name:
                 help: "Filters the results by operating system."
       mdm/tag:
+        model:
+          errors:
+            messages:
+              character: "Tag names can only contain alphanumeric characters, dots, dashes, and underscores."
+              length: "desc must be less than 8k."
+
         search:
           operator:
             names:
