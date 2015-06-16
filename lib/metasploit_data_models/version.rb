@@ -12,8 +12,6 @@ module MetasploitDataModels
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 4
 
-    # The prerelease version, scoped to the {PATCH} version number.
-    PRERELEASE = "tag-char-validation"
 
     #
     # Module Methods
