@@ -433,8 +433,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         }
       end
 
-      it 'should return an ActiveRecord:Relation',
-         :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
+      it 'should return an ActiveRecord:Relation' do
         should be_a ActiveRecord::Relation
       end
 
@@ -465,8 +464,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         web_sites
       end
 
-      it 'should return an ActiveRecord:Relation',
-         :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
+      it 'should return an ActiveRecord:Relation' do
         should be_a ActiveRecord::Relation
       end
 
@@ -507,8 +505,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         }
       end
 
-      it 'should return an ActiveRecord:Relation',
-         :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
+      it 'should return an ActiveRecord:Relation' do
         should be_a ActiveRecord::Relation
       end
 
