@@ -204,8 +204,7 @@ module Mdm::Host::OperatingSystemNormalization
     # Mdm currently serves that role.
     #
 
-    service_match_keys = Hash.new { [] }
-    service_match_keys.merge({
+    service_match_keys = {
       # TODO: Implement smb.generic fingerprint database
       # 'smb'     => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
       # 'netbios' => [ 'smb.generic' ], # Distinct from smb.fingerprint, use os.certainty to choose best match
@@ -221,7 +220,7 @@ module Mdm::Host::OperatingSystemNormalization
       'nntp'    => [ 'nntp.banner' ],
       'ftp'     => [ 'ftp.banner' ],
       'ssdp'    => [ 'ssdp_header.server' ]
-    })
+    }
 
     matches = []
 
@@ -232,7 +231,7 @@ module Mdm::Host::OperatingSystemNormalization
       end
       res = Recog::Nizer.match(rdb, banner)
       matches << res if res
-    end
+    end if service_match_keys.has_key?(s.name)
 
     matches
   end
