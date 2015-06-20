@@ -231,7 +231,7 @@ module Mdm::Host::OperatingSystemNormalization
       end
       res = Recog::Nizer.match(rdb, banner)
       matches << res if res
-    end
+    end if service_match_keys.has_key?(s.name)
 
     matches
   end
