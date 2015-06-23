@@ -1,5 +1,9 @@
+#puts $LOAD_PATH
+#require 'support/shared/contexts/rex/text'
+
 RSpec.describe Mdm::Service, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
+  include_context 'Rex::Text'
 
   context 'CONSTANTS' do
     context 'PROTOS' do
@@ -70,6 +74,27 @@ RSpec.describe Mdm::Service, type: :model do
         svc = FactoryGirl.create(:mdm_service)
         expect(svc).to receive(:normalize_host_os)
         svc.run_callbacks(:save)
+      end
+      it 'should include recog data when there is a match' do
+        host = FactoryGirl.create(:mdm_host)
+        FactoryGirl.create(
+          :mdm_service,
+          :host => host,
+          :name => 'ftp',
+          :info => 'example.com Microsoft FTP Service (Version 3.0).'
+        )
+        expect(host.name).to eq('example.com')
+        expect(host.os_name).to eq('Windows NT')
+      end
+      it 'should not include recog data when there is not a match' do
+        host = FactoryGirl.create(:mdm_host)
+        FactoryGirl.create(
+          :mdm_service,
+          :host => host,
+          :name => 'ftp',
+          :info => 'THISSHOULDNEVERMATCH'
+        )
+        expect(host.os_name).to eq('Unknown')
       end
     end
   end
