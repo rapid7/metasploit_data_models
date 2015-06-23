@@ -11,8 +11,6 @@ module MetasploitDataModels
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 5
-    # Remove on master
-    PRERELEASE = 'crawler-choke-on-save'
 
 
     #
