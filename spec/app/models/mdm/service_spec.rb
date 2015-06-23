@@ -1,6 +1,3 @@
-#puts $LOAD_PATH
-#require 'support/shared/contexts/rex/text'
-
 RSpec.describe Mdm::Service, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
   include_context 'Rex::Text'
