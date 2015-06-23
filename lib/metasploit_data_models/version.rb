@@ -10,7 +10,7 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 4
+    PATCH = 5
     # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version number.
     PRERELEASE = 'recog-service-never-match'
 

@@ -46,7 +46,7 @@ class Mdm::WebPage < ActiveRecord::Base
 
   # @!attribute location
   #   Location derived from {#headers}.
-  #
+
   #   @return [String]
 
   # @!attribute mtime
@@ -82,7 +82,11 @@ class Mdm::WebPage < ActiveRecord::Base
   #
   # @return [Hash{String => String}]
   serialize :headers, MetasploitDataModels::Base64Serializer.new
-    
+
+  # Cookies sent from server.
+  #
+  # @return [Hash{String => String}]
+  serialize :cookie
   Metasploit::Concern.run(self)
 end
 
