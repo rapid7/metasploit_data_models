@@ -72,6 +72,7 @@ RSpec.describe Mdm::Service, type: :model do
         expect(svc).to receive(:normalize_host_os)
         svc.run_callbacks(:save)
       end
+
       it 'should include recog data when there is a match' do
         host = FactoryGirl.create(:mdm_host)
         FactoryGirl.create(
@@ -83,6 +84,7 @@ RSpec.describe Mdm::Service, type: :model do
         expect(host.name).to eq('example.com')
         expect(host.os_name).to eq('Windows NT')
       end
+
       it 'should not include recog data when there is not a match' do
         host = FactoryGirl.create(:mdm_host)
         FactoryGirl.create(
