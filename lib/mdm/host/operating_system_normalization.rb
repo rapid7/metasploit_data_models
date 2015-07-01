@@ -224,6 +224,8 @@ module Mdm::Host::OperatingSystemNormalization
 
     matches = []
 
+    return matches unless service_match_keys.has_key?(s.name)
+
     service_match_keys[s.name].each do |rdb|
       banner = s.info
       if self.respond_to?("service_banner_recog_filter_#{s.name}")
@@ -231,7 +233,7 @@ module Mdm::Host::OperatingSystemNormalization
       end
       res = Recog::Nizer.match(rdb, banner)
       matches << res if res
-    end if service_match_keys.has_key?(s.name)
+    end
 
     matches
   end
