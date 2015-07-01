@@ -1,6 +1,5 @@
 RSpec.describe Mdm::Service, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
-  include_context 'Rex::Text'
 
   context 'CONSTANTS' do
     context 'PROTOS' do
@@ -67,6 +66,8 @@ RSpec.describe Mdm::Service, type: :model do
 
   context 'callbacks' do
     context 'after_save' do
+      include_context 'Rex::Text'
+
       it 'should call #normalize_host_os' do
         svc = FactoryGirl.create(:mdm_service)
         expect(svc).to receive(:normalize_host_os)
