@@ -22,6 +22,14 @@ class Mdm::Vuln < ActiveRecord::Base
              counter_cache: :vuln_count,
              inverse_of: :vulns
 
+  # @!attribute [rw] matches
+  #   The matches for this vuln
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::AutomaticExploitation::Match>]
+  has_many :matches, class_name: "MetasploitDataModels::AutomaticExploitation::Match",
+           as: :matchable,
+           dependent: :destroy
+
   # @!attribute [rw] service
   #   The service with the vulnerability.
   #
@@ -118,6 +126,8 @@ class Mdm::Vuln < ActiveRecord::Base
             :class_name => 'Mdm::Module::Detail',
             :source => :detail,
             :through => :module_refs
+
+
   #
   # Attributes
   #
