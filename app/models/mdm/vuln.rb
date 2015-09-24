@@ -128,11 +128,6 @@ class Mdm::Vuln < ActiveRecord::Base
             :through => :module_refs
 
 
-  # @!attribute [rw] nexpose_vulnerability_definition
-  #   @return [::Nexpose::Data::VulnerabilityDefinition] The Nexpose representation for this vuln
-  belongs_to :nexpose_vulnerability_definition, class_name: "::Nexpose::Data::VulnerabilityDefinition", foreign_key: :nexpose_data_vuln_def_id
-
-
   #
   # Attributes
   #
