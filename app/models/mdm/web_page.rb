@@ -86,7 +86,7 @@ class Mdm::WebPage < ActiveRecord::Base
   # Cookies sent from server.
   #
   # @return [Hash{String => String}]
-  serialize :cookie
+  serialize :cookie, MetasploitDataModels::Base64Serializer.new
   Metasploit::Concern.run(self)
 end
 
