@@ -3,6 +3,48 @@ RSpec.describe Mdm::WebPage, type: :model do
 
   context 'associations' do
     it { is_expected.to belong_to(:web_site).class_name('Mdm::WebSite') }
+
+    context 'serialized cookie attribute' do
+      let(:valid_cookie) do
+        {
+          name: 'test name',
+          value: 'test value'
+        }
+      end
+
+      let(:invalid_cookie) do
+        """
+          --- !ruby/object:WEBrick::Cookie
+          name: 'test name'
+          value: 'test value'
+        """
+      end
+
+      let(:cookie) { valid_cookie }
+      let(:web_page) { FactoryGirl.create(:mdm_web_page, cookie: cookie) }
+
+      context 'with properly formed cookie' do
+        let(:cookie) { valid_cookie }
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns a hash' do
+          expect(web_page.cookie).to be_a Hash
+        end
+      end
+
+      context 'with malformed cookie' do
+        let(:cookie) { invalid_cookie }
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns as string' do
+          expect(web_page.cookie).to be_a String
+        end
+      end
+    end
   end
 
   context 'database' do
