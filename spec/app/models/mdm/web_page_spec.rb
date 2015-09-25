@@ -1,8 +1,61 @@
+require 'webrick'
 RSpec.describe Mdm::WebPage, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
     it { is_expected.to belong_to(:web_site).class_name('Mdm::WebSite') }
+
+    context 'serialized cookie attribute' do
+      let(:string_cookie) do
+        "test_name=test_value"
+      end
+
+      let(:hash_cookie) do
+        {
+          name: 'test name',
+          value: 'test value'
+        }
+      end
+
+      let(:webrick_cookie) do
+        WEBrick::Cookie.new('test name', 'test value')
+      end
+
+      let(:web_page) { FactoryGirl.create(:mdm_web_page, cookie: cookie) }
+
+      context 'with string cookie' do
+        let(:cookie) { string_cookie }
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns a hash' do
+          expect(web_page.cookie).to be_a String
+        end
+      end
+
+      context 'with Hash cookie' do
+        let(:cookie) { hash_cookie }
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns a hash' do
+          expect(web_page.cookie).to be_a Hash
+        end
+      end
+
+      context 'with WEBrick::Cookie' do
+        let(:cookie) { webrick_cookie }
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns as WEBrick::Cookie object' do
+          expect(web_page.cookie).to be_a WEBrick::Cookie
+        end
+      end
+    end
   end
 
   context 'database' do
