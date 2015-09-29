@@ -11,7 +11,6 @@ module MetasploitDataModels
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 7
-    PRERELEASE = 'add-run-scope-to-match'
 
 
     #
