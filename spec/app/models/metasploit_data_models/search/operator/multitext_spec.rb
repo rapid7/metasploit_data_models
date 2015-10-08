@@ -10,7 +10,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model d
   }
 
   context 'validations' do
-    it { is_expected.to ensure_length_of(:operator_names).is_at_least(2) }
+    it { is_expected.to validate_length_of(:operator_names).is_at_least(2) }
     it { is_expected.to validate_presence_of :name }
   end
 

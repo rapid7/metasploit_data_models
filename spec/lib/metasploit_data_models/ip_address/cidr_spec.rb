@@ -1,4 +1,4 @@
-RSpec.describe MetasploitDataModels::IPAddress::CIDR do
+RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   subject(:including_class_instance) {
     including_class.new(
         value: formatted_value
@@ -138,7 +138,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR do
         segment_count * segment_bits
       }
 
-      it 'validates it is an integer between 0 and maximum_prefix_length' do
+      it 'validates it is an integer between 0 and maximum_prefix_length', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
         expect(including_class_instance).to validate_numericality_of(:prefix_length).only_integer.is_greater_than_or_equal_to(0).is_less_than_or_equal_to(maximum_prefix_length)
       end
     end

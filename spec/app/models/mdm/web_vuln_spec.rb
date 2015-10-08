@@ -115,10 +115,6 @@ RSpec.describe Mdm::WebVuln, type: :model do
     it { is_expected.to validate_presence_of :path }
 
     context 'params' do
-      it 'should not validate presence of params because it default to [] and can never be nil' do
-        expect(web_vuln).not_to validate_presence_of(:params)
-      end
-
       context 'validates parameters' do
         let(:type_signature_sentence) do
           "Valid parameters are an Array<Array(String, String)>."
