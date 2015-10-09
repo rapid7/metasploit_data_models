@@ -32,7 +32,7 @@ RSpec.describe Mdm::WebPage, type: :model do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
         end
 
-        it 'reading cookie returns a hash' do
+        it 'reading cookie returns a string' do
           expect(web_page.cookie).to be_a String
         end
       end
@@ -51,7 +51,7 @@ RSpec.describe Mdm::WebPage, type: :model do
 
       context 'with WEBrick::Cookie' do
         let(:cookie) { webrick_cookie }
-        
+
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
         end
