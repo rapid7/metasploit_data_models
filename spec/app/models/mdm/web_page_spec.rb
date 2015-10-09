@@ -27,6 +27,7 @@ RSpec.describe Mdm::WebPage, type: :model do
 
       context 'with string cookie' do
         let(:cookie) { string_cookie }
+
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
         end
@@ -38,6 +39,7 @@ RSpec.describe Mdm::WebPage, type: :model do
 
       context 'with Hash cookie' do
         let(:cookie) { hash_cookie }
+
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
         end
@@ -49,6 +51,7 @@ RSpec.describe Mdm::WebPage, type: :model do
 
       context 'with WEBrick::Cookie' do
         let(:cookie) { webrick_cookie }
+        
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
         end
