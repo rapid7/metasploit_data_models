@@ -1,5 +1,4 @@
 # Web page requested from a {#web_site}.
-require 'webrick'
 class Mdm::WebPage < ActiveRecord::Base
   
   #
