@@ -4,16 +4,18 @@ RSpec.describe Mdm::WebPage, type: :model do
 
   context 'associations' do
     it { is_expected.to belong_to(:web_site).class_name('Mdm::WebSite') }
+  end
 
-    context 'serialized cookie attribute' do
+  context 'serialized attributes' do
+    context 'cookie' do
       let(:string_cookie) do
         "test_name=test_value"
       end
 
       let(:hash_cookie) do
         {
-          name: 'test name',
-          value: 'test value'
+            name: 'test name',
+            value: 'test value'
         }
       end
 
