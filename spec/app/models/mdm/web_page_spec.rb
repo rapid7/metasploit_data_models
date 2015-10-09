@@ -7,25 +7,10 @@ RSpec.describe Mdm::WebPage, type: :model do
 
   context 'serialized attributes' do
     context 'cookie' do
-      let(:string_cookie) do
-        "test_name=test_value"
-      end
-
-      let(:hash_cookie) do
-        {
-            name: 'test name',
-            value: 'test value'
-        }
-      end
-
-      let(:webrick_cookie) do
-        WEBrick::Cookie.new('test name', 'test value')
-      end
-
       let(:web_page) { FactoryGirl.create(:mdm_web_page, cookie: cookie) }
 
       context 'with string cookie' do
-        let(:cookie) { string_cookie }
+        let(:cookie) { "test_name=test_value" }
 
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
@@ -37,7 +22,12 @@ RSpec.describe Mdm::WebPage, type: :model do
       end
 
       context 'with Hash cookie' do
-        let(:cookie) { hash_cookie }
+        let(:cookie) do
+          {
+            name: 'test name',
+            value: 'test value'
+          }
+        end
 
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
@@ -49,7 +39,7 @@ RSpec.describe Mdm::WebPage, type: :model do
       end
 
       context 'with WEBrick::Cookie' do
-        let(:cookie) { webrick_cookie }
+        let(:cookie) { WEBrick::Cookie.new('test name', 'test value') }
 
         it 'persists successfully' do
           expect{web_page}.to change{Mdm::WebPage.count}.by(1)
