@@ -128,3 +128,12 @@ RSpec.configure do |config|
     allow_any_instance_of(Mdm::Workspace).to receive(:valid_ip_or_range?).and_return(true)
   end
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.library :active_record
+    with.library :active_model
+
+    with.test_framework :rspec
+  end
+end

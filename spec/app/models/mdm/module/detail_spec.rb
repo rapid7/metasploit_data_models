@@ -240,7 +240,10 @@ RSpec.describe Mdm::Module::Detail, type: :model do
     # validate_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
 
     context 'rank' do
-      it { is_expected.to validate_numericality_of(:rank).only_integer }
+      it 'validates rank is only an integer', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
+        is_expected.to validate_numericality_of(:rank).only_integer
+      end
+
       it { is_expected.to validate_inclusion_of(:rank).in_array(ranks) }
     end
 

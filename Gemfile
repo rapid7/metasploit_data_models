@@ -32,7 +32,7 @@ group :test do
   # In a full rails project, factory_girl_rails would be in both the :development, and :test group, but since we only
   # want rails in :test, factory_girl_rails must also only be in :test.
   # add matchers from shoulda, such as validates_presence_of, which are useful for testing validations
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3.0'
   # code coverage of tests
   gem 'simplecov', :require => false
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
