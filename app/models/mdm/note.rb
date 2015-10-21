@@ -90,11 +90,14 @@ class Mdm::Note < ActiveRecord::Base
   scope :visible, -> { where(Mdm::Note[:ntype].not_in(['web.form', 'web.url', 'web.vuln'])) }
 
   scope :search, lambda { |*args|
-    where(["(data NOT ILIKE 'BAh7%' AND data LIKE ?)" +
-               "OR (data ILIKE 'BAh7%' AND decode(data, 'base64') LIKE ?)" +
-               "OR ntype ILIKE ?",
-           "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%"
-          ])
+    joins(:host).
+      where(
+        "(notes.data NOT ILIKE 'BAh7%' AND notes.data LIKE ?) " +
+          "OR (notes.data ILIKE 'BAh7%' AND decode(notes.data, 'base64') LIKE ?) " +
+          'OR notes.ntype ILIKE ? ' +
+          'OR COALESCE(hosts.name, CAST(hosts.address AS TEXT)) ILIKE ?',
+        "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%"
+      )
   }
 
   #

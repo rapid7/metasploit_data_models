@@ -63,6 +63,12 @@ RSpec.describe Mdm::Loot, type: :model do
         myloot = FactoryGirl.create(:mdm_loot, :info => 'Find This')
         expect(Mdm::Loot.search('Find This')).to include(myloot)
       end
+
+      it 'should match on hostname' do
+        myloot = FactoryGirl.create(:mdm_loot, :info => 'Find This')
+        host_name = myloot.host.name
+        expect(Mdm::Loot.search(host_name)).to include(myloot)
+      end
     end
   end
 

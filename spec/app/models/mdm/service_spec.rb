@@ -53,13 +53,19 @@ RSpec.describe Mdm::Service, type: :model do
       end
     end
 
-    context "search for 'tcp'" do
-      it "should find only services that match" do
+    context 'search' do
+      it 'should find only services that match for \'tcp\'' do
         tcp_service   = FactoryGirl.create(:mdm_service, proto: 'tcp')
         udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
         search_results = Mdm::Service.search('tcp')
         expect(search_results).to     include(tcp_service)
         expect(search_results).not_to include(udp_service)
+      end
+
+      it 'should query host name of services' do
+        service = FactoryGirl.create(:mdm_service)
+        host_name = service.host.name
+        expect(Mdm::Service.search(host_name)).to include(service)
       end
     end
   end

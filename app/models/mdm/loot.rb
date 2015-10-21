@@ -122,16 +122,15 @@ class Mdm::Loot < ActiveRecord::Base
   #
 
   scope :search, lambda { |*args|
-    # @todo replace with AREL
-    terms = RELATIVE_SEARCH_FIELDS.collect { |relative_field|
-      "loots.#{relative_field} ILIKE ?"
-    }
-    disjunction = terms.join(' OR ')
-    formatted_parameter = "%#{args[0]}%"
-    parameters = [formatted_parameter] * RELATIVE_SEARCH_FIELDS.length
-    conditions = [disjunction] + parameters
-
-    where(conditions)
+    joins(:host).
+      where(
+        'loots.ltype ILIKE ? ' +
+          'OR loots.name ILIKE ? ' +
+          'OR loots.info ILIKE ? ' +
+          'OR loots.data ILIKE ? ' +
+          'OR COALESCE(hosts.name, CAST(hosts.address AS TEXT)) ILIKE ?',
+        "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%"
+      )
   }
 
   #

@@ -12,6 +12,7 @@ module MetasploitDataModels
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 7
 
+    PRERELEASE = 'search-analysis-tab'
 
     #
     # Module Methods

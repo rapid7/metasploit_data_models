@@ -80,6 +80,12 @@ RSpec.describe Mdm::Note, type: :model do
         flagged_note = FactoryGirl.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
         expect(Mdm::Note.search('flag.me')).to include(flagged_note)
       end
+
+      it 'should match on host name' do
+        flagged_note = FactoryGirl.create(:mdm_note, :seen => false)
+        host_name = flagged_note.host.name
+        expect(Mdm::Note.search(host_name)).to include(flagged_note)
+      end
     end
   end
 end
