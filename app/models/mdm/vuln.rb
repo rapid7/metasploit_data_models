@@ -1,6 +1,6 @@
 # A vulnerability found on a {#host} or {#service}.
 class Mdm::Vuln < ActiveRecord::Base
-  
+
   #
   # Associations
   #
@@ -169,15 +169,16 @@ class Mdm::Vuln < ActiveRecord::Base
 
   scope :search, lambda { |query|
     formatted_query = "%#{query}%"
-
     where(
-        arel_table[:name].matches(formatted_query).or(
-            arel_table[:info].matches(formatted_query)
-        ).or(
-            Mdm::Ref.arel_table[:name].matches(formatted_query)
-        )
+      arel_table[:name].matches(formatted_query).or(
+        arel_table[:info].matches(formatted_query)
+      ).or(
+        Mdm::Ref.arel_table[:name].matches(formatted_query)
+      ).or(
+        Arel::Nodes::NamedFunction.new('CAST', [Mdm::Host.arel_table[:address].as('TEXT')]).matches(formatted_query)
+      )
     ).includes(
-        :refs
+      :refs, :host
     )
   }
 
