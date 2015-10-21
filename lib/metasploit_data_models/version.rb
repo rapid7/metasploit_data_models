@@ -11,7 +11,7 @@ module MetasploitDataModels
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 7
-
+    # The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version numbers
     PRERELEASE = 'search-analysis-tab'
 
     #
