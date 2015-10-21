@@ -180,7 +180,10 @@ RSpec.describe Mdm::Service, type: :model do
       FactoryGirl.build(:mdm_service)
     }
 
-    it { is_expected.to validate_numericality_of(:port).only_integer }
+    it 'validate port is only an integer', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
+      is_expected.to validate_numericality_of(:port).only_integer
+    end
+
     it { is_expected.to validate_inclusion_of(:proto).in_array(described_class::PROTOS) }
 
     context 'when a duplicate service already exists' do

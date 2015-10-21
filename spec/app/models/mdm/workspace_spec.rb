@@ -138,11 +138,11 @@ RSpec.describe Mdm::Workspace, type: :model do
     end
 
     context 'description' do
-      it { is_expected.to ensure_length_of(:description).is_at_most(4 * (2 ** 10)) }
+      it { is_expected.to validate_length_of(:description).is_at_most(4 * (2 ** 10)) }
     end
 
     context 'name' do
-      it { is_expected.to ensure_length_of(:name).is_at_most(2**8 - 1) }
+      it { is_expected.to validate_length_of(:name).is_at_most(2**8 - 1) }
       it { is_expected.to validate_presence_of :name }
       it { is_expected.to validate_uniqueness_of :name }
     end

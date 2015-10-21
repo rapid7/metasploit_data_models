@@ -10,7 +10,9 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
   }
 
   context 'validations' do
-    it { is_expected.to validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer }
+    it 'validates value is only an integer between 0 and 255 inclusive', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
+      is_expected.to validate_numericality_of(:value).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(255).only_integer
+    end
   end
 
   it 'can be used in a Range' do
