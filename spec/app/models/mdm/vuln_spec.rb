@@ -266,6 +266,15 @@ RSpec.describe Mdm::Vuln, type: :model do
               expect(results).to match_array [vuln_with_host]
             end
           end
+
+          context 'with query matching Mdm::Host name' do
+            let(:vuln_with_host) { FactoryGirl.create(:mdm_vuln, :host)}
+            let(:query) { vuln_with_host.host.name}
+
+            it 'should match Mdm::Vuln' do
+              expect(results).to match_array [vuln_with_host]
+            end
+          end
         end
       end
     end

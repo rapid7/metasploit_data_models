@@ -176,6 +176,8 @@ class Mdm::Vuln < ActiveRecord::Base
         Mdm::Ref.arel_table[:name].matches(formatted_query)
       ).or(
         Arel::Nodes::NamedFunction.new('CAST', [Mdm::Host.arel_table[:address].as('TEXT')]).matches(formatted_query)
+      ).or(
+        Mdm::Host.arel_table[:name].matches(formatted_query)
       )
     ).includes(
       :refs, :host
