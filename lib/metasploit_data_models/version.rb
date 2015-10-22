@@ -10,7 +10,9 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 8
+    PATCH = 9
+    # Remove on master
+    PRERELEASE = 'search-host-name-vulns'
 
     #
     # Module Methods
