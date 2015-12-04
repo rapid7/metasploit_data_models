@@ -10,7 +10,8 @@ module MetasploitDataModels
     # The minor version number, scoped to the {MAJOR} version number.
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 9
+    PATCH = 10
+    PRERELEASE = "allow-localhost"
 
     #
     # Module Methods
