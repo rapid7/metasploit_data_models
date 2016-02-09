@@ -170,11 +170,13 @@ class Mdm::Workspace < ActiveRecord::Base
   #
   # @return [ActiveRecord::Relation<Mdm::Cred>]
   def creds
-    Mdm::Cred.find(
-      :all,
-      :include    => {:service => :host},
-      :conditions => ["hosts.workspace_id = ?", self.id]
-    )
+    # Mdm::Cred.find(
+    #   :all,
+    #   :include    => {:service => :host},
+    #   :conditions => ["hosts.workspace_id = ?", self.id]
+    # )
+
+    Mdm::Cred.joins(service: :host).where(hosts: {workspace_id: self.id})
   end
 
   # Returns default {Mdm::Workspace}.
@@ -224,11 +226,11 @@ class Mdm::Workspace < ActiveRecord::Base
   #
   # @return [ActiveRecord::Relation<Mdm::Tag>]
   def host_tags
-    Mdm::Tag.find(
-      :all,
-      :include    => :hosts,
-      :conditions => ["hosts.workspace_id = ?", self.id]
-    )
+    Mdm::Tag
+        .joins(:hosts)
+        .where(hosts: {
+          workspace_id: self.id
+        })
   end
 
   # Web forms found on {#web_sites}.
