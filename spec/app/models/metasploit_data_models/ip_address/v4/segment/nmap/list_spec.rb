@@ -71,7 +71,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
   end
 
   context 'validation' do
-    before(:each) do
+    before(:example) do
       nmap.valid?
     end
 

@@ -6,7 +6,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Single, type: :model do
   }
 
   context 'validation' do
-    before(:each) do
+    before(:example) do
       single.valid?
     end
 

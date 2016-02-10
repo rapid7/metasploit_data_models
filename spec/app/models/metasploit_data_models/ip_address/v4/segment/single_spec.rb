@@ -249,7 +249,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       allow(single).to receive(:value).and_return(value)
     end
 

@@ -320,7 +320,7 @@ RSpec.describe ParametersValidator do
         ''
       end
 
-      before(:each) do
+      before(:example) do
         validate_each
       end
 

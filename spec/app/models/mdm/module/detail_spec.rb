@@ -263,7 +263,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   end
 
   context 'with saved' do
-    before(:each) do
+    before(:example) do
       detail.save!
     end
 

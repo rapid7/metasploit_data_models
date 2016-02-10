@@ -4,7 +4,7 @@ shared_examples_for 'coerces inet column type to string' do |column|
   context 'with an inet column' do
     let(:address) { '10.0.0.1' }
 
-    before(:each) do
+    before(:example) do
       subject.update_attribute column, address
     end
 

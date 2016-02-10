@@ -68,7 +68,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   # Callbacks
   #
 
-  before(:each) do
+  before(:example) do
     stub_const('IncludingClass', including_class)
   end
 
@@ -83,7 +83,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   end
 
   context 'validation errors on' do
-    before(:each) do
+    before(:example) do
       including_class_instance.valid?
     end
 
@@ -173,7 +173,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
       including_class.match_regexp
     }
 
-    before(:each) do
+    before(:example) do
       expect(including_class).to receive(:regexp).and_return(/regexp/)
     end
 

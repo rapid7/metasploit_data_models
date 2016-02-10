@@ -27,7 +27,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::IPAddress, type: :model 
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       operation.valid?
     end
 

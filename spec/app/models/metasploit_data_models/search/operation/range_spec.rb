@@ -28,7 +28,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       range_operation.valid?
     end
 

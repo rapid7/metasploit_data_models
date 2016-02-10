@@ -123,7 +123,7 @@ RSpec.configure do |config|
 
   config.use_transactional_fixtures = true
 
-  config.before(:each) do
+  config.before(:example) do
     # Rex is only available when testing with metasploit-framework or pro, so stub out the methods that require it
     allow_any_instance_of(Mdm::Workspace).to receive(:valid_ip_or_range?).and_return(true)
   end
