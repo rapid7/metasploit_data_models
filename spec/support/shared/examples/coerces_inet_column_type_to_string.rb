@@ -1,4 +1,4 @@
-shared_examples_for 'coerces inet column type to string' do |column|
+RSpec.shared_examples_for 'coerces inet column type to string' do |column|
   raise ArgumentError, 'must pass the column name' unless column
 
   context 'with an inet column' do

@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with #children' do
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with #children' do
   let(:children) do
     2.times.collect { |n|
       double("Child #{n}")

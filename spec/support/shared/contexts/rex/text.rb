@@ -1,4 +1,4 @@
-shared_context 'Rex::Text' do
+RSpec.shared_context 'Rex::Text' do
   before(:example) do
     rex_text = Module.new do
       def self.ascii_safe_hex(str, whitespace=false)

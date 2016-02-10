@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match' do |options={}|
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match' do |options={}|
   options.assert_valid_keys(4, 6)
 
   subject(:match) {
