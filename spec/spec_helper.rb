@@ -127,6 +127,17 @@ RSpec.configure do |config|
     # Rex is only available when testing with metasploit-framework or pro, so stub out the methods that require it
     allow_any_instance_of(Mdm::Workspace).to receive(:valid_ip_or_range?).and_return(true)
   end
+
+  # rspec-rails 3 will no longer automatically infer an example group's spec type
+  # from the file location. You can explicitly opt-in to the feature using this
+  # config option.
+  # To explicitly tag specs without using automatic inference, set the `:type`
+  # metadata manually:
+  #
+  #     describe ThingsController, :type => :controller do
+  #       # Equivalent to being in spec/controllers
+  #     end
+  config.infer_spec_type_from_file_location!
 end
 
 Shoulda::Matchers.configure do |config|

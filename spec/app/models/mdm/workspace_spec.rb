@@ -203,7 +203,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should be an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should include services' do
@@ -357,7 +357,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::Tags from hosts in the workspace' do
@@ -434,7 +434,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebPages from hosts in the workspace' do
@@ -465,7 +465,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
@@ -506,7 +506,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
@@ -535,7 +535,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       it 'should return an ActiveRecord:Relation',
          :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it "should reject #unique_web_forms from host addresses that aren't in addresses" do
