@@ -97,7 +97,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
       it { is_expected.to be_valid }
 
       context 'after reloading' do
-        before(:each) do
+        before(:example) do
           mdm_web_vuln.save!
           mdm_web_vuln.reload
         end
@@ -142,7 +142,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
             web_vuln.params.index(element)
           end
 
-          before(:each) do
+          before(:example) do
             web_vuln.params = [element]
           end
 

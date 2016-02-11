@@ -30,7 +30,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::Range, type: 
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       range.valid?
     end
 

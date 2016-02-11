@@ -68,7 +68,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   # Callbacks
   #
 
-  before(:each) do
+  before(:example) do
     stub_const('IncludingClass', including_class)
   end
 
@@ -83,7 +83,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   end
 
   context 'validation errors on' do
-    before(:each) do
+    before(:example) do
       including_class_instance.valid?
     end
 
@@ -138,7 +138,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
         segment_count * segment_bits
       }
 
-      it 'validates it is an integer between 0 and maximum_prefix_length', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
+      it 'validates it is an integer between 0 and maximum_prefix_length' do
         expect(including_class_instance).to validate_numericality_of(:prefix_length).only_integer.is_greater_than_or_equal_to(0).is_less_than_or_equal_to(maximum_prefix_length)
       end
     end
@@ -173,7 +173,7 @@ RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
       including_class.match_regexp
     }
 
-    before(:each) do
+    before(:example) do
       expect(including_class).to receive(:regexp).and_return(/regexp/)
     end
 

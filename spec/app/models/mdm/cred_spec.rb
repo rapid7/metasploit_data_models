@@ -253,7 +253,7 @@ RSpec.describe Mdm::Cred, type: :model do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         ssh_key
         ssh_pubkey
       end
@@ -287,7 +287,7 @@ RSpec.describe Mdm::Cred, type: :model do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         ssh_key
         ssh_pubkey
       end
@@ -321,7 +321,7 @@ RSpec.describe Mdm::Cred, type: :model do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         ssh_key
         ssh_pubkey
       end
