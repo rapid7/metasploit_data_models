@@ -158,9 +158,9 @@ class Mdm::Cred < ActiveRecord::Base
   # @return [ActiveRecord::Relation<Mdm::Cred>] ssh_key creds with matching {#ssh_key_id}.
   def ssh_private_keys
     return [] unless self.ssh_key_id
-    matches = self.class.all(
-        :conditions => ["creds.ptype = ? AND creds.proof ILIKE ?", "ssh_key", "%#{self.ssh_key_id}%"]
-    )
+    matches = Mdm::Cred.where(
+        "ptype = ? AND proof ILIKE ?", "ssh_key", "%#{self.ssh_key_id}%"
+    ).to_a
     matches.select {|c| c.workspace == self.workspace}
   end
 
@@ -169,9 +169,9 @@ class Mdm::Cred < ActiveRecord::Base
   # @return [ActiveRecord::Relation<Mdm::Cred>] ssh_pubkey creds with matching {#ssh_key_id}.
   def ssh_public_keys
     return [] unless self.ssh_key_id
-    matches = self.class.all(
-        :conditions => ["creds.ptype = ? AND creds.proof ILIKE ?", "ssh_pubkey", "%#{self.ssh_key_id}%"]
-    )
+    matches = Mdm::Cred.where(
+        "ptype = ? AND proof ILIKE ?", "ssh_pubkey", "%#{self.ssh_key_id}%"
+    ).to_a
     matches.select {|c| c.workspace == self.workspace}
   end
 
