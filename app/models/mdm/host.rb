@@ -301,11 +301,11 @@ class Mdm::Host < ActiveRecord::Base
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
-  has_many :module_details,
+  has_many :module_details, -> { uniq } ,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,
-           :through => :module_refs,
-           :uniq => true
+           :through => :module_refs
+
 
   #
   # Attributes
