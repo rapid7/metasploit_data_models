@@ -180,7 +180,7 @@ RSpec.describe Mdm::Service, type: :model do
       FactoryGirl.build(:mdm_service)
     }
 
-    it 'validate port is only an integer', pending: 'https://github.com/thoughtbot/shoulda-matchers/issues/784' do
+    it 'validate port is only an integer' do
       is_expected.to validate_numericality_of(:port).only_integer
     end
 

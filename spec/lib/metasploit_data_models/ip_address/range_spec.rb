@@ -13,7 +13,7 @@ RSpec.describe MetasploitDataModels::IPAddress::Range do
         range.send(extreme)
       }
 
-      before(:each) do
+      before(:example) do
         allow(range).to receive(:value).and_return(value)
       end
 

@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search*::Group::Base' do |options={}|
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with Metasploit::Model::Search*::Group::Base' do |options={}|
   options.assert_valid_keys(:arel_class)
 
   arel_class = options.fetch(:arel_class)

@@ -12,7 +12,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Port::Range, type: :mode
   it { is_expected.to be_a MetasploitDataModels::Search::Operation::Range }
 
   context 'validations' do
-    before(:each) do
+    before(:example) do
       port_range_operation.valid?
     end
 
