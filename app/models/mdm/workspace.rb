@@ -170,13 +170,11 @@ class Mdm::Workspace < ActiveRecord::Base
   #
   # @return [ActiveRecord::Relation<Mdm::Cred>]
   def creds
-    # Mdm::Cred.find(
-    #   :all,
-    #   :include    => {:service => :host},
-    #   :conditions => ["hosts.workspace_id = ?", self.id]
-    # )
-
-    Mdm::Cred.joins(service: :host).where(hosts: {workspace_id: self.id})
+    Mdm::Cred
+        .joins(service: :host)
+        .where(hosts: {
+            workspace_id: self.id
+        })
   end
 
   # Returns default {Mdm::Workspace}.
