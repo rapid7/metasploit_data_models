@@ -13,7 +13,7 @@ module MetasploitDataModels
     PATCH = 11
 
 
-    PRERELEASE = 'transpec-conversions'
+    
 
 
     
