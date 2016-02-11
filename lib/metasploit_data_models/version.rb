@@ -13,7 +13,6 @@ module MetasploitDataModels
     PATCH = 0
 
     PRERELEASE = "Relation-all-deprecation"
-
     #
     # Module Methods
     #
