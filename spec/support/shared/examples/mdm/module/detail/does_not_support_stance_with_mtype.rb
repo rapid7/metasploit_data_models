@@ -1,4 +1,4 @@
-shared_examples_for 'Mdm::Module::Detail does not support stance with mtype' do |mtype|
+RSpec.shared_examples_for 'Mdm::Module::Detail does not support stance with mtype' do |mtype|
   context "with #{mtype.inspect}" do
     # define as a let so that lets from outer context can access option to set detail.
     let(:mtype) do

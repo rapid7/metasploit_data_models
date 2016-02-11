@@ -42,7 +42,7 @@ RSpec.describe Mdm::Event, type: :model do
       let(:flagged_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'flagme', :critical => true, :seen => false) }
       let(:non_critical_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'dontflagmebro', :critical => false, :seen => false) }
 
-      before(:each) do
+      before(:example) do
         flagged_event
         non_critical_event
       end

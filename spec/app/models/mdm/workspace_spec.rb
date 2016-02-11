@@ -94,7 +94,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         'must be a valid IP range'
       end
 
-      before(:each) do
+      before(:example) do
         workspace.boundary = boundary
         workspace.valid?
       end
@@ -234,7 +234,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
     context 'default' do
       context 'with default workspace' do
-        before(:each) do
+        before(:example) do
           FactoryGirl.create(
               :mdm_workspace,
               :name => default
@@ -271,7 +271,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       context 'with DEFAULT name' do
-        before(:each) do
+        before(:example) do
           workspace.name = default
         end
 
@@ -378,7 +378,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         workspace.send(:normalize)
       end
 
-      before(:each) do
+      before(:example) do
         workspace.boundary = boundary
       end
 
@@ -434,7 +434,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebPages from hosts in the workspace' do
@@ -459,13 +459,13 @@ RSpec.describe Mdm::Workspace, type: :model do
       # Let!s (let + before(:each))
       #
 
-      before(:each) do
+      before(:example) do
         other_web_sites
         web_sites
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
@@ -506,7 +506,7 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
 
       it 'should return an ActiveRecord:Relation' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::WebVulns from hosts in the workspace' do
@@ -535,7 +535,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       it 'should return an ActiveRecord:Relation',
          :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        should be_a ActiveRecord::Relation
+        is_expected.to be_a ActiveRecord::Relation
       end
 
       it "should reject #unique_web_forms from host addresses that aren't in addresses" do
