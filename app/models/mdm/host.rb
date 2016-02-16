@@ -486,7 +486,7 @@ class Mdm::Host < ActiveRecord::Base
   #
 
   scope :alive, -> { where({'hosts.state' => 'alive'}) }
-  scope :flagged, -> { where('notes.critical = true AND notes.seen = false').includes(:notes) }
+  scope :flagged, -> { where('notes.critical = true AND notes.seen = false').includes(:notes).references(:notes) }
   scope :search,
         lambda { |*args|
           # @todo replace with AREL
@@ -501,7 +501,7 @@ class Mdm::Host < ActiveRecord::Base
           where(*conditions)
         }
   scope :tag_search,
-        lambda { |*args| where("tags.name" => args[0]).includes(:tags) }
+        lambda { |*args| where("tags.name" => args[0]).includes(:tags).references(:tags) }
 
   #
   #
