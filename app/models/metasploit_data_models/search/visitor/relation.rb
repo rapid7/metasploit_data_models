@@ -42,7 +42,7 @@ class MetasploitDataModels::Search::Visitor::Relation < Metasploit::Model::Base
     tree = query.tree
 
     # Enumerable#inject does not support 3 arity for Hashes so need to unpack pair
-    visitor_by_relation_method.inject(query.klass.scoped) do |relation, pair|
+    visitor_by_relation_method.inject(query.klass.all) do |relation, pair|
       relation_method, visitor = pair
       visited = visitor.visit(tree)
       relation.send(relation_method, visited)
