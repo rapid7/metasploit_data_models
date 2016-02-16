@@ -6,7 +6,7 @@ class AddReportTemplates < ActiveRecord::Migration
 			t.string    :created_by
 			t.string    :path, :limit  => 1024
 			t.text      :name
-			t.timestamps
+			t.timestamps null: false
 		end
 	end
 

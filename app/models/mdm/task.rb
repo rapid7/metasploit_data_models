@@ -1,69 +1,42 @@
+# A task run by Metasploit Pro.
 class Mdm::Task < ActiveRecord::Base
   #
-  # Mass Assignment Security
+  #
+  # Associations
+  #
   #
 
-  attr_accessible :created_by, :module, :completed_at, :path, :info, :description, :progress, :options, :error, :result, :module_uuid, :settings, :presenter, :state, :app_run_id
-  
-  #
-  # Callbacks
-  #
-
-  before_destroy :delete_file
-
-  #
-  # Relations
-  #
-
-  # @!attribute listeners
-  #   Listeners spawned by this task
-  #
-  #   @return [ActiveRecord::Relation<Mdm::Listener>]
+  # Listeners spawned by this task
   has_many :listeners,
            class_name: 'Mdm::Listener',
            dependent: :destroy,
            inverse_of: :task
 
-  # @!attribute [rw] task_creds
-  #   Joins this to {#creds}.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::TaskCred>]
+  # Joins this to {#creds}.
   has_many :task_creds,
            class_name: 'Mdm::TaskCred',
            dependent: :destroy,
            inverse_of: :task
 
-  # @!attribute task_hosts
-  #   Joins this to {#hosts}.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::TaskHost>]
+  # Joins this to {#hosts}.
   has_many :task_hosts,
            class_name: 'Mdm::TaskHost',
            dependent: :destroy,
            inverse_of: :task
 
-  # @!attribute task_services
-  #   Joins this to {#services}.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::TaskService>]
+  # Joins this to {#services}.
   has_many :task_services,
            class_name: 'Mdm::TaskService',
            dependent: :destroy,
            inverse_of: :task
 
-  # @!attribute task_sessions
-  #   Joins this to {#sessions}.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::TaskSession>]
+  # Joins this to {#sessions}.
   has_many :task_sessions,
            class_name: 'Mdm::TaskSession',
            dependent: :destroy,
            inverse_of: :task
 
-  # @!attribute [rw] workspace
-  #   The Workspace the Task belongs to
-  #
-  #   @return [Mdm::Workspace]
+  # The Workspace the Task belongs to
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
              inverse_of: :tasks
@@ -72,55 +45,112 @@ class Mdm::Task < ActiveRecord::Base
   # through: :task_creds
   #
 
-  # @!attribute [rw] creds
-  #   Creds this task touched
-  #
-  #   @return [Array<Mdm::Cred>]
+  # Creds this task touched
   has_many :creds, :through => :task_creds, :class_name => 'Mdm::Cred'
 
   #
   # through: :task_hosts
   #
 
-  # @!attribute [rw] hosts
-  #   Hosts this task touched
-  #
-  #   @return [Array<Mdm::Host>
+  # Hosts this task touched
   has_many :hosts, :through => :task_hosts, :class_name => 'Mdm::Host'
 
   #
   # through: :task_services
   #
 
-  # @!attribute [rw] services
-  #   Services this task touched
-  #
-  #   @return [Array<Mdm::Service>
+  # Services this task touched
   has_many :services, :through => :task_services, :class_name => 'Mdm::Service'
 
   #
   # through: :task_sessions
   #
 
-  # @!attribute [rw] sessions
-  #   Session this task touched
-  #
-  #   @return [Array<Mdm::Session>
+  # Session this task touched
   has_many :sessions, :through => :task_sessions, :class_name => 'Mdm::Session'
 
 
 
 
+  # @!attribute created_by
+  #   {Mdm::User#username Name of user} that created this task.
+  #
+  #   @return [String]
+
+  # @!attribute description
+  #   Description of what the this task does.
+  #
+  #   @return [String]
+
+  # @!attribute error
+  #   Error raised while task was running that caused this task to fail.
+  #
+  #   @return [String]
+
+  # @!attribute info
+  #   Information about the task's current status.  What the task is currently doing.
+  #
+  #   @return [String]
+
+  # @!attribute module
+  #   {Mdm::Module::Class#full_name Module full name} that was run for this task.
+  #
+  #   @return [String]
+
+  # @!attribute module_uuid
+  #   UUID of `#module` that was run by this task.
+  #
+  #   @return [String]
+
+  # @!attribute path
+  #   Path to the log for this task.
+  #
+  #   @return [String]
+
+  # @!attribute progress
+  #   Percentage complete.
+  #
+  #   @return [Integer]
+
+  # @!attribute updated_at
+  #   When this task was last updated.
+  #
+  #   @return [DateTime]
+
+  #
+  # Callbacks
+  #
+
+  before_destroy :delete_file
+
   #
   # Serializations
   #
 
+  # Options passed to `#module`.
+  #
+  # @return [Hash]
   serialize :options, MetasploitDataModels::Base64Serializer.new
+
+  # Result of task running.
+  #
+  # @return [Hash]
   serialize :result, MetasploitDataModels::Base64Serializer.new
+
+  # Settings used to configure this task outside of the {#options module options}.
+  #
+  # @return [Hash]
   serialize :settings, MetasploitDataModels::Base64Serializer.new
+
+  #
+  # Instance Methods
+  #
 
   private
 
+  # Deletes {#path log} on-disk, so that disk is cleaned up when this task is deleted from the database.
+  #
+  # @return [void]
   def delete_file
     c = Pro::Client.get rescue nil
     if c
@@ -130,6 +160,7 @@ class Mdm::Task < ActiveRecord::Base
     end
   end
 
+  # Restore public for load hooks
   public
 
   Metasploit::Concern.run(self)

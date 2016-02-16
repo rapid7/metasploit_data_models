@@ -1,26 +1,50 @@
+# Client used for `report_client` in metasploit-framework Metasploit Modules.
 class Mdm::Client < ActiveRecord::Base
   #
   # Associations
   #
+
+  # {Mdm::Host} from which this client connected.
   belongs_to :host,
              class_name: 'Mdm::Host',
              inverse_of: :clients
 
   #
-  # Mass Assignment Security
+  # Attributes
   #
-  
-  # Database Columns
-  
-  attr_accessible :ua_string, :ua_name, :ua_ver
-  
-  # Foreign Keys
-  
-  attr_accessible :host_id
-  
-  # Model Associations
-  
-  attr_accessible :host
-  
+
+  # @!attribute created_at
+  #   When this client was created.
+  #
+  #   @return [DateTime]
+
+  # @!attribute updated_at
+  #   When this client was last updated.
+  #
+  #   @return [DateTime]
+
+  #
+  # @!group User Agent
+  #
+
+  # @!attribute ua_name
+  #   Parsed name from {#ua_string user agent string}
+  #
+  #   @return [String]
+
+  # @!attribute ua_string
+  #   Raw user agent string from client browser
+  #
+  #   @return [String]
+
+  # @!attribute ua_ver
+  #   Version of user agent.
+  #
+  #   @return [String]
+
+  #
+  # @!endgroup
+  #
+
   Metasploit::Concern.run(self)
 end

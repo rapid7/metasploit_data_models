@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match' do |options={}|
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match' do |options={}|
   options.assert_valid_keys(4, 6)
 
   subject(:match) {
@@ -11,7 +11,7 @@ shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match
 
   shared_examples_for 'match' do |boolean|
     if boolean
-      it { should be_a described_class }
+      it { is_expected.to be_a described_class }
 
       it 'does not set #operator' do
         expect(match.operator).to be_nil
@@ -21,7 +21,7 @@ shared_examples_for 'MetasploitDataModels::Search::Operation::IPAddress::*.match
         expect(match.value).not_to be_nil
       end
     else
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
   end
 

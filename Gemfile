@@ -3,14 +3,10 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-concern', :github => 'rapid7/metasploit-concern', :branch => 'staging/rails-4.0'
-gem 'metasploit-model', :github => 'rapid7/metasploit-model', :branch => 'staging/rails-4.0'
-gem 'protected_attributes', '~> 1.0.9'
-
 group :development do
-  gem 'metasploit-erd', :github => 'rapid7/metasploit-erd', :branch => 'staging/rails-4.0'
+  gem 'metasploit-erd', '~> 1.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', :github => 'rapid7/yard-metasploit-erd', :branch => 'staging/rails-4.0'
+  gem 'yard-metasploit-erd', '~> 1.0'
 end
 
 # used by dummy application
@@ -22,7 +18,7 @@ group :development, :test do
   gem 'factory_girl', '>= 4.1.0'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
-  
+
   rails_version_constraint = [
       '>= 4.0.9',
       '< 4.1.0'
@@ -36,14 +32,12 @@ group :test do
   # In a full rails project, factory_girl_rails would be in both the :development, and :test group, but since we only
   # want rails in :test, factory_girl_rails must also only be in :test.
   # add matchers from shoulda, such as validates_presence_of, which are useful for testing validations
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3.0'
   # code coverage of tests
   gem 'simplecov', :require => false
-  # @todo Update specs for rspec 3.0.0 compatibility and remove this gem in favor of just rspec-rails
-  gem 'rspec-core', '< 3.0.0'
   # need rspec-rails >= 2.12.0 as 2.12.0 adds support for redefining named subject in nested context that uses the
   # named subject from the outer context without causing a stack overflow.
-  gem 'rspec-rails', '>= 2.12.0'
+  gem 'rspec-rails', '~> 3.2'
   # used for building markup for webpage factories
   gem 'builder'
 end

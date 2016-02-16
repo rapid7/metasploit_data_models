@@ -1,4 +1,4 @@
-shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
+RSpec.shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
   context "with #{mtype.inspect}" do
     # define as a let so that lets from outer context can access option to set detail.
     let(:mtype) do
@@ -6,7 +6,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
     end
 
     it 'should return true for supports_stance?' do
-      detail.supports_stance?.should be_true
+      expect(detail.supports_stance?).to eq(true)
     end
 
     context 'with nil stance' do
@@ -14,7 +14,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         nil
       end
 
-      it { should be_invalid }
+      it { is_expected.to be_invalid }
     end
 
     context "with 'aggresive' stance" do
@@ -22,7 +22,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         'aggressive'
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context "with 'passive' stance" do
@@ -30,7 +30,7 @@ shared_examples_for 'Mdm::Module::Detail supports stance with mtype' do |mtype|
         'passive'
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 end

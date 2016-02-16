@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Operator::Port::List do
+RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model do
   subject(:port_list_operator) {
     described_class.new(
         klass: klass
@@ -17,7 +15,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
         described_class::SEPARATOR
       }
 
-      it { should == ',' }
+      it { is_expected.to eq(',') }
     end
   end
 
@@ -27,7 +25,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
     }
 
     context 'default' do
-      it { should == :port }
+      it { is_expected.to eq(:port) }
     end
 
     context 'setter' do
@@ -39,7 +37,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         port_list_operator.attribute = value
       end
 
@@ -87,7 +85,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
               operation_range.value
             }
 
-            it { should be_a Range }
+            it { is_expected.to be_a Range }
           end
         end
       end
@@ -121,7 +119,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
               operation_range.value
             }
 
-            it { should be_an Integer }
+            it { is_expected.to be_an Integer }
           end
         end
       end
@@ -145,7 +143,7 @@ describe MetasploitDataModels::Search::Operator::Port::List do
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       port_list_operator.attribute = attribute
     end
 
@@ -159,6 +157,6 @@ describe MetasploitDataModels::Search::Operator::Port::List do
       described_class.operator_name
     }
 
-    it { should == 'port_list' }
+    it { is_expected.to eq('port_list') }
   end
 end

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::ModuleRun do
+RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
   subject(:module_run){FactoryGirl.build(:metasploit_data_models_module_run)}
 
@@ -35,13 +33,13 @@ describe MetasploitDataModels::ModuleRun do
 
   context "validations" do
     describe "when a target_session is set on the module run" do
-      before(:each) do
+      before(:example) do
         module_run.target_session = FactoryGirl.build(:mdm_session)
       end
 
       context "when the module is an exploit" do
         context "and that exploit IS NOT local" do
-          before(:each) do
+          before(:example) do
             module_run.module_fullname = 'exploit/windows/mah-crazy-exploit'
           end
 
@@ -49,7 +47,7 @@ describe MetasploitDataModels::ModuleRun do
         end
 
         context "and that exploit IS local" do
-          before(:each) do
+          before(:example) do
             module_run.module_fullname = 'exploit/windows/local/mah-crazy-exploit'
           end
 
@@ -59,14 +57,14 @@ describe MetasploitDataModels::ModuleRun do
     end
 
     describe "when a spawned_session is set on the module run" do
-      before(:each) do
+      before(:example) do
         module_run.spawned_session  = FactoryGirl.build(:mdm_session)
       end
 
       context "when the module is not an exploit" do
 
         context "and it IS NOT a login scanner" do
-          before(:each) do
+          before(:example) do
             module_run.module_fullname = 'post/multi/gather/steal-minecraft-maps'
           end
 
@@ -74,7 +72,7 @@ describe MetasploitDataModels::ModuleRun do
         end
 
         context "and it IS a login scanner" do
-          before(:each) do
+          before(:example) do
             module_run.module_fullname = 'auxiliary/scanner/ssh/ssh_login'
           end
 
@@ -84,14 +82,14 @@ describe MetasploitDataModels::ModuleRun do
     end
 
     describe "attempted_at" do
-      before(:each){ module_run.attempted_at = nil }
+      before(:example){ module_run.attempted_at = nil }
 
       it { is_expected.to_not be_valid } 
     end
 
     describe "content information" do
       context "when there is no module_name" do
-        before(:each) do
+        before(:example) do
           module_run.module_fullname = nil
         end
 
@@ -102,7 +100,7 @@ describe MetasploitDataModels::ModuleRun do
 
     describe "status" do
       describe "invalidity" do
-        before(:each) do
+        before(:example) do
           module_run.status = "invalid nonsense"
         end
 
@@ -111,19 +109,19 @@ describe MetasploitDataModels::ModuleRun do
 
       describe "validity" do
         context "when the module run succeeded" do
-          before(:each){ module_run.status = MetasploitDataModels::ModuleRun::SUCCEED}
+          before(:example){ module_run.status = MetasploitDataModels::ModuleRun::SUCCEED}
 
           it{ expect(module_run).to be_valid }
         end
 
         context "when the module run went normally but failed" do
-          before(:each){ module_run.status = MetasploitDataModels::ModuleRun::FAIL}
+          before(:example){ module_run.status = MetasploitDataModels::ModuleRun::FAIL}
 
           it{ expect(module_run).to be_valid }
         end
 
         context "when the module run errored out" do
-          before(:each){ module_run.status = MetasploitDataModels::ModuleRun::ERROR}
+          before(:example){ module_run.status = MetasploitDataModels::ModuleRun::ERROR}
 
           it{ expect(module_run).to be_valid }
         end

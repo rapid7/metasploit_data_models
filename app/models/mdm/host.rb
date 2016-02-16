@@ -62,6 +62,18 @@ class Mdm::Host < ActiveRecord::Base
   ]
 
   #
+  # Aggregations
+  #
+
+  # @!attribute [rw] address
+  #   The IP address of this host. Necessary to avoid coercion to an `IPAddr` object.
+  #
+  #   @return [String]
+  def address
+    self[:address].to_s
+  end
+
+  #
   # Associations
   #
 
@@ -289,11 +301,11 @@ class Mdm::Host < ActiveRecord::Base
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
-  has_many :module_details,
+  has_many :module_details, -> { uniq } ,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,
-           :through => :module_refs,
-           :uniq => true
+           :through => :module_refs
+
 
   #
   # Attributes
@@ -447,35 +459,10 @@ class Mdm::Host < ActiveRecord::Base
   accepts_nested_attributes_for :services, :reject_if => lambda { |s| s[:port].blank? }, :allow_destroy => true
 
   #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :address, :mac, :comm, :name, :state, :os_name, :os_flavor,
-                  :os_sp, :os_lang, :arch, :purpose, :info, :comments, :scope,
-                  :virtual_host, :detected_arch
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id
-  
-  # Model Associations
-  
-  attr_accessible :clients, :events, :task_hosts, :exploit_attempts,
-                  :exploited_hosts, :host_details, :hosts_tags, :loots, :notes,
-                  :services, :sessions, :vulns, :workspace, :tags, :creds,
-                  :service_notes, :web_sites, :tasks, :vuln_refs, :refs,
-                  :module_refs, :module_details, :nexpose_asset
-  
-  #
   # Validations
   #
 
   validates :address,
-            :exclusion => {
-                :in => [IPAddr.new('127.0.0.1')]
-            },
             :ip_format => true,
             :presence => true,
             :uniqueness => {
@@ -582,7 +569,7 @@ class Mdm::Host < ActiveRecord::Base
       else
         potential_ip = IPAddr.new(address)
       end
-      
+
       return true unless potential_ip.ipv4? || potential_ip.ipv6?
     rescue ArgumentError
       return true

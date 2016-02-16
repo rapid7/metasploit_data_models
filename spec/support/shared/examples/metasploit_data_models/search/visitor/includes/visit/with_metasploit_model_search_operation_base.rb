@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with Metasploit::Model::Search::Operation::Base' do
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with Metasploit::Model::Search::Operation::Base' do
   let(:operator) do
     double('Operation Operator')
   end
@@ -10,17 +10,17 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
   end
 
   it 'should visit operator' do
-    visitor.should_receive(:visit).with(node).and_call_original
-    visitor.should_receive(:visit).with(operator).and_return([])
+    expect(visitor).to receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(operator).and_return([])
 
     visit
   end
 
   it 'should return operator visit' do
     operator_visit = ["Visited Operator"]
-    visitor.should_receive(:visit).with(node).and_call_original
-    visitor.stub(:visit).with(operator).and_return(operator_visit)
+    expect(visitor).to receive(:visit).with(node).and_call_original
+    allow(visitor).to receive(:visit).with(operator).and_return(operator_visit)
 
-    visit.should == operator_visit
+    expect(visit).to eq(operator_visit)
   end
 end

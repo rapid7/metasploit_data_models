@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Visitor::Relation do
+RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
   subject(:visitor) do
     described_class.new(
         :query => query
@@ -31,7 +29,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
 
   context 'validations' do
     context 'query' do
-      it { should validate_presence_of(:query) }
+      it { is_expected.to validate_presence_of(:query) }
 
       context 'valid' do
         let(:error) do
@@ -47,8 +45,8 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             double('Query')
           end
 
-          before(:each) do
-            query.stub(:valid? => query)
+          before(:example) do
+            allow(query).to receive(:valid?).and_return(query)
 
             visitor.valid?
           end
@@ -59,7 +57,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             end
 
             it 'should not record error' do
-              errors.should_not include(error)
+              expect(errors).not_to include(error)
             end
           end
 
@@ -69,7 +67,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
             end
 
             it 'should record error' do
-              errors.should_not include(error)
+              expect(errors).not_to include(error)
             end
           end
         end
@@ -80,7 +78,7 @@ describe MetasploitDataModels::Search::Visitor::Relation do
           end
 
           it 'should not record error' do
-            errors.should_not include(error)
+            expect(errors).not_to include(error)
           end
         end
       end
@@ -98,16 +96,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        includes_visitor.should_receive(:visit).with(query.tree)
+        expect(includes_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
         visited = double('Visited')
-        includes_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(includes_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
-        ActiveRecord::Relation.any_instance.should_receive(:includes).with(visited).and_return(query.klass.scoped)
+        expect_any_instance_of(ActiveRecord::Relation).to receive(:includes).with(visited).and_return(query.klass.scoped)
 
         visit
       end
@@ -119,16 +117,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        joins_visitor.should_receive(:visit).with(query.tree)
+        expect(joins_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
 
       it 'should pass visited to ActiveRecord::Relation#joins' do
         visited = double('Visited')
-        joins_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(joins_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
-        ActiveRecord::Relation.any_instance.should_receive(:joins).with(visited).and_return(query.klass.scoped)
+        expect_any_instance_of(ActiveRecord::Relation).to receive(:joins).with(visited).and_return(query.klass.scoped)
 
         visit
       end
@@ -140,16 +138,16 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       end
 
       it 'should visit Metasploit::Model::Search::Query#tree' do
-        where_visitor.should_receive(:visit).with(query.tree)
+        expect(where_visitor).to receive(:visit).with(query.tree)
 
         visit
       end
 
       it 'should pass visited to ActiveRecord::Relation#includes' do
         visited = double('Visited')
-        where_visitor.stub(:visit).with(query.tree).and_return(visited)
+        allow(where_visitor).to receive(:visit).with(query.tree).and_return(visited)
 
-        ActiveRecord::Relation.any_instance.should_receive(:where).with(visited).and_return(query.klass.scoped)
+        expect_any_instance_of(ActiveRecord::Relation).to receive(:where).with(visited).and_return(query.klass.scoped)
 
         visit
       end
@@ -870,9 +868,29 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       visitor.visitor_by_relation_method
     end
 
-    its([:joins]) { should be_a MetasploitDataModels::Search::Visitor::Joins }
-    its([:includes]) { should be_a MetasploitDataModels::Search::Visitor::Includes }
-    its([:where]) { should be_a MetasploitDataModels::Search::Visitor::Where }
+    context 'joins' do
+      subject(:joins) {
+        visitor_by_relation_method[:joins]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Joins }
+    end
+
+    context 'includes' do
+      subject(:includes) {
+        visitor_by_relation_method[:includes]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Includes }
+    end
+
+    context 'where' do
+      subject(:where) {
+        visitor_by_relation_method[:where]
+      }
+
+      it { is_expected.to be_a MetasploitDataModels::Search::Visitor::Where }
+    end
   end
 
   context 'visitor_class_by_relation_method' do
@@ -880,8 +898,28 @@ describe MetasploitDataModels::Search::Visitor::Relation do
       described_class.visitor_class_by_relation_method
     end
 
-    its([:joins]) { should == MetasploitDataModels::Search::Visitor::Joins }
-    its([:includes]) { should == MetasploitDataModels::Search::Visitor::Includes }
-    its([:where]) { should == MetasploitDataModels::Search::Visitor::Where }
+    context 'joins' do
+      subject(:joins) {
+        visitor_class_by_relation_method[:joins]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Joins) }
+    end
+
+    context 'includes' do
+      subject(:includes) {
+        visitor_class_by_relation_method[:includes]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Includes) }
+    end
+
+    context 'where' do
+      subject(:where) {
+        visitor_class_by_relation_method[:where]
+      }
+
+      it { is_expected.to eq(MetasploitDataModels::Search::Visitor::Where) }
+    end
   end
 end

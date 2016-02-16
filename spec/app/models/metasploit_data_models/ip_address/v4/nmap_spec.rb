@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::IPAddress::V4::Nmap do
+RSpec.describe MetasploitDataModels::IPAddress::V4::Nmap, type: :model do
   subject(:nmap) {
     described_class.new(
         value: formatted_value
@@ -8,7 +6,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
   }
 
   context 'validation' do
-    before(:each) do
+    before(:example) do
       nmap.valid?
     end
 
@@ -41,7 +39,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
             '1.2.3.4'
           }
 
-          it { should be_empty }
+          it { is_expected.to be_empty }
         end
       end
 
@@ -57,7 +55,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
           )
         }
 
-        it { should include length_error }
+        it { is_expected.to include length_error }
       end
     end
   end
@@ -86,7 +84,7 @@ describe MetasploitDataModels::IPAddress::V4::Nmap do
         nil
       }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'with matching formatted value' do

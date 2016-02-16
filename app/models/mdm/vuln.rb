@@ -1,6 +1,6 @@
 # A vulnerability found on a {#host} or {#service}.
 class Mdm::Vuln < ActiveRecord::Base
-  
+
   #
   # Associations
   #
@@ -22,6 +22,14 @@ class Mdm::Vuln < ActiveRecord::Base
              counter_cache: :vuln_count,
              inverse_of: :vulns
 
+  # @!attribute [rw] matches
+  #   The matches for this vuln
+  #
+  #   @return [ActiveRecord::Relation<MetasploitDataModels::AutomaticExploitation::Match>]
+  has_many :matches, class_name: "MetasploitDataModels::AutomaticExploitation::Match",
+           as: :matchable,
+           dependent: :destroy
+
   # @!attribute [rw] service
   #   The service with the vulnerability.
   #
@@ -29,6 +37,14 @@ class Mdm::Vuln < ActiveRecord::Base
   belongs_to :service,
              class_name: 'Mdm::Service',
              inverse_of: :vulns
+
+  # @!attribute [rw] origin
+  #   A polymorphic association to the origin that found
+  #   the vulnerability.
+  #
+  #   @return [ActiveRecord::Relation<origin>]
+  belongs_to :origin,
+             polymorphic: true
 
   # @!attribute [rw] vuln_attempts
   #   Attempts to exploit this vulnerability.
@@ -110,6 +126,8 @@ class Mdm::Vuln < ActiveRecord::Base
             :class_name => 'Mdm::Module::Detail',
             :source => :detail,
             :through => :module_refs
+
+
   #
   # Attributes
   #
@@ -151,35 +169,20 @@ class Mdm::Vuln < ActiveRecord::Base
 
   scope :search, lambda { |query|
     formatted_query = "%#{query}%"
-
     where(
-        arel_table[:name].matches(formatted_query).or(
-            arel_table[:info].matches(formatted_query)
-        ).or(
-            Mdm::Ref.arel_table[:name].matches(formatted_query)
-        )
+      arel_table[:name].matches(formatted_query).or(
+        arel_table[:info].matches(formatted_query)
+      ).or(
+        Mdm::Ref.arel_table[:name].matches(formatted_query)
+      ).or(
+        Arel::Nodes::NamedFunction.new('CAST', [Mdm::Host.arel_table[:address].as('TEXT')]).matches(formatted_query)
+      ).or(
+        Mdm::Host.arel_table[:name].matches(formatted_query)
+      )
     ).includes(
-        :refs
+      :refs, :host
     )
   }
-
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :name, :info, :exploited_at
-  
-  # Foreign Keys
-  
-  attr_accessible :host_id, :service_id
-  
-  # Model Associations
-  
-  attr_accessible :exploit_attempts, :host, :service, :vuln_attempts,
-                  :vuln_details, :vulns_refs, :refs, :module_refs,
-                  :module_details, :nexpose_vulnerability_definition
 
   #
   # Validations

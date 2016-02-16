@@ -1,17 +1,15 @@
-require 'spec_helper'
-
-describe Mdm::HostTag do
+RSpec.describe Mdm::HostTag, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should belong_to(:tag).class_name('Mdm::Tag') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:tag).class_name('Mdm::Tag') }
   end
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:tag_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:tag_id).of_type(:integer) }
     end
   end
 
@@ -21,7 +19,7 @@ describe Mdm::HostTag do
         FactoryGirl.build(:mdm_host_tag)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 

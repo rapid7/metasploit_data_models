@@ -1,25 +1,23 @@
-require 'spec_helper'
-
-describe Mdm::TaskSession do
+RSpec.describe Mdm::TaskSession, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'factory' do
     it 'should be valid' do
       task_session = FactoryGirl.build(:mdm_task_session)
-      task_session.should be_valid
+      expect(task_session).to be_valid
     end
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime)}
-      it { should have_db_column(:updated_at).of_type(:datetime)}
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
-      it { should have_db_column(:session_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:task_id).of_type(:integer).with_options(:null => false) }
+      it { is_expected.to have_db_column(:session_id).of_type(:integer).with_options(:null => false) }
     end
   end
 
@@ -41,7 +39,7 @@ describe Mdm::TaskSession do
       session = FactoryGirl.build(:mdm_session)
       FactoryGirl.create(:mdm_task_session, :task => task, :session => session)
       task_session2 = FactoryGirl.build(:mdm_task_session, :task => task, :session => session)
-      task_session2.should_not be_valid
+      expect(task_session2).not_to be_valid
     end
   end
 

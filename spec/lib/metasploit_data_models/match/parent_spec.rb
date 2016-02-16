@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Match::Parent do
+RSpec.describe MetasploitDataModels::Match::Parent do
   let(:including_class) {
     described_class = self.described_class
 
@@ -19,7 +17,7 @@ describe MetasploitDataModels::Match::Parent do
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
   end
 
@@ -52,7 +50,7 @@ describe MetasploitDataModels::Match::Parent do
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       stub_const('NumberChild', number_child_class)
       stub_const('NumberChild::REGEXP', /\d+/)
 
@@ -86,7 +84,7 @@ describe MetasploitDataModels::Match::Parent do
         match_child
       end
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -96,7 +94,7 @@ describe MetasploitDataModels::Match::Parent do
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with class names' do
@@ -125,7 +123,7 @@ describe MetasploitDataModels::Match::Parent do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         including_class.match_children_named child_classes.map(&:name)
       end
 

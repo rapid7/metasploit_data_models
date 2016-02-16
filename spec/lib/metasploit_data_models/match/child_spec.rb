@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Match::Child do
+RSpec.describe MetasploitDataModels::Match::Child do
   let(:extending_class) {
     # capture as local for Class.new block scope
     described_class = self.described_class
@@ -18,7 +16,7 @@ describe MetasploitDataModels::Match::Child do
     }
   }
 
-  before(:each) do
+  before(:example) do
     stub_const('ExtendingClass', extending_class)
     stub_const('ExtendingClass::REGEXP', /\d+-\d+/)
   end
@@ -54,7 +52,7 @@ describe MetasploitDataModels::Match::Child do
           '1,2-3'
         end
 
-        it { should be_nil }
+        it { is_expected.to be_nil }
       end
     end
   end

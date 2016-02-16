@@ -1,27 +1,25 @@
-require 'spec_helper'
-
-describe Mdm::Event do
+RSpec.describe Mdm::Event, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should belong_to(:host).class_name('Mdm::Host') }
-    it { should belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
   end
 
   context 'database' do
     context 'timestamps' do
-      it { should have_db_column(:created_at).of_type(:datetime) }
-      it { should have_db_column(:updated_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
     end
 
     context 'columns' do
-      it { should have_db_column(:workspace_id).of_type(:integer) }
-      it { should have_db_column(:host_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:critical).of_type(:boolean) }
-      it { should have_db_column(:seen).of_type(:boolean) }
-      it { should have_db_column(:username).of_type(:string) }
-      it { should have_db_column(:info).of_type(:text) }
+      it { is_expected.to have_db_column(:workspace_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:host_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:critical).of_type(:boolean) }
+      it { is_expected.to have_db_column(:seen).of_type(:boolean) }
+      it { is_expected.to have_db_column(:username).of_type(:string) }
+      it { is_expected.to have_db_column(:info).of_type(:text) }
     end
   end
 
@@ -43,23 +41,23 @@ describe Mdm::Event do
       let(:workspace) {FactoryGirl.create(:mdm_workspace)}
       let(:flagged_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'flagme', :critical => true, :seen => false) }
       let(:non_critical_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'dontflagmebro', :critical => false, :seen => false) }
- 
-      before(:each) do
+
+      before(:example) do
         flagged_event
         non_critical_event
       end
- 
+
       it 'should included critical unseen events' do
-        Mdm::Event.flagged.should eq [flagged_event]
+        expect(Mdm::Event.flagged).to eq [flagged_event]
       end
       it 'should exclude non-critical events' do
-        Mdm::Event.flagged.should_not include(non_critical_event)
+        expect(Mdm::Event.flagged).not_to include(non_critical_event)
       end
 
       it 'should exclude critical seen events' do
         flagged_event.seen = true
         flagged_event.save
-        Mdm::Event.flagged.should_not include(flagged_event)
+        expect(Mdm::Event.flagged).not_to include(flagged_event)
       end
     end
 
@@ -68,8 +66,8 @@ describe Mdm::Event do
         flagged_event = FactoryGirl.create(:mdm_event, :name => 'module_run')
         non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro')
         flagged_set = Mdm::Event.module_run
-        flagged_set.should include(flagged_event)
-        flagged_set.should_not include(non_critical_event)
+        expect(flagged_set).to include(flagged_event)
+        expect(flagged_set).not_to include(non_critical_event)
       end
     end
   end
@@ -77,15 +75,15 @@ describe Mdm::Event do
   context 'validations' do
     it 'should require name' do
       unnamed_event = FactoryGirl.build(:mdm_event, :name => nil)
-      unnamed_event.should_not be_valid
-      unnamed_event.errors[:name].should include("can't be blank")
+      expect(unnamed_event).not_to be_valid
+      expect(unnamed_event.errors[:name]).to include("can't be blank")
     end
   end
 
   context 'factory' do
     it 'should be valid' do
       event = FactoryGirl.build(:mdm_event)
-      event.should be_valid
+      expect(event).to be_valid
     end
   end
 

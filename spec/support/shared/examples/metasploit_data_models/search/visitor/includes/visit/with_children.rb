@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with #children' do
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with #children' do
   let(:children) do
     2.times.collect { |n|
       double("Child #{n}")
@@ -13,10 +13,10 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
 
   it 'should visit each child' do
     # needed for call to visit subject
-    visitor.should_receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(node).and_call_original
 
     children.each do |child|
-      visitor.should_receive(:visit).with(child).and_return([])
+      expect(visitor).to receive(:visit).with(child).and_return([])
     end
 
     visit
@@ -25,14 +25,14 @@ shared_examples_for 'MetasploitDataModels::Search::Visitor::Includes#visit with 
   it 'should return Array of all child visits' do
     child_visits = []
 
-    visitor.should_receive(:visit).with(node).and_call_original
+    expect(visitor).to receive(:visit).with(node).and_call_original
 
     children.each_with_index do |child, i|
       child_visit = ["Visited Child #{i}"]
-      visitor.stub(:visit).with(child).and_return(child_visit)
+      allow(visitor).to receive(:visit).with(child).and_return(child_visit)
       child_visits.concat(child_visit)
     end
 
-    visit.should == child_visits
+    expect(visit).to eq(child_visits)
   end
 end

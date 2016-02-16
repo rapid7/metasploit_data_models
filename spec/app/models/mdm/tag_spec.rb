@@ -1,29 +1,28 @@
-require 'spec_helper'
 require 'securerandom'
 
-describe Mdm::Tag do
+RSpec.describe Mdm::Tag, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should have_many(:hosts_tags).class_name('Mdm::HostTag') }
-    it { should have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
-    it { should belong_to(:user).class_name('Mdm::User') }
+    it { is_expected.to have_many(:hosts_tags).class_name('Mdm::HostTag') }
+    it { is_expected.to have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
+    it { is_expected.to belong_to(:user).class_name('Mdm::User') }
   end
 
   context 'database' do
 
     context 'timestamps'do
-      it { should have_db_column(:created_at).of_type(:datetime)}
-      it { should have_db_column(:updated_at).of_type(:datetime)}
+      it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(:null => false) }
+      it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(:null => false) }
     end
 
     context 'columns' do
-      it { should have_db_column(:user_id).of_type(:integer) }
-      it { should have_db_column(:name).of_type(:string) }
-      it { should have_db_column(:desc).of_type(:text) }
-      it { should have_db_column(:report_summary).of_type(:boolean).with_options(:null => false, :default =>false) }
-      it { should have_db_column(:report_detail).of_type(:boolean).with_options(:null => false, :default =>false) }
-      it { should have_db_column(:critical).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:desc).of_type(:text) }
+      it { is_expected.to have_db_column(:report_summary).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:report_detail).of_type(:boolean).with_options(:null => false, :default =>false) }
+      it { is_expected.to have_db_column(:critical).of_type(:boolean).with_options(:null => false, :default =>false) }
     end
   end
 
@@ -32,37 +31,38 @@ describe Mdm::Tag do
       it 'should not ba valid for a length over 8k' do
         desc = SecureRandom.hex(9001) #over 9000?!
         large_tag = FactoryGirl.build(:mdm_tag, :desc => desc)
-        large_tag.should_not be_valid
-        large_tag.errors[:desc].should include('desc must be less than 8k.')
+        expect(large_tag).not_to be_valid
+        expect(large_tag.errors[:desc]).to include('desc must be less than 8k.')
       end
     end
 
     context 'name' do
+      let(:error_msg) {I18n.t('activerecord.ancestors.mdm/tag.model.errors.messages.character')}
       it 'must be present' do
         nameless_tag = FactoryGirl.build(:mdm_tag, :name => nil)
-        nameless_tag.should_not be_valid
-        nameless_tag.errors[:name].should include("can't be blank")
+        expect(nameless_tag).not_to be_valid
+        expect(nameless_tag.errors[:name]).to include("can't be blank")
       end
 
       it 'may only contain alphanumerics, dot, dashes, and underscores' do
         mytag = FactoryGirl.build(:mdm_tag, :name => 'A.1-B_2')
-        mytag.should be_valid
+        expect(mytag).to be_valid
         #Test for various bad inputs we should never allow
         mytag = FactoryGirl.build(:mdm_tag, :name => "A'1")
-        mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag).not_to be_valid
+        expect(mytag.errors[:name]).to include(error_msg)
         mytag = FactoryGirl.build(:mdm_tag, :name => "A;1")
-        mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag).not_to be_valid
+        expect(mytag.errors[:name]).to include(error_msg)
         mytag = FactoryGirl.build(:mdm_tag, :name => "A%1")
-        mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag).not_to be_valid
+        expect(mytag.errors[:name]).to include(error_msg)
         mytag = FactoryGirl.build(:mdm_tag, :name => "A=1")
-        mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag).not_to be_valid
+        expect(mytag.errors[:name]).to include(error_msg)
         mytag = FactoryGirl.build(:mdm_tag, :name => "#A1")
-        mytag.should_not be_valid
-        mytag.errors[:name].should include('must be alphanumeric, dots, dashes, or underscores')
+        expect(mytag).not_to be_valid
+        expect(mytag.errors[:name]).to include(error_msg)
       end
     end
   end
@@ -71,7 +71,7 @@ describe Mdm::Tag do
     context '#to_s' do
       it 'should return the name of the tag as a string' do
         mytag = FactoryGirl.build(:mdm_tag, :name => 'mytag')
-        mytag.to_s.should == 'mytag'
+        expect(mytag.to_s).to eq('mytag')
       end
     end
   end
@@ -82,7 +82,7 @@ describe Mdm::Tag do
         FactoryGirl.build(:mdm_tag)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 

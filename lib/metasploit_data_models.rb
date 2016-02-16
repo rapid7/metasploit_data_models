@@ -17,7 +17,6 @@ require 'metasploit/concern'
 require 'metasploit/model'
 require 'arel-helpers'
 require 'postgres_ext'
-require 'protected_attributes'
 
 #
 # Project
@@ -27,6 +26,7 @@ require 'metasploit_data_models/version'
 
 autoload :Mdm, 'mdm'
 
+# Core database models for metasploit-framework.
 module MetasploitDataModels
   extend ActiveSupport::Autoload
 
@@ -39,6 +39,9 @@ module MetasploitDataModels
   autoload :Search
   autoload :SerializedPrefs
 
+  # The root directory of `metasploit_data_models` gem in both development and gem installs.
+  #
+  # @return [Pathname]
   def self.root
     unless instance_variable_defined? :@root
       lib_pathname = Pathname.new(__FILE__).dirname

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::Search::Operator::Multitext do
+RSpec.describe MetasploitDataModels::Search::Operator::Multitext, type: :model do
   subject(:multitext_operator) {
     described_class.new(
         attributes
@@ -12,8 +10,8 @@ describe MetasploitDataModels::Search::Operator::Multitext do
   }
 
   context 'validations' do
-    it { should ensure_length_of(:operator_names).is_at_least(2) }
-    it { should validate_presence_of :name }
+    it { is_expected.to validate_length_of(:operator_names).is_at_least(2) }
+    it { is_expected.to validate_presence_of :name }
   end
 
   context '#children' do
@@ -45,7 +43,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
         nil
       }
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'with empty String' do
@@ -53,7 +51,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
         ''
       }
 
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
 
     context 'without quotes' do
@@ -82,7 +80,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
       }
 
       it 'generates a single union for quoted words as a single argument' do
-        expect(children).to have(1).items
+        expect(children.length).to eq(1)
 
         child = children.first
 
@@ -101,7 +99,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
     }
 
     context 'default' do
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'setter' do
@@ -123,7 +121,7 @@ describe MetasploitDataModels::Search::Operator::Multitext do
     }
 
     context 'default' do
-      it { should == [] }
+      it { is_expected.to eq([]) }
     end
   end
 

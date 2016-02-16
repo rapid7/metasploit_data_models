@@ -3,7 +3,7 @@ class CreateTaskHosts < ActiveRecord::Migration
     create_table :task_hosts do |t|
       t.references :task, :null => false
       t.references :host, :null => false
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

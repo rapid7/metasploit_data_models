@@ -122,16 +122,15 @@ class Mdm::Loot < ActiveRecord::Base
   #
 
   scope :search, lambda { |*args|
-    # @todo replace with AREL
-    terms = RELATIVE_SEARCH_FIELDS.collect { |relative_field|
-      "loots.#{relative_field} ILIKE ?"
-    }
-    disjunction = terms.join(' OR ')
-    formatted_parameter = "%#{args[0]}%"
-    parameters = [formatted_parameter] * RELATIVE_SEARCH_FIELDS.length
-    conditions = [disjunction] + parameters
-
-    where(conditions)
+    joins(:host).
+      where(
+        'loots.ltype ILIKE ? ' +
+          'OR loots.name ILIKE ? ' +
+          'OR loots.info ILIKE ? ' +
+          'OR loots.data ILIKE ? ' +
+          'OR COALESCE(hosts.name, CAST(hosts.address AS TEXT)) ILIKE ?',
+        "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%"
+      )
   }
 
   #
@@ -140,22 +139,6 @@ class Mdm::Loot < ActiveRecord::Base
 
   serialize :data, MetasploitDataModels::Base64Serializer.new
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :ltype, :path, :data, :content_type, :name, :info
-  
-  # Foreign Keys
-  
-  attr_accessible :workspace_id, :host_id, :service_id
-  
-  # Model Associations
-  
-  attr_accessible :exploit_attempt, :host, :service, :vuln_attempt, :workspace
-  
   private
 
   # Deletes {#path} from disk.

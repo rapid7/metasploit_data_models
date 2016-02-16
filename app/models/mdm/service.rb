@@ -170,13 +170,15 @@ class Mdm::Service < ActiveRecord::Base
   scope :inactive, -> { where("services.state != 'open'") }
   scope :with_state, lambda { |a_state|  where("services.state = ?", a_state)}
   scope :search, lambda { |*args|
-    where([
-              "services.name ILIKE ? OR " +
-                  "services.info ILIKE ? OR " +
-                  "services.proto ILIKE ? OR " +
-                  "services.port = ? ",
-              "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", (args[0].to_i > 0) ? args[0].to_i : 99999
-          ])
+    joins(:host).
+      where(
+        'services.name ILIKE ? OR ' +
+          'services.info ILIKE ? OR ' +
+          'services.proto ILIKE ? OR ' +
+          'services.port = ? OR ' +
+          'COALESCE(hosts.name, CAST(hosts.address AS TEXT)) ILIKE ?',
+         "%#{args[0]}%", "%#{args[0]}%", "%#{args[0]}%", (args[0].to_i > 0) ? args[0].to_i : 99999, "%#{args[0]}%"
+      )
   }
 
   #
@@ -210,24 +212,6 @@ class Mdm::Service < ActiveRecord::Base
 
   search_with MetasploitDataModels::Search::Operator::Port::List
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :port, :proto, :state, :name, :info
-  
-  # Foreign Keys
-  
-  attr_accessible :host_id
-  
-  # Model Associations
-  
-  attr_accessible :creds, :exploit_attempts, :exploited_hosts, :host, :loots,
-                  :notes, :task_services, :vulns, :web_sites, :tasks,
-                  :web_pages, :web_forms, :web_vulns
- 
   #
   # Validations
   #

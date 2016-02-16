@@ -44,21 +44,5 @@ class Mdm::Ref < ActiveRecord::Base
   #
   #   @return [String]
 
-  #
-  # Mass Assignment Security
-  #
-  
-  # Database Columns
-  
-  attr_accessible :name
-  
-  # Foreign Keys
-  
-  attr_accessible :ref_id
-  
-  # Model Associations
-  
-  attr_accessible :module_refs, :vulns_refs, :vulns
-
   Metasploit::Concern.run(self)
 end

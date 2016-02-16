@@ -4,7 +4,7 @@ require 'metasploit_data_models/version'
 
 Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
-  s.version     = MetasploitDataModels::GEM_VERSION
+  s.version     = MetasploitDataModels::VERSION
   s.authors     = [
       'Samuel Huckins',
       'Luke Imhoff',
@@ -29,6 +29,13 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.1'
 
   # ---- Dependencies ----
+  s.add_development_dependency 'metasploit-version', '~> 0.1.3'
+  # documentation
+  s.add_development_dependency 'metasploit-yard', '~> 1.0'
+  s.add_development_dependency 'yard-activerecord', '~> 0.0.14'
+  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  s.add_development_dependency 'yard-metasploit-erd', '~> 0.1.0'
+
   s.add_development_dependency 'rake'
 
   # documentation
@@ -41,13 +48,12 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', *rails_version_constraints
   s.add_runtime_dependency 'activesupport', *rails_version_constraints
-  s.add_runtime_dependency 'protected_attributes', '~> 1.0.9'
-  s.add_runtime_dependency 'metasploit-concern'
-  s.add_runtime_dependency 'metasploit-model'
+  s.add_runtime_dependency 'metasploit-concern', '~> 1.0'
+  s.add_runtime_dependency 'metasploit-model', '~> 1.0'
   s.add_runtime_dependency 'railties', *rails_version_constraints
 
   # os fingerprinting
-  s.add_runtime_dependency 'recog', '~> 1.0'
+  s.add_runtime_dependency 'recog', '~> 2.0'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'

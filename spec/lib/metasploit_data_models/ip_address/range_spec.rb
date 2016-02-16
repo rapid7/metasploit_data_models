@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::IPAddress::Range do
+RSpec.describe MetasploitDataModels::IPAddress::Range do
   subject(:range) {
     range_class.new
   }
@@ -15,7 +13,7 @@ describe MetasploitDataModels::IPAddress::Range do
         range.send(extreme)
       }
 
-      before(:each) do
+      before(:example) do
         allow(range).to receive(:value).and_return(value)
       end
 
@@ -35,7 +33,7 @@ describe MetasploitDataModels::IPAddress::Range do
             'invalid_value'
           }
 
-          it { should be_nil }
+          it { is_expected.to be_nil }
         end
       end
 
@@ -44,7 +42,7 @@ describe MetasploitDataModels::IPAddress::Range do
           nil
         }
 
-        it { should be_nil }
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -67,7 +65,7 @@ describe MetasploitDataModels::IPAddress::Range do
         described_class::SEPARATOR
       }
 
-      it { should == '-' }
+      it { is_expected.to eq('-') }
     end
   end
 

@@ -25,33 +25,38 @@ issue tracking software.
 
 ### `PRERELEASE`
 
-1. Update `PRERELEASE` to match the `SUMMARY` in the branch name.  If you branched from `master`, and [version.rb](lib/metasploit_data_models/version.rb) does not have `PRERELEASE` defined, then adding the following lines after `PATCH`: 
+1. Update `PRERELEASE` to match the `SUMMARY` in the branch name.  If you branched from `master`, and [version.rb](lib/metasploit_data_models/version.rb) does not have `PRERELEASE` defined, then adding the following lines after `PATCH`:
 ```
-# The prerelease version, scoped to the {PATCH} version number.
+# The prerelease version, scoped to the {MAJOR}, {MINOR}, and {PATCH} version number.
 PRERELEASE = '<SUMMARY>'
 ```
 2. `rake spec`
 3.  Verify the specs pass, which indicates that `PRERELEASE` was updated correctly.
 4. Commit the change `git commit -a`
 
-
 ### Your changes
 
-Make your changes or however many commits you like, commiting each with `git commit`.
+Make your changes or however many commits you like, committing each with `git commit`.
 
 ### Pre-Pull Request Testing
 
+#### Specs
 1. Run specs one last time before opening the Pull Request: `rake spec`
 2. Verify there was no failures.
 
+#### Documentation
+1. Generate yard documentation to ensure all new code is documented: `rake yard`
+2. Verify there were no `[warn]`ings.
+3. Verify there were no undocumented objects.
+
 ### Push
 
-Push your branch to your fork on gitub: `git push push TYPE/ISSUE/SUMMARY`
+Push your branch to your fork on github: `git push TYPE/ISSUE/SUMMARY`
 
 ### Pull Request
 
 * [Create new Pull Request](https://github.com/rapid7/metasploit_data_models/compare/)
-* Add a Verification Steps comment
+* Add a Verification Steps to the description comment
 
 ```
 # Verification Steps
@@ -61,12 +66,18 @@ Push your branch to your fork on gitub: `git push push TYPE/ISSUE/SUMMARY`
 ## `rake spec`
 - [ ] `rake spec`
 - [ ] VERIFY no failures
+
+## `rake yard`
+- [ ] `rake yard`
+- [ ] VERIFY no `[warn]`ings
+- [ ] VERIFY no undocumented objects
 ```
+
 You should also include at least one scenario to manually check the changes outside of specs.
 
 * Add a Post-merge Steps comment
 
-The 'Post-merge Steps' are a reminder to the reviewer of the Pull Request of how to update the [`PRERELEASE`](lib/metasploit_data_models/version.rb) so that [version_spec.rb](spec/lib/metasploit_data_models/version_spec.rb) passes on the target branch after the merge.
+The 'Post-merge Steps' are a reminder to the reviewer of the Pull Request of how to update the [`PRERELEASE`](lib/metasploit_data_models/version.rb) so that [version_spec.rb](spec/lib/metasploit_data_models/version.rb_spec.rb) passes on the target branch after the merge.
 
 DESTINATION is the name of the destination branch into which the merge is being made.  SOURCE_SUMMARY is the SUMMARY from TYPE/ISSUE/SUMMARY branch name for the SOURCE branch that is being made.
 
@@ -106,7 +117,7 @@ Perform these steps prior to pushing to DESTINATION or the build will be broke o
 - [ ] Change `PRERELEASE` from `SOURCE_SUMMARY` to `DESTINATION_SUMMARY` to match the branch (DESTINATION) summary (DESTINATION_SUMMARY)
 
 ## Gem build
-- [ ] gem build *.gemspec
+- [ ] gem build metasploit_data_models.gemspec
 - [ ] VERIFY the prerelease suffix has change on the gem.
 
 ## RSpec
@@ -118,47 +129,5 @@ Perform these steps prior to pushing to DESTINATION or the build will be broke o
 - [ ] `git push origin DESTINATION`
 ```
 
-* Add a 'Release Steps' comment
-
-The 'Release Steps' are a reminder to the reviewer of the Pull Request of how to release the gem.
-
-```
-# Release
-
-Complete these steps on DESTINATION
-
-## Version
-
-### Compatible changes
-
-If the change are compatible with the previous branch's API, then increment [`PATCH`](lib/metasploit_data_models/version.rb).
-
-### Incompatible changes
-
-If your changes are incompatible with the previous branch's API, then increment
-[`MINOR`](lib/metasploit_data_models/version.rb) and reset [`PATCH`](lib/metasploit_data_models/version.rb) to `0`.
-
-- [ ] Following the rules for [semantic versioning 2.0](http://semver.org/spec/v2.0.0.html), update
-[`MINOR`](lib/metasploit_data_models/version.rb) and [`PATCH`](lib/metasploit_data_models/version.rb) and commit the changes.
-
-## JRuby
-- [ ] `rvm use jruby@metasploit_data_models`
-- [ ] `rm Gemfile.lock`
-- [ ] `bundle install`
-- [ ] `rake release`
-
-## MRI Ruby
-- [ ] `rvm use ruby-2.1@metasploit_data_models`
-- [ ] `rm Gemfile.lock`
-- [ ] `bundle install`
-- [ ] `rake release`
-```
-
-### Downstream dependencies
-
-When releasing new versions, the following projects may need to be updated:
-
-* [metasploit-credential](https://github.com/rapid7/metasploit-credential)
-* [metasploit-framework](https://github.com/rapid7/metasploit-framework)
-* [metasploit-pro-ui](https://github.com/rapid7/pro/tree/master/ui)
-* [metasploit-pro-engine](https://github.com/rapid7/pro/tree/master/engine)
+To update the [CHANGELOG.md](CHANGELOG.md) with the merged changes or release the merged code see
+[RELEASING.md](RELEASING.md)

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mdm::Module::Detail do
+RSpec.describe Mdm::Module::Detail, type: :model do
   subject(:detail) do
     FactoryGirl.build(
         :mdm_module_detail,
@@ -50,13 +48,13 @@ describe Mdm::Module::Detail do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { should have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
-    it { should have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
-    it { should have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
-    it { should have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
-    it { should have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
-    it { should have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
-    it { should have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
+    it { is_expected.to have_many(:actions).class_name('Mdm::Module::Action').dependent(:destroy) }
+    it { is_expected.to have_many(:archs).class_name('Mdm::Module::Arch').dependent(:destroy) }
+    it { is_expected.to have_many(:authors).class_name('Mdm::Module::Author').dependent(:destroy) }
+    it { is_expected.to have_many(:mixins).class_name('Mdm::Module::Mixin').dependent(:destroy) }
+    it { is_expected.to have_many(:platforms).class_name('Mdm::Module::Platform').dependent(:destroy) }
+    it { is_expected.to have_many(:refs).class_name('Mdm::Module::Ref').dependent(:destroy) }
+    it { is_expected.to have_many(:targets).class_name('Mdm::Module::Target').dependent(:destroy) }
   end
 
   context 'CONSTANTS' do
@@ -65,12 +63,29 @@ describe Mdm::Module::Detail do
         described_class::DIRECTORY_BY_TYPE
       end
 
-      its(['auxiliary']) { should == 'auxiliary' }
-      its(['encoder']) { should == 'encoders' }
-      its(['exploit']) { should == 'exploits' }
-      its(['nop']) { should == 'nops' }
-      its(['payload']) { should == 'payloads' }
-      its(['post']) { should == 'post' }
+      it "maps 'auxiliary' to 'auxiliary'" do
+        expect(directory_by_type['auxiliary']).to eq('auxiliary')
+      end
+      
+      it "maps 'encoder' to 'encoders'" do
+        expect(directory_by_type['encoder']).to eq('encoders')
+      end
+      
+      it "maps 'exploit' to 'exploits'" do
+        expect(directory_by_type['exploit']).to eq('exploits')
+      end
+      
+      it "maps 'nop' to 'nops'" do
+        expect(directory_by_type['nop']).to eq('nops')
+      end
+      
+      it "maps 'payload' to 'payloads'" do
+        expect(directory_by_type['payload']).to eq('payloads')
+      end
+      
+      it "maps 'post' to 'post'" do
+        expect(directory_by_type['post']).to eq('post')
+      end
     end
 
     context 'PRIVILEGES' do
@@ -79,8 +94,8 @@ describe Mdm::Module::Detail do
       end
 
       it 'should contain both Boolean values' do
-        privileges.should include(false)
-        privileges.should include(true)
+        expect(privileges).to include(false)
+        expect(privileges).to include(true)
       end
     end
 
@@ -89,13 +104,33 @@ describe Mdm::Module::Detail do
         described_class::RANK_BY_NAME
       end
 
-      its(['Manual']) { should == 0 }
-      its(['Low']) { should == 100 }
-      its(['Average']) { should == 200 }
-      its(['Normal']) { should == 300 }
-      its(['Good']) { should == 400 }
-      its(['Great']) { should == 500 }
-      its(['Excellent']) { should == 600 }
+      it "maps 'Manual' to 0" do
+        expect(rank_by_name['Manual']).to eq(0)
+      end
+
+      it "maps 'Low' to 100" do
+        expect(rank_by_name['Low']).to eq(100)
+      end
+
+      it "maps 'Average' to 200" do
+        expect(rank_by_name['Average']).to eq(200)
+      end
+
+      it "maps 'Normal' to 300" do
+        expect(rank_by_name['Normal']).to eq(300)
+      end
+
+      it "maps 'Good' to 400" do
+        expect(rank_by_name['Good']).to eq(400)
+      end
+
+      it "maps 'Great' to 500" do
+        expect(rank_by_name['Great']).to eq(500)
+      end
+
+      it "maps 'Excellent' to 600" do
+        expect(rank_by_name['Excellent']).to eq(600)
+      end
     end
 
     context 'STANCES' do
@@ -103,34 +138,34 @@ describe Mdm::Module::Detail do
         described_class::STANCES
       end
 
-      it { should include('aggressive') }
-      it { should include('passive') }
+      it { is_expected.to include('aggressive') }
+      it { is_expected.to include('passive') }
     end
   end
 
   context 'database' do
     context 'columns' do
-      it { should have_db_column(:default_target).of_type(:integer) }
-      it { should have_db_column(:description).of_type(:text) }
-      it { should have_db_column(:disclosure_date).of_type(:datetime)}
-      it { should have_db_column(:file).of_type(:text) }
-      it { should have_db_column(:fullname).of_type(:text) }
-      it { should have_db_column(:license).of_type(:string) }
-      it { should have_db_column(:mtime).of_type(:datetime) }
-      it { should have_db_column(:mtype).of_type(:string) }
-      it { should have_db_column(:name).of_type(:text) }
-      it { should have_db_column(:privileged).of_type(:boolean) }
-      it { should have_db_column(:rank).of_type(:integer) }
-      it { should have_db_column(:ready).of_type(:boolean) }
-      it { should have_db_column(:refname).of_type(:text) }
-      it { should have_db_column(:stance).of_type(:string).with_options(:null => true) }
+      it { is_expected.to have_db_column(:default_target).of_type(:integer) }
+      it { is_expected.to have_db_column(:description).of_type(:text) }
+      it { is_expected.to have_db_column(:disclosure_date).of_type(:datetime)}
+      it { is_expected.to have_db_column(:file).of_type(:text) }
+      it { is_expected.to have_db_column(:fullname).of_type(:text) }
+      it { is_expected.to have_db_column(:license).of_type(:string) }
+      it { is_expected.to have_db_column(:mtime).of_type(:datetime) }
+      it { is_expected.to have_db_column(:mtype).of_type(:string) }
+      it { is_expected.to have_db_column(:name).of_type(:text) }
+      it { is_expected.to have_db_column(:privileged).of_type(:boolean) }
+      it { is_expected.to have_db_column(:rank).of_type(:integer) }
+      it { is_expected.to have_db_column(:ready).of_type(:boolean) }
+      it { is_expected.to have_db_column(:refname).of_type(:text) }
+      it { is_expected.to have_db_column(:stance).of_type(:string).with_options(:null => true) }
     end
 
     context 'indices' do
-      it { should have_db_index(:description) }
-      it { should have_db_index(:mtype) }
-      it { should have_db_index(:name) }
-      it { should have_db_index(:refname) }
+      it { is_expected.to have_db_index(:description) }
+      it { is_expected.to have_db_index(:mtype) }
+      it { is_expected.to have_db_index(:name) }
+      it { is_expected.to have_db_index(:refname) }
     end
   end
 
@@ -140,7 +175,7 @@ describe Mdm::Module::Detail do
         FactoryGirl.build(:mdm_module_detail)
       end
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       context 'stance' do
         subject(:mdm_module_detail) do
@@ -152,10 +187,23 @@ describe Mdm::Module::Detail do
             'exploit'
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
-          its(:stance) { should_not be_nil }
-          its(:supports_stance?) { should be_true }
+          context '#stance' do
+            subject(:stance) {
+              mdm_module_detail.stance
+            }
+
+            it { is_expected.not_to be_nil }
+          end
+
+          context '#supports_stance?' do
+            subject(:supports_stance?) {
+              mdm_module_detail.supports_stance?
+            }
+
+            it { is_expected.to eq(true) }
+          end
         end
 
         context 'without supports_stance?' do
@@ -163,27 +211,43 @@ describe Mdm::Module::Detail do
             'post'
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
-          its(:stance) { should be_nil }
-          its(:supports_stance?) { should be_false }
+          context '#stance' do
+            subject(:stance) {
+              mdm_module_detail.stance
+            }
+
+            it { is_expected.to be_nil }
+          end
+
+          context '#supports_stance?' do
+            subject(:supports_stance?) {
+              mdm_module_detail.supports_stance?
+            }
+
+            it { is_expected.to eq(false) }
+          end
         end
       end
     end
   end
 
   context 'validations' do
-    it { should validate_inclusion_of(:mtype).in_array(types) }
+    it { is_expected.to validate_inclusion_of(:mtype).in_array(types) }
 
     # Because the boolean field will cast most strings to false,
     # validate_inclusion_of(:privileged).in_array([true, false]) will fail on the disallowed values check.
 
     context 'rank' do
-      it { should validate_numericality_of(:rank).only_integer }
-      it { should validate_inclusion_of(:rank).in_array(ranks) }
+      it 'validates rank is only an integer' do
+        is_expected.to validate_numericality_of(:rank).only_integer
+      end
+
+      it { is_expected.to validate_inclusion_of(:rank).in_array(ranks) }
     end
 
-    it { should validate_presence_of(:refname) }
+    it { is_expected.to validate_presence_of(:refname) }
 
     context 'stance' do
       context 'mtype' do
@@ -199,7 +263,7 @@ describe Mdm::Module::Detail do
   end
 
   context 'with saved' do
-    before(:each) do
+    before(:example) do
       detail.save!
     end
 
@@ -225,9 +289,13 @@ describe Mdm::Module::Detail do
           detail.actions.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
-        its(:name) { should == name }
+        context '#name' do
+          it 'is name passed to add_action' do
+            expect(module_action.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -253,9 +321,13 @@ describe Mdm::Module::Detail do
           detail.archs.last
         end
 
-        it { should be_valid }
+        it { is_expected.to be_valid }
 
-        its(:name) { should == name }
+        context '#name' do
+          it 'is name passed to add_arch' do
+            expect(module_arch.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -286,10 +358,19 @@ describe Mdm::Module::Detail do
             detail.authors.last
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
-          its(:email) { should == email }
-          its(:name) { should == name }
+          context '#email' do
+            it 'is email passed to add_author' do
+              expect(module_author.email).to eq(email)
+            end
+          end
+
+          context '#name' do
+            it 'is name passed to add_author' do
+              expect(module_author.name).to eq(name)
+            end
+          end
         end
       end
 
@@ -311,10 +392,21 @@ describe Mdm::Module::Detail do
             detail.authors.last
           end
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
 
-          its(:email) { should be_nil }
-          its(:name) { should == name }
+          context '#email' do
+            subject(:module_author_email) {
+              module_author.email
+            }
+
+            it { is_expected.to be_nil }
+          end
+
+          context '#name' do
+            it 'is name passed to add_author' do
+              expect(module_author.name).to eq(name)
+            end
+          end
         end
       end
     end
@@ -335,14 +427,19 @@ describe Mdm::Module::Detail do
       end
 
       context 'new Mdm::ModuleMixin' do
-        subject do
+        subject(:mdm_module_mixin) do
           add_mixin
 
           detail.mixins.last
         end
 
-        it { should be_valid }
-        its(:name) { should == name }
+        it { is_expected.to be_valid }
+
+        context '#name' do
+          it 'is name passed to add_mixin' do
+            expect(mdm_module_mixin.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -368,8 +465,13 @@ describe Mdm::Module::Detail do
           detail.platforms.last
         end
 
-        it { should be_valid }
-        its(:name) { should == name }
+        it { is_expected.to be_valid }
+
+        context '#name' do
+          it 'is name passed to add_platform' do
+            expect(module_platform.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -395,8 +497,13 @@ describe Mdm::Module::Detail do
           detail.refs.last
         end
 
-        it { should be_valid }
-        its(:name) { should == name }
+        it { is_expected.to be_valid }
+
+        context '#name' do
+          it 'is name passed to add_ref' do
+            expect(module_ref.name).to eq(name)
+          end
+        end
       end
     end
 
@@ -426,8 +533,13 @@ describe Mdm::Module::Detail do
           detail.targets.last
         end
 
-        it { should be_valid }
-        its(:name) { should == name }
+        it { is_expected.to be_valid }
+
+        context '#name' do
+          it 'is name passed to add_target' do
+            expect(module_target.name).to eq(name)
+          end
+        end
       end
     end
   end

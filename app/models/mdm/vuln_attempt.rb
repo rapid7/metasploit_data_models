@@ -1,31 +1,29 @@
+# An attempt to exploit a {#vuln}.
 class Mdm::VulnAttempt < ActiveRecord::Base
   
   #
   # Associations
   #
 
-  # @!attribute loot
-  #   Loot gathered from this attempt.
+  # Loot gathered from this attempt.
   #
-  #   @return [Mdm::Loot] if {#exploited} is `true`.
-  #   @return [nil] if {#exploited} is `false`.
+  # @return [Mdm::Loot] if {#exploited} is `true`.
+  # @return [nil] if {#exploited} is `false`.
   belongs_to :loot,
              class_name: 'Mdm::Loot',
              inverse_of: :vuln_attempt
 
-  # @!attribute session
-  #   The session opened by this attempt.
+  # The session opened by this attempt.
   #
-  #   @return [Mdm::Session] if {#exploited} is `true`.
-  #   @return [nil] if {#exploited} is `false`.
+  # @return [Mdm::Session] if {#exploited} is `true`.
+  # @return [nil] if {#exploited} is `false`.
   belongs_to :session,
              class_name: 'Mdm::Session',
              inverse_of: :vuln_attempt
 
-  # @!attribute vuln
-  #   The {Mdm::Vuln vulnerability} that this attempt was exploiting.
+  # The {Mdm::Vuln vulnerability} that this attempt was exploiting.
   #
-  #   @return [Mdm::Vuln]
+  # @return [Mdm::Vuln]
   belongs_to :vuln,
              class_name: 'Mdm::Vuln',
              counter_cache: :vuln_attempt_count,
@@ -35,28 +33,38 @@ class Mdm::VulnAttempt < ActiveRecord::Base
   # Attributes
   #
 
-  # @!attribute [rw] exploited
+  # @!attribute attempted_at
+  #   When this attempt was made.
+  #
+  #   @return [DateTime]
+
+  # @!attribute exploited
   #   Whether this attempt was successful.
   #
   #   @return [true] if {#vuln} was exploited.
   #   @return [false] if {#vuln} was not exploited.
 
+  # @!attribute fail_detail
+  #   Long details about why this attempt failed.
   #
-  # Mass Assignment Security
+  #   @return [String] if {#exploited} is `false`.
+  #   @return [nil] if {#exploited} is `true`.
+
+  # @!attribute fail_reason
+  #   Short reason why this attempt failed.
   #
-  
-  # Database Columns
-  
-  attr_accessible :attempted_at, :exploited, :fail_reason, :username, :module
-                  :fail_detail
-  
-  # Foreign Keys
-  
-  attr_accessible :vuln_id, :session_id, :loot_id
-  
-  # Model Associations
-  
-  attr_accessible :loot, :session, :vuln
+  #   @return [String] if {#exploited} is `false`.
+  #   @return [nil] if {#exploited} is `true`
+
+  # @!attribute module
+  #   {Mdm::Module::Detail#fullname Full name of exploit Metasploit Module} that was used in this attempt.
+  #
+  #   @return [String]
+
+  # @!attribute username
+  #   The {Mdm::User#username name of the user} that made this attempt.
+  #
+  #   @return [String]
 
   #
   # Validations

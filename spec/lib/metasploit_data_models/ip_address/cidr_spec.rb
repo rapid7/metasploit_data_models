@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe MetasploitDataModels::IPAddress::CIDR do
+RSpec.describe MetasploitDataModels::IPAddress::CIDR, type: :model do
   subject(:including_class_instance) {
     including_class.new(
         value: formatted_value
@@ -70,7 +68,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
   # Callbacks
   #
 
-  before(:each) do
+  before(:example) do
     stub_const('IncludingClass', including_class)
   end
 
@@ -80,12 +78,12 @@ describe MetasploitDataModels::IPAddress::CIDR do
         described_class::SEPARATOR
       }
 
-      it { should == '/' }
+      it { is_expected.to eq('/') }
     end
   end
 
   context 'validation errors on' do
-    before(:each) do
+    before(:example) do
       including_class_instance.valid?
     end
 
@@ -110,7 +108,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
             true
           }
 
-          it { should_not include(invalid_error) }
+          it { is_expected.not_to include(invalid_error) }
         end
 
         context 'without valid' do
@@ -118,7 +116,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
             false
           }
 
-          it { should include(invalid_error) }
+          it { is_expected.to include(invalid_error) }
         end
       end
 
@@ -131,7 +129,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
           I18n.translate!('errors.messages.blank')
         }
 
-        it { should include(blank_error) }
+        it { is_expected.to include(blank_error) }
       end
     end
 
@@ -166,7 +164,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
         end
       }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -175,7 +173,7 @@ describe MetasploitDataModels::IPAddress::CIDR do
       including_class.match_regexp
     }
 
-    before(:each) do
+    before(:example) do
       expect(including_class).to receive(:regexp).and_return(/regexp/)
     end
 
@@ -208,8 +206,8 @@ describe MetasploitDataModels::IPAddress::CIDR do
         regexp.names
       }
 
-      it { should include 'address' }
-      it { should include 'prefix_length' }
+      it { is_expected.to include 'address' }
+      it { is_expected.to include 'prefix_length' }
     end
   end
 
@@ -222,9 +220,17 @@ describe MetasploitDataModels::IPAddress::CIDR do
       Class.new(Metasploit::Model::Base) {
         attr_accessor :value
       }.tap { |address_class|
+        outer_segment_class = self.segment_class
 
-        allow(address_class).to receive(:segment_class).and_return(segment_class)
-        allow(address_class).to receive(:segment_count).and_return(segment_count)
+        address_class.define_singleton_method(:segment_class) do
+          outer_segment_class
+        end
+
+        outer_segment_count = self.segment_count
+
+        address_class.define_singleton_method(:segment_count) do
+          outer_segment_count
+        end
       }
     }
 
