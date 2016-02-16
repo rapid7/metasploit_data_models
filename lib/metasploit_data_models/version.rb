@@ -11,7 +11,7 @@ module MetasploitDataModels
     MINOR = 0
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 0
-
+    
     PRERELEASE = 'scoped-to-all'
     #
     # Module Methods

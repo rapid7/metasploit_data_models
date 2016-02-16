@@ -1,6 +1,6 @@
 # Checks that the string matches the
 RSpec::Matchers.define :match_string_exactly do |string|
-  failure_message_for_should do |regexp|
+  failure_message do |regexp|
     match = regexp.match(string)
 
     failure_message = "expected #{regexp} to match #{string}"

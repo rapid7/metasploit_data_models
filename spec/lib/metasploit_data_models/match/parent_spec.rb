@@ -50,7 +50,7 @@ RSpec.describe MetasploitDataModels::Match::Parent do
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       stub_const('NumberChild', number_child_class)
       stub_const('NumberChild::REGEXP', /\d+/)
 
@@ -123,7 +123,7 @@ RSpec.describe MetasploitDataModels::Match::Parent do
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         including_class.match_children_named child_classes.map(&:name)
       end
 

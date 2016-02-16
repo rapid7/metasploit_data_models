@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit matching record' do |options={}|
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Relation#visit matching record' do |options={}|
   options.assert_valid_keys(:attribute, :association)
 
   attribute = options.fetch(:attribute)

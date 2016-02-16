@@ -45,7 +45,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             double('Query')
           end
 
-          before(:each) do
+          before(:example) do
             allow(query).to receive(:valid?).and_return(query)
 
             visitor.valid?
