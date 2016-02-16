@@ -181,7 +181,7 @@ class Mdm::Vuln < ActiveRecord::Base
       )
     ).includes(
       :refs, :host
-    )
+    ).references(:refs,:host)
   }
 
   #
