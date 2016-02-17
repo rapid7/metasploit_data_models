@@ -12,7 +12,7 @@ module MetasploitDataModels
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 11
 
-    PRERELEASE = 'change-scoped-to-all'
+    PRERELEASE = 'rails-upgrade'
     #
     # Module Methods
     #
