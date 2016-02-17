@@ -12,7 +12,7 @@ module MetasploitDataModels
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 0
 
-    PRERELEASE = "Relation-all-deprecation"
+    PRERELEASE = "hash-scope"
     #
     # Module Methods
     #
