@@ -498,9 +498,7 @@ class Mdm::Host < ActiveRecord::Base
           parameters = [formatted_parameter] * SEARCH_FIELDS.length
           conditions = [disjunction] + parameters
 
-          {
-              :conditions => conditions
-          }
+          where(*conditions)
         }
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags).references(:tags) }
