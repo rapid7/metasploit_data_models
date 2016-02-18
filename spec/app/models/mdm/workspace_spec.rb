@@ -202,8 +202,8 @@ RSpec.describe Mdm::Workspace, type: :model do
         end
       end
 
-      it 'should be an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        is_expected.to be_a ActiveRecord::Relation
+      it 'should be an ActiveRecord::Relation' do
+        expect(workspace.creds).to be_a ActiveRecord::Relation
       end
 
       it 'should include services' do
@@ -306,7 +306,7 @@ RSpec.describe Mdm::Workspace, type: :model do
     end
 
     context '#host_tags' do
-      subject(:host_tags) do
+      let(:host_tags) do
         workspace.host_tags
       end
 
@@ -356,8 +356,8 @@ RSpec.describe Mdm::Workspace, type: :model do
         host_tags
       end
 
-      it 'should return an ActiveRecord::Relation', :pending => 'https://www.pivotaltracker.com/story/show/43219917' do
-        is_expected.to be_a ActiveRecord::Relation
+      it 'should return an ActiveRecord::Relation' do
+        expect(workspace.host_tags).to be_a ActiveRecord::Relation
       end
 
       it 'should return only Mdm::Tags from hosts in the workspace' do

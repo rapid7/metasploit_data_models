@@ -6,11 +6,11 @@ module MetasploitDataModels
     #
 
     # The major version number.
-    MAJOR = 1
+    MAJOR = 2
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 2
+    MINOR = 0
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 11
+    PATCH = 0
 
     PRERELEASE = 'rails-upgrade'
     #
