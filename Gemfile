@@ -7,6 +7,9 @@ group :development do
   gem 'metasploit-erd', '~> 1.0'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
   gem 'yard-metasploit-erd', '~> 1.0'
+
+  # rails-upgrade staging gems
+  gem 'metasploit-concern', git: 'https://github.com/rapid7/metasploit-concern', branch: 'staging/rails-upgrade'
 end
 
 # used by dummy application
