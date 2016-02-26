@@ -37,7 +37,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
       # Callbacks
       #
 
-      before(:each) do
+      before(:example) do
         port_list_operator.attribute = value
       end
 
@@ -143,7 +143,7 @@ RSpec.describe MetasploitDataModels::Search::Operator::Port::List, type: :model 
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       port_list_operator.attribute = attribute
     end
 

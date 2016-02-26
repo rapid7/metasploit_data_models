@@ -301,11 +301,11 @@ class Mdm::Host < ActiveRecord::Base
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
-  has_many :module_details,
+  has_many :module_details, -> { uniq } ,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,
-           :through => :module_refs,
-           :uniq => true
+           :through => :module_refs
+
 
   #
   # Attributes
@@ -498,9 +498,7 @@ class Mdm::Host < ActiveRecord::Base
           parameters = [formatted_parameter] * SEARCH_FIELDS.length
           conditions = [disjunction] + parameters
 
-          {
-              :conditions => conditions
-          }
+          where(*conditions)
         }
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags) }

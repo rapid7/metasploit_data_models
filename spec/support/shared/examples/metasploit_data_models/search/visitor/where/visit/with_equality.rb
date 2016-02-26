@@ -1,4 +1,4 @@
-shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equality operation' do
+RSpec.shared_examples_for 'MetasploitDataModels::Search::Visitor::Where#visit with equality operation' do
   let(:node) do
     node_class.new(
         :operator => operator,

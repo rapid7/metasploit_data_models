@@ -30,7 +30,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
     # Callbacks
     #
 
-    before(:each) do
+    before(:example) do
       range.valid?
     end
 

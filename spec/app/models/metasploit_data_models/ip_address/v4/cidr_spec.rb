@@ -44,7 +44,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
       it { is_expected.not_to be_valid }
 
       context 'errors' do
-        before(:each) do
+        before(:example) do
           cidr.valid?
         end
 
@@ -86,7 +86,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::CIDR, type: :model do
       it { is_expected.not_to be_valid }
 
       context 'errors' do
-        before(:each) do
+        before(:example) do
           cidr.valid?
         end
 

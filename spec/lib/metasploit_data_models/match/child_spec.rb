@@ -16,7 +16,7 @@ RSpec.describe MetasploitDataModels::Match::Child do
     }
   }
 
-  before(:each) do
+  before(:example) do
     stub_const('ExtendingClass', extending_class)
     stub_const('ExtendingClass::REGEXP', /\d+-\d+/)
   end
