@@ -11,8 +11,6 @@ module MetasploitDataModels
     MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
     PATCH = 11
-    # Remove on master
-    PRERELEASE = 'zip-export-web-scan-cookies'
 
     #
     # Module Methods
