@@ -6,13 +6,14 @@ module MetasploitDataModels
     #
 
     # The major version number.
-    MAJOR = 2
+    MAJOR = 1
     # The minor version number, scoped to the {MAJOR} version number.
-    MINOR = 0
+    MINOR = 2
     # The patch version number, scoped to the {MAJOR} and {MINOR} version numbers.
-    PATCH = 0
+    PATCH = 11
+    # Remove on master
+    PRERELEASE = 'zip-export-web-scan-cookies'
 
-    PRERELEASE = "hash-scope"
     #
     # Module Methods
     #

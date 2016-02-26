@@ -2,6 +2,8 @@
 # Core
 #
 require 'shellwords'
+# So that Mdm::WebPage#cookie can support serializing a WEBrick::Cookie
+require 'webrick'
 
 #
 # Gems

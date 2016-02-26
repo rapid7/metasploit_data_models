@@ -5,6 +5,53 @@ RSpec.describe Mdm::WebPage, type: :model do
     it { is_expected.to belong_to(:web_site).class_name('Mdm::WebSite') }
   end
 
+  context 'serialized attributes' do
+    context 'cookie' do
+      let(:web_page) { FactoryGirl.create(:mdm_web_page, cookie: cookie) }
+
+      context 'with string cookie' do
+        let(:cookie) { "test_name=test_value" }
+
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns a string' do
+          expect(web_page.cookie).to be_a String
+        end
+      end
+
+      context 'with Hash cookie' do
+        let(:cookie) do
+          {
+            name: 'test name',
+            value: 'test value'
+          }
+        end
+
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns a hash' do
+          expect(web_page.cookie).to be_a Hash
+        end
+      end
+
+      context 'with WEBrick::Cookie' do
+        let(:cookie) { WEBrick::Cookie.new('test name', 'test value') }
+
+        it 'persists successfully' do
+          expect{web_page}.to change{Mdm::WebPage.count}.by(1)
+        end
+
+        it 'reading cookie returns as WEBrick::Cookie object' do
+          expect(web_page.cookie).to be_a WEBrick::Cookie
+        end
+      end
+    end
+  end
+
   context 'database' do
 
     context 'timestamps'do
