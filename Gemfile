@@ -3,13 +3,17 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-group :development do
-  gem 'metasploit-erd', '~> 1.0'
-  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd', '~> 1.0'
+# gem 'metasploit-yard', github: 'rapid7/metasploit-yard',      branch: 'staging/rails-upgrade'
+# gem 'metasploit-erd',  github: 'rapid7/metasploit-erd',       branch: 'staging/rails-upgrade'
+# gem 'metasploit-erd',  github: 'rapid7/yard-metasploit-erd',  branch: 'staging/rails-upgrade'
+# gem 'metasploit-erd',  github: 'rapid7/metasploit-concern',   branch: 'staging/rails-upgrade'
+# gem 'metasploit-erd',  github: 'rapid7/metasploit-model',     branch: 'staging/rails-upgrade'
 
-  # rails-upgrade staging gems
-  gem 'metasploit-concern', git: 'https://github.com/rapid7/metasploit-concern', branch: 'staging/rails-upgrade'
+
+group :development do
+  gem 'metasploit-erd'
+  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  gem 'yard-metasploit-erd'
 end
 
 # used by dummy application
