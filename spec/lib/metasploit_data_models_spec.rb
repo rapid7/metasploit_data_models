@@ -1,4 +1,13 @@
 RSpec.describe MetasploitDataModels do
-  it_should_behave_like 'Metasploit::Version GEM_VERSION constant'
-  it_should_behave_like 'Metasploit::Version VERSION constant'
+  context 'CONSTANTS' do
+    context 'VERSION' do
+      subject(:version) {
+        described_class::VERSION
+      }
+
+      it 'is Metasploit::ERD::Version.full' do
+        expect(version).to eq(MetasploitDataModels::VERSION)
+      end
+    end
+  end
 end
