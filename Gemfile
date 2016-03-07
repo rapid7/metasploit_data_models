@@ -3,17 +3,17 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-# gem 'metasploit-yard', github: 'rapid7/metasploit-yard',      branch: 'staging/rails-upgrade'
-# gem 'metasploit-erd',  github: 'rapid7/metasploit-erd',       branch: 'staging/rails-upgrade'
-# gem 'metasploit-erd',  github: 'rapid7/yard-metasploit-erd',  branch: 'staging/rails-upgrade'
-# gem 'metasploit-erd',  github: 'rapid7/metasploit-concern',   branch: 'staging/rails-upgrade'
-# gem 'metasploit-erd',  github: 'rapid7/metasploit-model',     branch: 'staging/rails-upgrade'
 
+gem 'metasploit-yard',        github: 'rapid7/metasploit-yard',        branch: 'staging/rails-upgrade'
+gem 'metasploit-erd',         github: 'rapid7/metasploit-erd',         branch: 'staging/rails-upgrade'
+gem 'yard-metasploit-erd',    github: 'rapid7/yard-metasploit-erd',    branch: 'staging/rails-upgrade'
+gem 'metasploit-concern',     github: 'rapid7/metasploit-concern',     branch: 'staging/rails-upgrade'
+gem 'metasploit-model',       github: 'rapid7/metasploit-model',       branch: 'staging/rails-upgrade'
 
 group :development do
-  gem 'metasploit-erd'
+  #gem 'metasploit-erd'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  gem 'yard-metasploit-erd'
+  #gem 'yard-metasploit-erd'
 end
 
 # used by dummy application
@@ -27,8 +27,8 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   rails_version_constraint = [
-      '>= 4.0.9',
-      '< 4.1.0'
+      '>= 4.1',
+      '< 4.2'
   ]
   gem 'rails', *rails_version_constraint
   # Used to create fake data
