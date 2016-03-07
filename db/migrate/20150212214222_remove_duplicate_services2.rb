@@ -1,11 +1,16 @@
 class RemoveDuplicateServices2 < ActiveRecord::Migration
   def change
-    duplicate_keys = Mdm::Service.count(group: [:host_id, :port, :proto]).select { |k,v| v >1 }.keys
-    duplicate_keys.each do |keys|
-      duplicate_services = Mdm::Service.where(host_id: keys[0], port: keys[1], proto: keys[2]).order(:created_at)
-      duplicate_services.pop
-      duplicate_services.each(&:destroy)
-    end
+    select_mgr = Mdm::Service.arel_table.project(
+      Mdm::Service[:host_id],
+      Mdm::Service[:proto],
+      Mdm::Service[:port].count
+    ).group(
+      'host_id',
+      'port',
+      'proto'
+    ).having(Mdm::Service[:port].count.gt(1))
+
+    Mdm::Service.find_by_sql(select_mgr).each(&:destroy)
 
     add_index :services, [:host_id, :port, :proto], unique: true
   end
