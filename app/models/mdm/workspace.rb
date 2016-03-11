@@ -295,7 +295,7 @@ class Mdm::Workspace < ActiveRecord::Base
   def web_unique_forms(addrs=nil)
     forms = unique_web_forms
     if addrs
-      forms.reject!{|f| not addrs.include?( f.web_site.service.host.address.to_s ) }
+      forms.to_a.reject!{|f| not addrs.include?( f.web_site.service.host.address.to_s ) }
     end
     forms
   end
