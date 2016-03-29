@@ -129,40 +129,10 @@ class Mdm::Workspace < ActiveRecord::Base
 
   validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 255}
   validates :description, :length => {:maximum => 4096}
-  validate :boundary_must_be_ip_range
 
   #
   # Instance Methods
   #
-
-  # If {#limit_to_network} is disabled, this will always return `true`. Otherwise, return `true` only if all of the
-  # given IPs are within the project {#boundary boundaries}.
-  #
-  # @param ips [String] IP range(s)
-  # @return [true] if actions on ips are allowed.
-  # @return [false] if actions are not allowed on ips.
-  def allow_actions_on?(ips)
-    return true unless limit_to_network
-    return true unless boundary
-    return true if boundary.empty?
-    boundaries = Shellwords.split(boundary)
-    return true if boundaries.empty? # It's okay if there is no boundary range after all
-    given_range = Rex::Socket::RangeWalker.new(ips)
-    return false unless given_range # Can't do things to nonexistant IPs
-    allowed = false
-    boundaries.each do |boundary_range|
-      ok_range = Rex::Socket::RangeWalker.new(boundary)
-      allowed  = true if ok_range.include_range? given_range
-    end
-    return allowed
-  end
-
-  # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or IP address range}.
-  #
-  # @return [void]
-  def boundary_must_be_ip_range
-    errors.add(:boundary, "must be a valid IP range") unless valid_ip_or_range?(boundary)
-  end
 
   # @deprecated Use `Mdm::Workspace#credential_cores` when `Metasploit::Credential::Engine` is installed to get
   #    `Metasploit::Credential::Core`s.  Use `Mdm::Service#logins` when `Metasploit::Credential::Engine` is installed to
@@ -265,7 +235,6 @@ class Mdm::Workspace < ActiveRecord::Base
       Mdm::Service.join_association(:host),
       Mdm::Host.join_association(:workspace)
     ).where(Mdm::Workspace[:id].eq(id)).uniq
-    
   end
 
   # Web vulnerability found on {#web_sites}.
@@ -307,18 +276,6 @@ class Mdm::Workspace < ActiveRecord::Base
   # @return [void]
   def normalize
     boundary.strip! if boundary
-  end
-
-  # Returns whether `string` is a valid IP address or IP address range.
-  #
-  # @return [true] if valid IP address or IP address range.
-  # @return [false] otherwise.
-  def valid_ip_or_range?(string)
-    begin
-      Rex::Socket::RangeWalker.new(string)
-    rescue
-      return false
-    end
   end
 
   public

@@ -85,58 +85,6 @@ RSpec.describe Mdm::Workspace, type: :model do
   end
 
   context 'validations' do
-    context 'boundary' do
-      let(:boundary) do
-        nil
-      end
-
-      let(:error) do
-        'must be a valid IP range'
-      end
-
-      before(:example) do
-        workspace.boundary = boundary
-        workspace.valid?
-      end
-
-      it 'should validate using #valid_ip_or_range?' do
-        expect(workspace).to receive(:valid_ip_or_range?).with(boundary).and_return(false)
-
-        workspace.valid?
-      end
-
-      context 'with valid IP' do
-        let(:boundary) do
-          '192.168.0.1'
-        end
-
-        it 'should not record an error' do
-          expect(workspace.errors[:boundary]).not_to include(error)
-        end
-      end
-
-      context 'with valid range' do
-        let(:boundary) do
-          '192.168.0.1/24'
-        end
-
-        it 'should not record an error' do
-          expect(workspace.errors[:boundary]).not_to include(error)
-        end
-      end
-
-      context 'with invalid IP or range' do
-        let(:boundary) do
-          '192.168'
-        end
-
-        it 'should record error that boundary must be a valid IP range', :pending => 'https://www.pivotaltracker.com/story/show/43171927' do
-          expect(workspace).not_to be_valid
-          expect(workkspace.errors[:boundary]).to include(error)
-        end
-      end
-    end
-
     context 'description' do
       it { is_expected.to validate_length_of(:description).is_at_most(4 * (2 ** 10)) }
     end
@@ -549,5 +497,4 @@ RSpec.describe Mdm::Workspace, type: :model do
       end
     end
   end
-
 end
