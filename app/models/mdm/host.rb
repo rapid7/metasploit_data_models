@@ -571,6 +571,7 @@ class Mdm::Host < ActiveRecord::Base
     !!self.virtual_host
   end
 
+
   private
 
   def normalize_arch
