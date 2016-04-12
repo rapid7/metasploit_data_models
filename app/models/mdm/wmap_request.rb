@@ -84,18 +84,7 @@ class Mdm::WmapRequest < ActiveRecord::Base
   # @!endgroup
   #
 
-  #
-  # Instance Methods
-  #
 
-  # @note Necessary to avoid coercion to an `IPAddr` object.
-  #
-  # The IP address for this request.
-  #
-  # @return [String]
-  def address
-    self[:address].to_s
-  end
 
   Metasploit::Concern.run(self)
 end

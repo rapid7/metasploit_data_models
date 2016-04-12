@@ -30,10 +30,10 @@ Gem::Specification.new do |s|
 
   # ---- Dependencies ----
   # documentation
-  s.add_development_dependency 'metasploit-yard', '~> 1.1'
-  s.add_development_dependency 'yard-activerecord', '~> 0.0.14'
+  #s.add_development_dependency 'metasploit-yard'#, '~> 1.1'
+  #s.add_development_dependency 'yard-activerecord'#, '~> 0.0.14'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  s.add_development_dependency 'yard-metasploit-erd', '~> 1.1'
+  #s.add_development_dependency 'yard-metasploit-erd'#, '~> 1.1'
 
   s.add_development_dependency 'rake'
 
@@ -43,13 +43,12 @@ Gem::Specification.new do |s|
   # debugging
   s.add_development_dependency 'pry'
 
-  rails_version_constraints = ['>= 4.0.9', '< 4.1.0']
 
-  s.add_runtime_dependency 'activerecord', *rails_version_constraints
-  s.add_runtime_dependency 'activesupport', *rails_version_constraints
-  s.add_runtime_dependency 'metasploit-concern', '~> 1.1'
-  s.add_runtime_dependency 'metasploit-model', '~> 1.1'
-  s.add_runtime_dependency 'railties', *rails_version_constraints
+  s.add_runtime_dependency 'activerecord', '~>4.1.15'
+  s.add_runtime_dependency 'activesupport', '~>4.1.15'
+  s.add_runtime_dependency 'metasploit-concern' #, '~> 1.1'
+  s.add_runtime_dependency 'metasploit-model' #, '~> 1.1'
+  s.add_runtime_dependency 'railties', '~>4.1.15'
 
   # os fingerprinting
   s.add_runtime_dependency 'recog', '~> 2.0'

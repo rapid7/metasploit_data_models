@@ -117,11 +117,6 @@ RSpec.configure do |config|
 
   config.use_transactional_fixtures = true
 
-  config.before(:example) do
-    # Rex is only available when testing with metasploit-framework or pro, so stub out the methods that require it
-    allow_any_instance_of(Mdm::Workspace).to receive(:valid_ip_or_range?).and_return(true)
-  end
-
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.

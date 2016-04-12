@@ -61,17 +61,6 @@ class Mdm::Host < ActiveRecord::Base
       'unknown'
   ]
 
-  #
-  # Aggregations
-  #
-
-  # @!attribute [rw] address
-  #   The IP address of this host. Necessary to avoid coercion to an `IPAddr` object.
-  #
-  #   @return [String]
-  def address
-    self[:address].to_s
-  end
 
   #
   # Associations
@@ -581,6 +570,7 @@ class Mdm::Host < ActiveRecord::Base
   def is_vm?
     !!self.virtual_host
   end
+
 
   private
 

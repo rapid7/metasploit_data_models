@@ -25,3 +25,5 @@ Gemfile.lock
 pkg/*
 # Database configuration (with passwords) for specs
 spec/dummy/config/database.yml
+# Secrets
+spec/dummy/config/secrets.yml
