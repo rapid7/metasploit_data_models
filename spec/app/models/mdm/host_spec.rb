@@ -408,7 +408,7 @@ RSpec.describe Mdm::Host, type: :model do
         let(:arch) { "asdfasdf" }
         it 'should normalize to Unknown' do
           expect(host).to be_valid
-          expect(host.arch).to be described_class::UNKNOWN_ARCHITECTURE
+          expect(host.arch).to eq described_class::UNKNOWN_ARCHITECTURE
         end
       end
       described_class::ARCHITECTURES.each do |arch|

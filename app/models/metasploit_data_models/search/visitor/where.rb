@@ -118,7 +118,7 @@ class MetasploitDataModels::Search::Visitor::Where
   #
   # @return [Arel::Nodes::NamedFunction]
   def cast_to_inet(string)
-    cast_argument = Arel::Nodes::As.new(string, Arel::Nodes::SqlLiteral.new('INET'))
+    cast_argument = Arel::Nodes::As.new(Arel::Nodes.build_quoted(string), Arel::Nodes::SqlLiteral.new('INET'))
     Arel::Nodes::NamedFunction.new('CAST', [cast_argument])
   end
 
