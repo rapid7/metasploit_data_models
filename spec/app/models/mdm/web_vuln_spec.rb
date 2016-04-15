@@ -65,7 +65,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
       it { is_expected.to have_db_column(:method).of_type(:string).with_options(:limit => 1024, :null => false) }
       it { is_expected.to have_db_column(:name).of_type(:string).with_options(:limit => 1024, :null => false) }
       it { is_expected.to have_db_column(:owner).of_type(:string) }
-      it { is_expected.to have_db_column(:params).of_type(:text).with_options(:null => false) }
+      it { is_expected.to have_db_column(:params).of_type(:text) }
       it { is_expected.to have_db_column(:path).of_type(:text).with_options(:null => false) }
       it { is_expected.to have_db_column(:payload).of_type(:text) }
       it { is_expected.to have_db_column(:pname).of_type(:text) }

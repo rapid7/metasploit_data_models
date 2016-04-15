@@ -1836,7 +1836,7 @@ CREATE TABLE web_vulns (
     updated_at timestamp without time zone NOT NULL,
     path text NOT NULL,
     method character varying(1024) NOT NULL,
-    params text NOT NULL,
+    params text,
     pname text,
     risk integer NOT NULL,
     name character varying(1024) NOT NULL,
@@ -3392,6 +3392,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150421211719');
 
 INSERT INTO schema_migrations (version) VALUES ('20150514182921');
 
+INSERT INTO schema_migrations (version) VALUES ('20160415153312');
+
 INSERT INTO schema_migrations (version) VALUES ('21');
 
 INSERT INTO schema_migrations (version) VALUES ('22');
@@ -3417,3 +3419,4 @@ INSERT INTO schema_migrations (version) VALUES ('7');
 INSERT INTO schema_migrations (version) VALUES ('8');
 
 INSERT INTO schema_migrations (version) VALUES ('9');
+
