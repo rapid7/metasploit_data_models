@@ -680,7 +680,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
             context 'with CIDR' do
               let(:formatted_address) {
-                '1.3.4.5/8'
+                "'1.3.4.5/8'"
               }
 
               it 'should find only matching record' do

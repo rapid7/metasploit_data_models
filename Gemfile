@@ -29,7 +29,7 @@ group :development, :test do
   gem 'factory_girl_rails'
 
 
-  gem 'rails', '~>4.1.15'
+  gem 'rails', '~>4.2.6'
   # Used to create fake data
   gem "faker"
 end
