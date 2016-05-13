@@ -68,7 +68,7 @@ CREATE TABLE automatic_exploitation_match_results (
     id integer NOT NULL,
     match_id integer,
     run_id integer,
-    state character varying(255) NOT NULL,
+    state character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -132,12 +132,12 @@ ALTER SEQUENCE automatic_exploitation_match_sets_id_seq OWNED BY automatic_explo
 CREATE TABLE automatic_exploitation_matches (
     id integer NOT NULL,
     module_detail_id integer,
-    state character varying(255),
+    state character varying,
     nexpose_data_vulnerability_definition_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     match_set_id integer,
-    matchable_type character varying(255),
+    matchable_type character varying,
     matchable_id integer,
     module_fullname text
 );
@@ -244,7 +244,7 @@ CREATE TABLE creds (
     proof character varying(4096),
     ptype character varying(256),
     source_id integer,
-    source_type character varying(255)
+    source_type character varying
 );
 
 
@@ -276,11 +276,11 @@ CREATE TABLE events (
     workspace_id integer,
     host_id integer,
     created_at timestamp without time zone,
-    name character varying(255),
+    name character varying,
     updated_at timestamp without time zone,
     critical boolean,
     seen boolean,
-    username character varying(255),
+    username character varying,
     info text
 );
 
@@ -315,13 +315,13 @@ CREATE TABLE exploit_attempts (
     vuln_id integer,
     attempted_at timestamp without time zone,
     exploited boolean,
-    fail_reason character varying(255),
-    username character varying(255),
+    fail_reason character varying,
+    username character varying,
     module text,
     session_id integer,
     loot_id integer,
     port integer,
-    proto character varying(255),
+    proto character varying,
     fail_detail text
 );
 
@@ -389,10 +389,10 @@ CREATE TABLE host_details (
     host_id integer,
     nx_console_id integer,
     nx_device_id integer,
-    src character varying(255),
-    nx_site_name character varying(255),
-    nx_site_importance character varying(255),
-    nx_scan_template character varying(255),
+    src character varying,
+    nx_site_name character varying,
+    nx_site_importance character varying,
+    nx_scan_template character varying,
     nx_risk_score double precision
 );
 
@@ -424,15 +424,15 @@ CREATE TABLE hosts (
     id integer NOT NULL,
     created_at timestamp without time zone,
     address inet NOT NULL,
-    mac character varying(255),
-    comm character varying(255),
-    name character varying(255),
-    state character varying(255),
-    os_name character varying(255),
-    os_flavor character varying(255),
-    os_sp character varying(255),
-    os_lang character varying(255),
-    arch character varying(255),
+    mac character varying,
+    comm character varying,
+    name character varying,
+    state character varying,
+    os_name character varying,
+    os_flavor character varying,
+    os_sp character varying,
+    os_lang character varying,
+    arch character varying,
     workspace_id integer NOT NULL,
     updated_at timestamp without time zone,
     purpose text,
@@ -446,7 +446,7 @@ CREATE TABLE hosts (
     host_detail_count integer DEFAULT 0,
     exploit_attempt_count integer DEFAULT 0,
     cred_count integer DEFAULT 0,
-    detected_arch character varying(255)
+    detected_arch character varying
 );
 
 
@@ -552,7 +552,7 @@ CREATE TABLE loots (
     data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    content_type character varying(255),
+    content_type character varying,
     name text,
     info text,
     module_run_id integer
@@ -743,18 +743,18 @@ CREATE TABLE module_details (
     id integer NOT NULL,
     mtime timestamp without time zone,
     file text,
-    mtype character varying(255),
+    mtype character varying,
     refname text,
     fullname text,
     name text,
     rank integer,
     description text,
-    license character varying(255),
+    license character varying,
     privileged boolean,
     disclosure_date timestamp without time zone,
     default_target integer,
     default_action text,
-    stance character varying(255),
+    stance character varying,
     ready boolean
 );
 
@@ -876,16 +876,16 @@ CREATE TABLE module_runs (
     id integer NOT NULL,
     attempted_at timestamp without time zone,
     fail_detail text,
-    fail_reason character varying(255),
+    fail_reason character varying,
     module_fullname text,
     port integer,
-    proto character varying(255),
+    proto character varying,
     session_id integer,
-    status character varying(255),
+    status character varying,
     trackable_id integer,
-    trackable_type character varying(255),
+    trackable_type character varying,
     user_id integer,
-    username character varying(255),
+    username character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1093,7 +1093,7 @@ ALTER SEQUENCE refs_id_seq OWNED BY refs.id;
 CREATE TABLE report_templates (
     id integer NOT NULL,
     workspace_id integer DEFAULT 1 NOT NULL,
-    created_by character varying(255),
+    created_by character varying,
     path character varying(1024),
     name text,
     created_at timestamp without time zone NOT NULL,
@@ -1127,8 +1127,8 @@ ALTER SEQUENCE report_templates_id_seq OWNED BY report_templates.id;
 CREATE TABLE reports (
     id integer NOT NULL,
     workspace_id integer DEFAULT 1 NOT NULL,
-    created_by character varying(255),
-    rtype character varying(255),
+    created_by character varying,
+    rtype character varying,
     path character varying(1024),
     options text,
     created_at timestamp without time zone NOT NULL,
@@ -1165,8 +1165,8 @@ ALTER SEQUENCE reports_id_seq OWNED BY reports.id;
 CREATE TABLE routes (
     id integer NOT NULL,
     session_id integer,
-    subnet character varying(255),
-    netmask character varying(255)
+    subnet character varying,
+    netmask character varying
 );
 
 
@@ -1194,7 +1194,7 @@ ALTER SEQUENCE routes_id_seq OWNED BY routes.id;
 --
 
 CREATE TABLE schema_migrations (
-    version character varying(255) NOT NULL
+    version character varying NOT NULL
 );
 
 
@@ -1208,8 +1208,8 @@ CREATE TABLE services (
     created_at timestamp without time zone,
     port integer NOT NULL,
     proto character varying(16) NOT NULL,
-    state character varying(255),
-    name character varying(255),
+    state character varying,
+    name character varying,
     updated_at timestamp without time zone,
     info text
 );
@@ -1241,11 +1241,11 @@ ALTER SEQUENCE services_id_seq OWNED BY services.id;
 CREATE TABLE session_events (
     id integer NOT NULL,
     session_id integer,
-    etype character varying(255),
+    etype character varying,
     command bytea,
     output bytea,
-    remote_path character varying(255),
-    local_path character varying(255),
+    remote_path character varying,
+    local_path character varying,
     created_at timestamp without time zone
 );
 
@@ -1276,16 +1276,16 @@ ALTER SEQUENCE session_events_id_seq OWNED BY session_events.id;
 CREATE TABLE sessions (
     id integer NOT NULL,
     host_id integer,
-    stype character varying(255),
-    via_exploit character varying(255),
-    via_payload character varying(255),
-    "desc" character varying(255),
+    stype character varying,
+    via_exploit character varying,
+    via_payload character varying,
+    "desc" character varying,
     port integer,
-    platform character varying(255),
+    platform character varying,
     datastore text,
     opened_at timestamp without time zone NOT NULL,
     closed_at timestamp without time zone,
-    close_reason character varying(255),
+    close_reason character varying,
     local_id integer,
     last_seen timestamp without time zone,
     module_run_id integer
@@ -1482,12 +1482,12 @@ ALTER SEQUENCE task_sessions_id_seq OWNED BY task_sessions.id;
 CREATE TABLE tasks (
     id integer NOT NULL,
     workspace_id integer DEFAULT 1 NOT NULL,
-    created_by character varying(255),
-    module character varying(255),
+    created_by character varying,
+    module character varying,
     completed_at timestamp without time zone,
     path character varying(1024),
-    info character varying(255),
-    description character varying(255),
+    info character varying,
+    description character varying,
     progress integer,
     options text,
     error text,
@@ -1524,16 +1524,16 @@ ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    username character varying(255),
-    crypted_password character varying(255),
-    password_salt character varying(255),
-    persistence_token character varying(255),
+    username character varying,
+    crypted_password character varying,
+    password_salt character varying,
+    persistence_token character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    fullname character varying(255),
-    email character varying(255),
-    phone character varying(255),
-    company character varying(255),
+    fullname character varying,
+    email character varying,
+    phone character varying,
+    company character varying,
     prefs character varying(524288),
     admin boolean DEFAULT true NOT NULL
 );
@@ -1567,8 +1567,8 @@ CREATE TABLE vuln_attempts (
     vuln_id integer,
     attempted_at timestamp without time zone,
     exploited boolean,
-    fail_reason character varying(255),
-    username character varying(255),
+    fail_reason character varying,
+    username character varying,
     module text,
     session_id integer,
     loot_id integer,
@@ -1603,14 +1603,14 @@ CREATE TABLE vuln_details (
     id integer NOT NULL,
     vuln_id integer,
     cvss_score double precision,
-    cvss_vector character varying(255),
-    title character varying(255),
+    cvss_vector character varying,
+    title character varying,
     description text,
     solution text,
     proof bytea,
     nx_console_id integer,
     nx_device_id integer,
-    nx_vuln_id character varying(255),
+    nx_vuln_id character varying,
     nx_severity double precision,
     nx_pci_severity double precision,
     nx_published timestamp without time zone,
@@ -1619,10 +1619,10 @@ CREATE TABLE vuln_details (
     nx_tags text,
     nx_vuln_status text,
     nx_proof_key text,
-    src character varying(255),
+    src character varying,
     nx_scan_id integer,
     nx_vulnerable_since timestamp without time zone,
-    nx_pci_compliance_status character varying(255)
+    nx_pci_compliance_status character varying
 );
 
 
@@ -1654,14 +1654,14 @@ CREATE TABLE vulns (
     host_id integer,
     service_id integer,
     created_at timestamp without time zone,
-    name character varying(255),
+    name character varying,
     updated_at timestamp without time zone,
     info character varying(65536),
     exploited_at timestamp without time zone,
     vuln_detail_count integer DEFAULT 0,
     vuln_attempt_count integer DEFAULT 0,
     origin_id integer,
-    origin_type character varying(255)
+    origin_type character varying
 );
 
 
@@ -1847,7 +1847,7 @@ CREATE TABLE web_vulns (
     blame text,
     request bytea,
     proof bytea NOT NULL,
-    owner character varying(255),
+    owner character varying,
     payload text
 );
 
@@ -1877,7 +1877,7 @@ ALTER SEQUENCE web_vulns_id_seq OWNED BY web_vulns.id;
 
 CREATE TABLE wmap_requests (
     id integer NOT NULL,
-    host character varying(255),
+    host character varying,
     address inet,
     port integer,
     ssl integer,
@@ -1919,7 +1919,7 @@ ALTER SEQUENCE wmap_requests_id_seq OWNED BY wmap_requests.id;
 
 CREATE TABLE wmap_targets (
     id integer NOT NULL,
-    host character varying(255),
+    host character varying,
     address inet,
     port integer,
     ssl integer,
@@ -1964,7 +1964,7 @@ CREATE TABLE workspace_members (
 
 CREATE TABLE workspaces (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     boundary character varying(4096),
