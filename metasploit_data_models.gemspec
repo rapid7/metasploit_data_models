@@ -30,10 +30,10 @@ Gem::Specification.new do |s|
 
   # ---- Dependencies ----
   # documentation
-  #s.add_development_dependency 'metasploit-yard'#, '~> 1.1'
-  #s.add_development_dependency 'yard-activerecord'#, '~> 0.0.14'
+  s.add_development_dependency 'metasploit-yard'
+  s.add_development_dependency 'yard-activerecord'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
-  #s.add_development_dependency 'yard-metasploit-erd'#, '~> 1.1'
+  s.add_development_dependency 'yard-metasploit-erd'
 
   s.add_development_dependency 'rake'
 
@@ -46,8 +46,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'activerecord', '~>4.2.6'
   s.add_runtime_dependency 'activesupport', '~>4.2.6'
-  s.add_runtime_dependency 'metasploit-concern' #, '~> 1.1'
-  s.add_runtime_dependency 'metasploit-model' #, '~> 1.1'
+  s.add_runtime_dependency 'metasploit-concern'
+  s.add_runtime_dependency 'metasploit-model'
   s.add_runtime_dependency 'railties', '~>4.2.6'
 
   # os fingerprinting

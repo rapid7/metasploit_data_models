@@ -4,12 +4,6 @@ source "https://rubygems.org"
 gemspec
 
 
-gem 'metasploit-yard',        github: 'rapid7/metasploit-yard',        branch: 'staging/rails-upgrade'
-gem 'metasploit-erd',         github: 'rapid7/metasploit-erd',         branch: 'staging/rails-upgrade'
-gem 'yard-metasploit-erd',    github: 'rapid7/yard-metasploit-erd',    branch: 'staging/rails-upgrade'
-gem 'metasploit-concern',     github: 'rapid7/metasploit-concern',     branch: 'staging/rails-upgrade'
-gem 'metasploit-model',       github: 'rapid7/metasploit-model',       branch: 'staging/rails-upgrade'
-
 group :development do
   #gem 'metasploit-erd'
   # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
@@ -23,8 +17,6 @@ group :development, :test do
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryGirl.' in factory definitions syntax.
   gem 'factory_girl'
-  # running documentation generation tasks and rspec tasks
-  gem 'rake'
   # auto-load factories from spec/factories
   gem 'factory_girl_rails'
 
