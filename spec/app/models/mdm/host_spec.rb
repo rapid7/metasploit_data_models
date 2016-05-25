@@ -55,6 +55,29 @@ RSpec.describe Mdm::Host, type: :model do
     it { is_expected.to eq(0.84) }
   end
 
+  describe 'MAC address format validation' do
+    context 'when colon delimited' do
+      it 'is valid' do
+        host = FactoryGirl.build(:mdm_host, mac: '1a:2B:3c:4D:5e:6f')
+        expect(host).to be_valid
+      end
+    end
+
+    context 'when hyphen delimited' do
+      it 'is valid' do
+        host = FactoryGirl.build(:mdm_host, mac: '1a-2B-3c-4D-5e-6f')
+        expect(host).to be_valid
+      end
+    end
+
+    context 'when mixed colon-hyphen delimited ' do
+      it 'is invalid' do
+        host = FactoryGirl.build(:mdm_host, mac: '1a:2B:3c-4D:5e:6f')
+        expect(host).to be_invalid
+      end
+    end
+  end
+
   context '#destroy' do
     it 'should successfully destroy the object and the dependent objects' do
       host = FactoryGirl.create(:mdm_host)
