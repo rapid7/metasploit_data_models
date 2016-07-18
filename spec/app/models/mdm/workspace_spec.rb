@@ -39,7 +39,6 @@ RSpec.describe Mdm::Workspace, type: :model do
 
   context 'associations' do
     it { is_expected.to have_many(:clients).class_name('Mdm::Client').through(:hosts) }
-    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:services) }
     it { is_expected.to have_many(:events).class_name('Mdm::Event') }
     it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').through(:hosts) }
     it { is_expected.to have_many(:hosts).class_name('Mdm::Host') }
@@ -133,53 +132,6 @@ RSpec.describe Mdm::Workspace, type: :model do
       }
     end
 
-    context '#creds' do
-      #
-      # Let!s (let + before(:each))
-      #
-
-      let!(:creds) do
-        services.collect do |service|
-          FactoryGirl.create(:mdm_cred, :service => service)
-        end
-      end
-
-      let!(:other_creds) do
-        other_services.collect do |service|
-          FactoryGirl.create(:mdm_cred, :service => service)
-        end
-      end
-
-      it 'should be an ActiveRecord::Relation' do
-        expect(workspace.creds).to be_a ActiveRecord::Relation
-      end
-
-      it 'should include services' do
-        # to_a to make query return instances
-        found_creds = workspace.creds.to_a
-
-        expect(found_creds.length).to be > 0
-
-        expect(
-            found_creds.none? { |found_cred|
-              found_cred.service.nil?
-            }
-        ).to eq(true)
-      end
-
-      it 'should return only Mdm::Creds from hosts in workspace' do
-        found_creds = workspace.creds
-
-        expect(found_creds.length).to eq(creds.length)
-
-        expect(
-            found_creds.all? { |cred|
-              cred.service.host.workspace == workspace
-            }
-        ).to eq(true)
-      end
-    end
-
     context 'default' do
       context 'with default workspace' do
         before(:example) do
@@ -228,17 +180,6 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       context 'without DEFAULT name' do
         it { is_expected.to eq(false) }
-      end
-    end
-
-    context '#each_cred' do
-      it 'should pass each of the #creds to the block' do
-        creds = FactoryGirl.create_list(:mdm_cred, 2)
-        allow(workspace).to receive(:creds).and_return(creds)
-
-        expect { |block|
-          workspace.each_cred(&block)
-        }.to yield_successive_args(*creds)
       end
     end
 

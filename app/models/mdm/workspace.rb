@@ -21,12 +21,6 @@ class Mdm::Workspace < ActiveRecord::Base
            class_name: 'MetasploitDataModels::AutomaticExploitation:MatchSet',
            inverse_of: :workspace
 
-  # @deprecated Use `Mdm::Workspace#core_credentials` defined by `Metasploit::Credential::Engine` to get
-  #   `Metasploit::Credential::Core`s gathered from this workspace's {#hosts} and {#services}.
-  #
-  # Creds gathered from this workspace's {#hosts} and {#services}.
-  has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
-
   # Events that occurred in this workspace.
   has_many :events, :class_name => 'Mdm::Event'
 
@@ -134,19 +128,6 @@ class Mdm::Workspace < ActiveRecord::Base
   # Instance Methods
   #
 
-  # @deprecated Use `Mdm::Workspace#credential_cores` when `Metasploit::Credential::Engine` is installed to get
-  #    `Metasploit::Credential::Core`s.  Use `Mdm::Service#logins` when `Metasploit::Credential::Engine` is installed to
-  #    get `Metasploit::Credential::Login`s.
-  #
-  # @return [ActiveRecord::Relation<Mdm::Cred>]
-  def creds
-    Mdm::Cred
-        .joins(service: :host)
-        .where(hosts: {
-            workspace_id: self.id
-        })
-  end
-
   # Returns default {Mdm::Workspace}.
   #
   # @return [Mdm::Workspace]
@@ -160,22 +141,6 @@ class Mdm::Workspace < ActiveRecord::Base
   # @return [false] if this is not the {default} workspace.
   def default?
     name == DEFAULT
-  end
-
-  # @deprecated Use `workspace.credential_cores.each` when `Metasploit::Credential::Engine` is installed to enumerate
-  #   `Metasploit::Credential::Core`s.  Use `service.logins.each` when `Metasploit::Credential::Engine` is installed to
-  #   enumerate `Metasploit::Credential::Login`s.
-  #
-  # Enumerates each element of {#creds}.
-  #
-  # @yield [cred]
-  # @yieldparam cred [Mdm::Cred] Cred associated with {#hosts a host} or {#services a service} in this workspace.
-  # @yieldreturn [void]
-  # @return [void]
-  def each_cred(&block)
-    creds.each do |cred|
-      block.call(cred)
-    end
   end
 
   # Enumerates each element of {#host_tags}.
