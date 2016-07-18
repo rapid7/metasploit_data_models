@@ -27,7 +27,6 @@ RSpec.describe Mdm::Service, type: :model do
 
     it { is_expected.to have_many(:task_services).class_name('Mdm::TaskService').dependent(:destroy) }
     it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_services) }
-    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').dependent(:destroy) }
     it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }
     it { is_expected.to have_many(:notes).class_name('Mdm::Note').dependent(:destroy) }
     it { is_expected.to have_many(:vulns).class_name('Mdm::Vuln').dependent(:destroy) }
