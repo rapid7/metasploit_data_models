@@ -4,7 +4,6 @@ module Mdm
 
   autoload :ApiKey
   autoload :Client
-  autoload :Cred
   autoload :Event
   autoload :ExploitAttempt
   autoload :ExploitedHost
