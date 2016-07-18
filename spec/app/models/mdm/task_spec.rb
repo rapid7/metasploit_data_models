@@ -45,8 +45,6 @@ RSpec.describe Mdm::Task, type: :model do
   end
 
   context "Associations" do
-    it { is_expected.to have_many(:task_creds).class_name('Mdm::TaskCred').dependent(:destroy) }
-    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:task_creds) }
     it { is_expected.to have_many(:task_sessions).class_name('Mdm::TaskSession').dependent(:destroy) }
     it { is_expected.to have_many(:sessions).class_name('Mdm::Session').through(:task_sessions) }
     it { is_expected.to have_many(:task_hosts).class_name('Mdm::TaskHost').dependent(:destroy) }

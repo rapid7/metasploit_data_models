@@ -12,12 +12,6 @@ class Mdm::Task < ActiveRecord::Base
            dependent: :destroy,
            inverse_of: :task
 
-  # Joins this to {#creds}.
-  has_many :task_creds,
-           class_name: 'Mdm::TaskCred',
-           dependent: :destroy,
-           inverse_of: :task
-
   # Joins this to {#hosts}.
   has_many :task_hosts,
            class_name: 'Mdm::TaskHost',

@@ -1352,38 +1352,6 @@ ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
--- Name: task_creds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE task_creds (
-    id integer NOT NULL,
-    task_id integer NOT NULL,
-    cred_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: task_creds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE task_creds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: task_creds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE task_creds_id_seq OWNED BY task_creds.id;
-
-
---
 -- Name: task_hosts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2260,13 +2228,6 @@ ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclas
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY task_creds ALTER COLUMN id SET DEFAULT nextval('task_creds_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY task_hosts ALTER COLUMN id SET DEFAULT nextval('task_hosts_id_seq'::regclass);
 
 
@@ -2669,14 +2630,6 @@ ALTER TABLE ONLY sessions
 
 ALTER TABLE ONLY tags
     ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
-
-
---
--- Name: task_creds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY task_creds
-    ADD CONSTRAINT task_creds_pkey PRIMARY KEY (id);
 
 
 --
@@ -3399,6 +3352,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150514182921');
 INSERT INTO schema_migrations (version) VALUES ('20160415153312');
 
 INSERT INTO schema_migrations (version) VALUES ('20160718163326');
+
+INSERT INTO schema_migrations (version) VALUES ('20160718191714');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
