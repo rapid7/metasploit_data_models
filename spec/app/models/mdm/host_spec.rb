@@ -68,7 +68,6 @@ RSpec.describe Mdm::Host, type: :model do
       session = FactoryGirl.create(:mdm_session, :host => host)
       vuln = FactoryGirl.create(:mdm_vuln, :host => host)
 
-
       expect {
         host.destroy
       }.to_not raise_error
@@ -106,7 +105,6 @@ RSpec.describe Mdm::Host, type: :model do
   end
 
   context 'associations' do
-    it { is_expected.to have_many(:creds).class_name('Mdm::Cred').through(:services) }
     it { is_expected.to have_many(:clients).class_name('Mdm::Client').dependent(:destroy) }
     it { is_expected.to have_many(:exploit_attempts).class_name('Mdm::ExploitAttempt').dependent(:destroy) }
     it { is_expected.to have_many(:exploited_hosts).class_name('Mdm::ExploitedHost').dependent(:destroy) }

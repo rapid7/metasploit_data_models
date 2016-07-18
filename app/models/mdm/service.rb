@@ -16,15 +16,6 @@ class Mdm::Service < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute creds
-  #   Credentials gathered from this service.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::Cred>]
-  has_many :creds,
-           class_name: 'Mdm::Cred',
-           dependent: :destroy,
-           inverse_of: :service
-
   # @!attribute exploit_attempts
   #   Exploit attempts against this service.
   #
@@ -206,7 +197,8 @@ class Mdm::Service < ActiveRecord::Base
                        set: :string
                    }
 
-  #
+  #require 'mdm/exploited_host'
+  
   # Search Withs
   #
 

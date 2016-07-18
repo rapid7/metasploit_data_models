@@ -213,13 +213,6 @@ class Mdm::Host < ActiveRecord::Base
   # Through services
   #
 
-  # @!attribute [r] creds
-  #   Credentials captured from {#services}.
-  #
-  #   @return [ActiveRecord::Relation<Mdm::Cred>]
-  #   @see #services
-  has_many :creds, :class_name => 'Mdm::Cred', :through => :services
-
   # @!attribute [r] service_notes
   #   {Mdm::Note Notes} about {#services} running on this host.
   #
@@ -336,11 +329,6 @@ class Mdm::Host < ActiveRecord::Base
   #   When this host was created in the database.
   #
   #   @return [DateTime]
-
-  # @!attribute [rw] cred_count
-  #   Counter cache for {#creds}.
-  #
-  #   @return [Integer]
 
   # @!attribute [rw] detected_arch
   #   The architecture of the host's CPU as detected by `Recog`. If {#arch} is
