@@ -63,10 +63,10 @@ class Mdm::Host < ActiveRecord::Base
 
   # Valid MAC address value
   #hyphen-separated: 1a-2B-3c-4D-5e-6f
-   MAC_ADDRESS_HYPHEN_REGEX = /\A(?:[A-F0-9]{2}[-]){5}[A-F0-9]{2}\z/i
+  MAC_ADDRESS_HYPHEN_REGEX = /\A(?:[A-F0-9]{2}[-]){5}[A-F0-9]{2}\z/i
 
   #colon-separated:  1a:2B:3c:4D:5e:6f
-   MAC_ADDRESS_COLON_REGEX  = /\A(?:[A-F0-9]{2}[:]){5}[A-F0-9]{2}\z/i
+  MAC_ADDRESS_COLON_REGEX  = /\A(?:[A-F0-9]{2}[:]){5}[A-F0-9]{2}\z/i
 
   # 6-tuple of hex (case-insensitive) doublets
   MAC_ADDRESS_REGEX = Regexp.union(MAC_ADDRESS_HYPHEN_REGEX, MAC_ADDRESS_COLON_REGEX)
@@ -487,8 +487,8 @@ class Mdm::Host < ActiveRecord::Base
 
   validates :mac,
             :format => {
-              :with =>    MAC_ADDRESS_REGEX,
-              :message => 'must be a valid MAC address'
+                :with => MAC_ADDRESS_REGEX,
+                :message => 'must be a valid MAC address'
             }
 
   validates :state,
