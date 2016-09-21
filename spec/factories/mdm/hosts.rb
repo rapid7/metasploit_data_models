@@ -10,13 +10,13 @@ FactoryGirl.define do
     #
     address { generate :mdm_ipv4_address }
     name { generate :mdm_host_name }
+    mac { generate :mdm_host_mac }
 
     factory :full_mdm_host do
       arch { generate :mdm_host_arch }
       comm { generate :mdm_host_comm }
       comments { generate :mdm_host_comments }
       info { generate :mdm_host_info }
-      mac { generate :mdm_host_mac }
       os_flavor { generate :mdm_host_os_flavor }
       os_lang { generate :mdm_host_os_lang }
       os_name { generate :mdm_host_os_name }
