@@ -366,6 +366,7 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def apply_match_to_host(match)
     host = self
+#    puts("IN apply_match_to_host: #{match}")
 
     # These values in a match always override the current value unless
     # the host attribute has been explicitly locked by the user
@@ -455,8 +456,16 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def guess_purpose_from_match(match)
     # Create a string based on all match values
-    pstr = match.values.join(' ').downcase
-
+    pstr = nil
+    match.values.each do |i|
+      begin
+        if i.encoding.name == "ASCII-8-BIT"
+          pstr << i.downcase + ' '
+        end
+      rescue NameError => e
+        # If the element cannot be checked for encoding, we do not want it.
+      end
+    end
     # Loosely map keywords to specific purposes
     case pstr
     when /windows server|windows (nt|20)/
