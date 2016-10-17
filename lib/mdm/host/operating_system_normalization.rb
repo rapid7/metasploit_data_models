@@ -446,7 +446,6 @@ module Mdm::Host::OperatingSystemNormalization
         host.mac = host.mac.scan(/../).join(':')
       end
     end
-
   end
 
   #
