@@ -255,7 +255,7 @@ class Mdm::Service < ActiveRecord::Base
   #
   # @return [void]
   def normalize_host_os
-    if info_changed?
+    if info_changed? && host.workspaace.present? && !host.workspace.import_fingerprint
       host.normalize_os
     end
   end
