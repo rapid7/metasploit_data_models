@@ -366,7 +366,6 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def apply_match_to_host(match)
     host = self
-#    puts("IN apply_match_to_host: #{match}")
 
     # These values in a match always override the current value unless
     # the host attribute has been explicitly locked by the user
