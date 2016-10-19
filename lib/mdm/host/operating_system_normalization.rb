@@ -454,14 +454,14 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def guess_purpose_from_match(match)
     # Create a string based on all match values
-    pstr = nil
+    pstr = ""
     match.values.each do |i|
-      begin
-        if i.encoding.name == "ASCII-8-BIT"
+      # we need to only add lowercase ANSI text to the pstr, so skip
+      # anything that has no "encoding"
+      if i.respond_to?(:encoding)
+        if i.encoding.name == "ASCII-8BIT"
           pstr << i.downcase + ' '
         end
-      rescue NameError => e
-        # If the element cannot be checked for encoding, we do not want it.
       end
     end
     # Loosely map keywords to specific purposes
