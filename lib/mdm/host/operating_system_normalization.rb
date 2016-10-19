@@ -463,7 +463,8 @@ module Mdm::Host::OperatingSystemNormalization
           begin
             pstr << j.downcase.encode("UTF-8")
           rescue Encoding::UndefinedConversionError => e
-            elog("Found incompatible (non-ANSI) character in guess_purpose_from_match")
+            # this works in Framework, but causes a Travis CI error
+            # elog("Found incompatible (non-ANSI) character in guess_purpose_from_match")
           end
         end
       end
