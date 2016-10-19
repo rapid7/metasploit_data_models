@@ -453,14 +453,15 @@ module Mdm::Host::OperatingSystemNormalization
   # exposed services and rename to guess_purpose_with_match()
   #
   def guess_purpose_from_match(match)
-    # Create a string based on all match values
-    pstr = ""
+    #
+    # The regex below relies on ANSI characters, so we must ensure that
+    # pstr is populated with ANSI chars so it can be searched correctly
+    #
+    pstr = "".encode("ASCII-8BIT")
     match.values.each do |i|
-      # we need to only add lowercase ANSI text to the pstr, so skip
-      # anything that has no "encoding"
       if i.respond_to?(:encoding)
         if i.encoding.name == "ASCII-8BIT"
-          pstr << i.downcase + ' '
+          pstr << (i.downcase + ' ')
         end
       end
     end
@@ -468,7 +469,7 @@ module Mdm::Host::OperatingSystemNormalization
     case pstr
     when /windows server|windows (nt|20)/
       'server'
-    when /windows (xp|vista|[78])/
+    when /windows (xp|vista|[78]|10)/
       'client'
     when /printer|print server/
       'printer'
