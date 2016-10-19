@@ -455,9 +455,17 @@ module Mdm::Host::OperatingSystemNormalization
   def guess_purpose_from_match(match)
     # some data that is sent to this is numeric; we do not want that
     pstr = ""
+    # Go through each character of each value and make sure it is all
+    # UTF-8
     match.values.each do |i|
       if i.respond_to?(:encoding)
-        pstr << (i.downcase + ' ')
+        i.each_char do |j|
+          begin
+            pstr << j.downcase.encode("UTF-8")
+          rescue Encoding::UndefinedConversionError => e
+            elog("Found incompatible (non-ANSI) character in guess_purpose_from_match")
+          end
+        end
       end
     end
     # Loosely map keywords to specific purposes
