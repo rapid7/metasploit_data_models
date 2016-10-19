@@ -453,16 +453,11 @@ module Mdm::Host::OperatingSystemNormalization
   # exposed services and rename to guess_purpose_with_match()
   #
   def guess_purpose_from_match(match)
-    #
-    # The regex below relies on ANSI characters, so we must ensure that
-    # pstr is populated with ANSI chars so it can be searched correctly
-    #
-    pstr = "".encode("ASCII-8BIT")
+    # some data that is sent to this is numeric; we do not want that
+    pstr = ""
     match.values.each do |i|
       if i.respond_to?(:encoding)
-        if i.encoding.name == "ASCII-8BIT"
-          pstr << (i.downcase + ' ')
-        end
+        pstr << (i.downcase + ' ')
       end
     end
     # Loosely map keywords to specific purposes
