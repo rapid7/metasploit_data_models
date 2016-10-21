@@ -18,7 +18,7 @@ module IPAddrExtensions
     begin
       spaceship_without_rescue(other)
     rescue ArgumentError
-      false
+      nil
     end
   end
 
@@ -26,7 +26,7 @@ module IPAddrExtensions
     begin
       include_without_rescue?(other)
     rescue ArgumentError
-      false
+      nil
     end
   end
 
