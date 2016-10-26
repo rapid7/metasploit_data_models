@@ -445,7 +445,6 @@ module Mdm::Host::OperatingSystemNormalization
         host.mac = host.mac.scan(/../).join(':')
       end
     end
-
   end
 
   #
@@ -454,14 +453,27 @@ module Mdm::Host::OperatingSystemNormalization
   # exposed services and rename to guess_purpose_with_match()
   #
   def guess_purpose_from_match(match)
-    # Create a string based on all match values
-    pstr = match.values.join(' ').downcase
-
+    # some data that is sent to this is numeric; we do not want that
+    pstr = ""
+    # Go through each character of each value and make sure it is all
+    # UTF-8
+    match.values.each do |i|
+      if i.respond_to?(:encoding)
+        i.each_char do |j|
+          begin
+            pstr << j.downcase.encode("UTF-8")
+          rescue Encoding::UndefinedConversionError => e
+            # this works in Framework, but causes a Travis CI error
+            # elog("Found incompatible (non-ANSI) character in guess_purpose_from_match")
+          end
+        end
+      end
+    end
     # Loosely map keywords to specific purposes
     case pstr
     when /windows server|windows (nt|20)/
       'server'
-    when /windows (xp|vista|[78])/
+    when /windows (xp|vista|[78]|10)/
       'client'
     when /printer|print server/
       'printer'
