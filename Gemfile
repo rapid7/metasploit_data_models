@@ -24,6 +24,7 @@ group :development, :test do
   gem 'rails', '~>4.2.6'
   # Used to create fake data
   gem "faker"
+  gem 'awesome_print'
 end
 
 group :test do
