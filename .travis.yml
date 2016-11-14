@@ -12,7 +12,7 @@ rvm:
   - 2.2.4
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
+  - psql --version
   - bundle exec rake --version
   - bundle exec rake db:create db:migrate
-  - psql --version
 script: bundle exec rake spec yard
