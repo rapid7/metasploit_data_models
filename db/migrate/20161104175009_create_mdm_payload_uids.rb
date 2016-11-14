@@ -1,6 +1,6 @@
-class CreateMdmPayloadUuids < ActiveRecord::Migration
+class CreateMdmPayloadUids < ActiveRecord::Migration
   def change
-    create_table :payload_uuids do |t|
+    create_table :payload_uids do |t|
       t.string :uid, null: false
       t.string :arch, null: false
       t.string :platform, null: false

@@ -1025,10 +1025,10 @@ ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
 
 
 --
--- Name: payload_uuids; Type: TABLE; Schema: public; Owner: -
+-- Name: payload_uids; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE payload_uuids (
+CREATE TABLE payload_uids (
     id integer NOT NULL,
     uid character varying NOT NULL,
     arch character varying NOT NULL,
@@ -1044,10 +1044,10 @@ CREATE TABLE payload_uuids (
 
 
 --
--- Name: payload_uuids_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: payload_uids_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE payload_uuids_id_seq
+CREATE SEQUENCE payload_uids_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1056,10 +1056,10 @@ CREATE SEQUENCE payload_uuids_id_seq
 
 
 --
--- Name: payload_uuids_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: payload_uids_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE payload_uuids_id_seq OWNED BY payload_uuids.id;
+ALTER SEQUENCE payload_uids_id_seq OWNED BY payload_uids.id;
 
 
 --
@@ -2236,7 +2236,7 @@ ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payload_uuids ALTER COLUMN id SET DEFAULT nextval('payload_uuids_id_seq'::regclass);
+ALTER TABLE ONLY payload_uids ALTER COLUMN id SET DEFAULT nextval('payload_uids_id_seq'::regclass);
 
 
 --
@@ -2646,11 +2646,11 @@ ALTER TABLE ONLY notes
 
 
 --
--- Name: payload_uuids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: payload_uids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payload_uuids
-    ADD CONSTRAINT payload_uuids_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY payload_uids
+    ADD CONSTRAINT payload_uids_pkey PRIMARY KEY (id);
 
 
 --
@@ -3086,10 +3086,10 @@ CREATE INDEX index_notes_on_vuln_id ON notes USING btree (vuln_id);
 
 
 --
--- Name: index_payload_uuids_on_uid; Type: INDEX; Schema: public; Owner: -
+-- Name: index_payload_uids_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_payload_uuids_on_uid ON payload_uuids USING btree (uid);
+CREATE UNIQUE INDEX index_payload_uids_on_uid ON payload_uids USING btree (uid);
 
 
 --
