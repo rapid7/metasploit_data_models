@@ -19,4 +19,5 @@ before_script:
   - bundle exec rake db:create db:migrate
 script:
   - git diff --exit-code spec/dummy/db/structure.sql
-  - bundle exec rake spec yard
+  - bundle exec rake spec
+  - bundle exec rake yard
