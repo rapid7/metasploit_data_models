@@ -1970,7 +1970,8 @@ CREATE TABLE workspaces (
     boundary character varying(4096),
     description character varying(4096),
     owner_id integer,
-    limit_to_network boolean DEFAULT false NOT NULL
+    limit_to_network boolean DEFAULT false NOT NULL,
+    import_fingerprint boolean DEFAULT false
 );
 
 
@@ -3393,6 +3394,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150421211719');
 INSERT INTO schema_migrations (version) VALUES ('20150514182921');
 
 INSERT INTO schema_migrations (version) VALUES ('20160415153312');
+
+INSERT INTO schema_migrations (version) VALUES ('20161004165612');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
