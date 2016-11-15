@@ -2,7 +2,7 @@ sudo: false
 group: stable
 cache: bundler
 addons:
-  postgresql: '9.5'
+  postgresql: '9.3'
   apt:
     packages:
       - graphviz
