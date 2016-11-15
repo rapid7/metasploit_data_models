@@ -1,15 +1,14 @@
-addons:
-  postgresql: '9.5'
-group: stable
 sudo: false
+group: stable
 cache: bundler
 addons:
+  postgresql: '9.5'
   apt:
     packages:
       - graphviz
 language: ruby
 rvm:
-  - 2.2.4
+  - '2.3.1'
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - psql --version
