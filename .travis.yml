@@ -1,17 +1,21 @@
-addons:
-  postgresql: '9.5'
-group: stable
 sudo: false
+group: stable
 cache: bundler
 addons:
+  postgresql: '9.3'
   apt:
     packages:
+      - libpcap-dev
       - graphviz
 language: ruby
 rvm:
-  - 2.2.4
+  - '2.3.1'
+  
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - bundle exec rake --version
   - bundle exec rake db:create db:migrate
-script: bundle exec rake spec yard
+script:
+  - git diff --exit-code spec/dummy/db/structure.sql
+  - bundle exec rake spec
+  - bundle exec rake yard
