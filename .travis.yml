@@ -9,7 +9,7 @@ addons:
       - libpcap-dev
       - graphviz
 rvm:
-  - 2.3.1
+  - 2.3.2
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - bundle exec rake --version
