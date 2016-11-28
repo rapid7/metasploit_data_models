@@ -232,6 +232,100 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
     end
   end
+  
+  context 'scopes' do
+    
+    before(:each) do        
+      @ms12_020 = FactoryGirl.create(:mdm_module_detail,
+        name: "MS12-020 Microsoft Remote Desktop Use-After-Free DoS",
+        fullname: 'auxiliary/dos/windows/rdp/ms12_020_maxchannelids')
+      @ms08_067 = FactoryGirl.create(:mdm_module_detail,
+        name: "MS08-067 Microsoft Server Service Relative Path Stack Corruption",
+        fullname: 'exploit/windows/smb/ms08_067_netapi')
+      @ms06_040 = FactoryGirl.create(:mdm_module_detail,
+        name: "MS06-040 Microsoft Server Service NetpwPathCanonicalize Overflow",
+        fullname: 'exploit/windows/smb/ms06_040_netapi')
+      @cve_2012_0507 = FactoryGirl.create(:mdm_module_detail,
+        name: "Java AtomicReferenceArray Type Violation Vulnerability",
+        fullname: 'exploit/multi/browser/java_atomicreferencearray')
+      @cve_2010_0425 = FactoryGirl.create(:mdm_module_detail,
+        name: "PHP Remote File Include Generic Code Execution",
+        fullname: 'exploit/unix/webapp/php_include')
+      
+      @author1 = "hdm <x@hdm.io>"
+      @author2 = "jduck <jduck@metasploit.com>"
+      @author3 = "juan vazquez <juan.vazquez@metasploit.com>"
+      @author4 = "egypt <egypt@metasploit.com>"
+      
+      FactoryGirl.create(:mdm_module_author, detail: @ms12_020, name: @author2)
+      FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author1)
+      FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author2)
+      FactoryGirl.create(:mdm_module_author, detail: @ms06_040, name: @author1)
+      FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author3)
+      FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author4)
+      
+      FactoryGirl.create(:mdm_module_platform, detail: @ms12_020, name: 'windows')
+      FactoryGirl.create(:mdm_module_platform, detail: @ms08_067, name: 'windows')
+      FactoryGirl.create(:mdm_module_platform, detail: @ms06_040, name: 'windows')
+      FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'linux')
+      FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'java')
+
+      
+    end
+    
+    context '#module_author' do
+      it 'finds all modules with author matching "Juan"' do
+        expect(Mdm::Module::Detail.module_author(['%juan%'])).to eq([@cve_2012_0507])
+      end
+      
+      it 'finds all modules for author matching "hdm"' do
+        expect(Mdm::Module::Detail.module_author(['%hdm%'])).to eq([@ms08_067, @ms06_040])
+      end
+      it 'finds all modules with authors matching "juan", "jduck"' do
+        expect(Mdm::Module::Detail.module_author(['%juan%','%jduck%'])).to eq([@ms12_020,@ms08_067,@cve_2012_0507])
+      end
+    end
+    
+    context '#module_name' do
+      it 'finds all modules with name matching "DoS"' do
+        expect(Mdm::Module::Detail.module_name(['%DoS%'])).to eq([@ms12_020])
+      end
+      
+      it 'finds all modules with name matching "netapi"' do
+        expect(Mdm::Module::Detail.module_name(['%netapi%'])).to eq([@ms08_067, @ms06_040])
+      end
+      
+      it 'finds all modules with name matching "browser"' do
+        expect(Mdm::Module::Detail.module_name(['%browser%'])).to eq([@cve_2012_0507])
+      end
+    end
+    
+    context '#module_os_or_platform' do
+      it 'finds all modules with a platform matching "linux"' do
+        expect(Mdm::Module::Detail.module_os_or_platform(['%linux%'])).to eq([@cve_2012_0507])
+      end
+ 
+      it 'finds all modules with a platform matching "windows"' do
+        expect(Mdm::Module::Detail.module_os_or_platform(['%windows%'])).to eq([@ms12_020,@ms08_067,@ms06_040])
+      end
+    end
+    
+    context '#module_text' do
+      
+    end
+    
+    context 'module_type' do
+      
+    end
+
+    context 'module_app' do
+      
+    end
+
+    context 'module_ref' do
+      
+    end
+  end
 
   context 'validations' do
     it { is_expected.to validate_inclusion_of(:mtype).in_array(types) }
