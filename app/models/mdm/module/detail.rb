@@ -245,9 +245,9 @@ class Mdm::Module::Detail < ActiveRecord::Base
     )))))))))
   }
   
-  scope :module_type, ->(values) { Mdm::Module::Detail[:mtype].matches_any(values) }
+  scope :module_type, ->(values) { where(Mdm::Module::Detail[:mtype].matches_any(values)) }
   
-  scope :module_app, ->(values) { Mdm::Module::Detail[:stance].matches_any(values) }
+  scope :module_app, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
   
   scope :module_ref, ->(values) {
     joins(Mdm::Module::Detail.join_association(:refs, Arel::Nodes::OuterJoin)).
