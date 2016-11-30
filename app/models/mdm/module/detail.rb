@@ -196,6 +196,13 @@ class Mdm::Module::Detail < ActiveRecord::Base
   # Scopes
   #
   
+  scope :module_app, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
+  
+  scope :module_arch, ->(values) {
+    joins(Mdm::Module::Detail.join_association(:archs,Arel::Nodes::OuterJoin)).
+    where(Mdm::Module::Arch[:name].matches_any(values))
+  }
+  
   scope :module_author, ->(values) {
     joins(Mdm::Module::Detail.join_association(:authors, Arel::Nodes::OuterJoin)).
     where(
@@ -224,6 +231,11 @@ class Mdm::Module::Detail < ActiveRecord::Base
     )
   }
   
+  scope :module_ref, ->(values) {
+    joins(Mdm::Module::Detail.join_association(:refs, Arel::Nodes::OuterJoin)).
+    where(Mdm::Module::Ref[:name].matches_any(values))
+  }
+  
   scope :module_text, ->(values) {
     joins(
       Mdm::Module::Detail.join_association(:actions,    Arel::Nodes::OuterJoin),
@@ -245,15 +257,9 @@ class Mdm::Module::Detail < ActiveRecord::Base
     )))))))))
   }
   
+  
   scope :module_type, ->(values) { where(Mdm::Module::Detail[:mtype].matches_any(values)) }
-  
-  scope :module_app, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
-  
-  scope :module_ref, ->(values) {
-    joins(Mdm::Module::Detail.join_association(:refs, Arel::Nodes::OuterJoin)).
-    where(Mdm::Module::Ref[:name].matches_any(values))
-  }
-  
+      
   #
   # Validations
   #
