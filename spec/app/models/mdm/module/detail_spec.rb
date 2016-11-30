@@ -327,23 +327,13 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       
       
     end
-    
-    context '#module_app' do
-      it 'finds all modules with a stance matching "agg"' do
-        expect(Mdm::Module::Detail.module_app(['%agg%']).uniq).to contain_exactly(
-          @ms12_020,@ms08_067,@ms06_040,@cve_2010_0425)
-      end
-      it 'finds all modules with a stance matching "pass"' do
-        expect(Mdm::Module::Detail.module_app(['%pass%']).uniq).to contain_exactly(@cve_2012_0507)
-      end
-    end
-    
+        
     context '#module_arch' do
       it 'finds all modules with a stance matching "java"' do
         expect(Mdm::Module::Detail.module_arch(['%java%']).uniq).to contain_exactly(@cve_2012_0507)
       end
       it 'finds all modules with a stance matching "pass"' do
-        expect(Mdm::Module::Detail.module_arch(['%pass%']).uniq).to contain_exactly(@cve_2012_0507)
+        expect(Mdm::Module::Detail.module_arch(['%java%', '%php%']).uniq).to contain_exactly(@cve_2012_0507, @cve_2010_0425)
       end
     end
     
@@ -392,6 +382,16 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
       it 'finds all modules with a reff matching "EDB"' do
         expect(Mdm::Module::Detail.module_ref(['%EDB%']).uniq).to contain_exactly(@ms12_020)
+      end
+    end
+    
+    context '#module_stance' do
+      it 'finds all modules with a stance matching "agg"' do
+        expect(Mdm::Module::Detail.module_stance(['%agg%']).uniq).to contain_exactly(
+          @ms12_020,@ms08_067,@ms06_040,@cve_2010_0425)
+      end
+      it 'finds all modules with a stance matching "pass"' do
+        expect(Mdm::Module::Detail.module_stance(['%pass%']).uniq).to contain_exactly(@cve_2012_0507)
       end
     end
     

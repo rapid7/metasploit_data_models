@@ -195,9 +195,7 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #
   # Scopes
   #
-  
-  scope :module_app, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
-  
+    
   scope :module_arch, ->(values) {
     joins(Mdm::Module::Detail.join_association(:archs,Arel::Nodes::OuterJoin)).
     where(Mdm::Module::Arch[:name].matches_any(values))
@@ -235,6 +233,8 @@ class Mdm::Module::Detail < ActiveRecord::Base
     joins(Mdm::Module::Detail.join_association(:refs, Arel::Nodes::OuterJoin)).
     where(Mdm::Module::Ref[:name].matches_any(values))
   }
+  
+  scope :module_stance, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
   
   scope :module_text, ->(values) {
     joins(
