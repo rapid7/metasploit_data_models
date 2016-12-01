@@ -66,23 +66,23 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       it "maps 'auxiliary' to 'auxiliary'" do
         expect(directory_by_type['auxiliary']).to eq('auxiliary')
       end
-      
+
       it "maps 'encoder' to 'encoders'" do
         expect(directory_by_type['encoder']).to eq('encoders')
       end
-      
+
       it "maps 'exploit' to 'exploits'" do
         expect(directory_by_type['exploit']).to eq('exploits')
       end
-      
+
       it "maps 'nop' to 'nops'" do
         expect(directory_by_type['nop']).to eq('nops')
       end
-      
+
       it "maps 'payload' to 'payloads'" do
         expect(directory_by_type['payload']).to eq('payloads')
       end
-      
+
       it "maps 'post' to 'post'" do
         expect(directory_by_type['post']).to eq('post')
       end
@@ -232,10 +232,10 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
     end
   end
-  
+
   context 'scopes' do
-    
-    before(:each) do        
+
+    before(:each) do
       @ms12_020 = FactoryGirl.create(:mdm_module_detail,
         name: "MS12-020 Microsoft Remote Desktop Use-After-Free DoS",
         fullname: 'auxiliary/dos/windows/rdp/ms12_020_maxchannelids',
@@ -266,25 +266,25 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         description: "This module can be used to exploit any generic PHP file include vulnerability,\n        where the application includes code like the following:\n\n        <?php include($_GET['path']); ?>",
         mtype: 'exploit',
         stance: 'aggressive')
-      
+
       @author1 = "hdm <x@hdm.io>"
       @author2 = "jduck <jduck@metasploit.com>"
       @author3 = "juan vazquez <juan.vazquez@metasploit.com>"
       @author4 = "egypt <egypt@metasploit.com>"
-      
+
       FactoryGirl.create(:mdm_module_author, detail: @ms12_020, name: @author2)
       FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author1)
       FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author2)
       FactoryGirl.create(:mdm_module_author, detail: @ms06_040, name: @author1)
       FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author3)
       FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author4)
-      
+
       FactoryGirl.create(:mdm_module_platform, detail: @ms12_020, name: 'windows')
       FactoryGirl.create(:mdm_module_platform, detail: @ms08_067, name: 'windows')
       FactoryGirl.create(:mdm_module_platform, detail: @ms06_040, name: 'windows')
       FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'linux')
       FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'java')
-      
+
       FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["ppc"]')
       FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["x86"]')
       FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["java"]')
@@ -303,7 +303,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'BID-52161')
       FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'OSVDB-80724')
       FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'CVE-2012-0507')
-      
+
       FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NX)')
       FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NO NX)')
       FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP1 English (NX)')
@@ -324,10 +324,8 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Windows x86 (Native Payload)')
       FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Generic (Java Payload)')
       FactoryGirl.create(:mdm_module_target, detail: @cve_2010_0425, name: 'Automatic')
-      
-      
     end
-        
+
     context '#module_arch' do
       it 'finds all modules with a stance matching "java"' do
         expect(Mdm::Module::Detail.module_arch(['%java%']).uniq).to contain_exactly(@cve_2012_0507)
@@ -336,12 +334,12 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         expect(Mdm::Module::Detail.module_arch(['%java%', '%php%']).uniq).to contain_exactly(@cve_2012_0507, @cve_2010_0425)
       end
     end
-    
+
     context '#module_author' do
       it 'finds all modules with author matching "Juan"' do
         expect(Mdm::Module::Detail.module_author(['%juan%'])).to contain_exactly(@cve_2012_0507)
       end
-      
+
       it 'finds all modules for author matching "hdm"' do
         expect(Mdm::Module::Detail.module_author(['%hdm%'])).to contain_exactly(@ms08_067, @ms06_040)
       end
@@ -349,32 +347,32 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         expect(Mdm::Module::Detail.module_author(['%juan%','%jduck%'])).to contain_exactly(@ms12_020,@ms08_067,@cve_2012_0507)
       end
     end
-    
+
     context '#module_name' do
       it 'finds all modules with name matching "DoS"' do
         expect(Mdm::Module::Detail.module_name(['%DoS%'])).to contain_exactly(@ms12_020)
       end
-      
+
       it 'finds all modules with name matching "netapi"' do
         expect(Mdm::Module::Detail.module_name(['%netapi%'])).to contain_exactly(@ms08_067, @ms06_040)
       end
-      
+
       it 'finds all modules with name matching "browser"' do
         expect(Mdm::Module::Detail.module_name(['%browser%'])).to contain_exactly(@cve_2012_0507)
       end
     end
-    
+
     context '#module_os_or_platform' do
       it 'finds all modules with a platform matching "linux"' do
         expect(Mdm::Module::Detail.module_os_or_platform(['%linux%']).uniq).to contain_exactly(@cve_2012_0507)
       end
- 
+
       it 'finds all modules with a platform matching "windows"' do
         expect(Mdm::Module::Detail.module_os_or_platform(['%windows%']).uniq).to contain_exactly(
           @ms12_020,@ms08_067,@ms06_040,@cve_2012_0507)
       end
     end
-    
+
     context 'module_ref' do
       it 'finds all modules with a reff matching "CVE-2012"' do
         expect(Mdm::Module::Detail.module_ref(['%CVE-2012%']).uniq).to contain_exactly(
@@ -384,7 +382,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         expect(Mdm::Module::Detail.module_ref(['%EDB%']).uniq).to contain_exactly(@ms12_020)
       end
     end
-    
+
     context '#module_stance' do
       it 'finds all modules with a stance matching "agg"' do
         expect(Mdm::Module::Detail.module_stance(['%agg%']).uniq).to contain_exactly(
@@ -394,7 +392,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         expect(Mdm::Module::Detail.module_stance(['%pass%']).uniq).to contain_exactly(@cve_2012_0507)
       end
     end
-    
+
     context '#module_text' do
       it 'finds all modules with a description matching "ConnectMCSPDU"' do
         expect(Mdm::Module::Detail.module_text(['%ConnectMCSPDU%']).uniq).to contain_exactly(@ms12_020)
@@ -421,7 +419,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         expect(Mdm::Module::Detail.module_text(['%Auto%']).uniq).to contain_exactly(@ms08_067,@ms06_040,@cve_2010_0425)
       end
     end
-    
+
     context 'module_type' do
       it 'finds all modules with a mtype matching "aux"' do
         expect(Mdm::Module::Detail.module_type(['%aux%']).uniq).to contain_exactly(@ms12_020)
