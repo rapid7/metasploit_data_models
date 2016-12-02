@@ -2,7 +2,7 @@
 # {Mdm::Module} namespace.
 class Mdm::Module::Detail < ActiveRecord::Base
   self.table_name = 'module_details'
-  
+
   #
   # CONSTANTS
   #
@@ -191,6 +191,74 @@ class Mdm::Module::Detail < ActiveRecord::Base
   #   {#supports_stance? support stances}.
   #
   #   @return ['active', 'passive', nil]
+
+  #
+  # Scopes
+  #
+
+  scope :module_arch, ->(values) {
+    joins(Mdm::Module::Detail.join_association(:archs,Arel::Nodes::OuterJoin)).
+    where(Mdm::Module::Arch[:name].matches_any(values))
+  }
+
+  scope :module_author, ->(values) {
+    joins(Mdm::Module::Detail.join_association(:authors, Arel::Nodes::OuterJoin)).
+    where(
+      Mdm::Module::Author[:email].matches_any(values).or(
+        Mdm::Module::Author[:name].matches_any(values)
+      )
+    )
+  }
+
+  scope :module_name, ->(values) {
+    where(
+      Mdm::Module::Detail[:fullname].matches_any(values).or(
+        Mdm::Module::Detail[:name].matches_any(values)
+      )
+    )
+  }
+
+  scope :module_os_or_platform, ->(values) {
+    joins(
+      Mdm::Module::Detail.join_association(:platforms, Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:targets, Arel::Nodes::OuterJoin)
+    ).where(
+      Mdm::Module::Platform[:name].matches_any(values).or(
+        Mdm::Module::Target[:name].matches_any(values)
+      )
+    )
+  }
+
+  scope :module_ref, ->(values) {
+    joins(Mdm::Module::Detail.join_association(:refs, Arel::Nodes::OuterJoin)).
+    where(Mdm::Module::Ref[:name].matches_any(values))
+  }
+
+  scope :module_stance, ->(values) { where(Mdm::Module::Detail[:stance].matches_any(values)) }
+
+  scope :module_text, ->(values) {
+    joins(
+      Mdm::Module::Detail.join_association(:actions,    Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:archs,      Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:authors,    Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:platforms,  Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:refs,       Arel::Nodes::OuterJoin),
+      Mdm::Module::Detail.join_association(:targets,    Arel::Nodes::OuterJoin)
+    ).where(
+      Mdm::Module::Detail[:description].matches_any(values).or(
+      Mdm::Module::Detail[:fullname].matches_any(values).or(
+      Mdm::Module::Detail[:name].matches_any(values).or(
+      Mdm::Module::Action[:name].matches_any(values).or(
+      Mdm::Module::Arch[:name].matches_any(values).or(
+      Mdm::Module::Author[:name].matches_any(values).or(
+      Mdm::Module::Platform[:name].matches_any(values).or(
+      Mdm::Module::Ref[:name].matches_any(values).or(
+      Mdm::Module::Target[:name].matches_any(values)
+    )))))))))
+  }
+
+
+  scope :module_type, ->(values) { where(Mdm::Module::Detail[:mtype].matches_any(values)) }
 
   #
   # Validations
