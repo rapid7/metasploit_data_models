@@ -1,9 +1,10 @@
+dist: trusty
 sudo: false
 group: stable
 cache: bundler
 language: ruby
 addons:
-  postgresql: '9.3'
+  postgresql: '9.6'
   apt:
     packages:
       - libpcap-dev
