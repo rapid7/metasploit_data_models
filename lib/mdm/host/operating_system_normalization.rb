@@ -342,8 +342,35 @@ module Mdm::Host::OperatingSystemNormalization
       if m['os.product'] =~ /^Windows Server/
         m['os.product'] = m['os.product'].gsub(/Windows Server/, 'Windows')
       end
+
+      # Normalize OS Family
+      m = normalize_match_family(m)
     end
 
+    m
+  end
+
+  # Normalize matches in order to ensure that an os.family entry exists
+  # if we have enough data to put one together.
+  def normalize_match_family(m)
+    # If the os.family already exists, we don't need to do anything
+    return m if m['os.family'].present?
+    case m['os.product']
+      when /Windows/
+        m['os.family'] = 'Windows'
+      when /Linux/
+        m['os.family'] = 'Linux'
+      when /Solaris/
+        m['os.family'] = 'Solaris'
+      when /SunOS/
+        m['os.family'] = 'SunOS'
+      when /AIX/
+        m['os.family'] = 'AIX'
+      when /HP-UX/
+        m['os.family'] = 'HP-UX'
+      when /OS X/
+        m['os.family'] = 'OS X'
+    end
     m
   end
 
@@ -415,6 +442,10 @@ module Mdm::Host::OperatingSystemNormalization
           host.os_name = sanitize(match['os.family'])
         end
       end
+    end
+
+    if match.has_key?('os.family')
+      host.os_family = sanitize(match['os.family'])
     end
 
     # Select the flavor from os.edition if available

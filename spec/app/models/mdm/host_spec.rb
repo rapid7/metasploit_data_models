@@ -352,6 +352,7 @@ RSpec.describe Mdm::Host, type: :model do
       it { is_expected.to have_db_column(:info).of_type(:string).with_options(:limit => 2 ** 16) }
       it { is_expected.to have_db_column(:mac).of_type(:string) }
       it { is_expected.to have_db_column(:name).of_type(:string) }
+      it { is_expected.to have_db_column(:os_family).of_type(:string) }
       it { is_expected.to have_db_column(:os_flavor).of_type(:string) }
       it { is_expected.to have_db_column(:os_lang).of_type(:string) }
       it { is_expected.to have_db_column(:os_name).of_type(:string) }
@@ -861,6 +862,44 @@ RSpec.describe Mdm::Host, type: :model do
         match = { 'os.product' => 'Windows Server 2012' }
         result = host.send(:normalize_match, match)
         expect(result['os.product']).to eq('Windows 2012')
+      end
+    end
+
+    context '#normalize_match_family' do
+      it 'should set the family to Windows if the product contains Windows' do
+        match  = { 'os.product' => 'Microsoft Windows 7' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'Windows'
+      end
+
+      it 'should set the family to Linux if the product contains Linux' do
+        match  = { 'os.product' => 'Linux (Ubuntu)' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'Linux'
+      end
+
+      it 'should set the family to Solaris if the product contains Solaris' do
+        match  = { 'os.product' => 'Solaris' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'Solaris'
+      end
+
+      it 'should set the family to SunOS if the product contains SunOS' do
+        match  = { 'os.product' => 'SunOS' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'SunOS'
+      end
+
+      it 'should set the family to AIX if the product contains AIX' do
+        match  = { 'os.product' => 'AIX' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'AIX'
+      end
+
+      it 'should set the family to HP-UX if the product contains HP-UX' do
+        match  = { 'os.product' => 'HP-UX' }
+        result = host.normalize_match_family(match)
+        expect(result['os.family']).to eq 'HP-UX'
       end
     end
 
