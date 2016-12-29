@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.3.1
--- Dumped by pg_dump version 9.5.3
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -2000,385 +2001,385 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: api_keys id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY api_keys ALTER COLUMN id SET DEFAULT nextval('api_keys_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: automatic_exploitation_match_results id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_match_results ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_match_results_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: automatic_exploitation_match_sets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_match_sets ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_match_sets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: automatic_exploitation_matches id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_matches ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_matches_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: automatic_exploitation_runs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_runs ALTER COLUMN id SET DEFAULT nextval('automatic_exploitation_runs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: clients id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: creds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY creds ALTER COLUMN id SET DEFAULT nextval('creds_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: exploit_attempts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY exploit_attempts ALTER COLUMN id SET DEFAULT nextval('exploit_attempts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: exploited_hosts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY exploited_hosts ALTER COLUMN id SET DEFAULT nextval('exploited_hosts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: host_details id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY host_details ALTER COLUMN id SET DEFAULT nextval('host_details_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: hosts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY hosts ALTER COLUMN id SET DEFAULT nextval('hosts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: hosts_tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY hosts_tags ALTER COLUMN id SET DEFAULT nextval('hosts_tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: listeners id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY listeners ALTER COLUMN id SET DEFAULT nextval('listeners_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: loots id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY loots ALTER COLUMN id SET DEFAULT nextval('loots_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: macros id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY macros ALTER COLUMN id SET DEFAULT nextval('macros_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: mod_refs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mod_refs ALTER COLUMN id SET DEFAULT nextval('mod_refs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_actions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_actions ALTER COLUMN id SET DEFAULT nextval('module_actions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_archs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_archs ALTER COLUMN id SET DEFAULT nextval('module_archs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_authors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_authors ALTER COLUMN id SET DEFAULT nextval('module_authors_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_details id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_details ALTER COLUMN id SET DEFAULT nextval('module_details_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_mixins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_mixins ALTER COLUMN id SET DEFAULT nextval('module_mixins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_platforms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_platforms ALTER COLUMN id SET DEFAULT nextval('module_platforms_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_refs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_refs ALTER COLUMN id SET DEFAULT nextval('module_refs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_runs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_runs ALTER COLUMN id SET DEFAULT nextval('module_runs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: module_targets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_targets ALTER COLUMN id SET DEFAULT nextval('module_targets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: nexpose_consoles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY nexpose_consoles ALTER COLUMN id SET DEFAULT nextval('nexpose_consoles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY profiles ALTER COLUMN id SET DEFAULT nextval('profiles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: refs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY refs ALTER COLUMN id SET DEFAULT nextval('refs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: report_templates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY report_templates ALTER COLUMN id SET DEFAULT nextval('report_templates_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: reports id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reports ALTER COLUMN id SET DEFAULT nextval('reports_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: routes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY routes ALTER COLUMN id SET DEFAULT nextval('routes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY services ALTER COLUMN id SET DEFAULT nextval('services_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: session_events id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY session_events ALTER COLUMN id SET DEFAULT nextval('session_events_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: task_creds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_creds ALTER COLUMN id SET DEFAULT nextval('task_creds_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: task_hosts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_hosts ALTER COLUMN id SET DEFAULT nextval('task_hosts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: task_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_services ALTER COLUMN id SET DEFAULT nextval('task_services_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: task_sessions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_sessions ALTER COLUMN id SET DEFAULT nextval('task_sessions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tasks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vuln_attempts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vuln_attempts ALTER COLUMN id SET DEFAULT nextval('vuln_attempts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vuln_details id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vuln_details ALTER COLUMN id SET DEFAULT nextval('vuln_details_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulns id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulns ALTER COLUMN id SET DEFAULT nextval('vulns_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulns_refs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulns_refs ALTER COLUMN id SET DEFAULT nextval('vulns_refs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: web_forms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_forms ALTER COLUMN id SET DEFAULT nextval('web_forms_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: web_pages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_pages ALTER COLUMN id SET DEFAULT nextval('web_pages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: web_sites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_sites ALTER COLUMN id SET DEFAULT nextval('web_sites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: web_vulns id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_vulns ALTER COLUMN id SET DEFAULT nextval('web_vulns_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: wmap_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY wmap_requests ALTER COLUMN id SET DEFAULT nextval('wmap_requests_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: wmap_targets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY wmap_targets ALTER COLUMN id SET DEFAULT nextval('wmap_targets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: workspaces id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
 
 
 --
--- Name: api_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: api_keys api_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY api_keys
@@ -2386,7 +2387,7 @@ ALTER TABLE ONLY api_keys
 
 
 --
--- Name: automatic_exploitation_match_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: automatic_exploitation_match_results automatic_exploitation_match_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_match_results
@@ -2394,7 +2395,7 @@ ALTER TABLE ONLY automatic_exploitation_match_results
 
 
 --
--- Name: automatic_exploitation_match_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: automatic_exploitation_match_sets automatic_exploitation_match_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_match_sets
@@ -2402,7 +2403,7 @@ ALTER TABLE ONLY automatic_exploitation_match_sets
 
 
 --
--- Name: automatic_exploitation_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: automatic_exploitation_matches automatic_exploitation_matches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_matches
@@ -2410,7 +2411,7 @@ ALTER TABLE ONLY automatic_exploitation_matches
 
 
 --
--- Name: automatic_exploitation_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: automatic_exploitation_runs automatic_exploitation_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY automatic_exploitation_runs
@@ -2418,7 +2419,7 @@ ALTER TABLE ONLY automatic_exploitation_runs
 
 
 --
--- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY clients
@@ -2426,7 +2427,7 @@ ALTER TABLE ONLY clients
 
 
 --
--- Name: creds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: creds creds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY creds
@@ -2434,7 +2435,7 @@ ALTER TABLE ONLY creds
 
 
 --
--- Name: events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY events
@@ -2442,7 +2443,7 @@ ALTER TABLE ONLY events
 
 
 --
--- Name: exploit_attempts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: exploit_attempts exploit_attempts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY exploit_attempts
@@ -2450,7 +2451,7 @@ ALTER TABLE ONLY exploit_attempts
 
 
 --
--- Name: exploited_hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: exploited_hosts exploited_hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY exploited_hosts
@@ -2458,7 +2459,7 @@ ALTER TABLE ONLY exploited_hosts
 
 
 --
--- Name: host_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: host_details host_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY host_details
@@ -2466,7 +2467,7 @@ ALTER TABLE ONLY host_details
 
 
 --
--- Name: hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: hosts hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY hosts
@@ -2474,7 +2475,7 @@ ALTER TABLE ONLY hosts
 
 
 --
--- Name: hosts_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: hosts_tags hosts_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY hosts_tags
@@ -2482,7 +2483,7 @@ ALTER TABLE ONLY hosts_tags
 
 
 --
--- Name: listeners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: listeners listeners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY listeners
@@ -2490,7 +2491,7 @@ ALTER TABLE ONLY listeners
 
 
 --
--- Name: loots_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: loots loots_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY loots
@@ -2498,7 +2499,7 @@ ALTER TABLE ONLY loots
 
 
 --
--- Name: macros_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: macros macros_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY macros
@@ -2506,7 +2507,7 @@ ALTER TABLE ONLY macros
 
 
 --
--- Name: mod_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mod_refs mod_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mod_refs
@@ -2514,7 +2515,7 @@ ALTER TABLE ONLY mod_refs
 
 
 --
--- Name: module_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_actions module_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_actions
@@ -2522,7 +2523,7 @@ ALTER TABLE ONLY module_actions
 
 
 --
--- Name: module_archs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_archs module_archs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_archs
@@ -2530,7 +2531,7 @@ ALTER TABLE ONLY module_archs
 
 
 --
--- Name: module_authors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_authors module_authors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_authors
@@ -2538,7 +2539,7 @@ ALTER TABLE ONLY module_authors
 
 
 --
--- Name: module_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_details module_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_details
@@ -2546,7 +2547,7 @@ ALTER TABLE ONLY module_details
 
 
 --
--- Name: module_mixins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_mixins module_mixins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_mixins
@@ -2554,7 +2555,7 @@ ALTER TABLE ONLY module_mixins
 
 
 --
--- Name: module_platforms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_platforms module_platforms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_platforms
@@ -2562,7 +2563,7 @@ ALTER TABLE ONLY module_platforms
 
 
 --
--- Name: module_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_refs module_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_refs
@@ -2570,7 +2571,7 @@ ALTER TABLE ONLY module_refs
 
 
 --
--- Name: module_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_runs module_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_runs
@@ -2578,7 +2579,7 @@ ALTER TABLE ONLY module_runs
 
 
 --
--- Name: module_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: module_targets module_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY module_targets
@@ -2586,7 +2587,7 @@ ALTER TABLE ONLY module_targets
 
 
 --
--- Name: nexpose_consoles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: nexpose_consoles nexpose_consoles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY nexpose_consoles
@@ -2594,7 +2595,7 @@ ALTER TABLE ONLY nexpose_consoles
 
 
 --
--- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notes notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notes
@@ -2602,7 +2603,7 @@ ALTER TABLE ONLY notes
 
 
 --
--- Name: profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY profiles
@@ -2610,7 +2611,7 @@ ALTER TABLE ONLY profiles
 
 
 --
--- Name: refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: refs refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY refs
@@ -2618,7 +2619,7 @@ ALTER TABLE ONLY refs
 
 
 --
--- Name: report_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: report_templates report_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY report_templates
@@ -2626,7 +2627,7 @@ ALTER TABLE ONLY report_templates
 
 
 --
--- Name: reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: reports reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY reports
@@ -2634,7 +2635,7 @@ ALTER TABLE ONLY reports
 
 
 --
--- Name: routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: routes routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY routes
@@ -2642,7 +2643,7 @@ ALTER TABLE ONLY routes
 
 
 --
--- Name: services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY services
@@ -2650,7 +2651,7 @@ ALTER TABLE ONLY services
 
 
 --
--- Name: session_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: session_events session_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY session_events
@@ -2658,7 +2659,7 @@ ALTER TABLE ONLY session_events
 
 
 --
--- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sessions
@@ -2666,7 +2667,7 @@ ALTER TABLE ONLY sessions
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -2674,7 +2675,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: task_creds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_creds task_creds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_creds
@@ -2682,7 +2683,7 @@ ALTER TABLE ONLY task_creds
 
 
 --
--- Name: task_hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_hosts task_hosts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_hosts
@@ -2690,7 +2691,7 @@ ALTER TABLE ONLY task_hosts
 
 
 --
--- Name: task_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_services task_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_services
@@ -2698,7 +2699,7 @@ ALTER TABLE ONLY task_services
 
 
 --
--- Name: task_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_sessions task_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_sessions
@@ -2706,7 +2707,7 @@ ALTER TABLE ONLY task_sessions
 
 
 --
--- Name: tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tasks
@@ -2714,7 +2715,7 @@ ALTER TABLE ONLY tasks
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -2722,7 +2723,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: vuln_attempts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vuln_attempts vuln_attempts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vuln_attempts
@@ -2730,7 +2731,7 @@ ALTER TABLE ONLY vuln_attempts
 
 
 --
--- Name: vuln_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vuln_details vuln_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vuln_details
@@ -2738,7 +2739,7 @@ ALTER TABLE ONLY vuln_details
 
 
 --
--- Name: vulns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulns vulns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulns
@@ -2746,7 +2747,7 @@ ALTER TABLE ONLY vulns
 
 
 --
--- Name: vulns_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulns_refs vulns_refs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulns_refs
@@ -2754,7 +2755,7 @@ ALTER TABLE ONLY vulns_refs
 
 
 --
--- Name: web_forms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: web_forms web_forms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_forms
@@ -2762,7 +2763,7 @@ ALTER TABLE ONLY web_forms
 
 
 --
--- Name: web_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: web_pages web_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_pages
@@ -2770,7 +2771,7 @@ ALTER TABLE ONLY web_pages
 
 
 --
--- Name: web_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: web_sites web_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_sites
@@ -2778,7 +2779,7 @@ ALTER TABLE ONLY web_sites
 
 
 --
--- Name: web_vulns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: web_vulns web_vulns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY web_vulns
@@ -2786,7 +2787,7 @@ ALTER TABLE ONLY web_vulns
 
 
 --
--- Name: wmap_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: wmap_requests wmap_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY wmap_requests
@@ -2794,7 +2795,7 @@ ALTER TABLE ONLY wmap_requests
 
 
 --
--- Name: wmap_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: wmap_targets wmap_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY wmap_targets
@@ -2802,7 +2803,7 @@ ALTER TABLE ONLY wmap_targets
 
 
 --
--- Name: workspaces_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: workspaces workspaces_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY workspaces
