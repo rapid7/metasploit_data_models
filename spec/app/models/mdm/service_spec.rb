@@ -176,6 +176,39 @@ RSpec.describe Mdm::Service, type: :model do
   end
 
   context "validations" do
+
+    context 'port' do
+      it 'should require a port' do
+        portless_service= FactoryGirl.build(:mdm_service, :port => nil)
+        expect(portless_service).not_to be_valid
+        expect(portless_service.errors[:port]).to include("is not a number")
+      end
+
+      it 'should not be valid for out-of-range numbers' do
+        out_of_range = FactoryGirl.build(:mdm_service, :port => 70000)
+        expect(out_of_range).not_to be_valid
+        expect(out_of_range.errors[:port]).to include("is not included in the list")
+      end
+
+      it 'should not be valid for port 0' do
+        out_of_range = FactoryGirl.build(:mdm_service, :port => 0)
+        expect(out_of_range).not_to be_valid
+        expect(out_of_range.errors[:port]).to include("is not included in the list")
+      end
+
+      it 'should not be valid for decimal numbers' do
+        out_of_range = FactoryGirl.build(:mdm_service, :port => 5.67)
+        expect(out_of_range).not_to be_valid
+        expect(out_of_range.errors[:port]).to include("must be an integer")
+      end
+
+      it 'should not be valid for a negative number' do
+        out_of_range = FactoryGirl.build(:mdm_service, :port => -8)
+        expect(out_of_range).not_to be_valid
+        expect(out_of_range.errors[:port]).to include("is not included in the list")
+      end
+    end
+
     subject(:mdm_service) {
       FactoryGirl.build(:mdm_service)
     }

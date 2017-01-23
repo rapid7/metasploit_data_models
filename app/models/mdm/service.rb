@@ -218,6 +218,9 @@ class Mdm::Service < ActiveRecord::Base
   validates :port,
             numericality: {
                 only_integer: true
+            },
+            inclusion: {
+                in: 1..65535
             }
   validates :port,
             uniqueness: {
