@@ -7,5 +7,10 @@ FactoryGirl.define do
     association :workspace, :factory => :mdm_workspace
     association :host, :factory => :mdm_host
 
+    name { generate :mdm_loot_name }
+  end
+
+  sequence :mdm_loot_name do |n|
+    "Mdm::Loot name #{n}"
   end
 end
