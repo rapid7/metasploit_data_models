@@ -28,7 +28,7 @@ class Mdm::Workspace < ActiveRecord::Base
   has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
 
   # Events that occurred in this workspace.
-  has_many :events, :class_name => 'Mdm::Event'
+  has_many :events, dependent: :delete_all, :class_name => 'Mdm::Event'
 
   # Hosts in this workspace.
   has_many :hosts, :dependent => :destroy, :class_name => 'Mdm::Host'
