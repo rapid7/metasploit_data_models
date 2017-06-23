@@ -107,7 +107,7 @@ class Mdm::Host < ActiveRecord::Base
   #   @return [ActiveRecord::Relation<Mdm::Event>]
   has_many :events,
            class_name: 'Mdm::Event',
-           dependent: :destroy,
+           dependent: :delete_all,
            inverse_of: :host
 
   # @!attribute [rw] task_hosts
