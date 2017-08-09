@@ -49,7 +49,8 @@ class Mdm::Service < ActiveRecord::Base
   belongs_to :host,
              class_name: 'Mdm::Host',
              counter_cache: :service_count,
-             inverse_of: :services
+             inverse_of: :services,
+             touch: true
 
   # @!attribute loots
   #   Loot gathers from this service.
@@ -158,12 +159,6 @@ class Mdm::Service < ActiveRecord::Base
   #   @return [String] element of {STATES}.
 
   #
-  # Callbacks
-  #
-
-  after_save :normalize_host_os
-
-  #
   # Scopes
   #
 
@@ -247,20 +242,6 @@ class Mdm::Service < ActiveRecord::Base
   # @see Metasploit::Model::Search::Operator::Attribute#attribute_set
   def self.proto_set
     @proto_set ||= Set.new(PROTOS)
-  end
-
-  #
-  # Instance Methods
-  #
-
-  # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} whenever {#info} has
-  # changed.
-  #
-  # @return [void]
-  def normalize_host_os
-    if info_changed? && host.workspace.present? && !host.workspace.import_fingerprint
-      host.normalize_os
-    end
   end
 
   Metasploit::Concern.run(self)

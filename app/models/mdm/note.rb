@@ -13,7 +13,8 @@ class Mdm::Note < ActiveRecord::Base
   belongs_to :host,
              class_name: 'Mdm::Host',
              counter_cache: :note_count,
-             inverse_of: :notes
+             inverse_of: :notes,
+             touch: true
 
   # @!attribute [rw] service
   #   The service to which this note is attached.
@@ -76,12 +77,6 @@ class Mdm::Note < ActiveRecord::Base
   #   @return [DateTime]
 
   #
-  # Callbacks
-  #
-
-  after_save :normalize
-
-  #
   # Scopes
   #
 
@@ -105,20 +100,6 @@ class Mdm::Note < ActiveRecord::Base
   #
 
   serialize :data, ::MetasploitDataModels::Base64Serializer.new
-
-  private
-
-  # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} if the note is a
-  # {#ntype fingerprint}.
-  #
-  # @return [void]
-  def normalize
-    if data_changed? and ntype =~ /fingerprint/ && host.workspace.present? && !host.workspace.import_fingerprint
-      host.normalize_os
-    end
-  end
-
-  public
 
   Metasploit::Concern.run(self)
 end
