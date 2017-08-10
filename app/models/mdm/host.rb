@@ -604,6 +604,10 @@ class Mdm::Host < ActiveRecord::Base
     !!self.virtual_host
   end
 
+  def normalized?
+    !normalized_at.nil? && normalized_at.change(:usec => 0) == updated_at.change(:usec => 0)
+  end
+  
   private
 
   def normalize_arch

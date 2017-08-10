@@ -151,6 +151,10 @@ module Mdm::Host::OperatingSystemNormalization
   def normalize_os
     host   = self
     matches = []
+    
+    if host.normalized?
+      return
+    end
 
     # Note that we're already restricting the query to this host by using
     # host.notes instead of Note, so don't need a host_id in the
@@ -189,7 +193,13 @@ module Mdm::Host::OperatingSystemNormalization
     host.os_name ||= 'Unknown'
     host.purpose ||= 'device'
 
-    host.save if host.changed?
+    if host.changed?
+      host.save
+      host.touch(:normalized_at)
+    elsif host.normalized_at.nil?
+      host.touch(:normalized_at)
+    end
+    
   end
 
   # Recog matches for the `s` service.
