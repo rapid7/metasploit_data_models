@@ -81,7 +81,9 @@ class Mdm::Note < ActiveRecord::Base
   #
 
   scope :flagged, -> { where('critical = true AND seen = false') }
-
+  
+  scope :locked_attributes, -> { where(Mdm::Note[:ntype].matches("host.updated.%")) }
+   
   scope :visible, -> { where(Mdm::Note[:ntype].not_in(['web.form', 'web.url', 'web.vuln'])) }
 
   scope :search, lambda { |*args|

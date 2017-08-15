@@ -605,7 +605,7 @@ class Mdm::Host < ActiveRecord::Base
   end
 
   def normalized?
-    !normalized_at.nil? && normalized_at.change(:usec => 0) == updated_at.change(:usec => 0)
+    !normalized_at.nil? && normalized_at == updated_at
   end
   
   private

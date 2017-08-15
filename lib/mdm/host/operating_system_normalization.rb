@@ -403,25 +403,27 @@ module Mdm::Host::OperatingSystemNormalization
   #
   def apply_match_to_host(match)
     host = self
-
+    
+    locked_attributes = host.notes.locked_attributes
+    
     # These values in a match always override the current value unless
     # the host attribute has been explicitly locked by the user
 
-    if match['host.mac'] && !host.attribute_locked?(:mac)
+    if match['host.mac'] && !locked_attributes.any?{|n| n.ntype == 'host.updated.mac'}
       host.mac = sanitize(match['host.mac'])
     end
 
-    if match['host.name'] && !host.attribute_locked?(:name)
+    if match['host.name'] && !locked_attributes.any?{|n| n.ntype == 'host.updated.name'}
       host.name = sanitize(match['host.name'])
     end
 
     # Select the os architecture if available
-    if match['os.arch'] && !host.attribute_locked?(:arch)
+    if match['os.arch'] && !locked_attributes.any?{|n| n.ntype == 'host.updated.arch'}
       host.arch = sanitize(match['os.arch'])
     end
 
     # Guess the purpose using some basic heuristics
-    if ! host.attribute_locked?(:purpose)
+    if !locked_attributes.any?{|n| n.ntype == 'host.updated.purpose'}
       host.purpose = guess_purpose_from_match(match)
     end
 
@@ -442,7 +444,7 @@ module Mdm::Host::OperatingSystemNormalization
     # Metasploit currently ignores os.build, os.device, and os.vendor as separate fields.
 
     # Select the OS name from os.name, fall back to os.family
-    if ! host.attribute_locked?(:os_name)
+    if ! locked_attributes.any?{|n| n.ntype == 'host.updated.os_name'}
       # Try to fill this value from os.product first if it exists
       if match.has_key?('os.product')
         host.os_name = sanitize(match['os.product'])
@@ -459,12 +461,12 @@ module Mdm::Host::OperatingSystemNormalization
     end
 
     # Select the flavor from os.edition if available
-    if match.has_key?('os.edition') and ! host.attribute_locked?(:os_flavor)
+    if match.has_key?('os.edition') and ! locked_attributes.any?{|n| n.ntype == 'host.updated.os_flavor'}
       host.os_flavor = sanitize(match['os.edition'])
     end
 
     # Select an OS version as os.version, fall back to linux.kernel.version
-    if ! host.attribute_locked?(:os_sp)
+    if ! locked_attributes.any?{|n| n.ntype == 'host.updated.os_sp'}
       if match['os.version']
         host.os_sp = sanitize(match['os.version'])
       else
@@ -475,12 +477,12 @@ module Mdm::Host::OperatingSystemNormalization
     end
 
     # Select the os language if available
-    if match.has_key?('os.language') and ! host.attribute_locked?(:os_lang)
+    if match.has_key?('os.language') and !locked_attributes.any?{|n| n.ntype == 'host.updated.os_lang'}
       host.os_lang = sanitize(match['os.language'])
     end
 
     # Normalize MAC addresses to lower-case colon-delimited format
-    if host.mac and ! host.attribute_locked?(:mac)
+    if host.mac and ! locked_attributes.any?{|n| n.ntype == 'host.updated.mac'}
       host.mac = host.mac.downcase
       if host.mac =~ /^[a-f0-9]{12}$/
         host.mac = host.mac.scan(/../).join(':')
