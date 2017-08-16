@@ -525,6 +525,9 @@ class Mdm::Host < ActiveRecord::Base
   scope :tag_search,
         lambda { |*args| where("tags.name" => args[0]).includes(:tags).references(:tags) }
 
+  scope :normalized, -> { where(Mdm::Host[:updated_at].eq(Mdm::Host[:normalized_at])) }
+  scope :needs_normalization, -> { where(Mdm::Host[:normalized_at].lt(Mdm::Host[:updated_at])) }
+  
   #
   #
   # Search
