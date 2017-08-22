@@ -49,6 +49,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'metasploit-concern'
   s.add_runtime_dependency 'metasploit-model'
   s.add_runtime_dependency 'railties', '~>4.2.6'
+  
+  # Needed for bulk inserts
+  s.add_runtime_dependency 'activerecord-import'
 
   # os fingerprinting
   s.add_runtime_dependency 'recog', '~> 2.0'
