@@ -3,7 +3,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      nexpose_console = FactoryGirl.build(:mdm_nexpose_console)
+      nexpose_console = FactoryBot.build(:mdm_nexpose_console)
       expect(nexpose_console).to be_valid
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      nexpose_console = FactoryGirl.create(:mdm_nexpose_console)
+      nexpose_console = FactoryBot.create(:mdm_nexpose_console)
       expect {
         nexpose_console.destroy
       }.to_not raise_error
@@ -45,49 +45,49 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
   context 'validations' do
     context 'address' do
       it 'should require an address' do
-        addressless_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :address => nil)
+        addressless_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => nil)
         expect(addressless_nexpose_console).not_to be_valid
         expect(addressless_nexpose_console.errors[:address]).to include("can't be blank")
       end
 
       it 'should be valid for IPv4 format' do
-        ipv4_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :address => '192.168.1.120')
+        ipv4_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => '192.168.1.120')
         expect(ipv4_nexpose_console).to be_valid
       end
 
       it 'should be valid for IPv6 format' do
-        ipv6_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :address => '2001:0db8:85a3:0000:0000:8a2e:0370:7334')
+        ipv6_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => '2001:0db8:85a3:0000:0000:8a2e:0370:7334')
         expect(ipv6_nexpose_console).to be_valid
       end
     end
 
     context 'port' do
       it 'should require a port' do
-        portless_nexpose_console = FactoryGirl.build(:mdm_nexpose_console, :port => nil)
+        portless_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :port => nil)
         expect(portless_nexpose_console).not_to be_valid
         expect(portless_nexpose_console.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for out-of-range numbers' do
-        out_of_range = FactoryGirl.build(:mdm_nexpose_console, :port => 70000)
+        out_of_range = FactoryBot.build(:mdm_nexpose_console, :port => 70000)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for port 0' do
-        out_of_range = FactoryGirl.build(:mdm_nexpose_console, :port => 0)
+        out_of_range = FactoryBot.build(:mdm_nexpose_console, :port => 0)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for decimal numbers' do
-        out_of_range = FactoryGirl.build(:mdm_nexpose_console, :port => 5.67)
+        out_of_range = FactoryBot.build(:mdm_nexpose_console, :port => 5.67)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("must be an integer")
       end
 
       it 'should not be valid for a negative number' do
-        out_of_range = FactoryGirl.build(:mdm_nexpose_console, :port => -8)
+        out_of_range = FactoryBot.build(:mdm_nexpose_console, :port => -8)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
@@ -95,7 +95,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
     context 'name' do
       it 'should require a name' do
-        unnamed_console = FactoryGirl.build(:mdm_nexpose_console, :name => nil)
+        unnamed_console = FactoryBot.build(:mdm_nexpose_console, :name => nil)
         expect(unnamed_console).not_to be_valid
         expect(unnamed_console.errors[:name]).to include("can't be blank")
       end
@@ -103,7 +103,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
     context 'username' do
       it 'should require a name' do
-        console = FactoryGirl.build(:mdm_nexpose_console, :username => nil)
+        console = FactoryBot.build(:mdm_nexpose_console, :username => nil)
         expect(console).not_to be_valid
         expect(console.errors[:username]).to include("can't be blank")
       end
@@ -111,7 +111,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
     context 'password' do
       it 'should require a password' do
-        console = FactoryGirl.build(:mdm_nexpose_console, :password => nil)
+        console = FactoryBot.build(:mdm_nexpose_console, :password => nil)
         expect(console).not_to be_valid
         expect(console.errors[:password]).to include("can't be blank")
       end
@@ -122,7 +122,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
   context 'callbacks' do
     describe '#strip_protocol' do
       it 'should strip protocol handlers from the front of the address' do
-        nexpose_console = FactoryGirl.create(:mdm_nexpose_console, :address => 'https://foo.bar.com')
+        nexpose_console = FactoryBot.create(:mdm_nexpose_console, :address => 'https://foo.bar.com')
         expect(nexpose_console.address).to eq 'foo.bar.com'
       end
 

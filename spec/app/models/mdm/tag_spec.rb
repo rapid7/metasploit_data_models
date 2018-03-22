@@ -30,7 +30,7 @@ RSpec.describe Mdm::Tag, type: :model do
     context 'desc'  do
       it 'should not ba valid for a length over 8k' do
         desc = SecureRandom.hex(9001) #over 9000?!
-        large_tag = FactoryGirl.build(:mdm_tag, :desc => desc)
+        large_tag = FactoryBot.build(:mdm_tag, :desc => desc)
         expect(large_tag).not_to be_valid
         expect(large_tag.errors[:desc]).to include('desc must be less than 8k.')
       end
@@ -39,28 +39,28 @@ RSpec.describe Mdm::Tag, type: :model do
     context 'name' do
       let(:error_msg) {I18n.t('activerecord.ancestors.mdm/tag.model.errors.messages.character')}
       it 'must be present' do
-        nameless_tag = FactoryGirl.build(:mdm_tag, :name => nil)
+        nameless_tag = FactoryBot.build(:mdm_tag, :name => nil)
         expect(nameless_tag).not_to be_valid
         expect(nameless_tag.errors[:name]).to include("can't be blank")
       end
 
       it 'may only contain alphanumerics, dot, dashes, and underscores' do
-        mytag = FactoryGirl.build(:mdm_tag, :name => 'A.1-B_2')
+        mytag = FactoryBot.build(:mdm_tag, :name => 'A.1-B_2')
         expect(mytag).to be_valid
         #Test for various bad inputs we should never allow
-        mytag = FactoryGirl.build(:mdm_tag, :name => "A'1")
+        mytag = FactoryBot.build(:mdm_tag, :name => "A'1")
         expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include(error_msg)
-        mytag = FactoryGirl.build(:mdm_tag, :name => "A;1")
+        mytag = FactoryBot.build(:mdm_tag, :name => "A;1")
         expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include(error_msg)
-        mytag = FactoryGirl.build(:mdm_tag, :name => "A%1")
+        mytag = FactoryBot.build(:mdm_tag, :name => "A%1")
         expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include(error_msg)
-        mytag = FactoryGirl.build(:mdm_tag, :name => "A=1")
+        mytag = FactoryBot.build(:mdm_tag, :name => "A=1")
         expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include(error_msg)
-        mytag = FactoryGirl.build(:mdm_tag, :name => "#A1")
+        mytag = FactoryBot.build(:mdm_tag, :name => "#A1")
         expect(mytag).not_to be_valid
         expect(mytag.errors[:name]).to include(error_msg)
       end
@@ -70,7 +70,7 @@ RSpec.describe Mdm::Tag, type: :model do
   context 'instance methods' do
     context '#to_s' do
       it 'should return the name of the tag as a string' do
-        mytag = FactoryGirl.build(:mdm_tag, :name => 'mytag')
+        mytag = FactoryBot.build(:mdm_tag, :name => 'mytag')
         expect(mytag.to_s).to eq('mytag')
       end
     end
@@ -79,7 +79,7 @@ RSpec.describe Mdm::Tag, type: :model do
   context 'factories' do
     context 'mdm_tag' do
       subject(:mdm_tag) do
-        FactoryGirl.build(:mdm_tag)
+        FactoryBot.build(:mdm_tag)
       end
 
       it { is_expected.to be_valid }
@@ -88,7 +88,7 @@ RSpec.describe Mdm::Tag, type: :model do
 
   context '#destroy' do
     let!(:tag) do
-      FactoryGirl.create(:mdm_tag)
+      FactoryBot.create(:mdm_tag)
     end
 
     it 'should successfully destroy the object' do

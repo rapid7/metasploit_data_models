@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_listener, :aliases => [:listener], :class => Mdm::Listener do
     #
     # Associations

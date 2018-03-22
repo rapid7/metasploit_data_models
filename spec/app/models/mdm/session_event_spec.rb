@@ -7,14 +7,14 @@ RSpec.describe Mdm::SessionEvent, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      session_event = FactoryGirl.build(:mdm_session_event)
+      session_event = FactoryBot.build(:mdm_session_event)
       expect(session_event).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      session_event = FactoryGirl.create(:mdm_session_event)
+      session_event = FactoryBot.create(:mdm_session_event)
       expect {
         session_event.destroy
       }.to_not raise_error

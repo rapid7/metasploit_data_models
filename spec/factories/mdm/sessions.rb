@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_session, :aliases => [:session], :class => Mdm::Session do
     #
     # Associations

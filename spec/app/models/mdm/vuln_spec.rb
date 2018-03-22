@@ -1,16 +1,16 @@
 RSpec.describe Mdm::Vuln, type: :model do
   subject(:vuln) do
-    FactoryGirl.build(:mdm_vuln)
+    FactoryBot.build(:mdm_vuln)
   end
 
   it_should_behave_like 'Metasploit::Concern.run'
 
   context '#destroy' do
     it 'should successfully destroy the object and dependent objects' do
-      vuln = FactoryGirl.create(:mdm_vuln)
-      vuln_attempt = FactoryGirl.create(:mdm_vuln_attempt, :vuln => vuln)
-      vuln_detail = FactoryGirl.create(:mdm_vuln_detail, :vuln => vuln)
-      vuln_ref = FactoryGirl.create(:mdm_vuln_ref, :vuln => vuln)
+      vuln = FactoryBot.create(:mdm_vuln)
+      vuln_attempt = FactoryBot.create(:mdm_vuln_attempt, :vuln => vuln)
+      vuln_detail = FactoryBot.create(:mdm_vuln_detail, :vuln => vuln)
+      vuln_ref = FactoryBot.create(:mdm_vuln_ref, :vuln => vuln)
       expect {
         vuln.destroy
       }.to_not raise_error
@@ -49,20 +49,20 @@ RSpec.describe Mdm::Vuln, type: :model do
       context 'with Mdm::Refs' do
         let(:names) do
           2.times.collect {
-            FactoryGirl.generate :mdm_ref_name
+            FactoryBot.generate :mdm_ref_name
           }
         end
 
         let!(:refs) do
           names.collect do |name|
-            FactoryGirl.create(:mdm_ref, :name => name)
+            FactoryBot.create(:mdm_ref, :name => name)
           end
         end
 
         context 'with Mdm::VulnRefs' do
           let!(:vuln_refs) do
             refs.collect { |ref|
-              FactoryGirl.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
+              FactoryBot.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
             }
           end
           
@@ -74,7 +74,7 @@ RSpec.describe Mdm::Vuln, type: :model do
           
           context 'with Mdm::Module::Detail' do
             let!(:module_detail) do
-              FactoryGirl.create(
+              FactoryBot.create(
                   :mdm_module_detail
               )
             end
@@ -82,7 +82,7 @@ RSpec.describe Mdm::Vuln, type: :model do
             context 'with Mdm::Module::Refs with same names as Mdm::Refs' do
               let!(:module_refs) do
                 names.each do |name|
-                  FactoryGirl.create(
+                  FactoryBot.create(
                       :mdm_module_ref,
                       :detail => module_detail,
                       :name => name
@@ -149,7 +149,7 @@ RSpec.describe Mdm::Vuln, type: :model do
   context 'factories' do
     context 'mdm_host_vuln' do
       subject(:mdm_host_vuln) do
-        FactoryGirl.build(:mdm_host_vuln)
+        FactoryBot.build(:mdm_host_vuln)
       end
 
       it { is_expected.to be_valid }
@@ -157,7 +157,7 @@ RSpec.describe Mdm::Vuln, type: :model do
 
     context 'mdm_service_vuln' do
       subject(:mdm_service_vuln) do
-        FactoryGirl.build(:mdm_service_vuln)
+        FactoryBot.build(:mdm_service_vuln)
       end
 
       it { is_expected.to be_valid }
@@ -165,7 +165,7 @@ RSpec.describe Mdm::Vuln, type: :model do
 
     context 'mdm_vuln' do
       subject(:mdm_vuln) do
-        FactoryGirl.build(:mdm_vuln)
+        FactoryBot.build(:mdm_vuln)
       end
 
       it { is_expected.to be_valid }
@@ -180,17 +180,17 @@ RSpec.describe Mdm::Vuln, type: :model do
         end
 
         let!(:vuln) do
-          FactoryGirl.create(:mdm_vuln)
+          FactoryBot.create(:mdm_vuln)
         end
 
         context 'with Mdm::Ref' do
           let!(:ref) do
-            FactoryGirl.create(:mdm_ref)
+            FactoryBot.create(:mdm_ref)
           end
 
           context 'with Mdm::VulnRef' do
             let!(:vuln_ref) do
-              FactoryGirl.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
+              FactoryBot.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
             end
 
             context 'with query matching Mdm::Ref#name' do
@@ -259,7 +259,7 @@ RSpec.describe Mdm::Vuln, type: :model do
 
         context 'with Mdm::Host' do
           context 'with query matching Mdm::Host address' do
-            let(:vuln_with_host) { FactoryGirl.create(:mdm_vuln, :host)}
+            let(:vuln_with_host) { FactoryBot.create(:mdm_vuln, :host)}
             let(:query) { vuln_with_host.host.address}
 
             it 'should match Mdm::Vuln' do
@@ -268,7 +268,7 @@ RSpec.describe Mdm::Vuln, type: :model do
           end
 
           context 'with query matching Mdm::Host name' do
-            let(:vuln_with_host) { FactoryGirl.create(:mdm_vuln, :host)}
+            let(:vuln_with_host) { FactoryBot.create(:mdm_vuln, :host)}
             let(:query) { vuln_with_host.host.name}
 
             it 'should match Mdm::Vuln' do
@@ -285,7 +285,7 @@ RSpec.describe Mdm::Vuln, type: :model do
 
     context "invalid" do
       let(:mdm_vuln) do
-        FactoryGirl.build(:mdm_vuln)
+        FactoryBot.build(:mdm_vuln)
       end
 
       it "should not allow :name over 255 characters" do

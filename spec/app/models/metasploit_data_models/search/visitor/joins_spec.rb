@@ -84,7 +84,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
           context 'with association and attribute' do
             let(:association) do
-              FactoryGirl.generate :metasploit_model_search_operator_association_association
+              FactoryBot.generate :metasploit_model_search_operator_association_association
             end
 
             let(:association_operation) {
@@ -120,7 +120,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
           context 'with the same child join for all' do
             let(:association) do
-              FactoryGirl.generate :metasploit_model_search_operator_association_association
+              FactoryBot.generate :metasploit_model_search_operator_association_association
             end
 
             let(:association_operation) {
@@ -150,7 +150,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
           context 'with union of intersections' do
             let(:disjoint_associations) do
               Array.new(2) {
-                FactoryGirl.generate :metasploit_model_search_operator_association_association
+                FactoryBot.generate :metasploit_model_search_operator_association_association
               }
             end
 
@@ -207,7 +207,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             context 'with a common subset of child join' do
               let(:common_associations) do
                 Array.new(2) {
-                  FactoryGirl.generate :metasploit_model_search_operator_association_association
+                  FactoryBot.generate :metasploit_model_search_operator_association_association
                 }
               end
 
@@ -318,7 +318,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
     context 'with Metasploit::Model::Search::Operator::Association' do
       let(:association) do
-        FactoryGirl.generate :metasploit_model_search_operator_association_association
+        FactoryBot.generate :metasploit_model_search_operator_association_association
       end
 
       let(:node) do
@@ -368,7 +368,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
           context 'with name' do
             let(:name) do
-              FactoryGirl.generate :mdm_host_name
+              FactoryBot.generate :mdm_host_name
             end
 
             let(:formatted) do
@@ -380,7 +380,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
 
           context 'with services.name' do
             let(:name) do
-              FactoryGirl.generate :mdm_service_name
+              FactoryBot.generate :mdm_service_name
             end
 
             let(:formatted) do

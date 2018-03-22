@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_vuln_attempt, :class => Mdm::VulnAttempt do
     #
     # Associations

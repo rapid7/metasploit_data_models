@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_module_platform, :class => Mdm::Module::Platform do
     name { generate :mdm_module_platform_name }
 

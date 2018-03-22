@@ -30,14 +30,14 @@ RSpec.describe Mdm::User, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      user = FactoryGirl.build(:mdm_user)
+      user = FactoryBot.build(:mdm_user)
       expect(user).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      user = FactoryGirl.create(:mdm_user)
+      user = FactoryBot.create(:mdm_user)
       expect {
         user.destroy
       }.to_not raise_error

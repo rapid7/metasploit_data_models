@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_web_page, :aliases => [:web_page], :class => Mdm::WebPage do
     auth { generate :mdm_web_page_auth }
     body { generate :mdm_web_page_body }

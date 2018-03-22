@@ -3,7 +3,7 @@ RSpec.describe Mdm::WebSite, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      web_site = FactoryGirl.build(:mdm_web_site)
+      web_site = FactoryBot.build(:mdm_web_site)
       expect(web_site).to be_valid
     end
   end
@@ -31,7 +31,7 @@ RSpec.describe Mdm::WebSite, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      web_site = FactoryGirl.create(:mdm_web_site)
+      web_site = FactoryBot.create(:mdm_web_site)
       expect {
         web_site.destroy
       }.to_not raise_error
@@ -51,33 +51,33 @@ RSpec.describe Mdm::WebSite, type: :model do
   context 'methods' do
     context '#form_count' do
       it 'should return an accurate count of associated Webforms' do
-        mysite = FactoryGirl.create(:mdm_web_site)
-        FactoryGirl.create(:mdm_web_form, :web_site => mysite)
-        FactoryGirl.create(:mdm_web_form, :web_site => mysite)
+        mysite = FactoryBot.create(:mdm_web_site)
+        FactoryBot.create(:mdm_web_form, :web_site => mysite)
+        FactoryBot.create(:mdm_web_form, :web_site => mysite)
         expect(mysite.form_count).to eq(2)
-        FactoryGirl.create(:mdm_web_form, :web_site => mysite)
+        FactoryBot.create(:mdm_web_form, :web_site => mysite)
         expect(mysite.form_count).to eq(3)
       end
     end
 
     context '#page_count' do
       it 'should return an accurate count of associated Webpages' do
-        mysite = FactoryGirl.create(:mdm_web_site)
-        FactoryGirl.create(:mdm_web_page, :web_site => mysite)
-        FactoryGirl.create(:mdm_web_page, :web_site => mysite)
+        mysite = FactoryBot.create(:mdm_web_site)
+        FactoryBot.create(:mdm_web_page, :web_site => mysite)
+        FactoryBot.create(:mdm_web_page, :web_site => mysite)
         expect(mysite.page_count).to eq(2)
-        FactoryGirl.create(:mdm_web_page, :web_site => mysite)
+        FactoryBot.create(:mdm_web_page, :web_site => mysite)
         expect(mysite.page_count).to eq(3)
       end
     end
 
     context '#vuln_count' do
       it 'should return an accurate count of associated Webvulns' do
-        mysite = FactoryGirl.create(:mdm_web_site)
-        FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
-        FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
+        mysite = FactoryBot.create(:mdm_web_site)
+        FactoryBot.create(:mdm_web_vuln, :web_site => mysite)
+        FactoryBot.create(:mdm_web_vuln, :web_site => mysite)
         expect(mysite.vuln_count).to eq(2)
-        FactoryGirl.create(:mdm_web_vuln, :web_site => mysite)
+        FactoryBot.create(:mdm_web_vuln, :web_site => mysite)
         expect(mysite.vuln_count).to eq(3)
       end
     end

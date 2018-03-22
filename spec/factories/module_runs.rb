@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:session_id)
 
   factory :metasploit_data_models_module_run, class: MetasploitDataModels::ModuleRun do

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_module_detail, :class => Mdm::Module::Detail do
     transient do
       root {

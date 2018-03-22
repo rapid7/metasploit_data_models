@@ -25,7 +25,7 @@ RSpec.describe Mdm::VulnAttempt, type: :model do
 
   context 'validations' do
     it 'should require a vuln_id' do
-      orphan_detail = FactoryGirl.build(:mdm_vuln_detail, :vuln => nil)
+      orphan_detail = FactoryBot.build(:mdm_vuln_detail, :vuln => nil)
       expect(orphan_detail).not_to be_valid
       expect(orphan_detail.errors[:vuln_id]).to include("can't be blank")
     end
@@ -33,14 +33,14 @@ RSpec.describe Mdm::VulnAttempt, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      vuln_attempt = FactoryGirl.build(:mdm_vuln_attempt)
+      vuln_attempt = FactoryBot.build(:mdm_vuln_attempt)
       expect(vuln_attempt).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      vuln_attempt = FactoryGirl.create(:mdm_vuln_attempt)
+      vuln_attempt = FactoryBot.create(:mdm_vuln_attempt)
       expect {
         vuln_attempt.destroy
       }.to_not raise_error

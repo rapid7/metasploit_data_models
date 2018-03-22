@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_cred, :aliases => [:cred], :class => Mdm::Cred do
     #
     # Associations

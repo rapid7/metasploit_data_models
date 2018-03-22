@@ -8,7 +8,7 @@ RSpec.describe Mdm::Client, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      client = FactoryGirl.create(:mdm_client, :ua_string => 'user-agent')
+      client = FactoryBot.create(:mdm_client, :ua_string => 'user-agent')
       expect {
         client.destroy
       }.to_not raise_error
@@ -20,7 +20,7 @@ RSpec.describe Mdm::Client, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      client = FactoryGirl.build(:mdm_client)
+      client = FactoryBot.build(:mdm_client)
       expect(client).to be_valid
     end
   end

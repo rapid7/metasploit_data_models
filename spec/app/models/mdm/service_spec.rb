@@ -41,29 +41,29 @@ RSpec.describe Mdm::Service, type: :model do
   context 'scopes' do
     context "inactive" do
       it "should exclude open services" do
-        open_service = FactoryGirl.create(:mdm_service, :state => 'open')
+        open_service = FactoryBot.create(:mdm_service, :state => 'open')
         expect(Mdm::Service.inactive).not_to include(open_service)
       end
     end
 
     context "with_state open" do
       it "should exclude closed services" do
-        closed_service = FactoryGirl.create(:mdm_service, :state => 'closed')
+        closed_service = FactoryBot.create(:mdm_service, :state => 'closed')
         expect(Mdm::Service.with_state('open')).not_to include(closed_service)
       end
     end
 
     context 'search' do
       it 'should find only services that match for \'tcp\'' do
-        tcp_service   = FactoryGirl.create(:mdm_service, proto: 'tcp')
-        udp_service    =  FactoryGirl.create(:mdm_service, proto: 'udp')
+        tcp_service   = FactoryBot.create(:mdm_service, proto: 'tcp')
+        udp_service    =  FactoryBot.create(:mdm_service, proto: 'udp')
         search_results = Mdm::Service.search('tcp')
         expect(search_results).to     include(tcp_service)
         expect(search_results).not_to include(udp_service)
       end
 
       it 'should query host name of services' do
-        service = FactoryGirl.create(:mdm_service)
+        service = FactoryBot.create(:mdm_service)
         host_name = service.host.name
         expect(Mdm::Service.search(host_name)).to include(service)
       end
@@ -75,14 +75,14 @@ RSpec.describe Mdm::Service, type: :model do
       include_context 'Rex::Text'
 
       it 'should call #normalize_host_os' do
-        svc = FactoryGirl.create(:mdm_service)
+        svc = FactoryBot.create(:mdm_service)
         expect(svc).to receive(:normalize_host_os)
         svc.run_callbacks(:save)
       end
 
       it 'should include recog data when there is a match' do
-        host = FactoryGirl.create(:mdm_host)
-        FactoryGirl.create(
+        host = FactoryBot.create(:mdm_host)
+        FactoryBot.create(
           :mdm_service,
           :host => host,
           :name => 'ftp',
@@ -93,8 +93,8 @@ RSpec.describe Mdm::Service, type: :model do
       end
 
       it 'should not include recog data when there is not a match' do
-        host = FactoryGirl.create(:mdm_host)
-        FactoryGirl.create(
+        host = FactoryBot.create(:mdm_host)
+        FactoryBot.create(
           :mdm_service,
           :host => host,
           :name => 'ftp',
@@ -107,14 +107,14 @@ RSpec.describe Mdm::Service, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      service = FactoryGirl.build(:mdm_service)
+      service = FactoryBot.build(:mdm_service)
       expect(service).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      service = FactoryGirl.create(:mdm_service)
+      service = FactoryBot.create(:mdm_service)
       expect {
         service.destroy
       }.to_not raise_error
@@ -179,38 +179,38 @@ RSpec.describe Mdm::Service, type: :model do
 
     context 'port' do
       it 'should require a port' do
-        portless_service= FactoryGirl.build(:mdm_service, :port => nil)
+        portless_service= FactoryBot.build(:mdm_service, :port => nil)
         expect(portless_service).not_to be_valid
         expect(portless_service.errors[:port]).to include("is not a number")
       end
 
       it 'should not be valid for out-of-range numbers' do
-        out_of_range = FactoryGirl.build(:mdm_service, :port => 70000)
+        out_of_range = FactoryBot.build(:mdm_service, :port => 70000)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for port 0' do
-        out_of_range = FactoryGirl.build(:mdm_service, :port => 0)
+        out_of_range = FactoryBot.build(:mdm_service, :port => 0)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
 
       it 'should not be valid for decimal numbers' do
-        out_of_range = FactoryGirl.build(:mdm_service, :port => 5.67)
+        out_of_range = FactoryBot.build(:mdm_service, :port => 5.67)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("must be an integer")
       end
 
       it 'should not be valid for a negative number' do
-        out_of_range = FactoryGirl.build(:mdm_service, :port => -8)
+        out_of_range = FactoryBot.build(:mdm_service, :port => -8)
         expect(out_of_range).not_to be_valid
         expect(out_of_range.errors[:port]).to include("is not included in the list")
       end
     end
 
     subject(:mdm_service) {
-      FactoryGirl.build(:mdm_service)
+      FactoryBot.build(:mdm_service)
     }
 
     it 'validate port is only an integer' do
@@ -220,8 +220,8 @@ RSpec.describe Mdm::Service, type: :model do
     it { is_expected.to validate_inclusion_of(:proto).in_array(described_class::PROTOS) }
 
     context 'when a duplicate service already exists' do
-      let(:service1) { FactoryGirl.create(:mdm_service)}
-      let(:service2) { FactoryGirl.build(:mdm_service, :host => service1.host, :port => service1.port, :proto => service1.proto )}
+      let(:service1) { FactoryBot.create(:mdm_service)}
+      let(:service2) { FactoryBot.build(:mdm_service, :host => service1.host, :port => service1.port, :proto => service1.proto )}
       it 'is not valid' do
         expect(service2).to_not be_valid
       end

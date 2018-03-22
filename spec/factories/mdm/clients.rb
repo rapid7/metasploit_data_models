@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_client, :class => Mdm::Client do
     #
     # Associations

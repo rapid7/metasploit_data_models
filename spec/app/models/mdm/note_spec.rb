@@ -3,7 +3,7 @@ RSpec.describe Mdm::Note, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      note = FactoryGirl.build(:mdm_note)
+      note = FactoryBot.build(:mdm_note)
       expect(note).to be_valid
     end
   end
@@ -29,7 +29,7 @@ RSpec.describe Mdm::Note, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      note = FactoryGirl.create(:mdm_note)
+      note = FactoryBot.create(:mdm_note)
       expect {
         note.destroy
       }.to_not raise_error
@@ -49,16 +49,16 @@ RSpec.describe Mdm::Note, type: :model do
   context 'scopes' do
     context 'flagged' do
       it 'should exclude non-critical note' do
-        flagged_note = FactoryGirl.create(:mdm_note, :critical => true, :seen => false)
-        non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => false)
+        flagged_note = FactoryBot.create(:mdm_note, :critical => true, :seen => false)
+        non_critical_note = FactoryBot.create(:mdm_note, :critical => false, :seen => false)
         flagged_set = Mdm::Note.flagged
         expect(flagged_set).to include(flagged_note)
         expect(flagged_set).not_to include(non_critical_note)
       end
 
       it 'should exclude seen notes' do
-        flagged_note = FactoryGirl.create(:mdm_note, :critical => true, :seen => false)
-        non_critical_note = FactoryGirl.create(:mdm_note, :critical => false, :seen => true)
+        flagged_note = FactoryBot.create(:mdm_note, :critical => true, :seen => false)
+        non_critical_note = FactoryBot.create(:mdm_note, :critical => false, :seen => true)
         flagged_set = Mdm::Note.flagged
         expect(flagged_set).to include(flagged_note)
         expect(flagged_set).not_to include(non_critical_note)
@@ -67,8 +67,8 @@ RSpec.describe Mdm::Note, type: :model do
 
     context 'visible' do
       it 'should only include visible notes' do
-        flagged_note = FactoryGirl.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
-        webform_note = FactoryGirl.create(:mdm_note, :ntype => 'web.form', :critical => true, :seen => false)
+        flagged_note = FactoryBot.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
+        webform_note = FactoryBot.create(:mdm_note, :ntype => 'web.form', :critical => true, :seen => false)
         visible_set = Mdm::Note.visible
         expect(visible_set).to include(flagged_note)
         expect(visible_set).not_to include(webform_note)
@@ -77,12 +77,12 @@ RSpec.describe Mdm::Note, type: :model do
 
     context 'search' do
       it 'should match on ntype' do
-        flagged_note = FactoryGirl.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
+        flagged_note = FactoryBot.create(:mdm_note, :ntype => 'flag.me', :critical => true, :seen => false)
         expect(Mdm::Note.search('flag.me')).to include(flagged_note)
       end
 
       it 'should match on host name' do
-        flagged_note = FactoryGirl.create(:mdm_note, :seen => false)
+        flagged_note = FactoryBot.create(:mdm_note, :seen => false)
         host_name = flagged_note.host.name
         expect(Mdm::Note.search(host_name)).to include(flagged_note)
       end

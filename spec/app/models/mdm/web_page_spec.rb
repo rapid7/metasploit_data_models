@@ -7,7 +7,7 @@ RSpec.describe Mdm::WebPage, type: :model do
 
   context 'serialized attributes' do
     context 'cookie' do
-      let(:web_page) { FactoryGirl.create(:mdm_web_page, cookie: cookie) }
+      let(:web_page) { FactoryBot.create(:mdm_web_page, cookie: cookie) }
 
       context 'with string cookie' do
         let(:cookie) { "test_name=test_value" }
@@ -82,14 +82,14 @@ RSpec.describe Mdm::WebPage, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      web_page = FactoryGirl.build(:mdm_web_page)
+      web_page = FactoryBot.build(:mdm_web_page)
       expect(web_page).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      web_page = FactoryGirl.create(:mdm_web_page)
+      web_page = FactoryBot.create(:mdm_web_page)
       expect {
         web_page.destroy
       }.to_not raise_error

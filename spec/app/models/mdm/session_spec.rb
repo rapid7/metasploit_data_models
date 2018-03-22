@@ -3,14 +3,14 @@ RSpec.describe Mdm::Session, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      session = FactoryGirl.build(:mdm_session)
+      session = FactoryBot.build(:mdm_session)
       expect(session).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      session = FactoryGirl.create(:mdm_session)
+      session = FactoryBot.create(:mdm_session)
       expect {
         session.destroy
       }.to_not raise_error
@@ -56,8 +56,8 @@ RSpec.describe Mdm::Session, type: :model do
   context 'scopes' do
     context 'alive' do
       it 'should return sessions that have not been closed' do
-        alive_session = FactoryGirl.create(:mdm_session)
-        dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
+        alive_session = FactoryBot.create(:mdm_session)
+        dead_session = FactoryBot.create(:mdm_session, :closed_at => Time.now)
         alive_set = Mdm::Session.alive
         expect(alive_set).to include(alive_session)
         expect(alive_set).not_to include(dead_session)
@@ -66,8 +66,8 @@ RSpec.describe Mdm::Session, type: :model do
 
     context 'dead'  do
       it 'should return sessions that have been closed' do
-        alive_session = FactoryGirl.create(:mdm_session)
-        dead_session = FactoryGirl.create(:mdm_session, :closed_at => Time.now)
+        alive_session = FactoryBot.create(:mdm_session)
+        dead_session = FactoryBot.create(:mdm_session, :closed_at => Time.now)
         dead_set = Mdm::Session.dead
         expect(dead_set).not_to include(alive_session)
         expect(dead_set).to include(dead_session)
@@ -76,9 +76,9 @@ RSpec.describe Mdm::Session, type: :model do
 
     context 'upgradeable' do
       it 'should return sessions that can be upgraded to meterpreter' do
-        win_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
-        linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
-        win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
+        win_shell = FactoryBot.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
+        linux_shell = FactoryBot.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
+        win_meterp = FactoryBot.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
         upgrade_set = Mdm::Session.upgradeable
         expect(upgrade_set).to include(win_shell)
         expect(upgrade_set).not_to include(linux_shell)
@@ -90,7 +90,7 @@ RSpec.describe Mdm::Session, type: :model do
   context 'callbacks' do
     context 'before_destroy' do
       it 'should call #stop' do
-        mysession = FactoryGirl.create(:mdm_session)
+        mysession = FactoryBot.create(:mdm_session)
         expect(mysession).to receive(:stop)
         mysession.destroy
       end
@@ -100,17 +100,17 @@ RSpec.describe Mdm::Session, type: :model do
   context 'methods' do
     context '#upgradeable?' do
       it 'should return true for windows shells' do
-        win_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
+        win_shell = FactoryBot.create(:mdm_session, :stype => 'shell', :platform => 'Windows')
         expect(win_shell.upgradeable?).to eq(true)
       end
 
       it 'should return false for non-windows shells' do
-        linux_shell = FactoryGirl.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
+        linux_shell = FactoryBot.create(:mdm_session, :stype => 'shell', :platform => 'Linux')
         expect(linux_shell.upgradeable?).to eq(false)
       end
 
       it 'should return false for Windows Meterpreter Sessions' do
-        win_meterp = FactoryGirl.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
+        win_meterp = FactoryBot.create(:mdm_session, :stype => 'meterpreter', :platform => 'Windows')
         expect(win_meterp.upgradeable?).to eq(false)
       end
     end

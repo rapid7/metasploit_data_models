@@ -21,7 +21,7 @@ RSpec.describe Mdm::Module::Target, type: :model do
   context 'factories' do
     context 'mdm_module_target' do
       subject(:mdm_module_target) do
-        FactoryGirl.build :mdm_module_target
+        FactoryBot.build :mdm_module_target
       end
 
       it { is_expected.to be_valid }

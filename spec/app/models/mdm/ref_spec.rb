@@ -8,15 +8,15 @@ RSpec.describe Mdm::Ref, type: :model do
       context 'with Mdm::Module::Refs' do
         context 'with same name' do
           let(:name) do
-            FactoryGirl.generate :mdm_ref_name
+            FactoryBot.generate :mdm_ref_name
           end
 
           let!(:module_ref) do
-            FactoryGirl.create(:mdm_module_ref, :name => name)
+            FactoryBot.create(:mdm_module_ref, :name => name)
           end
 
           let!(:ref) do
-            FactoryGirl.create(:mdm_ref, :name => name)
+            FactoryBot.create(:mdm_ref, :name => name)
           end
 
           it 'should have module_refs in assocation' do
@@ -50,7 +50,7 @@ RSpec.describe Mdm::Ref, type: :model do
   context 'factories' do
     context 'mdm_ref' do
       subject(:mdm_ref) do
-        FactoryGirl.build :mdm_ref
+        FactoryBot.build :mdm_ref
       end
 
       it { is_expected.to be_valid }
@@ -59,7 +59,7 @@ RSpec.describe Mdm::Ref, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      mdm_ref = FactoryGirl.create(:mdm_ref)
+      mdm_ref = FactoryBot.create(:mdm_ref)
       expect {
         mdm_ref.destroy
       }.to_not raise_error

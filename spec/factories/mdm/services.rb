@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_service, :class => Mdm::Service do
     #
     # Associations
@@ -15,7 +15,7 @@ FactoryGirl.define do
 
     factory :web_service do
       proto 'tcp'
-      name { FactoryGirl.generate(:web_service_name) }
+      name { FactoryBot.generate(:web_service_name) }
     end
   end
 

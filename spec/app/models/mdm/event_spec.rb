@@ -25,7 +25,7 @@ RSpec.describe Mdm::Event, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object and all dependent objects' do
-      event = FactoryGirl.create(:mdm_event)
+      event = FactoryBot.create(:mdm_event)
       expect {
         event.destroy
       }.to_not raise_error
@@ -38,9 +38,9 @@ RSpec.describe Mdm::Event, type: :model do
 
   context 'scopes' do
     context 'flagged' do
-      let(:workspace) {FactoryGirl.create(:mdm_workspace)}
-      let(:flagged_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'flagme', :critical => true, :seen => false) }
-      let(:non_critical_event) { FactoryGirl.create(:mdm_event, :workspace => workspace, :name => 'dontflagmebro', :critical => false, :seen => false) }
+      let(:workspace) {FactoryBot.create(:mdm_workspace)}
+      let(:flagged_event) { FactoryBot.create(:mdm_event, :workspace => workspace, :name => 'flagme', :critical => true, :seen => false) }
+      let(:non_critical_event) { FactoryBot.create(:mdm_event, :workspace => workspace, :name => 'dontflagmebro', :critical => false, :seen => false) }
 
       before(:example) do
         flagged_event
@@ -63,8 +63,8 @@ RSpec.describe Mdm::Event, type: :model do
 
     context 'module_run' do
       it 'should only return module_run events' do
-        flagged_event = FactoryGirl.create(:mdm_event, :name => 'module_run')
-        non_critical_event = FactoryGirl.create(:mdm_event, :name => 'dontflagmebro')
+        flagged_event = FactoryBot.create(:mdm_event, :name => 'module_run')
+        non_critical_event = FactoryBot.create(:mdm_event, :name => 'dontflagmebro')
         flagged_set = Mdm::Event.module_run
         expect(flagged_set).to include(flagged_event)
         expect(flagged_set).not_to include(non_critical_event)
@@ -74,7 +74,7 @@ RSpec.describe Mdm::Event, type: :model do
 
   context 'validations' do
     it 'should require name' do
-      unnamed_event = FactoryGirl.build(:mdm_event, :name => nil)
+      unnamed_event = FactoryBot.build(:mdm_event, :name => nil)
       expect(unnamed_event).not_to be_valid
       expect(unnamed_event.errors[:name]).to include("can't be blank")
     end
@@ -82,7 +82,7 @@ RSpec.describe Mdm::Event, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      event = FactoryGirl.build(:mdm_event)
+      event = FactoryBot.build(:mdm_event)
       expect(event).to be_valid
     end
   end

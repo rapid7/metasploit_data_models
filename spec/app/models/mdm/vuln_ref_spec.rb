@@ -4,7 +4,7 @@ RSpec.describe Mdm::VulnRef, type: :model do
   context 'factories' do
     context 'mdm_vuln_ref' do
       subject(:mdm_vuln_ref) do
-        FactoryGirl.build(:mdm_vuln_ref)
+        FactoryBot.build(:mdm_vuln_ref)
       end
 
       it { is_expected.to be_valid }
@@ -26,14 +26,14 @@ RSpec.describe Mdm::VulnRef, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      vuln_ref = FactoryGirl.build(:mdm_vuln_ref)
+      vuln_ref = FactoryBot.build(:mdm_vuln_ref)
       expect(vuln_ref).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      vuln_ref = FactoryGirl.create(:mdm_vuln_ref)
+      vuln_ref = FactoryBot.create(:mdm_vuln_ref)
       expect {
         vuln_ref.destroy
       }.to_not raise_error

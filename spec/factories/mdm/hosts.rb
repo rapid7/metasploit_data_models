@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_host, :class => Mdm::Host do
     #
     # Associations

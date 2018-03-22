@@ -1,6 +1,6 @@
 RSpec.describe Mdm::Workspace, type: :model do
   subject(:workspace) do
-    FactoryGirl.build(:mdm_workspace)
+    FactoryBot.build(:mdm_workspace)
   end
 
   let(:default) do
@@ -11,16 +11,16 @@ RSpec.describe Mdm::Workspace, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      workspace = FactoryGirl.build(:mdm_workspace)
+      workspace = FactoryBot.build(:mdm_workspace)
       expect(workspace).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object and dependent objects' do
-      workspace = FactoryGirl.create(:mdm_workspace)
-      listener = FactoryGirl.create(:mdm_listener, :workspace => workspace)
-      task = FactoryGirl.create(:mdm_task, :workspace => workspace)
+      workspace = FactoryBot.create(:mdm_workspace)
+      listener = FactoryBot.create(:mdm_listener, :workspace => workspace)
+      task = FactoryBot.create(:mdm_task, :workspace => workspace)
 
       expect {
         workspace.destroy
@@ -98,38 +98,38 @@ RSpec.describe Mdm::Workspace, type: :model do
 
   context 'methods' do
     let(:hosts) do
-      FactoryGirl.create_list(:mdm_host, 2, :workspace => workspace)
+      FactoryBot.create_list(:mdm_host, 2, :workspace => workspace)
     end
 
     let(:other_hosts) do
-      FactoryGirl.create_list(:mdm_host, 2, :workspace => other_workspace)
+      FactoryBot.create_list(:mdm_host, 2, :workspace => other_workspace)
     end
 
     let(:other_services) do
       other_hosts.collect do |host|
-        FactoryGirl.create(:mdm_service, :host => host)
+        FactoryBot.create(:mdm_service, :host => host)
       end
     end
 
     let(:other_web_sites) do
       other_services.collect { |service|
-        FactoryGirl.create(:mdm_web_site, :service => service)
+        FactoryBot.create(:mdm_web_site, :service => service)
       }
     end
 
     let(:other_workspace) do
-      FactoryGirl.create(:mdm_workspace)
+      FactoryBot.create(:mdm_workspace)
     end
 
     let(:services) do
       hosts.collect do |host|
-        FactoryGirl.create(:mdm_service, :host => host)
+        FactoryBot.create(:mdm_service, :host => host)
       end
     end
 
     let(:web_sites) do
       services.collect { |service|
-        FactoryGirl.create(:mdm_web_site, :service => service)
+        FactoryBot.create(:mdm_web_site, :service => service)
       }
     end
 
@@ -140,13 +140,13 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       let!(:creds) do
         services.collect do |service|
-          FactoryGirl.create(:mdm_cred, :service => service)
+          FactoryBot.create(:mdm_cred, :service => service)
         end
       end
 
       let!(:other_creds) do
         other_services.collect do |service|
-          FactoryGirl.create(:mdm_cred, :service => service)
+          FactoryBot.create(:mdm_cred, :service => service)
         end
       end
 
@@ -183,7 +183,7 @@ RSpec.describe Mdm::Workspace, type: :model do
     context 'default' do
       context 'with default workspace' do
         before(:example) do
-          FactoryGirl.create(
+          FactoryBot.create(
               :mdm_workspace,
               :name => default
           )
@@ -233,7 +233,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
     context '#each_cred' do
       it 'should pass each of the #creds to the block' do
-        creds = FactoryGirl.create_list(:mdm_cred, 2)
+        creds = FactoryBot.create_list(:mdm_cred, 2)
         allow(workspace).to receive(:creds).and_return(creds)
 
         expect { |block|
@@ -244,7 +244,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
     context '#each_host_tag' do
       it 'should pass each of the #host_tags to the block' do
-        tags = FactoryGirl.create_list(:mdm_tag, 2)
+        tags = FactoryBot.create_list(:mdm_tag, 2)
         expect(workspace).to receive(:host_tags).and_return(tags)
 
         expect { |block|
@@ -263,14 +263,14 @@ RSpec.describe Mdm::Workspace, type: :model do
       #
 
       let(:other_tags) do
-        FactoryGirl.create_list(
+        FactoryBot.create_list(
             :mdm_tag,
             2
         )
       end
 
       let(:tags) do
-        FactoryGirl.create_list(
+        FactoryBot.create_list(
             :mdm_tag,
             2
         )
@@ -284,7 +284,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         host_tags = []
 
         hosts.zip(tags) do |host, tag|
-          host_tag = FactoryGirl.create(:mdm_host_tag, :host => host, :tag => tag)
+          host_tag = FactoryBot.create(:mdm_host_tag, :host => host, :tag => tag)
 
           host_tags << host_tag
         end
@@ -296,7 +296,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         host_tags = []
 
         other_hosts.zip(other_tags) do |host, tag|
-          host_tag = FactoryGirl.create(:mdm_host_tag, :host => host, :tag => tag)
+          host_tag = FactoryBot.create(:mdm_host_tag, :host => host, :tag => tag)
 
           host_tags << host_tag
         end
@@ -371,13 +371,13 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       let!(:other_web_forms) do
         other_web_sites.collect { |web_site|
-          FactoryGirl.create(:web_form, :web_site => web_site)
+          FactoryBot.create(:web_form, :web_site => web_site)
         }
       end
 
       let!(:web_forms) do
         web_sites.collect { |web_site|
-          FactoryGirl.create(:web_form, :web_site => web_site)
+          FactoryBot.create(:web_form, :web_site => web_site)
         }
       end
 
@@ -443,13 +443,13 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       let!(:other_web_vulns) do
         other_web_sites.collect { |web_site|
-          FactoryGirl.create(:mdm_web_vuln, :web_site => web_site)
+          FactoryBot.create(:mdm_web_vuln, :web_site => web_site)
         }
       end
 
       let!(:web_vulns) do
         web_sites.collect { |web_site|
-          FactoryGirl.create(:mdm_web_vuln, :web_site => web_site)
+          FactoryBot.create(:mdm_web_vuln, :web_site => web_site)
         }
       end
 

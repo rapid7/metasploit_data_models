@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_module_mixin, :class => Mdm::Module::Mixin do
     name { generate :mdm_module_mixin_name }
 

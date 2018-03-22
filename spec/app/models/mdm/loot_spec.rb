@@ -30,14 +30,14 @@ RSpec.describe Mdm::Loot, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      loot = FactoryGirl.build(:mdm_loot)
+      loot = FactoryBot.build(:mdm_loot)
       expect(loot).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      loot = FactoryGirl.create(:mdm_loot)
+      loot = FactoryBot.create(:mdm_loot)
       expect {
         loot.destroy
       }.to_not raise_error
@@ -50,22 +50,22 @@ RSpec.describe Mdm::Loot, type: :model do
   context 'scopes' do
     context 'search' do
       it 'should match on ltype' do
-        myloot = FactoryGirl.create(:mdm_loot, :ltype => 'find.this.ltype')
+        myloot = FactoryBot.create(:mdm_loot, :ltype => 'find.this.ltype')
         expect(Mdm::Loot.search('find.this.ltype')).to include(myloot)
       end
 
       it 'should match on name' do
-        myloot = FactoryGirl.create(:mdm_loot, :name => 'Find This')
+        myloot = FactoryBot.create(:mdm_loot, :name => 'Find This')
         expect(Mdm::Loot.search('Find This')).to include(myloot)
       end
 
       it 'should match on info' do
-        myloot = FactoryGirl.create(:mdm_loot, :info => 'Find This')
+        myloot = FactoryBot.create(:mdm_loot, :info => 'Find This')
         expect(Mdm::Loot.search('Find This')).to include(myloot)
       end
 
       it 'should match on hostname' do
-        myloot = FactoryGirl.create(:mdm_loot, :info => 'Find This')
+        myloot = FactoryBot.create(:mdm_loot, :info => 'Find This')
         host_name = myloot.host.name
         expect(Mdm::Loot.search(host_name)).to include(myloot)
       end
@@ -75,7 +75,7 @@ RSpec.describe Mdm::Loot, type: :model do
   context 'callbacks' do
     context 'before_destroy' do
       it 'should call #delete_file' do
-        myloot =  FactoryGirl.create(:mdm_loot)
+        myloot =  FactoryBot.create(:mdm_loot)
         expect(myloot).to receive(:delete_file)
         myloot.destroy
       end
