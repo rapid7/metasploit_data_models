@@ -1,7 +1,7 @@
 require 'rails'
 
 # `Rails::Engine` that exposes MetasploitDataModel's `ActiveRecord::Base` subclasses and automatically loads its
-# `FactoryGirl` factories, sequences, and traits.
+# `FactoryBot` factories, sequences, and traits.
 class MetasploitDataModels::Engine < Rails::Engine
   # @see http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
   config.generators do |g|
@@ -21,12 +21,12 @@ class MetasploitDataModels::Engine < Rails::Engine
   end
 
   initializer 'metasploit_data_models.prepend_factory_path', :after => 'factory_bot.set_factory_paths' do
-    if defined? FactoryGirl
+    if defined? FactoryBot
       relative_definition_file_path = config.generators.options[:factory_bot][:dir]
       definition_file_path = root.join(relative_definition_file_path)
 
       # unshift so that Pro can modify mdm factories
-      FactoryGirl.definition_file_paths.unshift definition_file_path
+      FactoryBot.definition_file_paths.unshift definition_file_path
     end
   end
 end
