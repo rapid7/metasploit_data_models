@@ -109,10 +109,6 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Includes, type: :model do
             :association => association
         )
       end
-
-      it 'is #association' do
-        expect(visit).to eq(association)
-      end
     end
 
     context 'with Metasploit::Model::Search::Operator::Attribute' do
