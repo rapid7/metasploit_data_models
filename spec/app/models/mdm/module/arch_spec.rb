@@ -20,7 +20,7 @@ RSpec.describe Mdm::Module::Arch, type: :model do
   context 'factories' do
     context 'mdm_module_arch' do
       subject(:mdm_module_arch) do
-        FactoryGirl.build(:mdm_module_arch)
+        FactoryBot.build(:mdm_module_arch)
       end
 
       it { is_expected.to be_valid }

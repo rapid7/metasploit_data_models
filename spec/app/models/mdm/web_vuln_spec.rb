@@ -46,7 +46,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      web_vuln = FactoryGirl.create(:mdm_web_vuln)
+      web_vuln = FactoryBot.create(:mdm_web_vuln)
       expect {
         web_vuln.destroy
       }.to_not raise_error
@@ -91,7 +91,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
   context 'factories' do
     context 'mdm_web_vuln' do
       subject(:mdm_web_vuln) do
-        FactoryGirl.build(:mdm_web_vuln)
+        FactoryBot.build(:mdm_web_vuln)
       end
 
       it { is_expected.to be_valid }
@@ -302,7 +302,7 @@ RSpec.describe Mdm::WebVuln, type: :model do
     end
 
     it 'should return default if set to nil and saved' do
-      web_vuln = FactoryGirl.build(:mdm_web_vuln)
+      web_vuln = FactoryBot.build(:mdm_web_vuln)
       web_vuln.params = nil
       web_vuln.save!
 

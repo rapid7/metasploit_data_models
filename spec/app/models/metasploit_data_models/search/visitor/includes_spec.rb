@@ -101,17 +101,13 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Includes, type: :model do
 
     context 'with Metasploit::Model::Search::Operator::Association' do
       let(:association) do
-        FactoryGirl.generate :metasploit_model_search_operator_association_association
+        FactoryBot.generate :metasploit_model_search_operator_association_association
       end
 
       let(:node) do
         Metasploit::Model::Search::Operator::Association.new(
             :association => association
         )
-      end
-
-      it 'is #association' do
-        expect(visit).to eq(association)
       end
     end
 
@@ -151,7 +147,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Includes, type: :model do
 
           context 'with name' do
             let(:name) do
-              FactoryGirl.generate :mdm_host_name
+              FactoryBot.generate :mdm_host_name
             end
 
             let(:formatted) do
@@ -163,7 +159,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Includes, type: :model do
 
           context 'with services.name' do
             let(:name) do
-              FactoryGirl.generate :mdm_service_name
+              FactoryBot.generate :mdm_service_name
             end
 
             let(:formatted) do

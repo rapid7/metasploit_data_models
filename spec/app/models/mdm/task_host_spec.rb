@@ -3,7 +3,7 @@ RSpec.describe Mdm::TaskHost, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      task_host = FactoryGirl.build(:mdm_task_host)
+      task_host = FactoryBot.build(:mdm_task_host)
       expect(task_host).to be_valid
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe Mdm::TaskHost, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      task_host = FactoryGirl.create(:mdm_task_host)
+      task_host = FactoryBot.create(:mdm_task_host)
       expect {
         task_host.destroy
       }.to_not raise_error
@@ -40,10 +40,10 @@ RSpec.describe Mdm::TaskHost, type: :model do
 
   context "validations" do
     it "should not allow duplicate associations" do
-      task = FactoryGirl.build(:mdm_task)
-      host = FactoryGirl.build(:mdm_host)
-      FactoryGirl.create(:mdm_task_host, :task => task, :host => host)
-      task_host2 = FactoryGirl.build(:mdm_task_host, :task => task, :host => host)
+      task = FactoryBot.build(:mdm_task)
+      host = FactoryBot.build(:mdm_host)
+      FactoryBot.create(:mdm_task_host, :task => task, :host => host)
+      task_host2 = FactoryBot.build(:mdm_task_host, :task => task, :host => host)
       expect(task_host2).not_to be_valid
     end
   end

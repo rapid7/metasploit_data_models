@@ -3,7 +3,7 @@ RSpec.describe Mdm::TaskCred, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      task_cred = FactoryGirl.build(:mdm_task_cred)
+      task_cred = FactoryBot.build(:mdm_task_cred)
       expect(task_cred).to be_valid
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe Mdm::TaskCred, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      task_cred = FactoryGirl.create(:mdm_task_cred)
+      task_cred = FactoryBot.create(:mdm_task_cred)
       expect {
         task_cred.destroy
       }.to_not raise_error
@@ -40,10 +40,10 @@ RSpec.describe Mdm::TaskCred, type: :model do
 
   context "validations" do
     it "should not allow duplicate associations" do
-      task = FactoryGirl.build(:mdm_task)
-      cred = FactoryGirl.build(:mdm_cred)
-      FactoryGirl.create(:mdm_task_cred, :task => task, :cred => cred)
-      task_cred2 = FactoryGirl.build(:mdm_task_cred, :task => task, :cred => cred)
+      task = FactoryBot.build(:mdm_task)
+      cred = FactoryBot.build(:mdm_cred)
+      FactoryBot.create(:mdm_task_cred, :task => task, :cred => cred)
+      task_cred2 = FactoryBot.build(:mdm_task_cred, :task => task, :cred => cred)
       expect(task_cred2).not_to be_valid
     end
   end

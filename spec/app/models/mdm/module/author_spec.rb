@@ -21,7 +21,7 @@ RSpec.describe Mdm::Module::Author, type: :model do
   context 'factories' do
     context 'full_mdm_module_author' do
       subject(:full_mdm_module_author) do
-        FactoryGirl.build :full_mdm_module_author
+        FactoryBot.build :full_mdm_module_author
       end
 
       it { is_expected.to be_valid }
@@ -37,7 +37,7 @@ RSpec.describe Mdm::Module::Author, type: :model do
 
     context 'mdm_module_author' do
       subject(:mdm_module_author) do
-        FactoryGirl.build :mdm_module_author
+        FactoryBot.build :mdm_module_author
       end
 
       it { is_expected.to be_valid }

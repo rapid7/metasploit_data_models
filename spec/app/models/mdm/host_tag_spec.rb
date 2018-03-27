@@ -16,7 +16,7 @@ RSpec.describe Mdm::HostTag, type: :model do
   context 'factories' do
     context 'mdm_host_tag' do
       subject(:mdm_host_tag) do
-        FactoryGirl.build(:mdm_host_tag)
+        FactoryBot.build(:mdm_host_tag)
       end
 
       it { is_expected.to be_valid }
@@ -25,13 +25,13 @@ RSpec.describe Mdm::HostTag, type: :model do
 
   context '#destroy' do
     let(:tag) do
-      FactoryGirl.create(
+      FactoryBot.create(
           :mdm_tag
       )
     end
 
     let!(:host_tag) do
-      FactoryGirl.create(
+      FactoryBot.create(
           :mdm_host_tag,
           :tag => tag
       )
@@ -45,7 +45,7 @@ RSpec.describe Mdm::HostTag, type: :model do
 
     context 'with multiple Mdm::HostTags using same Mdm::Tag' do
       let!(:other_host_tag) do
-        FactoryGirl.create(
+        FactoryBot.create(
             :mdm_host_tag,
             :tag => tag
         )

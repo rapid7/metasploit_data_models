@@ -2,7 +2,7 @@ RSpec.describe Mdm::Host, type: :model do
   include_context 'Rex::Text'
 
   subject(:host) do
-    FactoryGirl.build(:mdm_host)
+    FactoryBot.build(:mdm_host)
   end
 
   let(:architectures) do
@@ -43,7 +43,7 @@ RSpec.describe Mdm::Host, type: :model do
   context 'factory' do
     context 'mdm_host' do
       subject(:mdm_host) {
-        FactoryGirl.build(:mdm_host)
+        FactoryBot.build(:mdm_host)
       }
 
       it { is_expected.to be_valid }
@@ -58,21 +58,21 @@ RSpec.describe Mdm::Host, type: :model do
   describe 'MAC address format validation' do
     context 'when colon delimited' do
       it 'is valid' do
-        host = FactoryGirl.build(:mdm_host, mac: '1a:2B:3c:4D:5e:6f')
+        host = FactoryBot.build(:mdm_host, mac: '1a:2B:3c:4D:5e:6f')
         expect(host).to be_valid
       end
     end
 
     context 'when hyphen delimited' do
       it 'is valid' do
-        host = FactoryGirl.build(:mdm_host, mac: '1a-2B-3c-4D-5e-6f')
+        host = FactoryBot.build(:mdm_host, mac: '1a-2B-3c-4D-5e-6f')
         expect(host).to be_valid
       end
     end
 
     context 'when mixed colon-hyphen delimited ' do
       it 'is invalid' do
-        host = FactoryGirl.build(:mdm_host, mac: '1a:2B:3c-4D:5e:6f')
+        host = FactoryBot.build(:mdm_host, mac: '1a:2B:3c-4D:5e:6f')
         expect(host).to be_invalid
       end
     end
@@ -80,16 +80,16 @@ RSpec.describe Mdm::Host, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object and the dependent objects' do
-      host = FactoryGirl.create(:mdm_host)
-      exploit_attempt = FactoryGirl.create(:mdm_exploit_attempt, :host => host)
-      exploited_host = FactoryGirl.create(:mdm_exploited_host, :host => host)
-      host_detail = FactoryGirl.create(:mdm_host_detail, :host => host)
-      loot = FactoryGirl.create(:mdm_loot, :host => host)
-      task_host = FactoryGirl.create(:mdm_task_host, :host => host)
-      note = FactoryGirl.create(:mdm_note, :host => host)
-      svc = FactoryGirl.create(:mdm_service, :host => host)
-      session = FactoryGirl.create(:mdm_session, :host => host)
-      vuln = FactoryGirl.create(:mdm_vuln, :host => host)
+      host = FactoryBot.create(:mdm_host)
+      exploit_attempt = FactoryBot.create(:mdm_exploit_attempt, :host => host)
+      exploited_host = FactoryBot.create(:mdm_exploited_host, :host => host)
+      host_detail = FactoryBot.create(:mdm_host_detail, :host => host)
+      loot = FactoryBot.create(:mdm_loot, :host => host)
+      task_host = FactoryBot.create(:mdm_task_host, :host => host)
+      note = FactoryBot.create(:mdm_note, :host => host)
+      svc = FactoryBot.create(:mdm_service, :host => host)
+      session = FactoryBot.create(:mdm_session, :host => host)
+      vuln = FactoryBot.create(:mdm_vuln, :host => host)
 
 
       expect {
@@ -145,7 +145,7 @@ RSpec.describe Mdm::Host, type: :model do
 
       context 'with Mdm::Vulns' do
         let!(:vulns) do
-          FactoryGirl.create_list(
+          FactoryBot.create_list(
               :mdm_vuln,
               2,
               :host => host
@@ -154,30 +154,30 @@ RSpec.describe Mdm::Host, type: :model do
 
         context 'with Mdm::Ref' do
           let(:name) do
-            FactoryGirl.generate :mdm_ref_name
+            FactoryBot.generate :mdm_ref_name
           end
 
           let!(:ref) do
-            FactoryGirl.create(:mdm_ref, :name => name)
+            FactoryBot.create(:mdm_ref, :name => name)
           end
 
           context 'with Mdm::VulnRefs' do
             let!(:vuln_refs) do
               vulns.collect { |vuln|
-                FactoryGirl.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
+                FactoryBot.create(:mdm_vuln_ref, :ref => ref, :vuln => vuln)
               }
             end
 
             context 'with Mdm::Module::Detail' do
               let!(:module_detail) do
-                FactoryGirl.create(
+                FactoryBot.create(
                     :mdm_module_detail
                 )
               end
 
               context 'with Mdm::Module::Ref with same name as Mdm::Ref' do
                 let!(:module_ref) do
-                  FactoryGirl.create(
+                  FactoryBot.create(
                       :mdm_module_ref,
                       :detail => module_detail,
                       :name => name
@@ -390,7 +390,7 @@ RSpec.describe Mdm::Host, type: :model do
   context 'factories' do
     context 'full_mdm_host' do
       subject(:full_mdm_host) do
-        FactoryGirl.build(:full_mdm_host)
+        FactoryBot.build(:full_mdm_host)
       end
 
       it { is_expected.to be_valid }
@@ -398,7 +398,7 @@ RSpec.describe Mdm::Host, type: :model do
 
     context 'mdm_host' do
       subject(:mdm_host) do
-        FactoryGirl.build(:mdm_host)
+        FactoryBot.build(:mdm_host)
       end
 
       it { is_expected.to be_valid }
@@ -414,10 +414,10 @@ RSpec.describe Mdm::Host, type: :model do
       it 'should validate uniqueness of address scoped to workspace_id' do
         address = '192.168.0.1'
 
-        workspace = FactoryGirl.create(:mdm_workspace)
-        FactoryGirl.create(:mdm_host, :address => address, :workspace => workspace)
+        workspace = FactoryBot.create(:mdm_workspace)
+        FactoryBot.create(:mdm_host, :address => address, :workspace => workspace)
 
-        duplicate_host = FactoryGirl.build(:mdm_host, :address => address, :workspace => workspace)
+        duplicate_host = FactoryBot.build(:mdm_host, :address => address, :workspace => workspace)
 
         expect(duplicate_host).not_to be_valid
         expect(duplicate_host.errors[:address]).to include('has already been taken')
@@ -425,9 +425,9 @@ RSpec.describe Mdm::Host, type: :model do
     end
 
     context 'arch' do
-      let(:workspace) { FactoryGirl.create(:mdm_workspace) }
+      let(:workspace) { FactoryBot.create(:mdm_workspace) }
       let(:address) { '192.168.0.1' }
-      let(:host) { FactoryGirl.create(:mdm_host, :address => address, :workspace => workspace, :arch => arch) }
+      let(:host) { FactoryBot.create(:mdm_host, :address => address, :workspace => workspace, :arch => arch) }
       context 'with an unknown architecture' do
         let(:arch) { "asdfasdf" }
         it 'should normalize to Unknown' do
@@ -449,7 +449,7 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'search scope' do
     subject(:full_mdm_host) do
-      FactoryGirl.create(:full_mdm_host)
+      FactoryBot.create(:full_mdm_host)
     end
 
     def search_for(str)
@@ -732,17 +732,17 @@ RSpec.describe Mdm::Host, type: :model do
 
     context '#validate_fingerprint_data' do
       it 'should return false for an empty hash' do
-        fingerprint= FactoryGirl.build(:mdm_note, :data => {})
+        fingerprint= FactoryBot.build(:mdm_note, :data => {})
         expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
 
       it 'should return false for postgresql fingerprints' do
-        fingerprint= FactoryGirl.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
+        fingerprint= FactoryBot.build(:mdm_note, :ntype => 'postgresql.fingerprint', :data => {})
         expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
 
       it 'should return false if the fingerprint does not contain a hash' do
-        fingerprint= FactoryGirl.build(:mdm_note, :data => 'this is not a fingerprint')
+        fingerprint= FactoryBot.build(:mdm_note, :data => 'this is not a fingerprint')
         expect(host.validate_fingerprint_data(fingerprint)).to eq(false)
       end
     end
@@ -963,7 +963,7 @@ RSpec.describe Mdm::Host, type: :model do
     context '#normalize_scanner_fp' do
       context 'for session_fingerprint' do
         it 'should return all the correct data for Windows XP SP3 x86' do
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host)
+          fingerprint = FactoryBot.build(:mdm_session_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Windows XP')
           expect(result['os.version']).to eq('SP3')
@@ -974,7 +974,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should return all the correct data for Windows 2008 SP1 x64' do
           fp_data = { :os => 'Microsoft Windows 2008 SP1', :arch => 'x64'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Windows Server 2008')
           expect(result['os.version']).to eq('SP1')
@@ -986,7 +986,7 @@ RSpec.describe Mdm::Host, type: :model do
         it 'should fingerprint Metasploitable correctly' do
           # Taken from an actual session_fingerprint of Metasploitable 2
           fp_data = { :os => 'Linux 2.6.24-16-server (i386)', :name => 'metasploitable'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Linux')
           expect(result['host.name']).to eq('metasploitable')
@@ -997,7 +997,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should just populate os_name if it is unsure' do
           fp_data = { :os => 'Darwin 12.3.0 x86_64 i386'}
-          fingerprint = FactoryGirl.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_session_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Darwin 12.3.0 x86_64 i386')
           expect(result['os.version']).to eq(nil)
@@ -1008,7 +1008,7 @@ RSpec.describe Mdm::Host, type: :model do
 
       context 'for nmap_fingerprint' do
         it 'should return OS name for a Windows XP fingerprint' do
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host)
+          fingerprint = FactoryBot.build(:mdm_nmap_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Windows XP')
           expect(result['os.certainty'].to_f).to eq(described_class::MAX_NMAP_CERTAINTY)
@@ -1016,7 +1016,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should return OS name for a Metasploitable fingerprint' do
           fp_data = {:os_vendor=>"Linux", :os_family=>"Linux", :os_version=>"2.6.X", :os_accuracy=>100}
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Linux')
           expect(result['os.version']).to eq('2.6.X')
@@ -1025,7 +1025,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should return OS name and flavor fo an OSX fingerprint' do
           fp_data = {:os_vendor=>"Apple", :os_family=>"Mac OS X", :os_version=>"10.8.X", :os_accuracy=>100}
-          fingerprint = FactoryGirl.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nmap_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Mac OS X')
           expect(result['os.vendor']).to eq('Apple')
@@ -1037,7 +1037,7 @@ RSpec.describe Mdm::Host, type: :model do
       context 'for nexpose_fingerprint' do
         context 'of a Windows system' do
           it 'should return a generic Windows fingerprint with no product info' do
-            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host)
+            fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host)
             result = host.send(:normalize_scanner_fp, fingerprint).first
             expect(result['os.product']).to eq('Windows')
             expect(result['os.arch']).to eq('x86')
@@ -1046,7 +1046,7 @@ RSpec.describe Mdm::Host, type: :model do
 
           it 'should recognize a Windows 7 fingerprint' do
             fp_data = {:family=>"Windows", :certainty=>"0.67", :vendor=>"Microsoft", :arch=>"x86", :product => 'Windows 7', :version => 'SP1'}
-            fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+            fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
             result = host.send(:normalize_scanner_fp, fingerprint).first
             expect(result['os.product']).to eq('Windows 7')
             expect(result['os.version']).to eq('SP1')
@@ -1057,7 +1057,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should recognize an OSX fingerprint' do
           fp_data = {:family=>"Mac OS X", :certainty=>"0.80", :vendor=>"Apple"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Mac OS X')
           expect(result['os.vendor']).to eq("Apple")
@@ -1065,7 +1065,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should recognize a Cisco fingerprint' do
           fp_data = {:family=>"IOS", :certainty=>"1.00", :vendor=>"Cisco", :version=>"11.2(8)SA2"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('IOS')
           expect(result['os.vendor']).to eq('Cisco')
@@ -1073,14 +1073,14 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should recognize an embedded fingerprint' do
           fp_data = {:family=>"embedded", :certainty=>"1.00", :vendor=>"Footek"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Footek')
         end
 
         it 'should handle an unknown fingerprint' do
           fp_data = {:certainty=>"1.00", :vendor=>"Footek"}
-          fingerprint = FactoryGirl.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_nexpose_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq('Footek')
         end
@@ -1090,7 +1090,7 @@ RSpec.describe Mdm::Host, type: :model do
 
       context 'for retina_fingerprint' do
         it 'should recognize a Windows fingerprint' do
-          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host)
+          fingerprint = FactoryBot.build(:mdm_retina_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq( 'Windows Server 2003')
           expect(result['os.arch']).to eq('x64')
@@ -1100,7 +1100,7 @@ RSpec.describe Mdm::Host, type: :model do
 
         it 'should otherwise jsut copy the fingerprint to os_name' do
           fp_data = { :os => 'Linux 2.6.X (i386)'}
-          fingerprint = FactoryGirl.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
+          fingerprint = FactoryBot.build(:mdm_retina_fingerprint, :host => host, :data => fp_data)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq( 'Linux 2.6.X (i386)')
           expect(result['os.certainty'].to_f).to eq(0.8)

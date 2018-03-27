@@ -1,6 +1,6 @@
 RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
-  subject(:module_run){FactoryGirl.build(:metasploit_data_models_module_run)}
+  subject(:module_run){FactoryBot.build(:metasploit_data_models_module_run)}
 
   context "database columns" do
     it { is_expected.to have_db_column(:attempted_at).of_type(:datetime) }
@@ -34,7 +34,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
   context "validations" do
     describe "when a target_session is set on the module run" do
       before(:example) do
-        module_run.target_session = FactoryGirl.build(:mdm_session)
+        module_run.target_session = FactoryBot.build(:mdm_session)
       end
 
       context "when the module is an exploit" do
@@ -58,7 +58,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
     describe "when a spawned_session is set on the module run" do
       before(:example) do
-        module_run.spawned_session  = FactoryGirl.build(:mdm_session)
+        module_run.spawned_session  = FactoryBot.build(:mdm_session)
       end
 
       context "when the module is not an exploit" do

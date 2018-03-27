@@ -155,7 +155,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
 
           context 'with name' do
             let(:name) do
-              FactoryGirl.generate :mdm_host_name
+              FactoryBot.generate :mdm_host_name
             end
 
             let(:formatted) do
@@ -169,7 +169,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
 
           context 'with services.name' do
             let(:name) do
-              FactoryGirl.generate :mdm_service_name
+              FactoryBot.generate :mdm_service_name
             end
 
             let(:formatted) do

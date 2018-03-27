@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence :mdm_ipv4_address do |n|
     max = 255
 

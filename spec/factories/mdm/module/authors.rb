@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_module_author, :class => Mdm::Module::Author do
     name { generate :mdm_module_author_name }
 

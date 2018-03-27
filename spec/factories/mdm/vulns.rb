@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_vuln, :class => Mdm::Vuln do
     name { generate :mdm_vuln_name }
 

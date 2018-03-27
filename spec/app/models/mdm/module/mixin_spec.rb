@@ -20,7 +20,7 @@ RSpec.describe Mdm::Module::Mixin, type: :model do
   context 'factories' do
     context 'mdm_module_mixin' do
       subject(:mdm_module_mixin) do
-        FactoryGirl.build :mdm_module_mixin
+        FactoryBot.build :mdm_module_mixin
       end
 
       it { is_expected.to be_valid }

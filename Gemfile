@@ -15,11 +15,10 @@ group :development, :test do
   # Upload coverage reports to coveralls.io
   gem 'coveralls', require: false  
   # supplies factories for producing model instance for specs
-  # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryGirl.' in factory definitions syntax.
-  gem 'factory_girl'
+  # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryBot.' in factory definitions syntax.
+  gem 'factory_bot'
   # auto-load factories from spec/factories
-  gem 'factory_girl_rails'
-
+  gem 'factory_bot_rails'
 
   gem 'rails', '~>4.2.6'
   # Used to create fake data

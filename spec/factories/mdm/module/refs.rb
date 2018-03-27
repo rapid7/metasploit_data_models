@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_module_ref, :class => Mdm::Module::Ref do
     name { generate :mdm_module_ref_name }
 

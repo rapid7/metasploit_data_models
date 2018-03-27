@@ -22,7 +22,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
   end
 
   let(:value) {
-    FactoryGirl.generate :mdm_host_name
+    FactoryBot.generate :mdm_host_name
   }
 
   it_should_behave_like 'Metasploit::Concern.run'
@@ -171,7 +171,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           #
 
           let(:non_matching_host) {
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_host,
                 address: non_matching_host_address,
                 name: non_matching_host_name,
@@ -179,7 +179,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
                 os_name: non_matching_host_os_name,
                 os_sp: non_matching_host_os_sp
             ).tap { |host|
-              FactoryGirl.create(
+              FactoryBot.create(
                   :mdm_host_tag,
                   host: host,
                   tag: non_matching_tag
@@ -224,7 +224,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           }
 
           let(:non_matching_tag) {
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_tag,
                 desc: non_matching_tag_desc,
                 name: non_matching_tag_name
@@ -244,7 +244,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           #
 
           let!(:non_matching_record) {
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_service,
                 host: non_matching_host,
                 info: non_matching_info,
@@ -276,7 +276,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
 
             let!(:matching_record_by_port) {
               matching_ports.each_with_object({}) { |matching_port, matching_record_by_port|
-                matching_record_by_port[matching_port] = FactoryGirl.create(
+                matching_record_by_port[matching_port] = FactoryBot.create(
                     :mdm_service,
                     port: matching_port
                 )
@@ -346,7 +346,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             #
 
             let(:matching_host) {
-              FactoryGirl.create(
+              FactoryBot.create(
                   :mdm_host,
                   address: matching_host_address,
                   name: matching_host_name,
@@ -354,7 +354,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
                   os_name: matching_host_os_name,
                   os_sp: matching_host_os_sp
               ).tap { |host|
-                FactoryGirl.create(
+                FactoryBot.create(
                     :mdm_host_tag,
                     host: host,
                     tag: matching_tag
@@ -399,7 +399,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             }
 
             let(:matching_tag) {
-              FactoryGirl.create(
+              FactoryBot.create(
                   :mdm_tag,
                   desc: matching_tag_desc,
                   name: matching_tag_name
@@ -419,7 +419,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
             #
 
             let!(:matching_record) {
-              FactoryGirl.create(
+              FactoryBot.create(
                   :mdm_service,
                   host: matching_host,
                   info: matching_info,
@@ -636,7 +636,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           #
 
           let!(:matching_record) do
-            FactoryGirl.build(
+            FactoryBot.build(
                 :mdm_host,
                 address: matching_record_address,
                 name: matching_record_name,
@@ -647,7 +647,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           end
 
           let!(:matching_service) do
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_service,
                 host: matching_record,
                 name: matching_service_name
@@ -655,7 +655,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           end
 
           let!(:non_matching_record) do
-            FactoryGirl.build(
+            FactoryBot.build(
                 :mdm_host,
                 address: non_matching_record_address,
                 name: non_matching_record_name,
@@ -666,7 +666,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           end
 
           let!(:non_matching_service) do
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_service,
                 host: non_matching_record,
                 name: non_matching_service_name
@@ -828,7 +828,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           #
 
           let!(:matching_record) {
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_tag,
                 desc: matching_desc,
                 name: matching_name
@@ -836,7 +836,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Relation, type: :model do
           }
 
           let!(:non_matching_record) {
-            FactoryGirl.create(
+            FactoryBot.create(
                 :mdm_tag,
                 desc: non_matching_desc,
                 name: non_matching_name

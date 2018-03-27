@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_user, :class => Mdm::User do
     admin true
     company "Interplanetary Teleportation, LTD"

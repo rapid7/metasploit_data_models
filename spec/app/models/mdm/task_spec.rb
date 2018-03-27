@@ -3,7 +3,7 @@ RSpec.describe Mdm::Task, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      task = FactoryGirl.build(:mdm_task)
+      task = FactoryBot.build(:mdm_task)
       expect(task).to be_valid
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe Mdm::Task, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      task = FactoryGirl.create(:mdm_task)
+      task = FactoryBot.create(:mdm_task)
       expect {
         task.destroy
       }.to_not raise_error
@@ -60,7 +60,7 @@ RSpec.describe Mdm::Task, type: :model do
   context 'callbacks' do
     context 'before_destroy' do
       it 'should call #delete_file' do
-        task = FactoryGirl.create(:mdm_task)
+        task = FactoryBot.create(:mdm_task)
         expect(task).to receive(:delete_file)
         task.destroy
       end

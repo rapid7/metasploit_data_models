@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_task, :aliases => [:task], :class => 'Mdm::Task' do
     #
     # Associations

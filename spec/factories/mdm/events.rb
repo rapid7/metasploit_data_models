@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_event, :aliases => [:event], :class => Mdm::Event do
-    name { FactoryGirl.generate :mdm_event_name }
+    name { FactoryBot.generate :mdm_event_name }
 
     trait :workspace do
       association :workspace, :factory => :mdm_workspace

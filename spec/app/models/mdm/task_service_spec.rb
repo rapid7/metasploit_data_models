@@ -3,7 +3,7 @@ RSpec.describe Mdm::TaskService, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      task_service = FactoryGirl.build(:mdm_task_service)
+      task_service = FactoryBot.build(:mdm_task_service)
       expect(task_service).to be_valid
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe Mdm::TaskService, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      task_service = FactoryGirl.create(:mdm_task_service)
+      task_service = FactoryBot.create(:mdm_task_service)
       expect {
         task_service.destroy
       }.to_not raise_error
@@ -40,10 +40,10 @@ RSpec.describe Mdm::TaskService, type: :model do
 
   context "validations" do
     it "should not allow duplicate associations" do
-      task = FactoryGirl.build(:mdm_task)
-      service = FactoryGirl.build(:mdm_service)
-      FactoryGirl.create(:mdm_task_service, :task => task, :service => service)
-      task_service2 = FactoryGirl.build(:mdm_task_service, :task => task, :service => service)
+      task = FactoryBot.build(:mdm_task)
+      service = FactoryBot.build(:mdm_service)
+      FactoryBot.create(:mdm_task_service, :task => task, :service => service)
+      task_service2 = FactoryBot.build(:mdm_task_service, :task => task, :service => service)
       expect(task_service2).not_to be_valid
     end
   end

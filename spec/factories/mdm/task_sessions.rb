@@ -1,6 +1,6 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+# Read about factories at https://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_task_session, :class => 'Mdm::TaskSession' do
     association :task, :factory => :mdm_task
     association :session, :factory => :mdm_session

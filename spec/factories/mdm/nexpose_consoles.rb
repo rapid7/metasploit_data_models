@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_nexpose_console, :aliases => [:nexpose_console], :class => Mdm::NexposeConsole do
     name { generate :mdm_nexpose_console_name }
     port { generate :mdm_tcp_port }

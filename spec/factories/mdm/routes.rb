@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_route, :aliases => [:route], :class => Mdm::Route do
     #
     # Associations

@@ -1,6 +1,6 @@
 RSpec.describe Mdm::Module::Detail, type: :model do
   subject(:detail) do
-    FactoryGirl.build(
+    FactoryBot.build(
         :mdm_module_detail,
         :mtype => mtype,
         :stance => stance
@@ -8,7 +8,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   end
 
   let(:mtype) do
-    FactoryGirl.generate :mdm_module_detail_mtype
+    FactoryBot.generate :mdm_module_detail_mtype
   end
 
   let(:ranks) do
@@ -24,7 +24,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   end
 
   let(:stance) do
-    FactoryGirl.generate :mdm_module_detail_stance
+    FactoryBot.generate :mdm_module_detail_stance
   end
 
   let(:stances) do
@@ -172,14 +172,14 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   context 'factories' do
     context 'mdm_module_detail' do
       subject(:mdm_module_detail) do
-        FactoryGirl.build(:mdm_module_detail)
+        FactoryBot.build(:mdm_module_detail)
       end
 
       it { is_expected.to be_valid }
 
       context 'stance' do
         subject(:mdm_module_detail) do
-          FactoryGirl.build(:mdm_module_detail, :mtype => mtype)
+          FactoryBot.build(:mdm_module_detail, :mtype => mtype)
         end
 
         context 'with supports_stance?' do
@@ -236,31 +236,31 @@ RSpec.describe Mdm::Module::Detail, type: :model do
   context 'scopes' do
 
     before(:each) do
-      @ms12_020 = FactoryGirl.create(:mdm_module_detail,
+      @ms12_020 = FactoryBot.create(:mdm_module_detail,
         name: "MS12-020 Microsoft Remote Desktop Use-After-Free DoS",
         fullname: 'auxiliary/dos/windows/rdp/ms12_020_maxchannelids',
         description: "This module exploits the MS12-020 RDP vulnerability originally discovered and\n        reported by Luigi Auriemma.  The flaw can be found in the way the T.125\n        ConnectMCSPDU packet is handled in the maxChannelIDs field, which will result\n        an invalid pointer being used, therefore causing a denial-of-service condition.",
         mtype: 'auxiliary',
         stance: 'aggressive')
-      @ms08_067 = FactoryGirl.create(:mdm_module_detail,
+      @ms08_067 = FactoryBot.create(:mdm_module_detail,
         name: "MS08-067 Microsoft Server Service Relative Path Stack Corruption",
         fullname: 'exploit/windows/smb/ms08_067_netapi',
         description: "This module exploits a parsing flaw in the path canonicalization code of\n        NetAPI32.dll through the Server Service. This module is capable of bypassing\n        NX on some operating systems and service packs. The correct target must be\n        used to prevent the Server Service (along with a dozen others in the same\n        process) from crashing. Windows XP targets seem to handle multiple successful\n        exploitation events, but 2003 targets will often crash or hang on subsequent\n        attempts. This is just the first version of this module, full support for\n        NX bypass on 2003, along with other platforms, is still in development.",
         mtype: 'exploit',
         stance: 'aggressive')
-      @ms06_040 = FactoryGirl.create(:mdm_module_detail,
+      @ms06_040 = FactoryBot.create(:mdm_module_detail,
         name: "MS06-040 Microsoft Server Service NetpwPathCanonicalize Overflow",
         fullname: 'exploit/windows/smb/ms06_040_netapi',
         description: "This module exploits a stack buffer overflow in the NetApi32 CanonicalizePathName() function\n        using the NetpwPathCanonicalize RPC call in the Server Service. It is likely that\n        other RPC calls could be used to exploit this service. This exploit will result in\n        a denial of service on Windows XP SP2 or Windows 2003 SP1. A failed exploit attempt\n        will likely result in a complete reboot on Windows 2000 and the termination of all\n        SMB-related services on Windows XP. The default target for this exploit should succeed\n        on Windows NT 4.0, Windows 2000 SP0-SP4+, Windows XP SP0-SP1 and Windows 2003 SP0.",
         mtype: 'exploit',
         stance: 'aggressive')
-      @cve_2012_0507 = FactoryGirl.create(:mdm_module_detail,
+      @cve_2012_0507 = FactoryBot.create(:mdm_module_detail,
         name: "Java AtomicReferenceArray Type Violation Vulnerability",
         fullname: 'exploit/multi/browser/java_atomicreferencearray',
         description: "This module exploits a vulnerability due to the fact that\n        AtomicReferenceArray uses the Unsafe class to store a reference in an\n        array directly, which may violate type safety if not used properly.\n        This allows a way to escape the JRE sandbox, and load additional classes\n        in order to perform malicious operations.",
         mtype: 'exploit',
         stance: 'passive')
-      @cve_2010_0425 = FactoryGirl.create(:mdm_module_detail,
+      @cve_2010_0425 = FactoryBot.create(:mdm_module_detail,
         name: "PHP Remote File Include Generic Code Execution",
         fullname: 'exploit/unix/webapp/php_include',
         description: "This module can be used to exploit any generic PHP file include vulnerability,\n        where the application includes code like the following:\n\n        <?php include($_GET['path']); ?>",
@@ -272,58 +272,58 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       @author3 = "juan vazquez <juan.vazquez@metasploit.com>"
       @author4 = "egypt <egypt@metasploit.com>"
 
-      FactoryGirl.create(:mdm_module_author, detail: @ms12_020, name: @author2)
-      FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author1)
-      FactoryGirl.create(:mdm_module_author, detail: @ms08_067, name: @author2)
-      FactoryGirl.create(:mdm_module_author, detail: @ms06_040, name: @author1)
-      FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author3)
-      FactoryGirl.create(:mdm_module_author, detail: @cve_2012_0507, name: @author4)
+      FactoryBot.create(:mdm_module_author, detail: @ms12_020, name: @author2)
+      FactoryBot.create(:mdm_module_author, detail: @ms08_067, name: @author1)
+      FactoryBot.create(:mdm_module_author, detail: @ms08_067, name: @author2)
+      FactoryBot.create(:mdm_module_author, detail: @ms06_040, name: @author1)
+      FactoryBot.create(:mdm_module_author, detail: @cve_2012_0507, name: @author3)
+      FactoryBot.create(:mdm_module_author, detail: @cve_2012_0507, name: @author4)
 
-      FactoryGirl.create(:mdm_module_platform, detail: @ms12_020, name: 'windows')
-      FactoryGirl.create(:mdm_module_platform, detail: @ms08_067, name: 'windows')
-      FactoryGirl.create(:mdm_module_platform, detail: @ms06_040, name: 'windows')
-      FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'linux')
-      FactoryGirl.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'java')
+      FactoryBot.create(:mdm_module_platform, detail: @ms12_020, name: 'windows')
+      FactoryBot.create(:mdm_module_platform, detail: @ms08_067, name: 'windows')
+      FactoryBot.create(:mdm_module_platform, detail: @ms06_040, name: 'windows')
+      FactoryBot.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'linux')
+      FactoryBot.create(:mdm_module_platform, detail: @cve_2012_0507, name: 'java')
 
-      FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["ppc"]')
-      FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["x86"]')
-      FactoryGirl.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["java"]')
-      FactoryGirl.create(:mdm_module_arch, detail: @cve_2010_0425, name: 'php')
+      FactoryBot.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["ppc"]')
+      FactoryBot.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["x86"]')
+      FactoryBot.create(:mdm_module_arch, detail: @cve_2012_0507, name: '["java"]')
+      FactoryBot.create(:mdm_module_arch, detail: @cve_2010_0425, name: 'php')
 
-      FactoryGirl.create(:mdm_module_ref, detail: @ms12_020, name: 'EDB-18606')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms12_020, name: 'MSB-MS12-020')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms12_020, name: 'CVE-2012-0002')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms08_067, name: 'MSB-MS08-067')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms08_067, name: 'OSVDB-49243')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms08_067, name: 'CVE-2008-4250')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms06_040, name: 'MSB-MS06-040')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms06_040, name: 'BID-19409')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms06_040, name: 'OSVDB-27845')
-      FactoryGirl.create(:mdm_module_ref, detail: @ms06_040, name: 'CVE-2006-3439')
-      FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'BID-52161')
-      FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'OSVDB-80724')
-      FactoryGirl.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'CVE-2012-0507')
+      FactoryBot.create(:mdm_module_ref, detail: @ms12_020, name: 'EDB-18606')
+      FactoryBot.create(:mdm_module_ref, detail: @ms12_020, name: 'MSB-MS12-020')
+      FactoryBot.create(:mdm_module_ref, detail: @ms12_020, name: 'CVE-2012-0002')
+      FactoryBot.create(:mdm_module_ref, detail: @ms08_067, name: 'MSB-MS08-067')
+      FactoryBot.create(:mdm_module_ref, detail: @ms08_067, name: 'OSVDB-49243')
+      FactoryBot.create(:mdm_module_ref, detail: @ms08_067, name: 'CVE-2008-4250')
+      FactoryBot.create(:mdm_module_ref, detail: @ms06_040, name: 'MSB-MS06-040')
+      FactoryBot.create(:mdm_module_ref, detail: @ms06_040, name: 'BID-19409')
+      FactoryBot.create(:mdm_module_ref, detail: @ms06_040, name: 'OSVDB-27845')
+      FactoryBot.create(:mdm_module_ref, detail: @ms06_040, name: 'CVE-2006-3439')
+      FactoryBot.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'BID-52161')
+      FactoryBot.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'OSVDB-80724')
+      FactoryBot.create(:mdm_module_ref, detail: @cve_2012_0507, name: 'CVE-2012-0507')
 
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NO NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP1 English (NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP1 English (NO NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP3 English (NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP3 English (AlwaysOn NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP2 English (NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP2 English (AlwaysOn NX)')
-      FactoryGirl.create(:mdm_module_target, detail: @ms08_067, name: 'Automatic Targeting')
-      FactoryGirl.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows 2003 SP0')
-      FactoryGirl.create(:mdm_module_target, detail: @ms06_040, name: '(stack)  Windows XP SP1 English')
-      FactoryGirl.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows XP SP0/SP1')
-      FactoryGirl.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows NT 4.0 / Windows 2000 SP0-SP4')
-      FactoryGirl.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Automatic (NT 4.0, 2000 SP0-SP4, XP SP0-SP1)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Linux x86 (Native Payload)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Mac OS X x86 (Native Payload)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Mac OS X PPC (Native Payload)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Windows x86 (Native Payload)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Generic (Java Payload)')
-      FactoryGirl.create(:mdm_module_target, detail: @cve_2010_0425, name: 'Automatic')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP2 English (NO NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP1 English (NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows 2003 SP1 English (NO NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP3 English (NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP3 English (AlwaysOn NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP2 English (NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Windows XP SP2 English (AlwaysOn NX)')
+      FactoryBot.create(:mdm_module_target, detail: @ms08_067, name: 'Automatic Targeting')
+      FactoryBot.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows 2003 SP0')
+      FactoryBot.create(:mdm_module_target, detail: @ms06_040, name: '(stack)  Windows XP SP1 English')
+      FactoryBot.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows XP SP0/SP1')
+      FactoryBot.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Windows NT 4.0 / Windows 2000 SP0-SP4')
+      FactoryBot.create(:mdm_module_target, detail: @ms06_040, name: '(wcscpy) Automatic (NT 4.0, 2000 SP0-SP4, XP SP0-SP1)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Linux x86 (Native Payload)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Mac OS X x86 (Native Payload)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Mac OS X PPC (Native Payload)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Windows x86 (Native Payload)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2012_0507, name: 'Generic (Java Payload)')
+      FactoryBot.create(:mdm_module_target, detail: @cve_2010_0425, name: 'Automatic')
     end
 
     context '#module_arch' do
@@ -473,7 +473,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_action_name
+        FactoryBot.generate :mdm_module_action_name
       end
 
       it 'should add an Mdm::Action under the Mdm::ModuleDetail' do
@@ -505,7 +505,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_arch_name
+        FactoryBot.generate :mdm_module_arch_name
       end
 
       it 'should add an Mdm::ModuleArch under the Mdm::ModuleDetail' do
@@ -533,7 +533,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
 
     context '#add_author' do
       let(:name) do
-        FactoryGirl.generate :mdm_module_author_name
+        FactoryBot.generate :mdm_module_author_name
       end
 
       context 'with email' do
@@ -542,7 +542,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
         end
 
         let(:email) do
-          FactoryGirl.generate :mdm_module_author_email
+          FactoryBot.generate :mdm_module_author_email
         end
 
         it 'should add an Mdm::ModuleAuthor under the Mdm::ModuleDetail' do
@@ -617,7 +617,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_mixin_name
+        FactoryBot.generate :mdm_module_mixin_name
       end
 
       it 'should add an Mdm::ModuleMixin under the Mdm::ModuleDetail' do
@@ -649,7 +649,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_platform_name
+        FactoryBot.generate :mdm_module_platform_name
       end
 
       it 'should add an Mdm::ModulePlatform under the Mdm::ModuleDetail' do
@@ -681,7 +681,7 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_ref_name
+        FactoryBot.generate :mdm_module_ref_name
       end
 
       it 'should add an Mdm::ModuleRef under the Mdm::ModuleDetail' do
@@ -713,11 +713,11 @@ RSpec.describe Mdm::Module::Detail, type: :model do
       end
 
       let(:index) do
-        FactoryGirl.generate :mdm_module_target_index
+        FactoryBot.generate :mdm_module_target_index
       end
 
       let(:name) do
-        FactoryGirl.generate :mdm_module_target_name
+        FactoryBot.generate :mdm_module_target_name
       end
 
       it 'should add an Mdm::ModuleTarget under the Mdm::ModuleDetail' do

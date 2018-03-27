@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_loot, :aliases => [:loot], :class => Mdm::Loot do
     #
     # Associations

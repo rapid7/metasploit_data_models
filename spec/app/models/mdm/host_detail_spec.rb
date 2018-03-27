@@ -20,7 +20,7 @@ RSpec.describe Mdm::HostDetail, type: :model do
 
   context 'validations' do
     it 'should only be valid with a host_id' do
-      orphan_detail = FactoryGirl.build(:mdm_host_detail, :host => nil)
+      orphan_detail = FactoryBot.build(:mdm_host_detail, :host => nil)
       expect(orphan_detail).not_to be_valid
       expect(orphan_detail.errors[:host_id]).to include("can't be blank")
     end
@@ -28,14 +28,14 @@ RSpec.describe Mdm::HostDetail, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      host_detail = FactoryGirl.build(:mdm_host_detail)
+      host_detail = FactoryBot.build(:mdm_host_detail)
       expect(host_detail).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      detail = FactoryGirl.create(:mdm_host_detail)
+      detail = FactoryBot.create(:mdm_host_detail)
       expect{
         detail.destroy
       }.to_not raise_error

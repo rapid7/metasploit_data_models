@@ -3,7 +3,7 @@ RSpec.describe Mdm::TaskSession, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      task_session = FactoryGirl.build(:mdm_task_session)
+      task_session = FactoryBot.build(:mdm_task_session)
       expect(task_session).to be_valid
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe Mdm::TaskSession, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      task_session = FactoryGirl.create(:mdm_task_session)
+      task_session = FactoryBot.create(:mdm_task_session)
       expect {
         task_session.destroy
       }.to_not raise_error
@@ -35,10 +35,10 @@ RSpec.describe Mdm::TaskSession, type: :model do
 
   context "validations" do
     it "should not allow duplicate associations" do
-      task = FactoryGirl.build(:mdm_task)
-      session = FactoryGirl.build(:mdm_session)
-      FactoryGirl.create(:mdm_task_session, :task => task, :session => session)
-      task_session2 = FactoryGirl.build(:mdm_task_session, :task => task, :session => session)
+      task = FactoryBot.build(:mdm_task)
+      session = FactoryBot.build(:mdm_session)
+      FactoryBot.create(:mdm_task_session, :task => task, :session => session)
+      task_session2 = FactoryBot.build(:mdm_task_session, :task => task, :session => session)
       expect(task_session2).not_to be_valid
     end
   end

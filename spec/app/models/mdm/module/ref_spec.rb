@@ -11,15 +11,15 @@ RSpec.describe Mdm::Module::Ref, type: :model do
       context 'with Mdm::Refs' do
         context 'with same name' do
           let(:name) do
-            FactoryGirl.generate :mdm_module_ref_name
+            FactoryBot.generate :mdm_module_ref_name
           end
 
           let!(:module_ref) do
-            FactoryGirl.create(:mdm_module_ref, :name => name)
+            FactoryBot.create(:mdm_module_ref, :name => name)
           end
 
           let!(:ref) do
-            FactoryGirl.create(:mdm_ref, :name => name)
+            FactoryBot.create(:mdm_ref, :name => name)
           end
 
           it 'should have refs in association' do
@@ -44,7 +44,7 @@ RSpec.describe Mdm::Module::Ref, type: :model do
   context 'factories' do
     context 'mdm_module_ref' do
       subject(:mdm_module_ref) do
-        FactoryGirl.build :mdm_module_ref
+        FactoryBot.build :mdm_module_ref
       end
 
       it { is_expected.to be_valid }

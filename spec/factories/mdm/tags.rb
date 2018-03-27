@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_tag, :class => Mdm::Tag do
     desc { generate :mdm_tag_desc }
     name { generate :mdm_tag_name }

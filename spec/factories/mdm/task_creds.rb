@@ -1,6 +1,6 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+# Read about factories at https://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :mdm_task_cred, :class => 'Mdm::TaskCred' do
 
     association :task, :factory => :mdm_task

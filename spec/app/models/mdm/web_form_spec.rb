@@ -27,14 +27,14 @@ RSpec.describe Mdm::WebForm, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      web_form = FactoryGirl.build(:mdm_web_form)
+      web_form = FactoryBot.build(:mdm_web_form)
       expect(web_form).to be_valid
     end
   end
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      web_form = FactoryGirl.create(:mdm_web_form)
+      web_form = FactoryBot.create(:mdm_web_form)
       expect {
         web_form.destroy
       }.to_not raise_error
