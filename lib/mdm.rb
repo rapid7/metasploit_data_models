@@ -18,6 +18,7 @@ module Mdm
   autoload :Module
   autoload :NexposeConsole
   autoload :Note
+  autoload :Payload
   autoload :Profile
   autoload :Ref
   autoload :Route
