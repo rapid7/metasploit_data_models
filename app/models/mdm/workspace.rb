@@ -81,6 +81,9 @@ class Mdm::Workspace < ActiveRecord::Base
   # Sessions opened on {#hosts} in this workspace.
   has_many :sessions, :through => :hosts, :class_name => 'Mdm::Session'
 
+  # Payloads for this workspace.
+  has_many :payloads, :class_name => 'Mdm::Payload'
+
   #
   # Attributes
   #
