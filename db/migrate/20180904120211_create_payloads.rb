@@ -10,7 +10,9 @@ class CreatePayloads < ActiveRecord::Migration
       t.string :urls
       t.string :description
       t.references :workspace
-
+      t.string :raw_payload
+      t.string :raw_payload_hash
+      t.string :build_opts
 
       t.timestamps null: false
     end
