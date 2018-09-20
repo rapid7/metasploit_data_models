@@ -7,8 +7,7 @@ class Mdm::Payload < ActiveRecord::Base
   # Associations
   #
 
-  # {Mdm::Workspace} in which this payload was created.  If {#host} is present, then this will match
-  # {Mdm::Host#workspace `host.workspace`}.
+  # {Mdm::Workspace} in which this payload was created.
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
              inverse_of: :payloads
@@ -94,5 +93,6 @@ class Mdm::Payload < ActiveRecord::Base
   #
 
   serialize :urls
+  serialize :build_opts
 
 end
