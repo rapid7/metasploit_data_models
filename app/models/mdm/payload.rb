@@ -8,7 +8,10 @@ class Mdm::Payload < ActiveRecord::Base
   # Associations
   #
 
+  # @!attribute [rw] workspace
   # {Mdm::Workspace} in which this payload was created.
+  #
+  #   @return [Mdm::Workspace]
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
              inverse_of: :payloads
@@ -29,10 +32,16 @@ class Mdm::Payload < ActiveRecord::Base
   #
   #   @return [String]
 
+  # @!attribute [rw] uuid_mask
+  #   The number of bytes of the UUID that this payload has embedded within it. This is to support
+  #   legacy payloads that limit the UUID to 8 bytes
+  #
+  #   @return [Integer]
+
   # @!attribute [rw] timestamp
   #   The Unix format timestamp when this payload was created.
   #
-  #   @return [String]
+  #   @return [Integer]
 
   # @!attribute [rw] arch
   #   The architecture this payload supports.
@@ -71,10 +80,22 @@ class Mdm::Payload < ActiveRecord::Base
   #
   #   @return [String]
 
+  # @!attribute [rw] build_status
+  #   The current status of the job building the payload binary. Valid values are "started", "completed", and "error"
+  #
+  #   @return [String]
+
   # @!attribute [rw] build_opts
   #   A hash containing various options used to build this payload
   #
   #   @return [Hash]
+
+
+  #
+  # Validations
+  #
+
+  validates :workspace, :presence => true
 
 
   #
@@ -91,4 +112,7 @@ class Mdm::Payload < ActiveRecord::Base
   serialize :urls
   serialize :build_opts
 
+  public
+
+  Metasploit::Concern.run(self)
 end
