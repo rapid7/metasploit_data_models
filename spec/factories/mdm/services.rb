@@ -11,10 +11,10 @@ FactoryBot.define do
     name { generate :mdm_service_name }
     port { generate :port }
     proto { generate :mdm_service_proto }
-    state 'open'
+    state { 'open' }
 
     factory :web_service do
-      proto 'tcp'
+      proto { 'tcp' }
       name { FactoryBot.generate(:web_service_name) }
     end
   end
