@@ -5,9 +5,9 @@ FactoryBot.define do
     #
     association :service, :factory => :mdm_service
 
-    active true
+    active { true }
     pass{ generate :mdm_cred_pass }
-    ptype 'password'
+    ptype { 'password' }
     user{ generate :mdm_user_username }
   end
 

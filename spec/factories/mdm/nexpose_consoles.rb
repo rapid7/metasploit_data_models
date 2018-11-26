@@ -4,7 +4,7 @@ FactoryBot.define do
     port { generate :mdm_tcp_port }
     address { generate :mdm_ipv4_address }
     username {'ConsoleUser'}
-    password 's0meH4rdP4ssW0rd'
+    password { 's0meH4rdP4ssW0rd' }
   end
 
   sequence :mdm_nexpose_console_name do |n|
