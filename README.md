@@ -37,7 +37,7 @@ different `on_load` name, which is just the class name converted to an underscor
         token[0..3] + "****************************"
       end
     end
-    
+
 **This gem's `Rails::Engine` is not required automatically.** You'll need to also add the following to your `config/application.rb`:
 
     require 'metasploit_data_models/engine'
@@ -50,8 +50,6 @@ the database.
 ### Elsewhere
 
 In Metasploit Pro, MDM is loaded via the metasploit_data_models gem: https://rubygems.org/gems/metasploit_data_models
-
-An MRI and JRuby implementation is generated for all substantial updates.
 
 ## Developer Info
 
