@@ -219,7 +219,7 @@ module Mdm::Host::OperatingSystemNormalization
       'pop3'    => [ 'pop3.banner' ],   # Metasploit reports 110/995 as pop3
       'nntp'    => [ 'nntp.banner' ],
       'ftp'     => [ 'ftp.banner' ],
-      'ssdp'    => [ 'ssdp_header.server' ]
+      'ssdp'    => [ 'http_header.server' ]
     }
 
     matches = []
