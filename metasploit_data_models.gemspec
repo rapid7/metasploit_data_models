@@ -71,9 +71,7 @@ Gem::Specification.new do |s|
     # markdown formatting for yard
     s.add_development_dependency 'redcarpet'
 
-    # bound to 0.20 for Activerecord 4.2.8 deprecation warnings:
-    # https://github.com/ged/ruby-pg/commit/c90ac644e861857ae75638eb6954b1cb49617090
-    s.add_runtime_dependency 'pg', "0.20.0"
+    s.add_runtime_dependency 'pg'
 
     s.platform = Gem::Platform::RUBY
   end
