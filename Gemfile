@@ -24,6 +24,10 @@ group :development, :test do
   gem 'rails', '~>4.2.6'
   # Used to create fake data
   gem "faker"
+
+  # bound to 0.20 for Activerecord 4.2.8 deprecation warnings:
+  # https://github.com/ged/ruby-pg/commit/c90ac644e861857ae75638eb6954b1cb49617090
+  gem 'pg', "0.20.0"
 end
 
 group :test do
