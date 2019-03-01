@@ -1,7 +1,6 @@
 #MetasploitDataModels [![Build Status](https://travis-ci.org/rapid7/metasploit_data_models.png)](https://travis-ci.org/rapid7/metasploit_data_models)[![Code Climate](https://codeclimate.com/github/rapid7/metasploit_data_models.png)](https://codeclimate.com/github/rapid7/metasploit_data_models)[![Coverage Status](https://coveralls.io/repos/rapid7/metasploit_data_models/badge.png)](https://coveralls.io/r/rapid7/metasploit_data_models)[![Dependency Status](https://gemnasium.com/rapid7/metasploit_data_models.png)](https://gemnasium.com/rapid7/metasploit_data_models)[![Gem Version](https://badge.fury.io/rb/metasploit_data_models.png)](http://badge.fury.io/rb/metasploit_data_models)
 
-The database layer for Metasploit
-
+Part of Metasploit's database layer
 
 ## Purpose
 __MetasploitDataModels__ exists to do several key things:
@@ -37,7 +36,7 @@ different `on_load` name, which is just the class name converted to an underscor
         token[0..3] + "****************************"
       end
     end
-    
+
 **This gem's `Rails::Engine` is not required automatically.** You'll need to also add the following to your `config/application.rb`:
 
     require 'metasploit_data_models/engine'
@@ -50,8 +49,6 @@ the database.
 ### Elsewhere
 
 In Metasploit Pro, MDM is loaded via the metasploit_data_models gem: https://rubygems.org/gems/metasploit_data_models
-
-An MRI and JRuby implementation is generated for all substantial updates.
 
 ## Developer Info
 

@@ -16,13 +16,17 @@ group :development, :test do
   gem 'coveralls', require: false  
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryBot.' in factory definitions syntax.
-  gem 'factory_bot'
+  gem 'factory_bot', '~>4'
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
   gem 'rails', '~>4.2.6'
   # Used to create fake data
   gem "faker"
+
+  # bound to 0.20 for Activerecord 4.2.8 deprecation warnings:
+  # https://github.com/ged/ruby-pg/commit/c90ac644e861857ae75638eb6954b1cb49617090
+  gem 'pg', "0.20.0"
 end
 
 group :test do

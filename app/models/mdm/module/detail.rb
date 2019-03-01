@@ -15,7 +15,8 @@ class Mdm::Module::Detail < ActiveRecord::Base
       'exploit' => 'exploits',
       'nop' => 'nops',
       'payload' => 'payloads',
-      'post' => 'post'
+      'post' => 'post',
+      'evasion' => 'evasion'
   }
 
   # {#privileged} is Boolean so, valid values are just `true` and `false`, but since both the validation and

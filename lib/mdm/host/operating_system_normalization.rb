@@ -219,7 +219,7 @@ module Mdm::Host::OperatingSystemNormalization
       'pop3'    => [ 'pop3.banner' ],   # Metasploit reports 110/995 as pop3
       'nntp'    => [ 'nntp.banner' ],
       'ftp'     => [ 'ftp.banner' ],
-      'ssdp'    => [ 'ssdp_header.server' ]
+      'ssdp'    => [ 'http_header.server' ]
     }
 
     matches = []
@@ -253,6 +253,7 @@ module Mdm::Host::OperatingSystemNormalization
     fingerprint_note_match_keys = {
       'smb.fingerprint'  => {
         :native_os               => [ 'smb.native_os' ],
+        :native_lm               => [ 'smb.native_lm' ],
       },
       'http.fingerprint' => {
         :header_server           => [ 'http_header.server', 'apache_os' ],
