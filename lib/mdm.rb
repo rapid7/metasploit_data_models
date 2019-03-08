@@ -3,7 +3,6 @@ module Mdm
   extend ActiveSupport::Autoload
 
   autoload :ApiKey
-  autoload :AsyncCallback
   autoload :Client
   autoload :Cred
   autoload :Event
