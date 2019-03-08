@@ -84,6 +84,9 @@ class Mdm::Workspace < ActiveRecord::Base
   # Payloads for this workspace.
   has_many :payloads, :class_name => 'Mdm::Payload'
 
+  # Callbacks for this workspace.
+  has_many :async_callbacks, :class_name => 'Mdm::AsyncCallback'
+
   #
   # Attributes
   #
