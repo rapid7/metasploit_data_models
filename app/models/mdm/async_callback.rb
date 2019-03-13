@@ -9,12 +9,12 @@ class Mdm::AsyncCallback < ActiveRecord::Base
   #
 
   # @!attribute [rw] workspace
-  # {Mdm::Workspace} in which this payload was created.
+  # {Mdm::Workspace} in which this payload callback will be logged.
   #
   #   @return [Mdm::Workspace]
   belongs_to :workspace,
              class_name: 'Mdm::Workspace',
-             inverse_of: :payloads
+             inverse_of: :async_callbacks
 
 
   #
