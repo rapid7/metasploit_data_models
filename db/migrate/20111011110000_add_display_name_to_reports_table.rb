@@ -1,4 +1,4 @@
-class AddDisplayNameToReportsTable < ActiveRecord::Migration
+class AddDisplayNameToReportsTable < ActiveRecord::Migration[4.2]
 
 	class Report < ActiveRecord::Base
 	end

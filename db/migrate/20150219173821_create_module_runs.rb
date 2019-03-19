@@ -1,4 +1,4 @@
-class CreateModuleRuns < ActiveRecord::Migration
+class CreateModuleRuns < ActiveRecord::Migration[4.2]
   def change
     create_table :module_runs do |t|
       t.datetime :attempted_at

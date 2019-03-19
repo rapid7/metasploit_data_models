@@ -1,6 +1,6 @@
 # Probably temporary, a spot to stash module names and their associated refs
 # Don't count on it being populated at any given moment.
-class AddModRefTable < ActiveRecord::Migration
+class AddModRefTable < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :mod_refs do |t|

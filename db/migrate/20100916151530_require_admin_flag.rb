@@ -1,4 +1,4 @@
-class RequireAdminFlag < ActiveRecord::Migration
+class RequireAdminFlag < ActiveRecord::Migration[4.2]
 
 	# Make the admin flag required.
 	def self.up

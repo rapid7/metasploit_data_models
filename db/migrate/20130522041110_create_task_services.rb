@@ -1,4 +1,4 @@
-class CreateTaskServices < ActiveRecord::Migration
+class CreateTaskServices < ActiveRecord::Migration[4.2]
   def change
     create_table :task_services do |t|
       t.references :task, :null => false

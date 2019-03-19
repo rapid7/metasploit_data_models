@@ -1,4 +1,4 @@
-class AddInitialIndexes < ActiveRecord::Migration
+class AddInitialIndexes < ActiveRecord::Migration[4.2]
 	def self.up
 
 

@@ -1,4 +1,4 @@
-class AddHostTags < ActiveRecord::Migration
+class AddHostTags < ActiveRecord::Migration[4.2]
 
 	def self.up
 

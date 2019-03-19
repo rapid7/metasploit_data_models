@@ -1,4 +1,4 @@
-class EnlargeEventInfo < ActiveRecord::Migration
+class EnlargeEventInfo < ActiveRecord::Migration[4.2]
 	def self.up
 		change_column :events, :info, :text
 	end

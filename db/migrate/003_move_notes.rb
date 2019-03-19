@@ -1,4 +1,4 @@
-class MoveNotes < ActiveRecord::Migration
+class MoveNotes < ActiveRecord::Migration[4.2]
 	def self.up
 		# Remove the host requirement.  We'll add the column back in below.
 		remove_column :notes, :host_id

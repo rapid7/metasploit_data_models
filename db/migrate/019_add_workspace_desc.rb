@@ -1,4 +1,4 @@
-class AddWorkspaceDesc < ActiveRecord::Migration
+class AddWorkspaceDesc < ActiveRecord::Migration[4.2]
 	def self.up
 		change_table :workspaces do |t|
 			t.string :description, :limit => 4096

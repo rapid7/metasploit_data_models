@@ -1,4 +1,4 @@
-class AddTaskIdToReportsTable < ActiveRecord::Migration
+class AddTaskIdToReportsTable < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :reports, :task_id, :integer

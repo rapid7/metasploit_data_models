@@ -1,4 +1,4 @@
-class InetColumns < ActiveRecord::Migration
+class InetColumns < ActiveRecord::Migration[4.2]
 
   def self.up
     change_column :hosts, :address, 'INET using address::INET'

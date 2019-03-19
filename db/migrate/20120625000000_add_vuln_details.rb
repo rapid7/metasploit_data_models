@@ -1,4 +1,4 @@
-class AddVulnDetails < ActiveRecord::Migration
+class AddVulnDetails < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :vuln_details do |t|

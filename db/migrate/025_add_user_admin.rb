@@ -1,4 +1,4 @@
-class AddUserAdmin < ActiveRecord::Migration
+class AddUserAdmin < ActiveRecord::Migration[4.2]
 
 	# Add user admin flag and project member list.
 	def self.up

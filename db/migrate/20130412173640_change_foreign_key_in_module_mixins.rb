@@ -1,6 +1,6 @@
 # Changes `module_mixins.module_detail_id` to `module_mixins.detail_id` so that foreign key matches the conventional
 # name when `Mdm::ModuleDetail` became {Mdm::Module::Detail}.
-class ChangeForeignKeyInModuleMixins < ActiveRecord::Migration
+class ChangeForeignKeyInModuleMixins < ActiveRecord::Migration[4.2]
   #
   # CONSTANTS
   #

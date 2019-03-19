@@ -1,4 +1,4 @@
-class AddOriginToMdmVuln < ActiveRecord::Migration
+class AddOriginToMdmVuln < ActiveRecord::Migration[4.2]
   def up
     add_column :vulns, :origin_id,   :integer
     add_column :vulns, :origin_type, :string

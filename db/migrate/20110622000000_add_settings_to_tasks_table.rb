@@ -1,4 +1,4 @@
-class AddSettingsToTasksTable < ActiveRecord::Migration
+class AddSettingsToTasksTable < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :tasks, :settings, :binary

@@ -1,4 +1,4 @@
-class AddModuleDetails < ActiveRecord::Migration
+class AddModuleDetails < ActiveRecord::Migration[4.2]
 
 	def self.up
 	

@@ -1,5 +1,5 @@
 # Changes web_vulns.confidence from text to integer as it is populated with integers.
-class ChangeWebVulnsConfidenceToInteger < ActiveRecord::Migration
+class ChangeWebVulnsConfidenceToInteger < ActiveRecord::Migration[4.2]
   #
   # CONSTANTS
   #

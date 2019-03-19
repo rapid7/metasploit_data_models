@@ -1,4 +1,4 @@
-class AddTemplatePrefs < ActiveRecord::Migration
+class AddTemplatePrefs < ActiveRecord::Migration[4.2]
 	def self.up
 		remove_column :email_templates, :generate_exe
 		add_column :email_templates, :prefs, :text

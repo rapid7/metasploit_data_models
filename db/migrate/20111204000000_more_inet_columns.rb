@@ -1,4 +1,4 @@
-class MoreInetColumns < ActiveRecord::Migration
+class MoreInetColumns < ActiveRecord::Migration[4.2]
 
 	def self.up
 		change_column :wmap_requests, :address, 'INET using address::INET'

@@ -1,6 +1,6 @@
 # Changes index on address so it scoped to workspace_id and is unique to match the validation in {Mdm::Host} on
 # {Mdm::Host#address}.
-class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
+class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration[4.2]
   TABLE_NAME = :hosts
 
   # maps Table -> Association Column for models that "belong to" a Host

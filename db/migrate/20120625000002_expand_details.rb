@@ -1,4 +1,4 @@
-class ExpandDetails < ActiveRecord::Migration
+class ExpandDetails < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :vuln_details, :nx_vuln_status, :text

@@ -1,4 +1,4 @@
-class AddListenersTable < ActiveRecord::Migration
+class AddListenersTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :listeners do |t|
 			t.timestamps null: false

@@ -1,4 +1,4 @@
-class DropTableImportedCreds < ActiveRecord::Migration
+class DropTableImportedCreds < ActiveRecord::Migration[4.2]
   def up
     drop_table :imported_creds
   end

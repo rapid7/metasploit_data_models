@@ -1,4 +1,4 @@
-class RenameModuleIndices < ActiveRecord::Migration
+class RenameModuleIndices < ActiveRecord::Migration[4.2]
   def change
     # This migration will only need to be run if the indices were originally
     # generated before Rails 4. Fresh builds can safely skip this.

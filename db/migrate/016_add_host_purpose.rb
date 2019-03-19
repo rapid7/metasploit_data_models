@@ -1,4 +1,4 @@
-class AddHostPurpose < ActiveRecord::Migration
+class AddHostPurpose < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :hosts, :purpose, :text
 	end

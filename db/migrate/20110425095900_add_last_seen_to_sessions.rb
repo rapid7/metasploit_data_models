@@ -1,4 +1,4 @@
-class AddLastSeenToSessions < ActiveRecord::Migration
+class AddLastSeenToSessions < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :sessions, :last_seen, :timestamp
 	end

@@ -1,5 +1,5 @@
 # -*- coding: binary -*-
-class ConvertBinary < ActiveRecord::Migration
+class ConvertBinary < ActiveRecord::Migration[4.2]
 
 
 	class WebPage < ActiveRecord::Base

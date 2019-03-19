@@ -1,4 +1,4 @@
-class AddWmapTables < ActiveRecord::Migration
+class AddWmapTables < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :wmap_targets do |t|
 			t.string  :host                  # vhost

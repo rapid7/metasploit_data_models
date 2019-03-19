@@ -1,4 +1,4 @@
-class RenameAndPruneNessusVulns < ActiveRecord::Migration
+class RenameAndPruneNessusVulns < ActiveRecord::Migration[4.2]
 
 	class Vuln < ActiveRecord::Base
 	end

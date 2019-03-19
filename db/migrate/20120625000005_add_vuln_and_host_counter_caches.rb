@@ -1,4 +1,4 @@
-class AddVulnAndHostCounterCaches < ActiveRecord::Migration
+class AddVulnAndHostCounterCaches < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :hosts, :host_detail_count, :integer, :default => 0

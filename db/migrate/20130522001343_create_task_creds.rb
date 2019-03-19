@@ -1,4 +1,4 @@
-class CreateTaskCreds < ActiveRecord::Migration
+class CreateTaskCreds < ActiveRecord::Migration[4.2]
   def change
     create_table :task_creds do |t|
       t.references :task, :null => false

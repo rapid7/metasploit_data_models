@@ -1,4 +1,4 @@
-class CreateTaskHosts < ActiveRecord::Migration
+class CreateTaskHosts < ActiveRecord::Migration[4.2]
   def change
     create_table :task_hosts do |t|
       t.references :task, :null => false

@@ -1,4 +1,4 @@
-class AddFailMessage < ActiveRecord::Migration
+class AddFailMessage < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :vuln_attempts, :fail_detail, :text

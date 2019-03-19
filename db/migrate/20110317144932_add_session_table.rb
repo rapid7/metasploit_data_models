@@ -1,4 +1,4 @@
-class AddSessionTable < ActiveRecord::Migration
+class AddSessionTable < ActiveRecord::Migration[4.2]
 
 	class Event < ActiveRecord::Base
 		serialize :info

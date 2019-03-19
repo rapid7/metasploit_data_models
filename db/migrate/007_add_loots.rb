@@ -1,4 +1,4 @@
-class AddLoots < ActiveRecord::Migration
+class AddLoots < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :loots do |t|

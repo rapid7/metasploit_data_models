@@ -1,4 +1,4 @@
-class AddRoutesTable < ActiveRecord::Migration
+class AddRoutesTable < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :routes do |t|

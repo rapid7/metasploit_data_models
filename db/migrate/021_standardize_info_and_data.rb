@@ -1,4 +1,4 @@
-class StandardizeInfoAndData < ActiveRecord::Migration
+class StandardizeInfoAndData < ActiveRecord::Migration[4.2]
 	def self.up
 		# Remove the host requirement.  We'll add the column back in below.
 		remove_column :vulns, :data

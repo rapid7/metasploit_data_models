@@ -1,6 +1,6 @@
 # Changes `module_actions.module_detail_id` to `module_actions.detail_id` so that foreign key matches the conventional
 # name when `Mdm::ModuleDetail` became {Mdm::Module::Detail}.
-class ChangeForeignKeyInModuleActions < ActiveRecord::Migration
+class ChangeForeignKeyInModuleActions < ActiveRecord::Migration[4.2]
   #
   # CONSTANTS
   #

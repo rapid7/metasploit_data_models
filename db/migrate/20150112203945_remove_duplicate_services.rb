@@ -1,4 +1,4 @@
-class RemoveDuplicateServices < ActiveRecord::Migration
+class RemoveDuplicateServices < ActiveRecord::Migration[4.2]
   def change
     select_mgr = Mdm::Service.arel_table.project(
       Mdm::Service[:host_id],
