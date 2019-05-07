@@ -8,14 +8,6 @@ class Mdm::Payload < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] workspace
-  # {Mdm::Workspace} in which this payload was created.
-  #
-  #   @return [Mdm::Workspace]
-  belongs_to :workspace,
-             class_name: 'Mdm::Workspace',
-             inverse_of: :payloads
-
 
   #
   # Attributes
@@ -65,11 +57,6 @@ class Mdm::Payload < ActiveRecord::Base
   #
   #   @return [String]
 
-  # @!attribute [rw] workspace_id
-  #   The ID of the workspace this payload belongs to.
-  #
-  #   @return [Integer]
-
   # @!attribute [rw] raw_payload
   #   A URL pointing to where the binary payload can be downloaded from.
   #
@@ -94,8 +81,6 @@ class Mdm::Payload < ActiveRecord::Base
   #
   # Validations
   #
-
-  validates :workspace, :presence => true
 
 
   #
