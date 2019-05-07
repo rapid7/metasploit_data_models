@@ -8,14 +8,6 @@ class Mdm::AsyncCallback < ActiveRecord::Base
   # Associations
   #
 
-  # @!attribute [rw] workspace
-  # {Mdm::Workspace} in which this payload callback will be logged.
-  #
-  #   @return [Mdm::Workspace]
-  belongs_to :workspace,
-             class_name: 'Mdm::Workspace',
-             inverse_of: :async_callbacks
-
 
   #
   # Attributes
@@ -47,16 +39,9 @@ class Mdm::AsyncCallback < ActiveRecord::Base
   #
   #   @return [Integer]
 
-  # @!attribute [rw] workspace_id
-  #   The ID of the workspace this payload belongs to.
-  #
-  #   @return [Integer]
-
   #
   # Validations
   #
-
-  validates :workspace, :presence => true
 
 
   #
