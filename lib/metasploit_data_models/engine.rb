@@ -1,6 +1,6 @@
 require 'rails'
 
-# `Rails::Engine` that exposes MetasploitDataModel's `ActiveRecord::Base` subclasses and automatically loads its
+# `Rails::Engine` that exposes MetasploitDataModel's `ApplicationRecord` subclasses and automatically loads its
 # `FactoryBot` factories, sequences, and traits.
 class MetasploitDataModels::Engine < Rails::Engine
   # @see http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl

@@ -1,5 +1,5 @@
 # A service, such as an ssh server or web server, running on a {#host}.
-class Mdm::Service < ActiveRecord::Base
+class Mdm::Service < ApplicationRecord
   include Metasploit::Model::Search
 
   #

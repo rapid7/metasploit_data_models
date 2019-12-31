@@ -1,5 +1,5 @@
 # WMAP target. WMAP is a plugin to metasploit-framework.
-class Mdm::WmapTarget < ActiveRecord::Base
+class Mdm::WmapTarget < ApplicationRecord
   #
   # Attributes
   #

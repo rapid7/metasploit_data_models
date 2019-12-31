@@ -1,5 +1,5 @@
 # Join model between {Mdm::Session} and {Mdm::Task} that signifies that the {#task} spawned the {#session}.
-class Mdm::TaskSession < ActiveRecord::Base
+class Mdm::TaskSession < ApplicationRecord
   #
   # Associations
   #

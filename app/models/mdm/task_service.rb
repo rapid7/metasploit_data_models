@@ -1,5 +1,5 @@
 # Join model between {Mdm::Service} and {Mdm::Task} that signifies that the {#task} found the {#service}.
-class Mdm::TaskService < ActiveRecord::Base
+class Mdm::TaskService < ApplicationRecord
   #
   # Associations
   #

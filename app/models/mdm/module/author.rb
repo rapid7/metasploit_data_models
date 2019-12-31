@@ -1,5 +1,5 @@
 # The {#email} and {#name} of an author of a {#detail Metasploit Module}.
-class Mdm::Module::Author < ActiveRecord::Base
+class Mdm::Module::Author < ApplicationRecord
   self.table_name = 'module_authors'
 
   #

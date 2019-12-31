@@ -1,5 +1,5 @@
 # A Web Site running on a {#service}.
-class Mdm::WebSite < ActiveRecord::Base
+class Mdm::WebSite < ApplicationRecord
   
   #
   # Associations

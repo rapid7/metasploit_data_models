@@ -1,6 +1,6 @@
 # A session opened on a {#host} using an {#via_exploit exploit} and controlled through a {#via_payload payload} to
 # connect back to the local host using meterpreter or a cmd shell.
-class Mdm::Session < ActiveRecord::Base
+class Mdm::Session < ApplicationRecord
   
   #
   # Associations

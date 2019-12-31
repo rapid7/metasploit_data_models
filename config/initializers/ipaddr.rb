@@ -1,7 +1,7 @@
 module IPAddrExtensions
   extend ActiveSupport::Concern
   included do
-    alias_method_chain :coerce_other, :rescue
+#    alias_method_chain :coerce_other, :rescue
   end
   
   def coerce_other_with_rescue(other)

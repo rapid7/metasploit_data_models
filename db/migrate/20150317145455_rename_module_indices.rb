@@ -2,7 +2,7 @@ class RenameModuleIndices < ActiveRecord::Migration[4.2]
   def change
     # This migration will only need to be run if the indices were originally
     # generated before Rails 4. Fresh builds can safely skip this.
-    return if ActiveRecord::Base.connection.indexes(:module_actions).first.name != 'index_module_actions_on_module_detail_id'
+    return if ApplicationRecord.connection.indexes(:module_actions).first.name != 'index_module_actions_on_module_detail_id'
 
     rename_index :module_actions,
                  'index_module_actions_on_module_detail_id',

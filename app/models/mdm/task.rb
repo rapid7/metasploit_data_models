@@ -1,5 +1,5 @@
 # A task run by Metasploit Pro.
-class Mdm::Task < ActiveRecord::Base
+class Mdm::Task < ApplicationRecord
   #
   #
   # Associations

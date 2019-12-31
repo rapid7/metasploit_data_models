@@ -328,10 +328,10 @@ RSpec.describe Mdm::Module::Detail, type: :model do
 
     context '#module_arch' do
       it 'finds all modules with a stance matching "java"' do
-        expect(Mdm::Module::Detail.module_arch(['%java%']).uniq).to contain_exactly(@cve_2012_0507)
+        expect(Mdm::Module::Detail.module_arch(['%java%']).distinct).to contain_exactly(@cve_2012_0507)
       end
       it 'finds all modules with a stance matching "pass"' do
-        expect(Mdm::Module::Detail.module_arch(['%java%', '%php%']).uniq).to contain_exactly(@cve_2012_0507, @cve_2010_0425)
+        expect(Mdm::Module::Detail.module_arch(['%java%', '%php%']).distinct).to contain_exactly(@cve_2012_0507, @cve_2010_0425)
       end
     end
 
@@ -364,68 +364,68 @@ RSpec.describe Mdm::Module::Detail, type: :model do
 
     context '#module_os_or_platform' do
       it 'finds all modules with a platform matching "linux"' do
-        expect(Mdm::Module::Detail.module_os_or_platform(['%linux%']).uniq).to contain_exactly(@cve_2012_0507)
+        expect(Mdm::Module::Detail.module_os_or_platform(['%linux%']).distinct).to contain_exactly(@cve_2012_0507)
       end
 
       it 'finds all modules with a platform matching "windows"' do
-        expect(Mdm::Module::Detail.module_os_or_platform(['%windows%']).uniq).to contain_exactly(
+        expect(Mdm::Module::Detail.module_os_or_platform(['%windows%']).distinct).to contain_exactly(
           @ms12_020,@ms08_067,@ms06_040,@cve_2012_0507)
       end
     end
 
     context 'module_ref' do
       it 'finds all modules with a reff matching "CVE-2012"' do
-        expect(Mdm::Module::Detail.module_ref(['%CVE-2012%']).uniq).to contain_exactly(
+        expect(Mdm::Module::Detail.module_ref(['%CVE-2012%']).distinct).to contain_exactly(
           @ms12_020,@cve_2012_0507)
       end
       it 'finds all modules with a reff matching "EDB"' do
-        expect(Mdm::Module::Detail.module_ref(['%EDB%']).uniq).to contain_exactly(@ms12_020)
+        expect(Mdm::Module::Detail.module_ref(['%EDB%']).distinct).to contain_exactly(@ms12_020)
       end
     end
 
     context '#module_stance' do
       it 'finds all modules with a stance matching "agg"' do
-        expect(Mdm::Module::Detail.module_stance(['%agg%']).uniq).to contain_exactly(
+        expect(Mdm::Module::Detail.module_stance(['%agg%']).distinct).to contain_exactly(
           @ms12_020,@ms08_067,@ms06_040,@cve_2010_0425)
       end
       it 'finds all modules with a stance matching "pass"' do
-        expect(Mdm::Module::Detail.module_stance(['%pass%']).uniq).to contain_exactly(@cve_2012_0507)
+        expect(Mdm::Module::Detail.module_stance(['%pass%']).distinct).to contain_exactly(@cve_2012_0507)
       end
     end
 
     context '#module_text' do
       it 'finds all modules with a description matching "ConnectMCSPDU"' do
-        expect(Mdm::Module::Detail.module_text(['%ConnectMCSPDU%']).uniq).to contain_exactly(@ms12_020)
+        expect(Mdm::Module::Detail.module_text(['%ConnectMCSPDU%']).distinct).to contain_exactly(@ms12_020)
       end
       it 'finds all modules with a fullname matching "smb/ms0"' do
-        expect(Mdm::Module::Detail.module_text(['%smb/ms0%']).uniq).to contain_exactly(@ms08_067,@ms06_040)
+        expect(Mdm::Module::Detail.module_text(['%smb/ms0%']).distinct).to contain_exactly(@ms08_067,@ms06_040)
       end
       it 'finds all modules with a name matching "Microsoft Server Service"' do
-        expect(Mdm::Module::Detail.module_text(['%Microsoft Server Service%']).uniq).to contain_exactly(@ms08_067,@ms06_040)
+        expect(Mdm::Module::Detail.module_text(['%Microsoft Server Service%']).distinct).to contain_exactly(@ms08_067,@ms06_040)
       end
       it 'finds all modules with a arch matching "php"' do
-        expect(Mdm::Module::Detail.module_text(['%php%']).uniq).to contain_exactly(@cve_2010_0425)
+        expect(Mdm::Module::Detail.module_text(['%php%']).distinct).to contain_exactly(@cve_2010_0425)
       end
       it 'finds all modules with a author matching "jduck"' do
-        expect(Mdm::Module::Detail.module_text(['%jduck%']).uniq).to contain_exactly(@ms12_020,@ms08_067)
+        expect(Mdm::Module::Detail.module_text(['%jduck%']).distinct).to contain_exactly(@ms12_020,@ms08_067)
       end
       it 'finds all modules with a platform matching "linux"' do
-        expect(Mdm::Module::Detail.module_text(['%linux%']).uniq).to contain_exactly(@cve_2012_0507)
+        expect(Mdm::Module::Detail.module_text(['%linux%']).distinct).to contain_exactly(@cve_2012_0507)
       end
       it 'finds all modules with a ref matching "MSB-MS"' do
-        expect(Mdm::Module::Detail.module_text(['%MSB-MS%']).uniq).to contain_exactly(@ms12_020,@ms08_067,@ms06_040)
+        expect(Mdm::Module::Detail.module_text(['%MSB-MS%']).distinct).to contain_exactly(@ms12_020,@ms08_067,@ms06_040)
       end
       it 'finds all modules with a target matching "Auto"' do
-        expect(Mdm::Module::Detail.module_text(['%Auto%']).uniq).to contain_exactly(@ms08_067,@ms06_040,@cve_2010_0425)
+        expect(Mdm::Module::Detail.module_text(['%Auto%']).distinct).to contain_exactly(@ms08_067,@ms06_040,@cve_2010_0425)
       end
     end
 
     context 'module_type' do
       it 'finds all modules with a mtype matching "aux"' do
-        expect(Mdm::Module::Detail.module_type(['%aux%']).uniq).to contain_exactly(@ms12_020)
+        expect(Mdm::Module::Detail.module_type(['%aux%']).distinct).to contain_exactly(@ms12_020)
       end
       it 'finds all modules with a mtype matching "exp"' do
-        expect(Mdm::Module::Detail.module_type(['%exp%']).uniq).to contain_exactly(
+        expect(Mdm::Module::Detail.module_type(['%exp%']).distinct).to contain_exactly(
           @ms08_067,@ms06_040,@cve_2012_0507,@cve_2010_0425)
       end
     end

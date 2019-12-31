@@ -1,5 +1,5 @@
 # Data gathered or derived from the {#host} or {#service} such as its {#ntype fingerprint}.
-class Mdm::Note < ActiveRecord::Base
+class Mdm::Note < ApplicationRecord
   
   #
   # Associations

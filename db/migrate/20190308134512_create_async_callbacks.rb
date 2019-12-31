@@ -1,4 +1,4 @@
-class CreateAsyncCallbacks < ActiveRecord::Migration
+class CreateAsyncCallbacks < ActiveRecord::Migration[4.2]
   def change
     create_table :async_callbacks do |t|
       t.string :uuid, :null => false

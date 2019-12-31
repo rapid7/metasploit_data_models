@@ -1,5 +1,5 @@
 # Network route that goes through a {#session} to allow accessing IPs on the remote end of the session.
-class Mdm::Route < ActiveRecord::Base
+class Mdm::Route < ApplicationRecord
   
   #
   # Associations

@@ -1,6 +1,6 @@
 class AddDisplayNameToReportsTable < ActiveRecord::Migration[4.2]
 
-	class Report < ActiveRecord::Base
+	class Report < ApplicationRecord
 	end
 
 	def self.up

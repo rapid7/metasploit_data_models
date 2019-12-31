@@ -1,14 +1,14 @@
 class AddSessionTable < ActiveRecord::Migration[4.2]
 
-	class Event < ActiveRecord::Base
+	class Event < ApplicationRecord
 		serialize :info
 	end
 
-	class SessionEvent < ActiveRecord::Base
+	class SessionEvent < ApplicationRecord
 		belongs_to :session
 	end
 
-	class Session < ActiveRecord::Base
+	class Session < ApplicationRecord
 		has_many :events, :class_name => 'AddSessionTable::SessionEvent'
 		serialize :datastore
 	end

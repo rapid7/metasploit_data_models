@@ -1,5 +1,5 @@
 # Web page requested from a {#web_site}.
-class Mdm::WebPage < ActiveRecord::Base
+class Mdm::WebPage < ApplicationRecord
   
   #
   # Associations

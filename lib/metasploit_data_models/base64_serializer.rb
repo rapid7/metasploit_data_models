@@ -1,5 +1,5 @@
 # Provides ActiveRecord 3.1x-friendly serialization for descendants of
-# ActiveRecord::Base. Backwards compatible with older YAML methods and
+# ApplicationRecord. Backwards compatible with older YAML methods and
 # will fall back to string decoding in the worst case
 #
 # @example Using default default of {}

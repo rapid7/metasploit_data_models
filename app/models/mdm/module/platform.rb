@@ -1,5 +1,5 @@
 # {#name Platform} on which the {#detail Metasploit Module} can run.
-class Mdm::Module::Platform < ActiveRecord::Base
+class Mdm::Module::Platform < ApplicationRecord
   self.table_name = 'module_platforms'
 
   #

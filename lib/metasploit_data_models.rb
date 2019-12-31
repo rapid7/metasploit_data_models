@@ -18,7 +18,6 @@ require 'active_support/all'
 require 'metasploit/concern'
 require 'metasploit/model'
 require 'arel-helpers'
-require 'postgres_ext'
 
 #
 # Project

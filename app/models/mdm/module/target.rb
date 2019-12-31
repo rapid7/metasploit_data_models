@@ -1,6 +1,6 @@
 # A potential target for a {Mdm::Module::Detail exploit Metasploit Module}.  Targets can change options including
 # offsets for ROP chains to tune an exploit to work with different system libraries and versions.
-class Mdm::Module::Target < ActiveRecord::Base
+class Mdm::Module::Target < ApplicationRecord
   self.table_name = 'module_targets'
 
   #

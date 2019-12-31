@@ -1,5 +1,5 @@
 # {Mdm::Vuln Vulnerability details} supplied from an external source, such as Nexpose.
-class Mdm::VulnDetail < ActiveRecord::Base
+class Mdm::VulnDetail < ApplicationRecord
   #
   # Associations
   #

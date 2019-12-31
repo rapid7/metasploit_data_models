@@ -1,7 +1,7 @@
 # @deprecated Use metasploit-credential's `Metasploit::Credential::Core`.
 #
 # A credential captured from a {#service}.
-class Mdm::Cred < ActiveRecord::Base
+class Mdm::Cred < ApplicationRecord
   #
   # CONSTANTS
   #

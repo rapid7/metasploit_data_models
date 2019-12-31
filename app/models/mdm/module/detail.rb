@@ -1,6 +1,6 @@
 # Details about an Msf::Module.  Metadata that can be an array is stored in associations in modules under the
 # {Mdm::Module} namespace.
-class Mdm::Module::Detail < ActiveRecord::Base
+class Mdm::Module::Detail < ApplicationRecord
   self.table_name = 'module_details'
 
   #

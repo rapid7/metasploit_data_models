@@ -1,5 +1,5 @@
 # Macro of {#actions} to run at once.
-class Mdm::Macro < ActiveRecord::Base
+class Mdm::Macro < ApplicationRecord
   extend MetasploitDataModels::SerializedPrefs
 
   #

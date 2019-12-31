@@ -1,5 +1,5 @@
 # Details supplied by Nexpose about a {Mdm::Host host}.
-class Mdm::HostDetail < ActiveRecord::Base
+class Mdm::HostDetail < ApplicationRecord
   #
   # Associations
   #

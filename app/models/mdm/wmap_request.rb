@@ -1,5 +1,5 @@
 # Request sent to a {Mdm::WmapTarget}.  WMAP is a plugin to metasploit-framework.
-class Mdm::WmapRequest < ActiveRecord::Base
+class Mdm::WmapRequest < ApplicationRecord
   #
   #
   # Attributes

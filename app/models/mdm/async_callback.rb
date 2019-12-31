@@ -1,5 +1,5 @@
 # An asychronous callback that has been received by the Mettle Pingback Listener and is logged
-class Mdm::AsyncCallback < ActiveRecord::Base
+class Mdm::AsyncCallback < ApplicationRecord
   extend ActiveSupport::Autoload
 
   include Metasploit::Model::Search

@@ -1,5 +1,5 @@
 # User settings.
-class Mdm::Profile < ActiveRecord::Base
+class Mdm::Profile < ApplicationRecord
   #
   # Attributes
   #

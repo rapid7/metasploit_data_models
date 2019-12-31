@@ -1,5 +1,5 @@
 # Client used for `report_client` in metasploit-framework Metasploit Modules.
-class Mdm::Client < ActiveRecord::Base
+class Mdm::Client < ApplicationRecord
   #
   # Associations
   #

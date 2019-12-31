@@ -1,5 +1,5 @@
 # API key to access the RPC.
-class Mdm::ApiKey < ActiveRecord::Base
+class Mdm::ApiKey < ApplicationRecord
   
   #
   # Attributes
