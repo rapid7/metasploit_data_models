@@ -1,10 +1,7 @@
 module IPAddrExtensions
   extend ActiveSupport::Concern
-  included do
-#    alias_method_chain :coerce_other, :rescue
-  end
-  
-  def coerce_other_with_rescue(other)
+
+  def coerce(other)
     begin
       case other
       when IPAddr
@@ -18,7 +15,15 @@ module IPAddrExtensions
       OpenStruct.new(family: false, to_i: false)
     end
   end
+
+  def include?(other)
+    begin
+      super(other)
+    rescue IPAddr::InvalidAddressError
+      false
+    end
+  end
   
 end
 
-IPAddr.send(:include, IPAddrExtensions)
+IPAddr.send(:prepend, IPAddrExtensions)
