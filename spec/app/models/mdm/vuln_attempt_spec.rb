@@ -33,7 +33,7 @@ RSpec.describe Mdm::VulnAttempt, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      vuln_attempt = FactoryBot.build(:mdm_vuln_attempt)
+      vuln_attempt = FactoryBot.create(:mdm_vuln_attempt)
       expect(vuln_attempt).to be_valid
     end
   end

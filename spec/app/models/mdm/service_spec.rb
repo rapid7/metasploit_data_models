@@ -82,6 +82,7 @@ RSpec.describe Mdm::Service, type: :model do
 
       it 'should include recog data when there is a match' do
         host = FactoryBot.create(:mdm_host)
+        host.name = 'example.com'
         FactoryBot.create(
           :mdm_service,
           :host => host,
