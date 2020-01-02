@@ -258,7 +258,7 @@ class Mdm::Service < ApplicationRecord
   #
   # @return [void]
   def normalize_host_os
-    if info_changed? && host.workspace.present? && !host.workspace.import_fingerprint
+    if saved_changes? && host.workspace.present? && !host.workspace.import_fingerprint
       host.normalize_os
     end
   end
