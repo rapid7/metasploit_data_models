@@ -1,4 +1,4 @@
-class AddMissingAeIndices < ActiveRecord::Migration
+class AddMissingAeIndices < ActiveRecord::Migration[4.2]
   def up
     add_index :automatic_exploitation_match_results, :match_id
     add_index :automatic_exploitation_match_results, :run_id

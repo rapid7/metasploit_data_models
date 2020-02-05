@@ -1,4 +1,4 @@
-class AddProfilesTable < ActiveRecord::Migration
+class AddProfilesTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :profiles do |t|
 			t.timestamps null: false

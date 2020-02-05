@@ -1,4 +1,4 @@
-class AddQuery < ActiveRecord::Migration
+class AddQuery < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :web_forms, :query, :text
 		add_column :web_vulns, :query, :text

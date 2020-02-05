@@ -1,4 +1,4 @@
-class RemoveCampaigns < ActiveRecord::Migration
+class RemoveCampaigns < ActiveRecord::Migration[4.2]
   def up
     drop_table :attachments
     drop_table :attachments_email_templates

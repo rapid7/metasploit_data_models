@@ -1,4 +1,4 @@
-class ExpandHostComment < ActiveRecord::Migration
+class ExpandHostComment < ActiveRecord::Migration[4.2]
 	
 	def self.up
 		change_column :hosts, :comments, :text

@@ -1,4 +1,4 @@
-class AddNexposeConsolesTable < ActiveRecord::Migration
+class AddNexposeConsolesTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :nexpose_consoles do |t|
 			t.timestamps null: false

@@ -1,4 +1,4 @@
-class MigrateCredData < ActiveRecord::Migration
+class MigrateCredData < ActiveRecord::Migration[4.2]
 
 	def self.up
 		begin # Wrap the whole thing in a giant rescue.

@@ -1,4 +1,4 @@
-class AddUserPreferences < ActiveRecord::Migration
+class AddUserPreferences < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :users, :prefs, :string, :limit => 524288
 	end

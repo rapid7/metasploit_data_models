@@ -1,4 +1,4 @@
-class CreateTaskSessions < ActiveRecord::Migration
+class CreateTaskSessions < ActiveRecord::Migration[4.2]
   def change
     create_table :task_sessions do |t|
       t.references :task, :null => false

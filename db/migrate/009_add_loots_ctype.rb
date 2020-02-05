@@ -1,4 +1,4 @@
-class AddLootsCtype < ActiveRecord::Migration
+class AddLootsCtype < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :loots, :content_type, :string
 	end

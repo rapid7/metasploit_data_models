@@ -1,4 +1,4 @@
-class AddVulnAttempts < ActiveRecord::Migration
+class AddVulnAttempts < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :vuln_attempts do |t|

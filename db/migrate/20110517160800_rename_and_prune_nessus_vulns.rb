@@ -1,6 +1,6 @@
-class RenameAndPruneNessusVulns < ActiveRecord::Migration
+class RenameAndPruneNessusVulns < ActiveRecord::Migration[4.2]
 
-	class Vuln < ActiveRecord::Base
+	class Vuln < ApplicationRecord
 	end
 
 	# No table changes, just vuln renaming to drop the NSS id

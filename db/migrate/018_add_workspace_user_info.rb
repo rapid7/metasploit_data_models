@@ -1,4 +1,4 @@
-class AddWorkspaceUserInfo < ActiveRecord::Migration
+class AddWorkspaceUserInfo < ActiveRecord::Migration[4.2]
 	def self.up
 		change_table :workspaces do |t|
 			t.string :boundary, :limit => 4096

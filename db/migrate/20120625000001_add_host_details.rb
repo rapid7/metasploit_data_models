@@ -1,4 +1,4 @@
-class AddHostDetails < ActiveRecord::Migration
+class AddHostDetails < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :host_details do |t|

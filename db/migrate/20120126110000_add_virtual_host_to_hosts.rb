@@ -1,4 +1,4 @@
-class AddVirtualHostToHosts < ActiveRecord::Migration
+class AddVirtualHostToHosts < ActiveRecord::Migration[4.2]
   def self.up
     add_column :hosts, :virtual_host, :text
   end

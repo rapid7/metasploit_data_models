@@ -1,4 +1,4 @@
-class AddEventsTable < ActiveRecord::Migration
+class AddEventsTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :events do |t|
 			t.integer   :workspace_id

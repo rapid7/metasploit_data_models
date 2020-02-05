@@ -1,4 +1,4 @@
-class AddApiKeysTable < ActiveRecord::Migration
+class AddApiKeysTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :api_keys do |t|
 			t.text :token

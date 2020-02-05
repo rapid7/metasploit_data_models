@@ -1,4 +1,4 @@
-class AddScopeToHosts < ActiveRecord::Migration
+class AddScopeToHosts < ActiveRecord::Migration[4.2]
   def self.up
     add_column :hosts, :scope, :text
   end

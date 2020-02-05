@@ -1,4 +1,4 @@
-class AddCredsTable < ActiveRecord::Migration
+class AddCredsTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :creds do |t|
 			t.integer   :service_id, :null => false

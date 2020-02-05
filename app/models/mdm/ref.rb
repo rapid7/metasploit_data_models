@@ -1,7 +1,7 @@
 # An external vulnerability reference for vulnerabilities that aren't part of a module.  {Mdm::Module::Ref} should be
 # used whenever possible and Mdm::Ref should only be used when the vulnerability is from an import and can't be
 # correlated to a module and its {Mdm::Module::Detail}.
-class Mdm::Ref < ActiveRecord::Base
+class Mdm::Ref < ApplicationRecord
   #
   # Associations
   #

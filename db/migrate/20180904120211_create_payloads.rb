@@ -1,4 +1,4 @@
-class CreatePayloads < ActiveRecord::Migration
+class CreatePayloads < ActiveRecord::Migration[4.2]
   def change
     create_table :payloads do |t|
       t.string :name

@@ -1,4 +1,4 @@
-class AddCredsCounterCache < ActiveRecord::Migration
+class AddCredsCounterCache < ActiveRecord::Migration[4.2]
   def up
     add_column :hosts, :cred_count, :integer, :default => 0
     Mdm::Host.reset_column_information

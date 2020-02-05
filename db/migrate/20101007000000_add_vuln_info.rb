@@ -1,4 +1,4 @@
-class AddVulnInfo < ActiveRecord::Migration
+class AddVulnInfo < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :web_vulns, :category, :text
 		add_column :web_vulns, :confidence, :text		

@@ -1,4 +1,4 @@
-class FixWebTables < ActiveRecord::Migration
+class FixWebTables < ActiveRecord::Migration[4.2]
 	
 	def self.up
 		change_column :web_pages, :path, :text

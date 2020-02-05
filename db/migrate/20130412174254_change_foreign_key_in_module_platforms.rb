@@ -1,6 +1,6 @@
 # Changes `module_platforms.module_detail_id` to `module_platforms.detail_id` so that foreign key matches the conventional
 # name when `Mdm::ModuleDetail` became {Mdm::Module::Detail}.
-class ChangeForeignKeyInModulePlatforms < ActiveRecord::Migration
+class ChangeForeignKeyInModulePlatforms < ActiveRecord::Migration[4.2]
   #
   # CONSTANTS
   #

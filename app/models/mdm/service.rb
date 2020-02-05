@@ -1,5 +1,5 @@
 # A service, such as an ssh server or web server, running on a {#host}.
-class Mdm::Service < ActiveRecord::Base
+class Mdm::Service < ApplicationRecord
   include Metasploit::Model::Search
 
   #
@@ -258,7 +258,7 @@ class Mdm::Service < ActiveRecord::Base
   #
   # @return [void]
   def normalize_host_os
-    if info_changed? && host.workspace.present? && !host.workspace.import_fingerprint
+    if saved_change_to_info? && host.workspace.present? && !host.workspace.import_fingerprint
       host.normalize_os
     end
   end

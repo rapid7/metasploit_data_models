@@ -6,7 +6,7 @@
 # There are also associations to {Mdm::Session} for two use cases: a `spawned_session` is a
 # session created by the ModuleRun. A `target_session` is a session that the ModuleRun
 # is acting upon (e.g.) for running a post module.
-class MetasploitDataModels::ModuleRun < ActiveRecord::Base
+class MetasploitDataModels::ModuleRun < ApplicationRecord
   #
   # Constants
   #

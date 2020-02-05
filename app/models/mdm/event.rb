@@ -1,5 +1,5 @@
 # Records framework events to the database.
-class Mdm::Event < ActiveRecord::Base
+class Mdm::Event < ApplicationRecord
     
   #
   # Associations

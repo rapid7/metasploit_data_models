@@ -1,5 +1,5 @@
 # A system with an {#address IP address} on the network that has been discovered in some way.
-class Mdm::Host < ActiveRecord::Base
+class Mdm::Host < ApplicationRecord
   extend ActiveSupport::Autoload
 
   autoload :OperatingSystemNormalization
@@ -316,7 +316,7 @@ class Mdm::Host < ActiveRecord::Base
   #   {Mdm::Module::Detail Details about modules} that were used to find {#vulns vulnerabilities} on this host.
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail]
-  has_many :module_details, -> { uniq } ,
+  has_many :module_details, -> { distinct } ,
            :class_name => 'Mdm::Module::Detail',
            :source =>:detail,
            :through => :module_refs

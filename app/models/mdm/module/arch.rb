@@ -1,5 +1,5 @@
 # A supported architecture for a given {Mdm::Module::Detail Metasploit Module}
-class Mdm::Module::Arch < ActiveRecord::Base
+class Mdm::Module::Arch < ApplicationRecord
   self.table_name = 'module_archs'
 
   #

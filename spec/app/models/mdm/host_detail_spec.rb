@@ -28,7 +28,7 @@ RSpec.describe Mdm::HostDetail, type: :model do
 
   context 'factory' do
     it 'should be valid' do
-      host_detail = FactoryBot.build(:mdm_host_detail)
+      host_detail = FactoryBot.create(:mdm_host_detail)
       expect(host_detail).to be_valid
     end
   end

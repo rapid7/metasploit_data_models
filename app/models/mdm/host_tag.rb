@@ -1,5 +1,5 @@
 # Join model between {Mdm::Host} and {Mdm::Tag}.
-class Mdm::HostTag < ActiveRecord::Base
+class Mdm::HostTag < ApplicationRecord
   self.table_name = "hosts_tags"
 
   #

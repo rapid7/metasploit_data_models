@@ -3,7 +3,7 @@
 #   `Metasploit::Credential::Engine` is installed.
 #
 # Join model between {Mdm::Cred} and {Mdm::Task} that signifies that the {#task} found the {#cred}.
-class Mdm::TaskCred < ActiveRecord::Base
+class Mdm::TaskCred < ApplicationRecord
   #
   # Associations
   #

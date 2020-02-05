@@ -1,4 +1,4 @@
-class RenameUser < ActiveRecord::Migration
+class RenameUser < ActiveRecord::Migration[4.2]
 	def self.up
 		remove_column :events, :user
 		change_table :events do |t|

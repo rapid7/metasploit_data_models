@@ -6,7 +6,7 @@ gemspec
 
 group :development do
   #gem 'metasploit-erd'
-  # embed ERDs on index, namespace Module and Class<ActiveRecord::Base> pages
+  # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
   #gem 'yard-metasploit-erd'
 end
 
@@ -16,17 +16,19 @@ group :development, :test do
   gem 'coveralls', require: false  
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryBot.' in factory definitions syntax.
-  gem 'factory_bot', '~>4'
+  gem 'factory_bot'
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
-  gem 'rails', '~>4.2.6'
+  gem 'rails'
   # Used to create fake data
   gem "faker"
 
   # bound to 0.20 for Activerecord 4.2.8 deprecation warnings:
   # https://github.com/ged/ruby-pg/commit/c90ac644e861857ae75638eb6954b1cb49617090
-  gem 'pg', "0.20.0"
+  gem 'pg'
+
+  gem 'pry'
 end
 
 group :test do

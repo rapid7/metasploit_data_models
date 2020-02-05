@@ -1,5 +1,5 @@
 # A vulnerability found on a {#host} or {#service}.
-class Mdm::Vuln < ActiveRecord::Base
+class Mdm::Vuln < ApplicationRecord
 
   #
   # Associations
@@ -122,7 +122,7 @@ class Mdm::Vuln < ActiveRecord::Base
   #
   #   @return [ActiveRecord::Relation<Mdm::Module::Detail>]
   has_many :module_details,
-            -> { uniq },
+            -> { distinct },
             :class_name => 'Mdm::Module::Detail',
             :source => :detail,
             :through => :module_refs

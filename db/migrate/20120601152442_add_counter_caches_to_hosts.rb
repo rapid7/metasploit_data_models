@@ -1,4 +1,4 @@
-class AddCounterCachesToHosts < ActiveRecord::Migration
+class AddCounterCachesToHosts < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :hosts, :note_count, :integer, :default => 0

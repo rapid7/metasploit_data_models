@@ -2,7 +2,7 @@
 # `:null => true`, to `:null => false`.
 #
 #  @abstract Subclass and define COLUMNS as Array<Symbol> and TABLE_NAME as Symbol.
-class MetasploitDataModels::ChangeRequiredColumnsToNullFalse < ActiveRecord::Migration
+class MetasploitDataModels::ChangeRequiredColumnsToNullFalse < ActiveRecord::Migration[4.2]
   # Marks all the COLUMNS as `:null => true`
   def down
     # Use self.class:: so constants are resolved in subclasses instead of this class.

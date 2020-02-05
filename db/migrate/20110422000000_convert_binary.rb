@@ -1,12 +1,12 @@
 # -*- coding: binary -*-
-class ConvertBinary < ActiveRecord::Migration
+class ConvertBinary < ActiveRecord::Migration[4.2]
 
 
-	class WebPage < ActiveRecord::Base
+	class WebPage < ApplicationRecord
 		serialize :headers
 	end
 
-	class WebVuln < ActiveRecord::Base
+	class WebVuln < ApplicationRecord
 		serialize :params
 	end
 

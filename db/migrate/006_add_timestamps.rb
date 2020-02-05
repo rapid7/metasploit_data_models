@@ -1,7 +1,7 @@
 
 # Adds 'created_at' and 'updated_at' columns to every primary table.
 #
-class AddTimestamps < ActiveRecord::Migration
+class AddTimestamps < ActiveRecord::Migration[4.2]
 
 	@@TABLES_NEEDING_RENAME = [:clients, :hosts, :notes, :refs, :services, :vulns, :wmap_requests]
 	@@TABLES_NEEDING_CREATED_AT = [:wmap_targets]

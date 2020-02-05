@@ -1,7 +1,7 @@
 # @deprecated Never populated by metasploit-framework.
 #
 # Module mixed into a {#detail Metasploit Module}.
-class Mdm::Module::Mixin < ActiveRecord::Base
+class Mdm::Module::Mixin < ApplicationRecord
   self.table_name = 'module_mixins'
 
   #

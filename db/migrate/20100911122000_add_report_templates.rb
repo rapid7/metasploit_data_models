@@ -1,4 +1,4 @@
-class AddReportTemplates < ActiveRecord::Migration
+class AddReportTemplates < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :report_templates do |t|

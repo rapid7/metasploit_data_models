@@ -1,4 +1,4 @@
-class AddNameToNexposeConsolesTable < ActiveRecord::Migration
+class AddNameToNexposeConsolesTable < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :nexpose_consoles, :name, :text

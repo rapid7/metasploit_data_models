@@ -1,5 +1,5 @@
 # External references to the vulnerability exploited by this module.
-class Mdm::Module::Ref < ActiveRecord::Base
+class Mdm::Module::Ref < ApplicationRecord
   self.table_name = 'module_refs'
 
   #

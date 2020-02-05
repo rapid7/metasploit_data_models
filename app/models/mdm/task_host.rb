@@ -1,5 +1,5 @@
 # Join model between {Mdm::Host} and {Mdm::Task} that signifies that the {#task} found the {#host}.
-class Mdm::TaskHost < ActiveRecord::Base
+class Mdm::TaskHost < ApplicationRecord
   #
   # Associations
   #

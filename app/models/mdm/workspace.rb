@@ -1,6 +1,6 @@
 # Workspace to separate different collections of {#hosts}.  Can be used to separate pentests against different networks
 # or different clients as reports are normally generated against all records in a workspace.
-class Mdm::Workspace < ActiveRecord::Base
+class Mdm::Workspace < ApplicationRecord
   #
   # CONSTANTS
   #
@@ -52,7 +52,7 @@ class Mdm::Workspace < ActiveRecord::Base
   # Users that are allowed to use this workspace.  Does not necessarily include all users, as an {Mdm::User#admin
   # administrator} can access any workspace, even ones where they are not a member.
   has_and_belongs_to_many :users,
-                          -> { uniq },
+                          -> { distinct },
                           class_name: 'Mdm::User',
                           join_table: 'workspace_members'
 
@@ -210,7 +210,7 @@ class Mdm::Workspace < ActiveRecord::Base
       Mdm::WebSite.join_association(:service),
       Mdm::Service.join_association(:host),
       Mdm::Host.join_association(:workspace)
-    ).where(Mdm::Workspace[:id].eq(id)).uniq
+    ).where(Mdm::Workspace[:id].eq(id)).distinct
   end
 
 
@@ -223,7 +223,7 @@ class Mdm::Workspace < ActiveRecord::Base
       Mdm::WebSite.join_association(:service),
       Mdm::Service.join_association(:host),
       Mdm::Host.join_association(:workspace)
-    ).where(Mdm::Workspace[:id].eq(id)).uniq
+    ).where(Mdm::Workspace[:id].eq(id)).distinct
   end
 
   # Web sites running on {#services}.
@@ -234,7 +234,7 @@ class Mdm::Workspace < ActiveRecord::Base
       Mdm::WebSite.join_association(:service),
       Mdm::Service.join_association(:host),
       Mdm::Host.join_association(:workspace)
-    ).where(Mdm::Workspace[:id].eq(id)).uniq
+    ).where(Mdm::Workspace[:id].eq(id)).distinct
   end
 
   # Web vulnerability found on {#web_sites}.
@@ -246,7 +246,7 @@ class Mdm::Workspace < ActiveRecord::Base
       Mdm::WebSite.join_association(:service),
       Mdm::Service.join_association(:host),
       Mdm::Host.join_association(:workspace)
-    ).where(Mdm::Workspace[:id].eq(id)).uniq
+    ).where(Mdm::Workspace[:id].eq(id)).distinct
   end
 
   # Web forms on {#web_sites}.

@@ -1,4 +1,4 @@
-class ValidMdmWebVulnParams < ActiveRecord::Migration
+class ValidMdmWebVulnParams < ActiveRecord::Migration[4.2]
   # Don't put back the bad format because there's not way to figure our which of the [] were '' before {#up} and
   # which were `[]` before {#up}.
   #

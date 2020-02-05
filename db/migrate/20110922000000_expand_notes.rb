@@ -1,4 +1,4 @@
-class ExpandNotes < ActiveRecord::Migration
+class ExpandNotes < ActiveRecord::Migration[4.2]
 	def self.up
 		change_column :notes, :data, :text
 	end

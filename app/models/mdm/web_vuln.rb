@@ -10,7 +10,7 @@
 #       "#{confidence}%"
 #     end
 #   end
-class Mdm::WebVuln < ActiveRecord::Base
+class Mdm::WebVuln < ApplicationRecord
   
   #
   # CONSTANTS

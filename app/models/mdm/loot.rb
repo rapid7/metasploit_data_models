@@ -1,6 +1,6 @@
 # Loot gathered from {#host} or {#service} such as files to prove you were on the system or to crack later to gain
 # sessions on other machines in the network.
-class Mdm::Loot < ActiveRecord::Base
+class Mdm::Loot < ApplicationRecord
   
   #
   # CONSTANTS

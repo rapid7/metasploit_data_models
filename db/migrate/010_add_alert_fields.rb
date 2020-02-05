@@ -1,4 +1,4 @@
-class AddAlertFields < ActiveRecord::Migration
+class AddAlertFields < ActiveRecord::Migration[4.2]
 	def self.up
 		add_column :notes, :critical, :boolean
 		add_column :notes, :seen, :boolean

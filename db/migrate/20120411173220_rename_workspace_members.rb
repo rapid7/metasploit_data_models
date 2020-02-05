@@ -1,4 +1,4 @@
-class RenameWorkspaceMembers < ActiveRecord::Migration
+class RenameWorkspaceMembers < ActiveRecord::Migration[4.2]
   def up
     rename_table :project_members, :workspace_members
   end

@@ -1,5 +1,5 @@
 
-class AddCampaignsAndTemplates < ActiveRecord::Migration
+class AddCampaignsAndTemplates < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :campaigns do |t|

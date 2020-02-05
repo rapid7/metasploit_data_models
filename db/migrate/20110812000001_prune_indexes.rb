@@ -1,4 +1,4 @@
-class PruneIndexes < ActiveRecord::Migration
+class PruneIndexes < ActiveRecord::Migration[4.2]
 	def self.up
 
 		if indexes(:hosts).map{|x| x.columns }.flatten.include?("comments")

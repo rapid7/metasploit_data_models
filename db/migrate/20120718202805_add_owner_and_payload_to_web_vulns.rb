@@ -1,4 +1,4 @@
-class AddOwnerAndPayloadToWebVulns < ActiveRecord::Migration
+class AddOwnerAndPayloadToWebVulns < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :web_vulns, :owner,   :string

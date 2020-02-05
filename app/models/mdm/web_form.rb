@@ -1,5 +1,5 @@
 # A filled-in form on a {#web_site}.
-class Mdm::WebForm < ActiveRecord::Base
+class Mdm::WebForm < ApplicationRecord
   
   #
   # Associations

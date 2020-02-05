@@ -1,4 +1,4 @@
-class AddWorkspaces < ActiveRecord::Migration
+class AddWorkspaces < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :workspaces do |t|

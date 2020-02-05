@@ -1,4 +1,4 @@
-class ExpandInfo < ActiveRecord::Migration
+class ExpandInfo < ActiveRecord::Migration[4.2]
 	def self.up
 		remove_column :events, :info
 		change_table :events do |t|

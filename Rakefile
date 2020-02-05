@@ -51,7 +51,7 @@ if gem_specification
   end
 
   #
-  # Eager load before yard docs so that ActiveRecord::Base subclasses are loaded for yard-metasploit-erd
+  # Eager load before yard docs so that ApplicationRecord subclasses are loaded for yard-metasploit-erd
   #
 
   task 'yard:doc' => :eager_load

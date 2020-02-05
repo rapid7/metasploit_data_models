@@ -1,5 +1,5 @@
 # Join model between {Mdm::Vuln} and {Mdm::Ref}.
-class Mdm::VulnRef < ActiveRecord::Base
+class Mdm::VulnRef < ApplicationRecord
   self.table_name = 'vulns_refs'
 
   #

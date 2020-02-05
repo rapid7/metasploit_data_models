@@ -1,4 +1,4 @@
-class AddImportedCreds < ActiveRecord::Migration
+class AddImportedCreds < ActiveRecord::Migration[4.2]
 
 	def self.up
 		create_table :imported_creds do |t|

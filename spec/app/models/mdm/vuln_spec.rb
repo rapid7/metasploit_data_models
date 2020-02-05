@@ -289,7 +289,7 @@ RSpec.describe Mdm::Vuln, type: :model do
       end
 
       it "should not allow :name over 255 characters" do
-        str = Faker::Lorem.characters(256)
+        str = Faker::Lorem.characters(number: 256)
         mdm_vuln.name = str
         mdm_vuln.valid?
         expect(mdm_vuln.errors[:name][0]).to include "is too long"

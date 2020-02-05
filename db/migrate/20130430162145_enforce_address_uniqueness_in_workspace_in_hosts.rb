@@ -1,6 +1,6 @@
 # Changes index on address so it scoped to workspace_id and is unique to match the validation in {Mdm::Host} on
 # {Mdm::Host#address}.
-class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
+class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration[4.2]
   TABLE_NAME = :hosts
 
   # maps Table -> Association Column for models that "belong to" a Host
@@ -33,7 +33,7 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
   #  idea what version of the code the user has checked out. So we fall back to SQL :(
   def find_and_merge_duplicate_hosts!
     # find all duplicate addresses within the same workspace currently in the db
-    dupe_addresses_and_workspaces = ActiveRecord::Base.connection.execute(%Q{
+    dupe_addresses_and_workspaces = ApplicationRecord.connection.execute(%Q{
       SELECT workspace_id, address, count_addr
         FROM (
           SELECT workspace_id, address, COUNT(address) AS count_addr
@@ -49,10 +49,10 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
       # iterate through the duped IPs
       dupe_addresses_and_workspaces.each do |result|
         # so its come to this
-        address      = ActiveRecord::Base.connection.quote(result['address'])
+        address      = ApplicationRecord.connection.quote(result['address'])
         workspace_id = result['workspace_id'].to_i
         # look up the duplicate Host table entries to find all IDs of the duped Hosts
-        hosts = ActiveRecord::Base.connection.execute(%Q|
+        hosts = ApplicationRecord.connection.execute(%Q|
           SELECT id
             FROM hosts
             WHERE address=#{address} AND workspace_id=#{workspace_id}
@@ -65,13 +65,13 @@ class EnforceAddressUniquenessInWorkspaceInHosts < ActiveRecord::Migration
         dupe_host_ids = hosts[1..-1]
         # update associations to these duplicate Hosts
         HOST_ASSOCIATION_MAP.each do |table, column|
-          ActiveRecord::Base.connection.execute(%Q|
+          ApplicationRecord.connection.execute(%Q|
             UPDATE #{table} SET #{column}=#{first_host_id}
               WHERE #{column} IN (#{dupe_host_ids.join(',')})
           |)
         end
         # destroy the duplicate host rows
-        ActiveRecord::Base.connection.execute(%Q|
+        ApplicationRecord.connection.execute(%Q|
           DELETE FROM hosts WHERE id IN (#{dupe_host_ids.join(',')})
         |)
       end

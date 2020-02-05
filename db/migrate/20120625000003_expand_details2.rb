@@ -1,4 +1,4 @@
-class ExpandDetails2 < ActiveRecord::Migration
+class ExpandDetails2 < ActiveRecord::Migration[4.2]
 
 	def self.up
 		add_column :host_details, :nx_site_name, :string

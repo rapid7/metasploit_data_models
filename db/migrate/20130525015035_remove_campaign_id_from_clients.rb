@@ -1,4 +1,4 @@
-class RemoveCampaignIdFromClients < ActiveRecord::Migration
+class RemoveCampaignIdFromClients < ActiveRecord::Migration[4.2]
   def up
     remove_column :clients, :campaign_id
   end

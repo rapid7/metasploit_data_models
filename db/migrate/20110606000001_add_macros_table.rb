@@ -1,4 +1,4 @@
-class AddMacrosTable < ActiveRecord::Migration
+class AddMacrosTable < ActiveRecord::Migration[4.2]
 	def self.up
 		create_table :macros do |t|
 			t.timestamps null: false
