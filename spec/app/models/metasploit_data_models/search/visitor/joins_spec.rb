@@ -82,7 +82,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             it { is_expected.to eq([]) }
           end
 
-          context 'with association and attribute', pending: 'FactoryBot update' do
+          context 'with association and attribute' do
             let(:association) do
               FactoryBot.generate :metasploit_model_search_operator_association_association
             end
@@ -118,7 +118,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             it { is_expected.to eq([]) }
           end
 
-          context 'with the same child join for all', pending: "FactoryBot update" do
+          context 'with the same child join for all' do
             let(:association) do
               FactoryBot.generate :metasploit_model_search_operator_association_association
             end
@@ -147,7 +147,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
             end
           end
 
-          context 'with union of intersections', pending: "FactoryBot update" do
+          context 'with union of intersections' do
             let(:disjoint_associations) do
               Array.new(2) {
                 FactoryBot.generate :metasploit_model_search_operator_association_association
@@ -316,7 +316,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Joins, type: :model do
       end
     end
 
-    context 'with Metasploit::Model::Search::Operator::Association', pending: "FactoryBot update" do
+    context 'with Metasploit::Model::Search::Operator::Association' do
       let(:association) do
         FactoryBot.generate :metasploit_model_search_operator_association_association
       end
