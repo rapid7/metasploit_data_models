@@ -53,7 +53,7 @@ class Mdm::ApiKey < ApplicationRecord
     license = License.get
 
     if license and not license.supports_api?
-      errors[:license] = " - this product does not support API access"
+      errors.add :license, " - this product does not support API access"
     end
   end
 

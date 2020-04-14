@@ -33,7 +33,7 @@ class ParametersValidator < ActiveModel::EachValidator
                 :index => index
             )
 
-            record.errors[attribute] << length_error
+            record.errors.add attribute, length_error
           else
             parameter_name = element.first
 
@@ -44,7 +44,7 @@ class ParametersValidator < ActiveModel::EachValidator
                     :index => index,
                     :prefix => "has blank parameter name"
                 )
-                record.errors[attribute] << error
+                record.errors.add attribute, error
               end
             else
               error = error_at(
@@ -52,7 +52,7 @@ class ParametersValidator < ActiveModel::EachValidator
                   :index => index,
                   :prefix => "has non-String parameter name (#{parameter_name.inspect})"
               )
-              record.errors[attribute] << error
+              record.errors.add attribute, error
             end
 
             parameter_value = element.second
@@ -63,7 +63,7 @@ class ParametersValidator < ActiveModel::EachValidator
                   :index => index,
                   :prefix => "has non-String parameter value (#{parameter_value.inspect})"
               )
-              record.errors[attribute] << error
+              record.errors.add attribute, error
             end
           end
         else
@@ -72,11 +72,11 @@ class ParametersValidator < ActiveModel::EachValidator
               :index => index,
               :prefix => 'has non-Array'
           )
-          record.errors[attribute] << error
+          record.errors.add attribute, error
         end
       end
     else
-      record.errors[attribute] << "is not an Array.  #{TYPE_SIGNATURE_SENTENCE}"
+      record.errors.add attribute, "is not an Array.  #{TYPE_SIGNATURE_SENTENCE}"
     end
   end
 
