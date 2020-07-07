@@ -113,7 +113,7 @@ class Mdm::Note < ApplicationRecord
   #
   # @return [void]
   def normalize
-    if data_changed? and ntype =~ /fingerprint/ && host.workspace.present? && !host.workspace.import_fingerprint
+    if saved_change_to_data? and ntype =~ /fingerprint/ && host.workspace.present? && !host.workspace.import_fingerprint
       host.normalize_os
     end
   end
