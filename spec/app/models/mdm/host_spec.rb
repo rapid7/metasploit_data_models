@@ -471,33 +471,33 @@ RSpec.describe Mdm::Host, type: :model do
 
   context 'os normalization' do
     context '#get_arch_from_string' do
-      context "should return 'x64'" do
+      context "should return 'x86_64'" do
         it "when the string contains 'x64'" do
-          expect(host.send(:get_arch_from_string, 'blahx64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahx64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'X64'" do
-          expect(host.send(:get_arch_from_string, 'blahX64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahX64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'x86_64'" do
-          expect(host.send(:get_arch_from_string, 'blahx86_64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahx86_64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'X86_64'" do
-          expect(host.send(:get_arch_from_string, 'blahX86_64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahX86_64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'amd64'" do
-          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'AMD64'" do
-          expect(host.send(:get_arch_from_string, 'blahAMD64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahAMD64blah')).to eq('x86_64')
         end
 
         it "when the string contains 'aMd64'" do
-          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x64')
+          expect(host.send(:get_arch_from_string, 'blahamd64blah')).to eq('x86_64')
         end
       end
 
@@ -531,21 +531,21 @@ RSpec.describe Mdm::Host, type: :model do
         end
       end
 
-      context "should return 'ppc'" do
+      context "should return 'PowerPC'" do
         it "when the string contains 'PowerPC'" do
-          expect(host.send(:get_arch_from_string, 'blahPowerPCblah')).to eq('ppc')
+          expect(host.send(:get_arch_from_string, 'blahPowerPCblah')).to eq('PowerPC')
         end
 
         it "when the string contains 'PPC'" do
-          expect(host.send(:get_arch_from_string, 'blahPPCblah')).to eq('ppc')
+          expect(host.send(:get_arch_from_string, 'blahPPCblah')).to eq('PowerPC')
         end
 
         it "when the string contains 'POWER'" do
-          expect(host.send(:get_arch_from_string, 'blahPOWERblah')).to eq('ppc')
+          expect(host.send(:get_arch_from_string, 'blahPOWERblah')).to eq('PowerPC')
         end
 
         it "when the string contains 'ppc'" do
-          expect(host.send(:get_arch_from_string, 'blahppcblah')).to eq('ppc')
+          expect(host.send(:get_arch_from_string, 'blahppcblah')).to eq('PowerPC')
         end
       end
 
@@ -560,22 +560,22 @@ RSpec.describe Mdm::Host, type: :model do
         end
       end
 
-      it "should return 'sparc' if the string contains SPARC, regardless of case" do
-        expect(host.send(:get_arch_from_string, 'blahSPARCblah')).to eq('sparc')
-        expect(host.send(:get_arch_from_string, 'blahSPaRCblah')).to eq('sparc')
-        expect(host.send(:get_arch_from_string, 'blahsparcblah')).to eq('sparc')
+      it "should return 'Sparc' if the string contains SPARC, regardless of case" do
+        expect(host.send(:get_arch_from_string, 'blahSPARCblah')).to eq('Sparc')
+        expect(host.send(:get_arch_from_string, 'blahSPaRCblah')).to eq('Sparc')
+        expect(host.send(:get_arch_from_string, 'blahsparcblah')).to eq('Sparc')
       end
 
-      it "should return 'arm' if the string contains 'ARM', regardless of case" do
-        expect(host.send(:get_arch_from_string, 'blahARMblah')).to eq('arm')
-        expect(host.send(:get_arch_from_string, 'blahArMblah')).to eq('arm')
-        expect(host.send(:get_arch_from_string, 'blaharmblah')).to eq('arm')
+      it "should return 'ARM' if the string contains 'ARM', regardless of case" do
+        expect(host.send(:get_arch_from_string, 'blahARMblah')).to eq('ARM')
+        expect(host.send(:get_arch_from_string, 'blahArMblah')).to eq('ARM')
+        expect(host.send(:get_arch_from_string, 'blaharmblah')).to eq('ARM')
       end
 
-      it "should return 'mips' if the string contains 'MIPS', regardless of case" do
-        expect(host.send(:get_arch_from_string, 'blahMIPSblah')).to eq('mips')
-        expect(host.send(:get_arch_from_string, 'blahMiPslah')).to eq('mips')
-        expect(host.send(:get_arch_from_string, 'blahmipsblah')).to eq('mips')
+      it "should return 'MIPS' if the string contains 'MIPS', regardless of case" do
+        expect(host.send(:get_arch_from_string, 'blahMIPSblah')).to eq('MIPS')
+        expect(host.send(:get_arch_from_string, 'blahMiPslah')).to eq('MIPS')
+        expect(host.send(:get_arch_from_string, 'blahmipsblah')).to eq('MIPS')
       end
     end
 
@@ -588,7 +588,7 @@ RSpec.describe Mdm::Host, type: :model do
       context 'arch' do
         it 'should return a value for arch if there is one' do
           result = host.send(:parse_windows_os_str, 'Windows x64')
-          expect(result['os.arch']).to eq('x64')
+          expect(result['os.arch']).to eq('x86_64')
         end
 
         it "should not have an arch key if we don't know the arch" do
@@ -1093,7 +1093,7 @@ RSpec.describe Mdm::Host, type: :model do
           fingerprint = FactoryBot.build(:mdm_retina_fingerprint, :host => host)
           result = host.send(:normalize_scanner_fp, fingerprint).first
           expect(result['os.product']).to eq( 'Windows Server 2003')
-          expect(result['os.arch']).to eq('x64')
+          expect(result['os.arch']).to eq('x86_64')
           expect(result['os.version']).to eq('SP2')
           expect(result['os.certainty'].to_f).to eq(0.8)
         end
