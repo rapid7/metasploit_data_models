@@ -6,7 +6,7 @@ class IpFormatValidator < ActiveModel::EachValidator
   #
   # @return [void]
   def validate_each(object, attribute, value)
-    error_message_block = lambda{ object.errors.add attribute, " must be a valid IPv4 or IPv6 address" }
+    error_message_block = lambda{ object.errors.add attribute, "must be a valid IPv4 or IPv6 address" }
     begin
       if value.is_a? IPAddr
         potential_ip = value.dup

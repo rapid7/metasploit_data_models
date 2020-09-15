@@ -32,7 +32,7 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
 
   context '#destroy' do
     it 'should successfully destroy the object' do
-      nexpose_console = FactoryBot.create(:mdm_nexpose_console)
+      nexpose_console = FactoryBot.create(:mdm_nexpose_console, :address => 'localhost')
       expect {
         nexpose_console.destroy
       }.to_not raise_error
@@ -48,6 +48,20 @@ RSpec.describe Mdm::NexposeConsole, type: :model do
         addressless_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => nil)
         expect(addressless_nexpose_console).not_to be_valid
         expect(addressless_nexpose_console.errors[:address]).to include("can't be blank")
+      end
+
+      it 'should be valid for a valid hostname' do
+        host_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => 'testvalue.test.com')
+        expect(host_nexpose_console).to be_valid
+      end
+
+      it 'should be invalid for a malformed hostname' do
+        host_nexpose_consoles = ['testvalue.test.com:', 'testvalue-.test.com', '[testvalue.test.com]']
+        host_nexpose_consoles.each do | entry |
+          host_nexpose_console = FactoryBot.build(:mdm_nexpose_console, :address => entry)
+          expect(host_nexpose_console).not_to be_valid
+          expect(host_nexpose_console.errors[:address]).to include("must be a valid (IP or hostname) address")
+        end
       end
 
       it 'should be valid for IPv4 format' do
