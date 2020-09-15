@@ -21,11 +21,6 @@ class Mdm::Workspace < ApplicationRecord
            class_name: 'MetasploitDataModels::AutomaticExploitation:MatchSet',
            inverse_of: :workspace
 
-  # @deprecated Use `Mdm::Workspace#core_credentials` defined by `Metasploit::Credential::Engine` to get
-  #   `Metasploit::Credential::Core`s gathered from this workspace's {#hosts} and {#services}.
-  #
-  # Creds gathered from this workspace's {#hosts} and {#services}.
-  has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
 
   # Events that occurred in this workspace.
   has_many :events, dependent: :delete_all, :class_name => 'Mdm::Event'
@@ -80,6 +75,12 @@ class Mdm::Workspace < ApplicationRecord
 
   # Sessions opened on {#hosts} in this workspace.
   has_many :sessions, :through => :hosts, :class_name => 'Mdm::Session'
+  
+  # @deprecated Use `Mdm::Workspace#core_credentials` defined by `Metasploit::Credential::Engine` to get
+  #   `Metasploit::Credential::Core`s gathered from this workspace's {#hosts} and {#services}.
+  #
+  # Creds gathered from this workspace's {#hosts} and {#services}.
+  has_many :creds, :through => :services, :class_name => 'Mdm::Cred'
 
   #
   # Attributes
