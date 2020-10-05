@@ -1,6 +1,6 @@
 module MetasploitDataModels
   # VERSION is managed by GemRelease
-  VERSION = '4.0.3'
+  VERSION = '4.1.0'
 
   # @return [String]
   #

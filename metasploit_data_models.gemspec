@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activerecord', '~>5.2.2'
   s.add_runtime_dependency 'activesupport', '~>5.2.2'
   s.add_runtime_dependency 'metasploit-concern'
-  s.add_runtime_dependency 'metasploit-model'
+  s.add_runtime_dependency 'metasploit-model', '>=3.1'
   s.add_runtime_dependency 'railties', '~>5.2.2'
 
   # os fingerprinting

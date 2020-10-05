@@ -1,6 +1,5 @@
 # A connection to Nexpose from Metasploit.
 class Mdm::NexposeConsole < ApplicationRecord
-  
   #
   # Associations
   #
@@ -80,7 +79,7 @@ class Mdm::NexposeConsole < ApplicationRecord
   # Callbacks
   #
 
-  before_save :strip_protocol
+  before_validation :strip_protocol
 
   #
   # Serializations
@@ -96,10 +95,14 @@ class Mdm::NexposeConsole < ApplicationRecord
   # Validations
   #
 
-  validates :address, :presence => true
+  validates :address, :presence => true, :address_format => true
+
   validates :name, :presence => true
+
   validates :password, :presence => true
+
   validates :port, :numericality => { :only_integer => true }, :inclusion => {:in => 1..65535}
+
   validates :username, :presence => true
 
   #
@@ -110,7 +113,7 @@ class Mdm::NexposeConsole < ApplicationRecord
   #
   # @return [void]
   def strip_protocol
-    self.address.gsub!(/^http(s)*:\/\//i,'')
+    self.address.gsub!(/^http(s)*:\/\//i,'') unless self.address.nil?  
   end
 
   Metasploit::Concern.run(self)
