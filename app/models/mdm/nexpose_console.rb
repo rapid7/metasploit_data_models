@@ -1,7 +1,5 @@
 # A connection to Nexpose from Metasploit.
 class Mdm::NexposeConsole < ApplicationRecord
-  extend ActiveSupport::Autoload
-  autoload :AddressFormatValidator, 'address_format_validator'
   #
   # Associations
   #
