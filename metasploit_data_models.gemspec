@@ -5,23 +5,15 @@ require 'metasploit_data_models/version'
 Gem::Specification.new do |s|
   s.name        = 'metasploit_data_models'
   s.version     = MetasploitDataModels::VERSION
-  s.authors     = [
-      'Samuel Huckins',
-      'Luke Imhoff',
-      "David 'thelightcosine' Maloney",
-      "Trevor 'burlyscudd' Rosen"
-  ]
-  s.email       = [
-      'shuckins@rapid7.com',
-      'luke_imhoff@rapid7.com',
-      'dmaloney@rapid7.com',
-      'trevor_rosen@rapid7.com'
-  ]
+  s.authors     = ['Metasploit Hackers']
+  s.email       = ['msfdev@metasploit.com']
   s.homepage    = ""
   s.summary     = %q{Database code for MSF and Metasploit Pro}
   s.description = %q{Implements minimal ActiveRecord models and database helper code used in both the Metasploit Framework (MSF) and Metasploit commercial editions.}
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n").reject { |file|
+    file =~ /^bin/
+  }
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = %w{app/models app/validators lib}
 
