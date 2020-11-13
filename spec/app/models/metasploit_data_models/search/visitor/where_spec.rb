@@ -129,7 +129,7 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
         attribute = double('Visited Operator')
         allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
 
-        expect(attribute).to receive(:in).with(range)
+        expect(attribute).to receive(:between).with(range)
 
         visit
       end

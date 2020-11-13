@@ -91,7 +91,7 @@ class MetasploitDataModels::Search::Visitor::Where
   visit 'MetasploitDataModels::Search::Operation::Port::Range' do |range_operation|
     attribute = attribute_visitor.visit range_operation.operator
 
-    attribute.in(range_operation.value)
+    attribute.between(range_operation.value)
   end
 
   #
