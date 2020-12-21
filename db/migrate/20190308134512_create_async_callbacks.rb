@@ -8,7 +8,6 @@ class CreateAsyncCallbacks < ActiveRecord::Migration[4.2]
       t.string :target_port
 
       t.timestamps null: false
-      t.uuid null: false
     end
   end
 end
