@@ -19,6 +19,8 @@
 coverage
 # generated yardocs
 doc
+# Installed gem versions.  Not stored for the same reasons as .rvmrc
+Gemfile.lock
 # Packaging directory for builds
 pkg/*
 # Database configuration (with passwords) for specs
