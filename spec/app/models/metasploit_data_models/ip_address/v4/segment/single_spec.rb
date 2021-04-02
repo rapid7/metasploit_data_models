@@ -233,7 +233,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
   end
 
   context '#to_s' do
-    subject(:to_s) {
+    subject(:call_to_s) {
       single.to_s
     }
 
@@ -256,7 +256,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Single, type: :mode
     it 'delegates to #value' do
       expect(value).to receive(:to_s)
 
-      to_s
+      call_to_s
     end
   end
 
