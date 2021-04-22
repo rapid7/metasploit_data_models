@@ -28,7 +28,11 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Attribute, type: :model do
           end
 
           it "should be #{node_class}#attribute" do
-            expect(name).to eq(node.attribute)
+            if node.attribute.instance_of? Symbol
+              expect(name.to_s).to eq(node.attribute.to_s)
+            else
+              expect(name).to eq(node.attribute)
+            end
           end
         end
 
