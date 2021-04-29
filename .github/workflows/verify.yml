@@ -51,13 +51,6 @@ jobs:
         run: |
           gem install bundler
 
-      - uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
       - name: Bundle install
         run: |
           bundle config path vendor/bundle
