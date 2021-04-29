@@ -67,7 +67,7 @@ class MetasploitDataModels::Search::Visitor::Relation < Metasploit::Model::Base
   # @return [Hash{Symbol => Class}]
   def self.visitor_class_by_relation_method
     @relation_method_by_visitor_class ||= RELATION_METHODS.each_with_object({}) { |relation_method, relation_method_by_visitor_class|
-      visitor_class_name = "#{parent.name}::#{relation_method.to_s.camelize}"
+      visitor_class_name = "#{module_parent.name}::#{relation_method.to_s.camelize}"
       visitor_class = visitor_class_name.constantize
 
       relation_method_by_visitor_class[relation_method] = visitor_class

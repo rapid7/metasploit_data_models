@@ -41,6 +41,14 @@ different `on_load` name, which is just the class name converted to an underscor
 
     require 'metasploit_data_models/engine'
 
+`ArelHelper` classes must also be included in your applications `app/models/application_record.rb` class:
+
+    class ApplicationRecord < ActiveRecord::Base
+      self.abstract_class = true
+      include ArelHelpers::ArelTable
+      include ArelHelpers::JoinAssociation
+    end
+
 ### Metasploit Framework
 
 In Metasploit Framework, `MetasploitDataModels::Engine` is loaded, but the data models are only if the user wants to use
