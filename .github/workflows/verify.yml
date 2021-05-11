@@ -30,7 +30,10 @@ jobs:
       fail-fast: true
       matrix:
         ruby:
+          - 2.5
+          - 2.6
           - 2.7
+          - 3.0
 
     env:
       RAILS_ENV: test
@@ -49,12 +52,12 @@ jobs:
 
       - name: Setup bundler
         run: |
-          gem install bundler
+          gem install bundler:2.1.4
 
       - name: Bundle install
         run: |
           bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundle _2.1.4_ install --jobs 4 --retry 3
 
       - name: Test
         run: |

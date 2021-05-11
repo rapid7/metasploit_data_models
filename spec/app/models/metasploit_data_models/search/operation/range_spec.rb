@@ -39,7 +39,7 @@ RSpec.describe MetasploitDataModels::Search::Operation::Range, type: :model do
 
       context '#ordered' do
         let(:error) {
-          I18n.translate!('metasploit.model.errors.models.metasploit_data_models/search/operation/range.attributes.value.order', error_attributes)
+          I18n.translate!('metasploit.model.errors.models.metasploit_data_models/search/operation/range.attributes.value.order', **error_attributes)
         }
 
         context 'with Range' do
