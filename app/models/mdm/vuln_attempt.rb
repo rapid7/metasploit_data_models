@@ -11,6 +11,7 @@ class Mdm::VulnAttempt < ApplicationRecord
   # @return [nil] if {#exploited} is `false`.
   belongs_to :loot,
              class_name: 'Mdm::Loot',
+             optional: true,
              inverse_of: :vuln_attempt
 
   # The session opened by this attempt.
@@ -19,6 +20,7 @@ class Mdm::VulnAttempt < ApplicationRecord
   # @return [nil] if {#exploited} is `false`.
   belongs_to :session,
              class_name: 'Mdm::Session',
+             optional: true,
              inverse_of: :vuln_attempt
 
   # The {Mdm::Vuln vulnerability} that this attempt was exploiting.

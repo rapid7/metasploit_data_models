@@ -2,8 +2,10 @@ RSpec.describe Mdm::Event, type: :model do
   it_should_behave_like 'Metasploit::Concern.run'
 
   context 'associations' do
-    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
-    it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
+    it { expect(described_class.reflect_on_association(:host).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:host).class_name).to eq('Mdm::Host') }
+    it { expect(described_class.reflect_on_association(:workspace).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:workspace).class_name).to eq('Mdm::Workspace') }
   end
 
   context 'database' do

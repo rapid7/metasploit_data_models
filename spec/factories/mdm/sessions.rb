@@ -4,6 +4,7 @@ FactoryBot.define do
     # Associations
     #
     association :host, :factory => :mdm_host
+    association :originating_module_run, :factory => :metasploit_data_models_module_run
 
     #
     # Attributes

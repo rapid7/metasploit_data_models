@@ -109,6 +109,7 @@ class MetasploitDataModels::ModuleRun < ApplicationRecord
   belongs_to :target_session,
              class_name: 'Mdm::Session',
              foreign_key: :session_id,
+             optional: true,
              inverse_of: :target_module_runs
 
 
@@ -130,6 +131,7 @@ class MetasploitDataModels::ModuleRun < ApplicationRecord
   belongs_to :user,
              class_name:  'Mdm::User',
              foreign_key: 'user_id',
+             optional: true,
              inverse_of: :module_runs
 
 

@@ -20,6 +20,7 @@ class Mdm::Vuln < ApplicationRecord
   belongs_to :host,
              class_name: 'Mdm::Host',
              counter_cache: :vuln_count,
+             optional: true,
              inverse_of: :vulns
 
   # @!attribute [rw] matches
@@ -36,6 +37,7 @@ class Mdm::Vuln < ApplicationRecord
   #   @return [Mdm::Service]
   belongs_to :service,
              class_name: 'Mdm::Service',
+             optional: true,
              inverse_of: :vulns
 
   # @!attribute [rw] origin
@@ -44,6 +46,7 @@ class Mdm::Vuln < ApplicationRecord
   #
   #   @return [ActiveRecord::Relation<origin>]
   belongs_to :origin,
+             optional: true,
              polymorphic: true
 
   # @!attribute [rw] vuln_attempts

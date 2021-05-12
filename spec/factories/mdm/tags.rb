@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :mdm_tag, :class => Mdm::Tag do
+    association :user, factory: :mdm_user
     desc { generate :mdm_tag_desc }
     name { generate :mdm_tag_name }
   end

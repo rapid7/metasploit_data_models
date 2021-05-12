@@ -15,6 +15,7 @@ class Mdm::Tag < ApplicationRecord
   # User that created this tag.
   belongs_to :user,
              class_name: 'Mdm::User',
+             optional: true, # no tags have ever actually had user set.
              inverse_of: :tags
 
   #

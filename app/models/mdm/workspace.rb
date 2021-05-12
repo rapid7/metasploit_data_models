@@ -36,7 +36,7 @@ class Mdm::Workspace < ApplicationRecord
 
   # User that owns this workspace and has full permissions within this workspace even if they are not an
   # {Mdm::User#admin administrator}.
-  belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id'
+  belongs_to :owner, :class_name => 'Mdm::User', :foreign_key => 'owner_id', optional: true
 
   # Tasks run inside this workspace.
   has_many :tasks,

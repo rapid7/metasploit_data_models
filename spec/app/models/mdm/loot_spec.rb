@@ -5,7 +5,8 @@ RSpec.describe Mdm::Loot, type: :model do
     it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
     it { is_expected.to belong_to(:service).class_name('Mdm::Service') }
     it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
-    it { is_expected.to belong_to(:module_run).class_name('MetasploitDataModels::ModuleRun') }
+    it { expect(described_class.reflect_on_association(:module_run).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:module_run).class_name).to eq('MetasploitDataModels::ModuleRun') }
   end
 
   context 'database' do

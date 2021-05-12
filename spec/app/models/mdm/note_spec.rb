@@ -41,9 +41,12 @@ RSpec.describe Mdm::Note, type: :model do
 
   context 'associations' do
     it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
-    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
-    it { is_expected.to belong_to(:service).class_name('Mdm::Service') }
-    it { is_expected.to belong_to(:vuln).class_name('Mdm::Vuln') }
+    it { expect(described_class.reflect_on_association(:host).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:host).class_name).to eq('Mdm::Host') }
+    it { expect(described_class.reflect_on_association(:service).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:service).class_name).to eq('Mdm::Service') }
+    it { expect(described_class.reflect_on_association(:vuln).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:vuln).class_name).to eq('Mdm::Vuln') }
   end
 
   context 'scopes' do

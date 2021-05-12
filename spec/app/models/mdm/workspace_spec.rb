@@ -46,7 +46,9 @@ RSpec.describe Mdm::Workspace, type: :model do
     it { is_expected.to have_many(:listeners).class_name('Mdm::Listener').dependent(:destroy) }
     it { is_expected.to have_many(:loots).class_name('Mdm::Loot').through(:hosts) }
     it { is_expected.to have_many(:notes).class_name('Mdm::Note') }
-    it { is_expected.to belong_to(:owner).class_name('Mdm::User').with_foreign_key('owner_id') }
+    it { expect(described_class.reflect_on_association(:owner).macro).to eq(:belongs_to) }
+    it { expect(described_class.reflect_on_association(:owner).class_name).to eq('Mdm::User') }
+    it { expect(described_class.reflect_on_association(:owner).foreign_key).to eq('owner_id') }
     it { is_expected.to have_many(:services).class_name('Mdm::Service').through(:hosts).with_foreign_key('service_id') }
     it { is_expected.to have_many(:sessions).class_name('Mdm::Session').through(:hosts) }
     it { is_expected.to have_many(:tasks).class_name('Mdm::Task').dependent(:destroy).order('created_at DESC') }
@@ -185,7 +187,7 @@ RSpec.describe Mdm::Workspace, type: :model do
         before(:example) do
           FactoryBot.create(
               :mdm_workspace,
-              :name => default
+              :name => Mdm::Workspace::DEFAULT
           )
         end
 
@@ -220,7 +222,7 @@ RSpec.describe Mdm::Workspace, type: :model do
 
       context 'with DEFAULT name' do
         before(:example) do
-          workspace.name = default
+          workspace.name = Mdm::Workspace::DEFAULT
         end
 
         it { is_expected.to eq(true) }
