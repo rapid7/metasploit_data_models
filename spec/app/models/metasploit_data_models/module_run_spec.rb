@@ -18,12 +18,10 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
   end
 
   context "associations" do
-    it { expect(described_class.reflect_on_association(:user).macro).to eq(:belongs_to) }
-    it { expect(described_class.reflect_on_association(:user).class_name).to eq('Mdm::User') }
-    it { expect(described_class.reflect_on_association(:user).inverse_of.name).to eq(:module_runs) }
-    it { expect(described_class.reflect_on_association(:target_session).macro).to eq(:belongs_to) }
-    it { expect(described_class.reflect_on_association(:target_session).class_name).to eq('Mdm::Session') }
-    it { expect(described_class.reflect_on_association(:target_session).inverse_of.name).to eq(:target_module_runs) }
+    it { is_expected.to belong_to(:user).optional.class_name('Mdm::User') }
+    it { is_expected.to belong_to(:user).optional.inverse_of(:module_runs) }
+    it { is_expected.to belong_to(:target_session).optional.class_name('Mdm::Session') }
+    it { is_expected.to belong_to(:target_session).optional.inverse_of(:target_module_runs) }
     it { is_expected.to belong_to(:trackable) }
     it { is_expected.to belong_to(:module_detail).class_name('Mdm::Module::Detail') }
     it { is_expected.to belong_to(:module_detail).inverse_of(:module_runs) }

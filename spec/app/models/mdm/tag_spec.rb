@@ -6,8 +6,7 @@ RSpec.describe Mdm::Tag, type: :model do
   context 'associations' do
     it { is_expected.to have_many(:hosts_tags).class_name('Mdm::HostTag') }
     it { is_expected.to have_many(:hosts).class_name('Mdm::Host').through(:hosts_tags) }
-    it { expect(described_class.reflect_on_association(:user).macro).to eq(:belongs_to) }
-    it { expect(described_class.reflect_on_association(:user).class_name).to eq('Mdm::User') }
+    it { is_expected.to belong_to(:user).optional.class_name('Mdm::User') }
   end
 
   context 'database' do
