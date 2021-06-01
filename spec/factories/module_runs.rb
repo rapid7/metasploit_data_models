@@ -20,7 +20,6 @@ FactoryBot.define do
     end
 
     attempted_at { Time.now }
-#    session_id { 1 }
     port { generate :port }
     proto { "tcp" }
     fail_detail { generate :module_run_fail_detail }

@@ -49,6 +49,7 @@ class Mdm::Loot < ApplicationRecord
   #   @return [Mdm::Service]
   belongs_to :service,
              class_name: 'Mdm::Service',
+             optional: true,
              inverse_of: :loots
 
   # @!attribute vuln_attempt
