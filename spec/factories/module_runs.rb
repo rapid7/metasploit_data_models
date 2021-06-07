@@ -4,6 +4,8 @@ FactoryBot.define do
   factory :metasploit_data_models_module_run, class: MetasploitDataModels::ModuleRun do
 
     association :user, factory: :mdm_user
+    association :module_detail, factory: :mdm_module_detail
+    association :trackable, factory: :mdm_host
 
     trait :failed do
       status { MetasploitDataModels::ModuleRun::FAIL }
@@ -18,13 +20,11 @@ FactoryBot.define do
     end
 
     attempted_at { Time.now }
-    session_id { 1 }
     port { generate :port }
     proto { "tcp" }
     fail_detail { generate :module_run_fail_detail }
     status { MetasploitDataModels::ModuleRun::SUCCEED }
     username { "joefoo" }
-    module_fullname { generate :module_run_module_fullname }
   end
 
   sequence :module_run_module_fullname do |n|

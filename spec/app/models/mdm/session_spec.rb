@@ -45,7 +45,7 @@ RSpec.describe Mdm::Session, type: :model do
   context 'associations' do
     it { is_expected.to have_many(:events).class_name('Mdm::SessionEvent').dependent(:delete_all) }
     it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
-    it { is_expected.to belong_to(:originating_module_run).class_name('MetasploitDataModels::ModuleRun') }
+    it { is_expected.to belong_to(:originating_module_run).optional.class_name('MetasploitDataModels::ModuleRun') }
     it { is_expected.to have_many(:routes).class_name('Mdm::Route').dependent(:delete_all) }
     it { is_expected.to have_many(:target_module_runs).class_name('MetasploitDataModels::ModuleRun') }
     it { is_expected.to have_many(:tasks).class_name('Mdm::Task').through(:task_sessions)}

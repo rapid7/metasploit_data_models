@@ -18,10 +18,10 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
   end
 
   context "associations" do
-    it { is_expected.to belong_to(:user).class_name('Mdm::User') }
-    it { is_expected.to belong_to(:user).inverse_of(:module_runs) }
-    it { is_expected.to belong_to(:target_session).class_name('Mdm::Session') }
-    it { is_expected.to belong_to(:target_session).inverse_of(:target_module_runs) }
+    it { is_expected.to belong_to(:user).optional.class_name('Mdm::User') }
+    it { is_expected.to belong_to(:user).optional.inverse_of(:module_runs) }
+    it { is_expected.to belong_to(:target_session).optional.class_name('Mdm::Session') }
+    it { is_expected.to belong_to(:target_session).optional.inverse_of(:target_module_runs) }
     it { is_expected.to belong_to(:trackable) }
     it { is_expected.to belong_to(:module_detail).class_name('Mdm::Module::Detail') }
     it { is_expected.to belong_to(:module_detail).inverse_of(:module_runs) }
@@ -40,7 +40,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
       context "when the module is an exploit" do
         context "and that exploit IS NOT local" do
           before(:example) do
-            module_run.module_fullname = 'exploit/windows/mah-crazy-exploit'
+            module_run.module_detail = FactoryBot.create(:mdm_module_detail, fullname: 'exploit/windows/mah-crazy-exploit')
           end
 
           it { is_expected.to_not be_valid }
@@ -48,7 +48,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
         context "and that exploit IS local" do
           before(:example) do
-            module_run.module_fullname = 'exploit/windows/local/mah-crazy-exploit'
+            module_run.module_detail = FactoryBot.create(:mdm_module_detail, fullname: 'exploit/windows/local/mah-crazy-exploit')
           end
 
           it { is_expected.to be_valid }
@@ -65,7 +65,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
         context "and it IS NOT a login scanner" do
           before(:example) do
-            module_run.module_fullname = 'post/multi/gather/steal-minecraft-maps'
+            module_run.module_detail = FactoryBot.create(:mdm_module_detail, fullname: 'post/multi/gather/steal-minecraft-maps')
           end
 
           it { is_expected.to_not be_valid }
@@ -73,7 +73,7 @@ RSpec.describe MetasploitDataModels::ModuleRun, type: :model do
 
         context "and it IS a login scanner" do
           before(:example) do
-            module_run.module_fullname = 'auxiliary/scanner/ssh/ssh_login'
+            module_run.module_detail = FactoryBot.create(:mdm_module_detail, fullname: 'auxiliary/scanner/ssh/ssh_login')
           end
 
           it { is_expected.to be_valid }

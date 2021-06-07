@@ -31,9 +31,9 @@ RSpec.describe Mdm::Vuln, type: :model do
 
 
   context 'associations' do
-    it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
-    it { is_expected.to belong_to(:origin) }
-    it { is_expected.to belong_to(:service).class_name('Mdm::Service') }
+    it { is_expected.to belong_to(:host).optional.class_name('Mdm::Host') }
+    it { is_expected.to belong_to(:origin).optional }
+    it { is_expected.to belong_to(:service).optional.class_name('Mdm::Service') }
     it { is_expected.to have_many(:module_refs).class_name('Mdm::Module::Ref').through(:refs) }
     it { is_expected.to have_many(:module_runs).class_name('MetasploitDataModels::ModuleRun') }
     it { is_expected.to have_many(:refs).class_name('Mdm::Ref').through(:vulns_refs) }

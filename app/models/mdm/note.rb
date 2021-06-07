@@ -13,6 +13,7 @@ class Mdm::Note < ApplicationRecord
   belongs_to :host,
              class_name: 'Mdm::Host',
              counter_cache: :note_count,
+             optional: true,
              inverse_of: :notes
 
   # @!attribute [rw] service
@@ -22,6 +23,7 @@ class Mdm::Note < ApplicationRecord
   #   @return [nil] if not is attached to an {Mdm::Host}.
   belongs_to :service,
              class_name: 'Mdm::Service',
+             optional: true,
              inverse_of: :notes
 
   # @!attribute [rw] vuln
@@ -31,6 +33,7 @@ class Mdm::Note < ApplicationRecord
   #   @return [nil] if not is attached to an {Mdm::Host}.
   belongs_to :vuln,
              class_name: 'Mdm::Vuln',
+             optional: true,
              inverse_of: :notes
 
   # @!attribute [rw] workspace

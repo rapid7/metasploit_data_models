@@ -67,6 +67,7 @@ class Mdm::VulnDetail < ApplicationRecord
   belongs_to :nexpose_console,
              class_name: 'Mdm::NexposeConsole',
              foreign_key: :nx_console_id,
+             optional: true,
              inverse_of: :vuln_details
 
   # @!attribute nx_added

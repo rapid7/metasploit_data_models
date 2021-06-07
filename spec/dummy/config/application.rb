@@ -51,6 +51,9 @@ module Dummy
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
 
+    # 5.x change to belongs_to
+    config.active_record.belongs_to_required_by_default = true
+
     # Enable the asset pipeline
     config.assets.enabled = false
 

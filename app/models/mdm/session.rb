@@ -47,6 +47,7 @@ class Mdm::Session < ApplicationRecord
   #   @return [MetasploitDataModels::ModuleRun]
   belongs_to :originating_module_run,
            class_name: 'MetasploitDataModels::ModuleRun',
+           optional: true, # no code currently generates a module_run
            foreign_key: :module_run_id,
            inverse_of: :spawned_session
 

@@ -40,6 +40,7 @@ class Mdm::Loot < ApplicationRecord
   belongs_to :module_run,
              class_name: 'MetasploitDataModels::ModuleRun',
              foreign_key: :module_run_id,
+             optional: true, # allow for manually stored loot?
              inverse_of: :loots
 
   # @!attribute [rw] service
@@ -48,6 +49,7 @@ class Mdm::Loot < ApplicationRecord
   #   @return [Mdm::Service]
   belongs_to :service,
              class_name: 'Mdm::Service',
+             optional: true,
              inverse_of: :loots
 
   # @!attribute vuln_attempt
