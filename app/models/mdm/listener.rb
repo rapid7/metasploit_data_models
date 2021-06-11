@@ -8,6 +8,7 @@ class Mdm::Listener < ApplicationRecord
   # Task that spawned this listener.
   belongs_to :task,
              class_name: 'Mdm::Task',
+             optional: true,
              inverse_of: :listeners
 
   # Workspace which controls this listener.
