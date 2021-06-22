@@ -3,7 +3,7 @@ RSpec.describe Mdm::Listener, type: :model do
 
   context 'associations' do
     it { is_expected.to belong_to(:workspace).class_name('Mdm::Workspace') }
-    it { is_expected.to belong_to(:task).class_name('Mdm::Task') }
+    it { is_expected.to belong_to(:task).optional.class_name('Mdm::Task') }
   end
 
   context 'database' do
