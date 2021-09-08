@@ -20,7 +20,7 @@ group :development, :test do
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
-  gem 'rails'
+  gem 'rails', '~> 6.0'
   # Used to create fake data
   gem "faker"
 
