@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     timeout-minutes: 40
 
     services:
@@ -46,18 +46,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - uses: actions/setup-ruby@v1
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-
-      - name: Setup bundler
-        run: |
-          gem install bundler:2.1.4
-
-      - name: Bundle install
-        run: |
-          bundle config path vendor/bundle
-          bundle _2.1.4_ install --jobs 4 --retry 3
+          bundler-cache: true
 
       - name: Test
         run: |
