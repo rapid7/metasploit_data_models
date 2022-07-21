@@ -135,7 +135,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
   end
 
   context '#to_s' do
-    subject(:to_s) do
+    subject(:to_s_value) do
       nmap.to_s
     end
 
@@ -145,7 +145,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
       }
 
       it 'returns a string equal to the original formatted value' do
-        expect(to_s).to eq(formatted_value)
+        expect(to_s_value).to eq(formatted_value)
       end
     end
 
@@ -155,7 +155,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Segment::Nmap::List, type: :
       }
 
       it 'returned the formatted value as a string' do
-        expect(to_s).to eq(formatted_value.to_s)
+        expect(to_s_value).to eq(formatted_value.to_s)
       end
     end
   end

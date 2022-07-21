@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'webrick'
 
   # os fingerprinting
-  s.add_runtime_dependency 'recog', '~> 2.0'
+  s.add_runtime_dependency 'recog'
 
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'

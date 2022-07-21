@@ -1,6 +1,6 @@
 # Web page requested from a {#web_site}.
 class Mdm::WebPage < ApplicationRecord
-  
+
   #
   # Associations
   #

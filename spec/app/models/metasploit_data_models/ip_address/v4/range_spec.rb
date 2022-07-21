@@ -185,7 +185,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
   end
 
   context '#to_s' do
-    subject(:to_s) {
+    subject(:to_s_result) {
       range.to_s
     }
 
@@ -195,7 +195,7 @@ RSpec.describe MetasploitDataModels::IPAddress::V4::Range, type: :model do
       }
 
       it 'equals the original formatted value' do
-        expect(to_s).to eq(formatted_value)
+        expect(to_s_result).to eq(formatted_value)
       end
     end
 

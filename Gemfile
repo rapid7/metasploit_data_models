@@ -3,7 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-
 group :development do
   #gem 'metasploit-erd'
   # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
@@ -13,7 +12,7 @@ end
 # used by dummy application
 group :development, :test do
   # Upload coverage reports to coveralls.io
-  gem 'coveralls', require: false  
+  gem 'coveralls', require: false
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryBot.' in factory definitions syntax.
   gem 'factory_bot'
@@ -21,6 +20,8 @@ group :development, :test do
   gem 'factory_bot_rails'
 
   gem 'rails', '~> 6.0'
+  gem 'net-smtp', require: false
+
   # Used to create fake data
   gem "faker"
 

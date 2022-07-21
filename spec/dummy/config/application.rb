@@ -39,12 +39,14 @@ module Dummy
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-    
+
     # Raise deprecations as errors
     config.active_support.deprecation = :raise
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
+
+    config.active_record.yaml_column_permitted_classes = MetasploitDataModels::YAML::PERMITTED_CLASSES
 
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,

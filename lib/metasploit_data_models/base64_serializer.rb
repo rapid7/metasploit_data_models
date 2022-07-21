@@ -27,7 +27,7 @@ class MetasploitDataModels::Base64Serializer
       },
       lambda { |serialized|
         # Support legacy YAML encoding for existing data
-        YAML.load(serialized)
+        YAML.safe_load(serialized, permitted_classes: MetasploitDataModels::YAML::PERMITTED_CLASSES)
       },
       lambda { |serialized|
         # Fall back to string decoding
