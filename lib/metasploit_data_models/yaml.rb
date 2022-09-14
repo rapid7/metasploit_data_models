@@ -26,8 +26,6 @@ class MetasploitDataModels::YAML
     'ActiveRecord::Type::Serialized'.to_sym,
     'ActiveRecord::Type::Text'.to_sym,
     'ActiveSupport::HashWithIndifferentAccess'.to_sym,
-    'Mdm::Workspace'.to_sym,
-    'MsfModule'.to_sym,
-    'Report'.to_sym,
+    'Mdm::Workspace'.to_sym
   ].freeze
 end

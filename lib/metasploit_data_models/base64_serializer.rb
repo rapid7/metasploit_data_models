@@ -27,7 +27,7 @@ class MetasploitDataModels::Base64Serializer
       },
       lambda { |serialized|
         # Support legacy YAML encoding for existing data
-        YAML.safe_load(serialized, permitted_classes: MetasploitDataModels::YAML::PERMITTED_CLASSES)
+        YAML.safe_load(serialized, permitted_classes: Rails.application.config.active_record.yaml_column_permitted_classes)
       },
       lambda { |serialized|
         # Fall back to string decoding
