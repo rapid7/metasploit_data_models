@@ -18,7 +18,7 @@ class Mdm::Workspace < ApplicationRecord
 
   # Automatic exploitation match sets generated against {#hosts} and {#services} in this workspace.
   has_many :automatic_exploitation_match_sets,
-           class_name: 'MetasploitDataModels::AutomaticExploitation:MatchSet',
+           class_name: 'MetasploitDataModels::AutomaticExploitation::MatchSet',
            inverse_of: :workspace
 
 
