@@ -39,6 +39,7 @@ module MetasploitDataModels
   autoload :ModuleRun
   autoload :Search
   autoload :SerializedPrefs
+  autoload :YAML
 
   # The root directory of `metasploit_data_models` gem in both development and gem installs.
   #

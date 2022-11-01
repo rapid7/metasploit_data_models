@@ -547,14 +547,14 @@ RSpec.describe Mdm::Host, type: :model do
         it "when the string contains 'ppc'" do
           expect(host.send(:get_arch_from_string, 'blahppcblah')).to eq('PowerPC')
         end
+
+        it 'when PowerPC is cased incorrectly' do
+          expect(host.send(:get_arch_from_string, 'powerPC')).to eq('PowerPC')
+          expect(host.send(:get_arch_from_string, 'Powerpc')).to eq('PowerPC')
+        end
       end
 
       context 'should return nil' do
-        it 'when PowerPC is cased incorrectly' do
-          expect(host.send(:get_arch_from_string, 'powerPC')).to eq(nil)
-          expect(host.send(:get_arch_from_string, 'Powerpc')).to eq(nil)
-        end
-
         it 'when no recognized arch string is present' do
           expect(host.send(:get_arch_from_string, 'blahblah')).to eq(nil)
         end
