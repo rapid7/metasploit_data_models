@@ -57,6 +57,8 @@ module Dummy
     config.active_record.belongs_to_required_by_default = true
 
     config.autoloader = :zeitwerk
+
+    ActiveRecord.legacy_connection_handling = false
   end
 end
 
