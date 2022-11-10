@@ -100,7 +100,8 @@ class Mdm::Tag < ApplicationRecord
   # @return [void]
   def destroy_if_orphaned
     self.class.transaction do
-      if hosts_tags.empty?
+      # call `.count` to avoid serialization of any Mdm::HostTag that may exist
+      if hosts_tags.count == 0
         destroy
       end
     end
