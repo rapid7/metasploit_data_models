@@ -3,9 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-concern', git: 'https://github.com/jmartin-r7/metasploit-concern', branch: 'add-support-for-rails-7'
-
-
 group :development do
   #gem 'metasploit-erd'
   # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
