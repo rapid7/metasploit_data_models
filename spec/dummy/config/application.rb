@@ -56,13 +56,9 @@ module Dummy
     # 5.x change to belongs_to
     config.active_record.belongs_to_required_by_default = true
 
-    # Enable the asset pipeline
-    config.assets.enabled = false
-
-    # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
-
     config.autoloader = :zeitwerk
+
+    ActiveRecord.legacy_connection_handling = false
   end
 end
 

@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = %w{app/models app/validators lib}
 
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.7'
 
   # ---- Dependencies ----
   # documentation
@@ -33,11 +33,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
 
 
-  s.add_runtime_dependency 'activerecord', '~>6.0'
-  s.add_runtime_dependency 'activesupport', '~>6.0'
+  s.add_runtime_dependency 'activerecord', '~>7.0'
+  s.add_runtime_dependency 'activesupport', '~>7.0'
   s.add_runtime_dependency 'metasploit-concern'
   s.add_runtime_dependency 'metasploit-model', '>=3.1'
-  s.add_runtime_dependency 'railties', '~>6.0'
+  s.add_runtime_dependency 'railties', '~>7.0'
   s.add_runtime_dependency 'webrick'
 
   # os fingerprinting

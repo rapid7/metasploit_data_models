@@ -5,7 +5,6 @@ require 'rails'
 class MetasploitDataModels::Engine < Rails::Engine
   # @see http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
   config.generators do |g|
-    g.assets false
     g.fixture_replacement :factory_bot, :dir => 'spec/factories'
     g.helper false
     g.test_framework :rspec, :fixture => false

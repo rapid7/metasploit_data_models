@@ -38,7 +38,9 @@ class Mdm::HostTag < ApplicationRecord
   # @see http://stackoverflow.com/a/11694704
   # @return [void]
   def destroy_orphan_tag
-    tag.destroy_if_orphaned
+    # ensure fresh load of tag record
+    # in theory this will always return one result safe navigation is just "extra"
+    Mdm::Tag.where(id: tag.id).first&.destroy_if_orphaned
   end
 
   # switch back to public for load hooks
