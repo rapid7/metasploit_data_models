@@ -31,6 +31,7 @@ class Mdm::Loot < ApplicationRecord
   #   @return [Mdm::Host]
   belongs_to :host,
              class_name: 'Mdm::Host',
+             optional: true, # allow for manually stored loot
              inverse_of: :loots
 
   # @!attribute [rw] module_run
