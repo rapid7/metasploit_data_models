@@ -130,17 +130,17 @@ class Mdm::Task < ApplicationRecord
   # Options passed to `#module`.
   #
   # @return [Hash]
-  serialize :options, MetasploitDataModels::Base64Serializer.new
+  serialize :options, coder: MetasploitDataModels::Base64Serializer.new
 
   # Result of task running.
   #
   # @return [Hash]
-  serialize :result, MetasploitDataModels::Base64Serializer.new
+  serialize :result, coder: MetasploitDataModels::Base64Serializer.new
 
   # Settings used to configure this task outside of the {#options module options}.
   #
   # @return [Hash]
-  serialize :settings, MetasploitDataModels::Base64Serializer.new
+  serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
 
   #
   # Instance Methods

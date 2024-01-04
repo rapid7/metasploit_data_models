@@ -172,7 +172,7 @@ class Mdm::Session < ApplicationRecord
   # Serializations
   #
 
-  serialize :datastore, ::MetasploitDataModels::Base64Serializer.new
+  serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new
 
   # Returns whether the session can be upgraded to a meterpreter session from a shell session on Windows.
   #

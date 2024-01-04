@@ -46,7 +46,7 @@ class Mdm::WebForm < ApplicationRecord
   # Parameters submitted in this form.
   #
   # @return [Array<Array(String, String)>>]
-  serialize :params, MetasploitDataModels::Base64Serializer.new
+  serialize :params, coder: MetasploitDataModels::Base64Serializer.new
 
   Metasploit::Concern.run(self)
 end

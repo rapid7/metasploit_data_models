@@ -69,7 +69,7 @@ class Mdm::Listener < ApplicationRecord
   # Options used to spawn this listener.
   #
   # @return [Hash]
-  serialize :options, MetasploitDataModels::Base64Serializer.new
+  serialize :options, coder: MetasploitDataModels::Base64Serializer.new
 
   #
   # Validations

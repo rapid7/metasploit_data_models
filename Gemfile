@@ -19,7 +19,7 @@ group :development, :test do
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
-  gem 'rails'
+  gem 'rails', '~>  7.0'
   gem 'net-smtp', require: false
 
   # Used to create fake data

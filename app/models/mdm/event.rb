@@ -72,7 +72,7 @@ class Mdm::Event < ApplicationRecord
   # {#name}-specific information about this event.
   #
   # @return [Hash]
-  serialize :info, MetasploitDataModels::Base64Serializer.new
+  serialize :info, coder: MetasploitDataModels::Base64Serializer.new
 
   #
   # Validations

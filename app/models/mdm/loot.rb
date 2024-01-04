@@ -140,7 +140,7 @@ class Mdm::Loot < ApplicationRecord
   # Serializations
   #
 
-  serialize :data, MetasploitDataModels::Base64Serializer.new
+  serialize :data, coder: MetasploitDataModels::Base64Serializer.new
 
   private
 

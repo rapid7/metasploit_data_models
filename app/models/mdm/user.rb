@@ -109,7 +109,7 @@ class Mdm::User < ApplicationRecord
   # Hash of user preferences
   #
   # @return [Hash]
-  serialize :prefs, MetasploitDataModels::Base64Serializer.new
+  serialize :prefs, coder: MetasploitDataModels::Base64Serializer.new
 
   # @!attribute time_zone
   #   User's preferred time zone.
