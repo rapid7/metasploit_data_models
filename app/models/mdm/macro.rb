@@ -39,12 +39,12 @@ class Mdm::Macro < ApplicationRecord
   #
   # @return [Array<Hash{Symbol=>Object}>] Array of action hashes.  Each action hash is have key :module with value
   #   of an {Mdm::Module::Detail#fullname} and and key :options with value of options used to the run the module.
-  serialize :actions, MetasploitDataModels::Base64Serializer.new
+  serialize :actions, coder: MetasploitDataModels::Base64Serializer.new
 
   # Preference for this macro, shared across all actions.
   #
   # @return [Hash]
-  serialize :prefs, MetasploitDataModels::Base64Serializer.new
+  serialize :prefs, coder: MetasploitDataModels::Base64Serializer.new
 
   # The maximum number of seconds that this macro is allowed to run.
   #

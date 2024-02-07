@@ -38,7 +38,7 @@ class Mdm::Profile < ApplicationRecord
   # Global settings.
   #
   # @return [Hash]
-  serialize :settings, MetasploitDataModels::Base64Serializer.new
+  serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
 
   Metasploit::Concern.run(self)
 end

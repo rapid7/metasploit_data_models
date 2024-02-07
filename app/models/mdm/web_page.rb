@@ -81,12 +81,12 @@ class Mdm::WebPage < ApplicationRecord
   # Headers sent from server.
   #
   # @return [Hash{String => String}]
-  serialize :headers, MetasploitDataModels::Base64Serializer.new
+  serialize :headers, coder: MetasploitDataModels::Base64Serializer.new
 
   # Cookies sent from server.
   #
   # @return [Hash{String => String}]
-  serialize :cookie
+  serialize :cookie, coder: MetasploitDataModels::Base64Serializer.new
   Metasploit::Concern.run(self)
 end
 

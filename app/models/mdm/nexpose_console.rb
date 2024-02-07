@@ -89,7 +89,7 @@ class Mdm::NexposeConsole < ApplicationRecord
   #   List of sites known to Nexpose.
   #
   #   @return [Array<String>] Array of site names.
-  serialize :cached_sites, MetasploitDataModels::Base64Serializer.new
+  serialize :cached_sites, coder: MetasploitDataModels::Base64Serializer.new
 
   #
   # Validations
