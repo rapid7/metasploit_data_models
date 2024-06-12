@@ -1,6 +1,6 @@
 # Data gathered or derived from the {#host} or {#service} such as its {#ntype fingerprint}.
 class Mdm::Note < ApplicationRecord
-  
+
   #
   # Associations
   #
@@ -107,7 +107,11 @@ class Mdm::Note < ApplicationRecord
   # Serializations
   #
 
-  serialize :data, coder: ::MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :data, coder: ::MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :data, ::MetasploitDataModels::Base64Serializer.new
+  end
 
   private
 

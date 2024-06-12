@@ -1,6 +1,6 @@
 # A filled-in form on a {#web_site}.
 class Mdm::WebForm < ApplicationRecord
-  
+
   #
   # Associations
   #
@@ -46,7 +46,11 @@ class Mdm::WebForm < ApplicationRecord
   # Parameters submitted in this form.
   #
   # @return [Array<Array(String, String)>>]
-  serialize :params, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :params, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :params, MetasploitDataModels::Base64Serializer.new
+  end
 
   Metasploit::Concern.run(self)
 end

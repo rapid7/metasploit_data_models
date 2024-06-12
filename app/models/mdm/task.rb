@@ -130,17 +130,29 @@ class Mdm::Task < ApplicationRecord
   # Options passed to `#module`.
   #
   # @return [Hash]
-  serialize :options, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :options, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :options, MetasploitDataModels::Base64Serializer.new
+  end
 
   # Result of task running.
   #
   # @return [Hash]
-  serialize :result, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :result, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :result, MetasploitDataModels::Base64Serializer.new
+  end
 
   # Settings used to configure this task outside of the {#options module options}.
   #
   # @return [Hash]
-  serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :settings, MetasploitDataModels::Base64Serializer.new
+  end
 
   #
   # Instance Methods
