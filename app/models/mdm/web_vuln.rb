@@ -11,7 +11,7 @@
 #     end
 #   end
 class Mdm::WebVuln < ApplicationRecord
-  
+
   #
   # CONSTANTS
   #
@@ -141,7 +141,11 @@ class Mdm::WebVuln < ApplicationRecord
   #   Parameters sent as part of request
   #
   #   @return [Array<Array(String, String)>] Array of parameter key value pairs
-  serialize :params, coder: MetasploitDataModels::Base64Serializer.new(:default => DEFAULT_PARAMS)
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :params, coder: MetasploitDataModels::Base64Serializer.new(:default => DEFAULT_PARAMS)
+  else
+    serialize :params, MetasploitDataModels::Base64Serializer.new(:default => DEFAULT_PARAMS)
+  end
 
   #
   # Methods

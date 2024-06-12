@@ -1,6 +1,6 @@
 # A Web Site running on a {#service}.
 class Mdm::WebSite < ApplicationRecord
-  
+
   #
   # Associations
   #
@@ -60,7 +60,11 @@ class Mdm::WebSite < ApplicationRecord
 
   # @!attribute [rw] options
   #   @todo Determine format and purpose of Mdm::WebSite#options.
-  serialize :options, coder: ::MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :options, coder: ::MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :options, ::MetasploitDataModels::Base64Serializer.new
+  end
 
   #
   # Instance Methods

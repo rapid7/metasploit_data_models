@@ -1,7 +1,7 @@
 # A user of metasploit-framework or metasploit-pro.
 class Mdm::User < ApplicationRecord
   extend MetasploitDataModels::SerializedPrefs
-  
+
   #
   # Associations
   #
@@ -109,7 +109,11 @@ class Mdm::User < ApplicationRecord
   # Hash of user preferences
   #
   # @return [Hash]
-  serialize :prefs, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :prefs, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :prefs, MetasploitDataModels::Base64Serializer.new
+  end
 
   # @!attribute time_zone
   #   User's preferred time zone.

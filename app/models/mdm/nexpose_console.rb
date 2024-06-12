@@ -89,7 +89,11 @@ class Mdm::NexposeConsole < ApplicationRecord
   #   List of sites known to Nexpose.
   #
   #   @return [Array<String>] Array of site names.
-  serialize :cached_sites, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :cached_sites, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :cached_sites, MetasploitDataModels::Base64Serializer.new
+  end
 
   #
   # Validations
@@ -113,7 +117,7 @@ class Mdm::NexposeConsole < ApplicationRecord
   #
   # @return [void]
   def strip_protocol
-    self.address.gsub!(/^http(s)*:\/\//i,'') unless self.address.nil?  
+    self.address.gsub!(/^http(s)*:\/\//i,'') unless self.address.nil?
   end
 
   Metasploit::Concern.run(self)

@@ -38,7 +38,11 @@ class Mdm::Profile < ApplicationRecord
   # Global settings.
   #
   # @return [Hash]
-  serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :settings, coder: MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :settings, MetasploitDataModels::Base64Serializer.new
+  end
 
   Metasploit::Concern.run(self)
 end

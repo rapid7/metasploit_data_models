@@ -1,7 +1,7 @@
 # A session opened on a {#host} using an {#via_exploit exploit} and controlled through a {#via_payload payload} to
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ApplicationRecord
-  
+
   #
   # Associations
   #
@@ -172,7 +172,11 @@ class Mdm::Session < ApplicationRecord
   # Serializations
   #
 
-  serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new
+  else
+    serialize :datastore, ::MetasploitDataModels::Base64Serializer.new
+  end
 
   # Returns whether the session can be upgraded to a meterpreter session from a shell session on Windows.
   #
