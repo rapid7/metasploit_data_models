@@ -70,9 +70,9 @@ class Mdm::Listener < ApplicationRecord
   #
   # @return [Hash]
   if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
-    serialize :options, coder: MetasploitDataModels::Base64Serializer.new
+    serialize :options, coder: MetasploitDataModels::Base64Serializer.new(coerce: true)
   else
-    serialize :options, MetasploitDataModels::Base64Serializer.new
+    serialize :options, MetasploitDataModels::Base64Serializer.new(coerce: true)
   end
 
   #
