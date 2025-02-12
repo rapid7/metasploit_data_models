@@ -15,6 +15,10 @@ class MetasploitDataModels::Base64Serializer
 
   # The default for {#default}
   DEFAULT = {}
+
+  # The default for {#coerce}
+  COERCE_DEFAULT = false
+
   # Deserializers for {#load}
   # 1. Base64 decoding and then unmarshalling the value.
   # 2. Parsing the value as YAML.
@@ -47,6 +51,24 @@ class MetasploitDataModels::Base64Serializer
   end
 
   attr_writer :default
+  attr_writer :coerce
+
+  # Recursively coerce the object that has been passed in, keeping primitive types as their original type,
+  # while changing objects that cannot be serialized into a string representation of the object data.
+  def coerce_object(value)
+    case value
+    when Hash
+      value.transform_values { |v| coerce_object(v) }
+    when Array
+      value.map { |v| coerce_object(v) }
+    when File, IO
+      value.inspect
+    when String, Integer, Float, TrueClass, FalseClass, NilClass, Symbol
+      value
+    else
+      value.to_s
+    end
+  end
 
   # Serializes the value by marshalling the value and then base64 encodes the marshaled value.
   #
@@ -54,7 +76,8 @@ class MetasploitDataModels::Base64Serializer
   # @return [String]
   def dump(value)
     # Always store data back in the Marshal format
-    marshalled = Marshal.dump(value)
+    to_serialize = @coerce ? coerce_object(value) : value
+    marshalled = Marshal.dump(to_serialize)
     base64_encoded = [ marshalled ].pack('m')
 
     base64_encoded
@@ -63,9 +86,10 @@ class MetasploitDataModels::Base64Serializer
   # @param attributes [Hash] attributes
   # @option attributes [Object] :default ({}) Value to use for {#default}.
   def initialize(attributes={})
-    attributes.assert_valid_keys(:default)
+    attributes.assert_valid_keys(:default, :coerce)
 
     @default = attributes.fetch(:default, DEFAULT)
+    @coerce = attributes.fetch(:coerce, COERCE_DEFAULT)
   end
 
   # Deserializes the value by either

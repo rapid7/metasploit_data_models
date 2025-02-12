@@ -73,9 +73,9 @@ class Mdm::Event < ApplicationRecord
   #
   # @return [Hash]
   if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
-    serialize :info, coder: MetasploitDataModels::Base64Serializer.new
+    serialize :info, coder: MetasploitDataModels::Base64Serializer.new(coerce: true)
   else
-    serialize :info, MetasploitDataModels::Base64Serializer.new
+    serialize :info, MetasploitDataModels::Base64Serializer.new(coerce: true)
   end
 
   #

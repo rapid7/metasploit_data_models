@@ -173,9 +173,9 @@ class Mdm::Session < ApplicationRecord
   #
 
   if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
-    serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new
+    serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new(coerce: true)
   else
-    serialize :datastore, ::MetasploitDataModels::Base64Serializer.new
+    serialize :datastore, ::MetasploitDataModels::Base64Serializer.new(coerce: true)
   end
 
   # Returns whether the session can be upgraded to a meterpreter session from a shell session on Windows.
