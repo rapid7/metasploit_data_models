@@ -183,5 +183,49 @@ RSpec.describe MetasploitDataModels::Search::Visitor::Where, type: :model do
         end
       end
     end
+
+    context 'with MetasploitDataModels::Search::Operation::Jsonb' do
+      let(:klass) do
+        klass = Class.new(ApplicationRecord)
+        Object.const_set('Jsonb', klass)
+        klass
+      end
+
+      let(:node) do
+        Metasploit::Model::Search::Operation::Jsonb.new(
+            :operator => operator,
+            :value => value
+        )
+      end
+
+      let(:operator) do
+        Metasploit::Model::Search::Operator::Attribute.new(
+            :klass => klass,
+            :attribute => :metadata
+        )
+      end
+
+      let(:value) do
+        'adcs_ca:myCA'
+      end
+
+      it 'should visit operation.operator with attribute_visitor' do
+        expect(visitor.attribute_visitor).to receive(:visit).with(operator).and_call_original
+
+        visit
+      end
+
+      it 'should return the expected Arel::Nodes::Matches' do
+        attribute = Arel::Attributes::Attribute.new(
+          Arel::Table.new(:metasploit_credential_privates),
+          'metadata'
+        )
+        allow(visitor.attribute_visitor).to receive(:visit).with(operator).and_return(attribute)
+
+        results = visit
+        expect(results).to be_a(Arel::Nodes::Matches)
+        expect(results.to_sql).to eq("\"metasploit_credential_privates\".\"metadata\" ->> 'adcs_ca' ILIKE '%myCA%'")
+      end
+    end
   end
 end
