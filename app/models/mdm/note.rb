@@ -113,6 +113,12 @@ class Mdm::Note < ApplicationRecord
     serialize :data, ::MetasploitDataModels::Base64Serializer.new
   end
 
+  #
+  # Validations
+  #
+
+  validate :data_is_hash
+
   private
 
   # {Mdm::Host::OperatingSystemNormalization#normalize_os Normalizes the host operating system} if the note is a
@@ -125,8 +131,16 @@ class Mdm::Note < ApplicationRecord
     end
   end
 
+  # Handles validation to ensure the `data` attribute is of class Hash. If `data` is not a `Hash`, an error is added to
+  # the `data` attribute, which prevents the record from being saved.
+  #
+  # @return [void]
+  # @raise [ActiveRecord::RecordInvalid] if `data` is not a Hash
+  def data_is_hash
+    errors.add(:data, 'must be a Hash') unless data.is_a?(Hash)
+  end
+
   public
 
   Metasploit::Concern.run(self)
 end
-
