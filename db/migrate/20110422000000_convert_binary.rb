@@ -3,11 +3,19 @@ class ConvertBinary < ActiveRecord::Migration[4.2]
 
 
 	class WebPage < ApplicationRecord
-		serialize :headers
+		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+			serialize :headers, coder: YAML
+		else
+			serialize :headers
+		end
 	end
 
 	class WebVuln < ApplicationRecord
-		serialize :params
+		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+			serialize :params, coder: YAML
+		else
+			serialize :params
+		end
 	end
 
 	def bfilter(str)
