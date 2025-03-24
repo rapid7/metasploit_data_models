@@ -92,10 +92,18 @@ class Mdm::Payload < ApplicationRecord
 
   #
   # Serializations
-  #
 
-  serialize :urls
-  serialize :build_opts
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :urls, coder: YAML
+  else
+    serialize :urls
+  end
+
+  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+    serialize :build_opts, coder: YAML
+  else
+    serialize :build_opts
+  end
 
   public
 
