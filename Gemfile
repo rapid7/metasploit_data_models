@@ -11,8 +11,6 @@ end
 
 # used by dummy application
 group :development, :test do
-  # Upload coverage reports to coveralls.io
-  gem 'coveralls', require: false
   # supplies factories for producing model instance for specs
   # Version 4.1.0 or newer is needed to support generate calls without the 'FactoryBot.' in factory definitions syntax.
   gem 'factory_bot'
