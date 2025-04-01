@@ -3,8 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-gem 'metasploit-model', git: 'https://github.com/cdelafuente-r7/metasploit-model', branch: 'feat/model/search/operation/jsonb'
-
 group :development do
   #gem 'metasploit-erd'
   # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
