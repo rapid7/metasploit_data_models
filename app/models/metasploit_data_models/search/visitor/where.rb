@@ -49,6 +49,25 @@ class MetasploitDataModels::Search::Visitor::Where
     attribute.matches(match_value)
   end
 
+  visit 'Metasploit::Model::Search::Operation::Jsonb' do |operation|
+    attribute = attribute_visitor.visit operation.operator
+
+    begin
+      operation_hash = JSON.parse(operation.value)
+      left = Arel::Nodes::InfixOperation.new(
+        '->>',
+        Arel::Nodes.build_quoted(attribute),
+        Arel::Nodes.build_quoted(operation_hash.keys[0])
+      )
+      right ="%#{operation_hash.values[0]}%"
+    rescue JSON::ParserError
+      left = Arel::Nodes::NamedFunction.new("cast", [attribute.as('text')])
+      right ="%#{operation.value}%"
+    end
+
+    left.matches(right)
+  end
+
   visit 'MetasploitDataModels::IPAddress::CIDR' do |cidr|
     cast_to_inet "#{cidr.address}/#{cidr.prefix_length}"
   end
