@@ -46,6 +46,15 @@ Gem::Specification.new do |s|
   # arel-helpers: Useful tools to help construct database queries with ActiveRecord and Arel.
   s.add_runtime_dependency 'arel-helpers'
 
+  # Standard libraries: https://www.ruby-lang.org/en/news/2023/12/25/ruby-3-3-0-released/
+  %w[
+    bigdecimal
+    drb
+    mutex_m
+  ].each do |library|
+    s.add_runtime_dependency library
+  end
+
   if RUBY_PLATFORM =~ /java/
     # markdown formatting for yard
     s.add_development_dependency 'kramdown'
