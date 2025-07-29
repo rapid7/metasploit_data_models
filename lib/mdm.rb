@@ -44,6 +44,7 @@ module Mdm
   autoload :WmapRequest
   autoload :WmapTarget
   autoload :Workspace
+  autoload :ServiceLink
 
   # Causes the model_name for all Mdm modules to not include the Mdm:: prefix in their name.
   #

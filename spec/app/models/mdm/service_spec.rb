@@ -35,6 +35,10 @@ RSpec.describe Mdm::Service, type: :model do
     it { is_expected.to have_many(:web_pages).class_name('Mdm::WebPage').through(:web_sites) }
     it { is_expected.to have_many(:web_forms).class_name('Mdm::WebForm').through(:web_sites) }
     it { is_expected.to have_many(:web_vulns).class_name('Mdm::WebVuln').through(:web_sites) }
+    it { is_expected.to have_many(:parent_links).class_name('Mdm::ServiceLink').dependent(:destroy) }
+    it { is_expected.to have_many(:parents).class_name('Mdm::Service').through(:parent_links) }
+    it { is_expected.to have_many(:child_links).class_name('Mdm::ServiceLink').dependent(:destroy) }
+    it { is_expected.to have_many(:children).class_name('Mdm::Service').through(:child_links) }
     it { is_expected.to belong_to(:host).class_name('Mdm::Host') }
   end
 
@@ -114,14 +118,70 @@ RSpec.describe Mdm::Service, type: :model do
   end
 
   context '#destroy' do
-    it 'should successfully destroy the object' do
-      service = FactoryBot.create(:mdm_service)
-      expect {
-        service.destroy
-      }.to_not raise_error
-      expect {
-        service.reload
-      }.to raise_error(ActiveRecord::RecordNotFound)
+    let(:service) { FactoryBot.create(:mdm_service) }
+
+    it 'should successfully destroy one Mdm::Service' do
+      expect { service.destroy }.to_not raise_error
+      expect { service.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    context 'with one parent and one child' do
+      let(:parent_service1) { FactoryBot.create(:mdm_service, name: 'parent_service1') }
+      let(:child_service1) { FactoryBot.create(:mdm_service, name: 'child_service1') }
+
+      before :example do
+        service.parents << parent_service1
+        service.children << child_service1
+      end
+
+      it 'should only destroy the child service' do
+        expect { service.destroy }.to_not raise_error
+        expect { service.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { child_service1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { parent_service1.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context 'with multiple children' do
+        let(:child_service2) { FactoryBot.create(:mdm_service, name: 'child_service2') }
+
+        it 'should all the child services' do
+          service.children << child_service2
+
+          expect { service.destroy }.to_not raise_error
+          expect { service.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { child_service1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { child_service2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { parent_service1.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'with multiple nested children' do
+        let(:child_service2) { FactoryBot.create(:mdm_service, name: 'child_service2') }
+
+        it 'should all the nested child services' do
+          child_service1.children << child_service2
+
+          expect { service.destroy }.to_not raise_error
+          expect { service.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { child_service1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { child_service2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { parent_service1.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'with a child that has another parent' do
+        let(:parent_service2) { FactoryBot.create(:mdm_service, name: 'parent_service2') }
+
+        it 'should not destroy the child' do
+          child_service1.parents << parent_service2
+
+          expect { service.destroy }.to_not raise_error
+          expect { service.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { child_service1.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+          expect { parent_service1.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+          expect { parent_service2.reload }.to_not raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
     end
   end
 
@@ -222,7 +282,7 @@ RSpec.describe Mdm::Service, type: :model do
 
     context 'when a duplicate service already exists' do
       let(:service1) { FactoryBot.create(:mdm_service)}
-      let(:service2) { FactoryBot.build(:mdm_service, :host => service1.host, :port => service1.port, :proto => service1.proto )}
+      let(:service2) { FactoryBot.build(:mdm_service, :host => service1.host, :port => service1.port, :proto => service1.proto, :resource => service1.resource, :name => service1.name) }
       it 'is not valid' do
         expect(service2).to_not be_valid
       end

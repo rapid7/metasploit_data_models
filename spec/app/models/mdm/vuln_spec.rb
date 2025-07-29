@@ -133,6 +133,7 @@ RSpec.describe Mdm::Vuln, type: :model do
       it { is_expected.to have_db_column(:origin_id).of_type(:integer) }
       it { is_expected.to have_db_column(:origin_type).of_type(:string) }
       it { is_expected.to have_db_column(:service_id).of_type(:integer) }
+      it { is_expected.to have_db_column(:resource).of_type(:jsonb) }
 
       context 'counter caches' do
         it { is_expected.to have_db_column(:vuln_attempt_count).of_type(:integer).with_options(:default => 0) }

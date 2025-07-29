@@ -96,6 +96,28 @@ class Mdm::Service < ApplicationRecord
            dependent: :destroy,
            inverse_of: :service
 
+  # @!attribute [rw] parent_links
+  #   Links to parent services of this service.
+  #
+  #   @return [Array<Mdm::ServiceLink>]
+  has_many :parent_links,
+           class_name: 'Mdm::ServiceLink',
+           foreign_key: 'child_id',
+           dependent: :destroy,
+           inverse_of: :child
+
+  # @!attribute [rw] parent_links
+  #   Link to child services of this service.
+  #
+  #   @return [Array<Mdm::ServiceLink>]
+  has_many :child_links,
+           class_name: 'Mdm::ServiceLink',
+           foreign_key: 'parent_id',
+           dependent: :destroy,
+           inverse_of: :parent
+
+
+
   #
   # through: :task_services
   #
@@ -129,6 +151,27 @@ class Mdm::Service < ApplicationRecord
   has_many :web_vulns, :through => :web_sites, :class_name => 'Mdm::WebVuln'
 
   #
+  # through: :parent_links
+  #
+
+  # @!attribute [rw] parents
+  #   Parent services of this service.
+  #
+  #   @return [Array<Mdm::Service>]
+  has_many :parents, through: :parent_links, source: :parent
+
+  #
+  # through: :child_links
+  #
+
+  # @!attribute [rw] children
+  #   Child services of this service.
+  #
+  #   @return [Array<Mdm::Service>]
+  has_many :children, through: :child_links, source: :child
+
+
+  #
   # Attributes
   #
 
@@ -156,6 +199,11 @@ class Mdm::Service < ApplicationRecord
   #   Whether this service is opened, closed, filtered, or in an unknown state.
   #
   #   @return [String] element of {STATES}.
+
+  # @!attribute [rw] resource
+  #   Additional resource information about the service, such as a URL or path.
+  #
+  #   @return [JSONB]
 
   #
   # Callbacks
@@ -227,7 +275,9 @@ class Mdm::Service < ApplicationRecord
               message: 'already exists on this host and protocol',
               scope: [
                 :host_id,
-                :proto
+                :proto,
+                :name,
+                :resource
               ]
             }
   validates :proto,
@@ -260,6 +310,15 @@ class Mdm::Service < ApplicationRecord
   def normalize_host_os
     if saved_change_to_info? && host.workspace.present? && !host.workspace.import_fingerprint
       host.normalize_os
+    end
+  end
+
+  # Destroy this service if it does not have parents {#service_links}
+  #
+  # @return [void]
+  def destroy_if_orphaned
+    self.class.transaction do
+      destroy if parents.count == 0
     end
   end
 

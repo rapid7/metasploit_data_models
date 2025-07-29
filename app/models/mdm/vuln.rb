@@ -160,6 +160,12 @@ class Mdm::Vuln < ApplicationRecord
   #
   #   @return [Integer]
 
+  # @!attribute [rw] resource
+  #   The resource that this vulnerability is associated with.
+  #   It is stored as a JSONB object.
+  #
+  #   @return [JSONB]
+
   #
   # Callbacks
   #
