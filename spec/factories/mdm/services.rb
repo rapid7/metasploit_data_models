@@ -12,6 +12,7 @@ FactoryBot.define do
     port { generate :port }
     proto { generate :mdm_service_proto }
     state { 'open' }
+    resource { generate :mdm_service_resource }
 
     factory :web_service do
       proto { 'tcp' }
@@ -21,6 +22,10 @@ FactoryBot.define do
 
   sequence(:mdm_service_name) { |n|
     "mdm_service_name#{n}"
+  }
+
+  sequence(:mdm_service_resource) { |n|
+    { "mdm_service_resource#{n}".to_sym => "mdm_service_resource_value#{n}" }
   }
 
   sequence :mdm_service_proto, Mdm::Service::PROTOS.cycle
