@@ -1,6 +1,11 @@
 # A session opened on a {#host} using an {#via_exploit exploit} and controlled through a {#via_payload payload} to
 # connect back to the local host using meterpreter or a cmd shell.
 class Mdm::Session < ApplicationRecord
+  extend ActiveSupport::Autoload
+
+  include Metasploit::Model::Search
+
+  require_relative 'session_tag'
 
   #
   # Associations
@@ -66,6 +71,27 @@ class Mdm::Session < ApplicationRecord
   has_one :vuln_attempt,
           class_name: 'Mdm::VulnAttempt',
           inverse_of: :session
+
+  # @!attribute sessions_tags
+  #   A join model between {Mdm::Tag} and {Mdm::Session}.  Use {#tags} to get the actual {Mdm::Tag Mdm::Tags} on this host.
+  #
+  #   @todo MSP-2723
+  #   @return [ActiveRecord::Relation<Mdm::SessionTag>]
+  has_many :sessions_tags,
+           class_name: 'Mdm::SessionTag',
+           dependent: :destroy,
+           inverse_of: :session
+
+  #
+  # Through sessions_tags
+  #
+
+  # @!attribute [r] tags
+  #   The tags on this session.  Tags are used to filter sessions.
+  #
+  #   @return [ActiveRecord::Relation<Mdm::Tag>]
+  #   @see #sessions_tags
+  has_many :tags, :class_name => 'Mdm::Tag', :through => :sessions_tags
 
   #
   # Through :host

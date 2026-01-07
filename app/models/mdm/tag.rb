@@ -12,6 +12,12 @@ class Mdm::Tag < ApplicationRecord
            dependent: :destroy,
            inverse_of: :tag
 
+  # Joins {#sessions} to this tag.
+  has_many :sessions_tags,
+           class_name: 'Mdm::SessionTag',
+           dependent: :destroy,
+           inverse_of: :tag
+
   # User that created this tag.
   belongs_to :user,
              class_name: 'Mdm::User',
