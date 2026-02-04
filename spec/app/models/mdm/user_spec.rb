@@ -24,7 +24,8 @@ RSpec.describe Mdm::User, type: :model do
       it { is_expected.to have_db_column(:phone).of_type(:string) }
       it { is_expected.to have_db_column(:company).of_type(:string) }
       it { is_expected.to have_db_column(:prefs).of_type(:string) }
-      it { is_expected.to have_db_column(:admin).of_type(:boolean).with_options(:null => false, :default =>true) }
+      it { is_expected.to have_db_column(:admin).of_type(:boolean).with_options(:null => false, :default => true) }
+      it { is_expected.to have_db_column(:saml_enabled).of_type(:boolean).with_options(:null => false, :default => false) }
     end
   end
 

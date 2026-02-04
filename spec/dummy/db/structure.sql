@@ -11,6 +11,8 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
 --
 -- Name: api_keys; Type: TABLE; Schema: public; Owner: -
 --
@@ -28,6 +30,7 @@ CREATE TABLE public.api_keys (
 --
 
 CREATE SEQUENCE public.api_keys_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -75,6 +78,7 @@ CREATE TABLE public.async_callbacks (
 --
 
 CREATE SEQUENCE public.async_callbacks_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -108,6 +112,7 @@ CREATE TABLE public.automatic_exploitation_match_results (
 --
 
 CREATE SEQUENCE public.automatic_exploitation_match_results_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -140,6 +145,7 @@ CREATE TABLE public.automatic_exploitation_match_sets (
 --
 
 CREATE SEQUENCE public.automatic_exploitation_match_sets_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -177,6 +183,7 @@ CREATE TABLE public.automatic_exploitation_matches (
 --
 
 CREATE SEQUENCE public.automatic_exploitation_matches_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -210,6 +217,7 @@ CREATE TABLE public.automatic_exploitation_runs (
 --
 
 CREATE SEQUENCE public.automatic_exploitation_runs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -244,6 +252,7 @@ CREATE TABLE public.clients (
 --
 
 CREATE SEQUENCE public.clients_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -282,6 +291,7 @@ CREATE TABLE public.creds (
 --
 
 CREATE SEQUENCE public.creds_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -319,6 +329,7 @@ CREATE TABLE public.events (
 --
 
 CREATE SEQUENCE public.events_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -360,6 +371,7 @@ CREATE TABLE public.exploit_attempts (
 --
 
 CREATE SEQUENCE public.exploit_attempts_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -395,6 +407,7 @@ CREATE TABLE public.exploited_hosts (
 --
 
 CREATE SEQUENCE public.exploited_hosts_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -431,6 +444,7 @@ CREATE TABLE public.host_details (
 --
 
 CREATE SEQUENCE public.host_details_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -485,6 +499,7 @@ CREATE TABLE public.hosts (
 --
 
 CREATE SEQUENCE public.hosts_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -515,6 +530,7 @@ CREATE TABLE public.hosts_tags (
 --
 
 CREATE SEQUENCE public.hosts_tags_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -554,6 +570,7 @@ CREATE TABLE public.listeners (
 --
 
 CREATE SEQUENCE public.listeners_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -594,6 +611,7 @@ CREATE TABLE public.loots (
 --
 
 CREATE SEQUENCE public.loots_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -629,6 +647,7 @@ CREATE TABLE public.macros (
 --
 
 CREATE SEQUENCE public.macros_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -660,6 +679,7 @@ CREATE TABLE public.mod_refs (
 --
 
 CREATE SEQUENCE public.mod_refs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -690,6 +710,7 @@ CREATE TABLE public.module_actions (
 --
 
 CREATE SEQUENCE public.module_actions_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -720,6 +741,7 @@ CREATE TABLE public.module_archs (
 --
 
 CREATE SEQUENCE public.module_archs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -751,6 +773,7 @@ CREATE TABLE public.module_authors (
 --
 
 CREATE SEQUENCE public.module_authors_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -794,6 +817,7 @@ CREATE TABLE public.module_details (
 --
 
 CREATE SEQUENCE public.module_details_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -824,6 +848,7 @@ CREATE TABLE public.module_mixins (
 --
 
 CREATE SEQUENCE public.module_mixins_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -854,6 +879,7 @@ CREATE TABLE public.module_platforms (
 --
 
 CREATE SEQUENCE public.module_platforms_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -884,6 +910,7 @@ CREATE TABLE public.module_refs (
 --
 
 CREATE SEQUENCE public.module_refs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -926,6 +953,7 @@ CREATE TABLE public.module_runs (
 --
 
 CREATE SEQUENCE public.module_runs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -957,6 +985,7 @@ CREATE TABLE public.module_targets (
 --
 
 CREATE SEQUENCE public.module_targets_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -998,6 +1027,7 @@ CREATE TABLE public.nexpose_consoles (
 --
 
 CREATE SEQUENCE public.nexpose_consoles_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1036,6 +1066,7 @@ CREATE TABLE public.notes (
 --
 
 CREATE SEQUENCE public.notes_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1078,6 +1109,7 @@ CREATE TABLE public.payloads (
 --
 
 CREATE SEQUENCE public.payloads_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1112,6 +1144,7 @@ CREATE TABLE public.profiles (
 --
 
 CREATE SEQUENCE public.profiles_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1144,6 +1177,7 @@ CREATE TABLE public.refs (
 --
 
 CREATE SEQUENCE public.refs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1178,6 +1212,7 @@ CREATE TABLE public.report_templates (
 --
 
 CREATE SEQUENCE public.report_templates_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1216,6 +1251,7 @@ CREATE TABLE public.reports (
 --
 
 CREATE SEQUENCE public.reports_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1247,6 +1283,7 @@ CREATE TABLE public.routes (
 --
 
 CREATE SEQUENCE public.routes_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1271,6 +1308,38 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: service_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.service_links (
+    id bigint NOT NULL,
+    parent_id bigint NOT NULL,
+    child_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: service_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.service_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: service_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.service_links_id_seq OWNED BY public.service_links.id;
+
+
+--
 -- Name: services; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1283,7 +1352,8 @@ CREATE TABLE public.services (
     state character varying,
     name character varying,
     updated_at timestamp without time zone,
-    info text
+    info text,
+    resource jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -1292,6 +1362,7 @@ CREATE TABLE public.services (
 --
 
 CREATE SEQUENCE public.services_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1327,6 +1398,7 @@ CREATE TABLE public.session_events (
 --
 
 CREATE SEQUENCE public.session_events_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1369,6 +1441,7 @@ CREATE TABLE public.sessions (
 --
 
 CREATE SEQUENCE public.sessions_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1405,6 +1478,7 @@ CREATE TABLE public.tags (
 --
 
 CREATE SEQUENCE public.tags_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1437,6 +1511,7 @@ CREATE TABLE public.task_creds (
 --
 
 CREATE SEQUENCE public.task_creds_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1469,6 +1544,7 @@ CREATE TABLE public.task_hosts (
 --
 
 CREATE SEQUENCE public.task_hosts_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1501,6 +1577,7 @@ CREATE TABLE public.task_services (
 --
 
 CREATE SEQUENCE public.task_services_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1533,6 +1610,7 @@ CREATE TABLE public.task_sessions (
 --
 
 CREATE SEQUENCE public.task_sessions_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1576,6 +1654,7 @@ CREATE TABLE public.tasks (
 --
 
 CREATE SEQUENCE public.tasks_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1607,7 +1686,8 @@ CREATE TABLE public.users (
     phone character varying,
     company character varying,
     prefs character varying(524288),
-    admin boolean DEFAULT true NOT NULL
+    admin boolean DEFAULT true NOT NULL,
+    saml_enabled boolean DEFAULT false NOT NULL
 );
 
 
@@ -1616,6 +1696,7 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1653,6 +1734,7 @@ CREATE TABLE public.vuln_attempts (
 --
 
 CREATE SEQUENCE public.vuln_attempts_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1703,6 +1785,7 @@ CREATE TABLE public.vuln_details (
 --
 
 CREATE SEQUENCE public.vuln_details_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1733,7 +1816,8 @@ CREATE TABLE public.vulns (
     vuln_detail_count integer DEFAULT 0,
     vuln_attempt_count integer DEFAULT 0,
     origin_id integer,
-    origin_type character varying
+    origin_type character varying,
+    resource jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -1742,6 +1826,7 @@ CREATE TABLE public.vulns (
 --
 
 CREATE SEQUENCE public.vulns_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1772,6 +1857,7 @@ CREATE TABLE public.vulns_refs (
 --
 
 CREATE SEQUENCE public.vulns_refs_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1807,6 +1893,7 @@ CREATE TABLE public.web_forms (
 --
 
 CREATE SEQUENCE public.web_forms_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1849,6 +1936,7 @@ CREATE TABLE public.web_pages (
 --
 
 CREATE SEQUENCE public.web_pages_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1883,6 +1971,7 @@ CREATE TABLE public.web_sites (
 --
 
 CREATE SEQUENCE public.web_sites_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1929,6 +2018,7 @@ CREATE TABLE public.web_vulns (
 --
 
 CREATE SEQUENCE public.web_vulns_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1971,6 +2061,7 @@ CREATE TABLE public.wmap_requests (
 --
 
 CREATE SEQUENCE public.wmap_requests_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2006,6 +2097,7 @@ CREATE TABLE public.wmap_targets (
 --
 
 CREATE SEQUENCE public.wmap_targets_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2052,6 +2144,7 @@ CREATE TABLE public.workspaces (
 --
 
 CREATE SEQUENCE public.workspaces_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2309,6 +2402,13 @@ ALTER TABLE ONLY public.reports ALTER COLUMN id SET DEFAULT nextval('public.repo
 --
 
 ALTER TABLE ONLY public.routes ALTER COLUMN id SET DEFAULT nextval('public.routes_id_seq'::regclass);
+
+
+--
+-- Name: service_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_links ALTER COLUMN id SET DEFAULT nextval('public.service_links_id_seq'::regclass);
 
 
 --
@@ -2755,6 +2855,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: service_links service_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_links
+    ADD CONSTRAINT service_links_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3154,10 +3262,31 @@ CREATE INDEX index_refs_on_name ON public.refs USING btree (name);
 
 
 --
--- Name: index_services_on_host_id_and_port_and_proto; Type: INDEX; Schema: public; Owner: -
+-- Name: index_service_links_on_child_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_services_on_host_id_and_port_and_proto ON public.services USING btree (host_id, port, proto);
+CREATE INDEX index_service_links_on_child_id ON public.service_links USING btree (child_id);
+
+
+--
+-- Name: index_service_links_on_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_service_links_on_parent_id ON public.service_links USING btree (parent_id);
+
+
+--
+-- Name: index_service_links_on_parent_id_and_child_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_service_links_on_parent_id_and_child_id ON public.service_links USING btree (parent_id, child_id);
+
+
+--
+-- Name: index_services_on_5_columns; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_services_on_5_columns ON public.services USING btree (host_id, port, proto, name, resource);
 
 
 --
@@ -3270,6 +3399,22 @@ CREATE INDEX index_web_vulns_on_name ON public.web_vulns USING btree (name);
 --
 
 CREATE INDEX index_web_vulns_on_path ON public.web_vulns USING btree (path);
+
+
+--
+-- Name: service_links fk_rails_20de66c25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_links
+    ADD CONSTRAINT fk_rails_20de66c25c FOREIGN KEY (child_id) REFERENCES public.services(id);
+
+
+--
+-- Name: service_links fk_rails_656cd59e76; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_links
+    ADD CONSTRAINT fk_rails_656cd59e76 FOREIGN KEY (parent_id) REFERENCES public.services(id);
 
 
 --
@@ -3398,6 +3543,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180904120211'),
 ('20190308134512'),
 ('20190507120211'),
+('20250716155919'),
+('20250717170556'),
+('20250718122714'),
+('20250720082201'),
+('20250721114306'),
+('20260130124052'),
 ('21'),
 ('22'),
 ('23'),
