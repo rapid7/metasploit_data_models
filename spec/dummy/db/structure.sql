@@ -1687,7 +1687,7 @@ CREATE TABLE public.users (
     company character varying,
     prefs character varying(524288),
     admin boolean DEFAULT true NOT NULL,
-    saml_enabled boolean DEFAULT false NOT NULL
+    sso_enabled boolean DEFAULT false NOT NULL
 );
 
 

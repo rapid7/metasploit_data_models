@@ -102,8 +102,8 @@ class Mdm::User < ApplicationRecord
   #
   #   @return [String]
 
-  # @!attribute saml_enabled
-  # Does this user authenticate via SAML
+  # @!attribute sso_enabled
+  # Does this user authenticate via SSO
   #
   # @return [Boolean]
 
