@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'metasploit-model', '~>5.0.4'
   s.add_runtime_dependency 'railties', '~>7.0'
   s.add_runtime_dependency 'webrick'
-  s.add_runtime_dependency 'concurrent-ruby', '<1.3.5'
 
   # os fingerprinting
   s.add_runtime_dependency 'recog'

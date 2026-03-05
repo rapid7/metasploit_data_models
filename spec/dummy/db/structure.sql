@@ -1457,6 +1457,36 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
+-- Name: sessions_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sessions_tags (
+    id bigint NOT NULL,
+    session_id integer,
+    tag_id integer
+);
+
+
+--
+-- Name: sessions_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sessions_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sessions_tags_id_seq OWNED BY public.sessions_tags.id;
+
+
+--
 -- Name: tags; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2433,6 +2463,13 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
+-- Name: sessions_tags id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions_tags ALTER COLUMN id SET DEFAULT nextval('public.sessions_tags_id_seq'::regclass);
+
+
+--
 -- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2887,6 +2924,14 @@ ALTER TABLE ONLY public.sessions
 
 
 --
+-- Name: sessions_tags sessions_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions_tags
+    ADD CONSTRAINT sessions_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3325,6 +3370,13 @@ CREATE INDEX index_sessions_on_module_run_id ON public.sessions USING btree (mod
 
 
 --
+-- Name: index_sessions_tags_on_session_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sessions_tags_on_session_id_and_tag_id ON public.sessions_tags USING btree (session_id, tag_id);
+
+
+--
 -- Name: index_vulns_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3548,6 +3600,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250718122714'),
 ('20250720082201'),
 ('20250721114306'),
+('20251231162000'),
 ('20260130124052'),
 ('21'),
 ('22'),
