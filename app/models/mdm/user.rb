@@ -102,6 +102,11 @@ class Mdm::User < ApplicationRecord
   #
   #   @return [String]
 
+  # @!attribute sso_enabled
+  # Does this user authenticate via SSO
+  #
+  # @return [Boolean]
+
   #
   # Serialziations
   #
