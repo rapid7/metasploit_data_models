@@ -81,7 +81,7 @@ class Mdm::WebPage < ApplicationRecord
   # Headers sent from server.
   #
   # @return [Hash{String => String}]
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :headers, coder: MetasploitDataModels::Base64Serializer.new
   else
     serialize :headers, MetasploitDataModels::Base64Serializer.new
@@ -90,7 +90,7 @@ class Mdm::WebPage < ApplicationRecord
   # Cookies sent from server.
   #
   # @return [Hash{String => String}]
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :cookie, coder: MetasploitDataModels::Base64Serializer.new
   else
     serialize :cookie, MetasploitDataModels::Base64Serializer.new

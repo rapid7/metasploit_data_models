@@ -114,7 +114,7 @@ class Mdm::User < ApplicationRecord
   # Hash of user preferences
   #
   # @return [Hash]
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :prefs, coder: MetasploitDataModels::Base64Serializer.new
   else
     serialize :prefs, MetasploitDataModels::Base64Serializer.new

@@ -46,7 +46,7 @@ class Mdm::WebForm < ApplicationRecord
   # Parameters submitted in this form.
   #
   # @return [Array<Array(String, String)>>]
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :params, coder: MetasploitDataModels::Base64Serializer.new
   else
     serialize :params, MetasploitDataModels::Base64Serializer.new

@@ -1,7 +1,7 @@
 class AddSessionTable < ActiveRecord::Migration[4.2]
 
 	class Event < ApplicationRecord
-		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+		if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
 			serialize :info, coder: YAML
 		else
 			serialize :info
@@ -14,7 +14,7 @@ class AddSessionTable < ActiveRecord::Migration[4.2]
 
 	class Session < ApplicationRecord
 		has_many :events, :class_name => 'AddSessionTable::SessionEvent'
-		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+		if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
 			serialize :datastore, coder: YAML
 		else
 			serialize :datastore
