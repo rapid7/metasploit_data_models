@@ -3,12 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-group :development do
-  #gem 'metasploit-erd'
-  # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
-  #gem 'yard-metasploit-erd'
-end
-
 # used by dummy application
 group :development, :test do
   # supplies factories for producing model instance for specs
