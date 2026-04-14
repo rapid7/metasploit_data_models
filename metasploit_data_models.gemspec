@@ -33,11 +33,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
 
 
-  s.add_runtime_dependency 'activerecord', '~>7.0'
-  s.add_runtime_dependency 'activesupport', '~>7.0'
+  # Rails 8.0 upgrade: widened from '~> 7.0' (which means >= 7.0, < 8.0) to
+  # '>= 7.0', '< 8.1' so this gem resolves with both Rails 7.x and 8.0.
+  # The old pessimistic constraint hard-blocked Bundler from pulling Rails 8.
+  s.add_runtime_dependency 'activerecord', '>= 7.0', '< 8.1'
+  s.add_runtime_dependency 'activesupport', '>= 7.0', '< 8.1'
   s.add_runtime_dependency 'metasploit-concern'
-  s.add_runtime_dependency 'metasploit-model', '~>5.0.4'
-  s.add_runtime_dependency 'railties', '~>7.0'
+  s.add_runtime_dependency 'metasploit-model', '>= 5.0.4'
+  s.add_runtime_dependency 'railties', '>= 7.0', '< 8.1'
   s.add_runtime_dependency 'webrick'
 
   # os fingerprinting

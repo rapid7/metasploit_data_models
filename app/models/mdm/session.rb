@@ -198,7 +198,7 @@ class Mdm::Session < ApplicationRecord
   # Serializations
   #
 
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :datastore, coder: ::MetasploitDataModels::Base64Serializer.new(coerce: true)
   else
     serialize :datastore, ::MetasploitDataModels::Base64Serializer.new(coerce: true)

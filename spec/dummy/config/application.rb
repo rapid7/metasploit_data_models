@@ -53,11 +53,6 @@ module Dummy
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
-
-    # 5.x change to belongs_to
-    config.active_record.belongs_to_required_by_default = true
-
-    config.autoloader = :zeitwerk
   end
 end
 

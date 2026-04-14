@@ -3,7 +3,7 @@ class ConvertBinary < ActiveRecord::Migration[4.2]
 
 
 	class WebPage < ApplicationRecord
-		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+		if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
 			serialize :headers, coder: YAML
 		else
 			serialize :headers
@@ -11,7 +11,7 @@ class ConvertBinary < ActiveRecord::Migration[4.2]
 	end
 
 	class WebVuln < ApplicationRecord
-		if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+		if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
 			serialize :params, coder: YAML
 		else
 			serialize :params

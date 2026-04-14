@@ -89,7 +89,7 @@ class Mdm::NexposeConsole < ApplicationRecord
   #   List of sites known to Nexpose.
   #
   #   @return [Array<String>] Array of site names.
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :cached_sites, coder: MetasploitDataModels::Base64Serializer.new
   else
     serialize :cached_sites, MetasploitDataModels::Base64Serializer.new

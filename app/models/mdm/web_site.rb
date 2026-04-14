@@ -60,7 +60,7 @@ class Mdm::WebSite < ApplicationRecord
 
   # @!attribute [rw] options
   #   @todo Determine format and purpose of Mdm::WebSite#options.
-  if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1
+  if ActiveRecord::VERSION::MAJOR > 7 || (ActiveRecord::VERSION::MAJOR == 7 && ActiveRecord::VERSION::MINOR >= 1)
     serialize :options, coder: ::MetasploitDataModels::Base64Serializer.new
   else
     serialize :options, ::MetasploitDataModels::Base64Serializer.new

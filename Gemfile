@@ -3,12 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in metasploit_data_models.gemspec
 gemspec
 
-group :development do
-  #gem 'metasploit-erd'
-  # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
-  #gem 'yard-metasploit-erd'
-end
-
 # used by dummy application
 group :development, :test do
   # supplies factories for producing model instance for specs
@@ -17,8 +11,8 @@ group :development, :test do
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
-  # Enforce tests to run on 7.0.X
-  gem 'rails', '~>  7.0.0'
+  # Allow Rails 7.0 through 8.0 for upgrade compatibility
+  gem 'rails', '>= 7.0', '< 8.1'
   gem 'net-smtp', require: false
 
   # Used to create fake data
