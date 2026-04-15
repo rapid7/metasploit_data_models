@@ -63,6 +63,20 @@ class Mdm::VulnAttempt < ApplicationRecord
   #
   #   @return [String]
 
+  # @!attribute check_code
+  #   The check code returned by the module's check method, if this attempt
+  #   was a vulnerability check rather than an exploitation attempt.
+  #
+  #   @return [String] one of 'vulnerable', 'appears', 'safe', 'detected', 'unknown'
+  #   @return [nil] if this was an exploitation attempt, not a check
+
+  # @!attribute check_detail
+  #   The human-readable message from the module's check method describing
+  #   why the target was determined to be vulnerable, safe, etc.
+  #
+  #   @return [String] if {#check_code} is present.
+  #   @return [nil] if this was an exploitation attempt, not a check
+
   # @!attribute username
   #   The {Mdm::User#username name of the user} that made this attempt.
   #

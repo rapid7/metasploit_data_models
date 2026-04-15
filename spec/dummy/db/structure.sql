@@ -1755,7 +1755,9 @@ CREATE TABLE public.vuln_attempts (
     module text,
     session_id integer,
     loot_id integer,
-    fail_detail text
+    fail_detail text,
+    check_code character varying,
+    check_detail text
 );
 
 
@@ -3602,6 +3604,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250721114306'),
 ('20251231162000'),
 ('20260130124052'),
+('20260411000000'),
 ('21'),
 ('22'),
 ('23'),
