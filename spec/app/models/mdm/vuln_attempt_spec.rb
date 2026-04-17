@@ -20,6 +20,8 @@ RSpec.describe Mdm::VulnAttempt, type: :model do
       it { is_expected.to have_db_column(:session_id).of_type(:integer) }
       it { is_expected.to have_db_column(:loot_id).of_type(:integer) }
       it { is_expected.to have_db_column(:fail_detail).of_type(:text) }
+      it { is_expected.to have_db_column(:check_code).of_type(:string) }
+      it { is_expected.to have_db_column(:check_detail).of_type(:text) }
     end
   end
 
