@@ -26,6 +26,7 @@ require 'arel-helpers'
 require 'metasploit_data_models/version'
 
 autoload :Mdm, 'mdm'
+autoload :Recog, 'recog'
 
 # Core database models for metasploit-framework.
 module MetasploitDataModels
