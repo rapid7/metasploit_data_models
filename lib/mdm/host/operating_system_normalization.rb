@@ -1,7 +1,7 @@
 #
 # Leverage the Recog gem as much as possible for sane fingerprint management
 #
-require 'recog'
+
 
 #
 # Rules for operating system fingerprinting in Metasploit
