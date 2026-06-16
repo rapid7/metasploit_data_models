@@ -34,5 +34,3 @@ jobs:
         bundle exec rake --version
         bundle exec rake db:create db:migrate
         bundle exec rake spec
-        bundle exec rake spec
-        bundle exec rake yard
