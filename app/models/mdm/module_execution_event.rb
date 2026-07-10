@@ -42,11 +42,6 @@ class Mdm::ModuleExecutionEvent < ApplicationRecord
   #
   #   @return [DateTime]
 
-  # @!attribute [rw] updated_at
-  #   Last time this event row was updated.
-  #
-  #   @return [DateTime]
-
   #
   # Validations
   #

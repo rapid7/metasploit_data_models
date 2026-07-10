@@ -15,7 +15,7 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
       it { is_expected.to have_db_column(:module_type).of_type(:text).with_options(null: false) }
       it { is_expected.to have_db_column(:kind).of_type(:text).with_options(null: false, default: 'run') }
       it { is_expected.to have_db_column(:options_snapshot) }
-      it { is_expected.to have_db_column(:originating_ui).of_type(:text).with_options(null: false) }
+      it { is_expected.to have_db_column(:originating_interface).of_type(:text).with_options(null: false) }
       it { is_expected.to have_db_column(:originating_user_id).of_type(:integer) }
       it { is_expected.to have_db_column(:originating_token_ref).of_type(:text) }
       it { is_expected.to have_db_column(:parent_execution_id).of_type(:integer) }
@@ -31,7 +31,7 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
     context 'indexes' do
       it { is_expected.to have_db_index([:workspace_id, :started_at]) }
       it { is_expected.to have_db_index([:module_reference_name, :started_at]) }
-      it { is_expected.to have_db_index([:kind, :originating_ui]) }
+      it { is_expected.to have_db_index([:kind, :originating_interface]) }
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
     it { is_expected.to validate_presence_of(:module_reference_name) }
     it { is_expected.to validate_presence_of(:module_type) }
     it { is_expected.to validate_presence_of(:kind) }
-    it { is_expected.to validate_presence_of(:originating_ui) }
+    it { is_expected.to validate_presence_of(:originating_interface) }
     it { is_expected.to validate_presence_of(:started_at) }
 
     it 'accepts every documented module_type' do
@@ -75,15 +75,15 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
       expect(record).not_to be_valid
     end
 
-    it 'accepts every documented originating_ui' do
-      Mdm::ModuleExecution::ORIGINATING_UIS.each do |ui|
-        record = FactoryBot.build(:mdm_module_execution, originating_ui: ui)
-        expect(record).to be_valid, "expected #{ui.inspect} to be valid"
+    it 'accepts every documented originating_interface' do
+      Mdm::ModuleExecution::ORIGINATING_INTERFACES.each do |iface|
+        record = FactoryBot.build(:mdm_module_execution, originating_interface: iface)
+        expect(record).to be_valid, "expected #{iface.inspect} to be valid"
       end
     end
 
-    it 'rejects an unknown originating_ui' do
-      record = FactoryBot.build(:mdm_module_execution, originating_ui: 'bogus')
+    it 'rejects an unknown originating_interface' do
+      record = FactoryBot.build(:mdm_module_execution, originating_interface: 'bogus')
       expect(record).not_to be_valid
     end
 

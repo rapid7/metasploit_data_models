@@ -11,7 +11,7 @@ class CreateModuleExecutions < ActiveRecord::Migration[7.0]
       t.text :module_type,           null: false
       t.text :kind,                  null: false, default: 'run'
       t.jsonb :options_snapshot
-      t.text :originating_ui,        null: false
+      t.text :originating_interface, null: false
       t.references :originating_user,
                    foreign_key: { to_table: :users },
                    index: true
@@ -47,8 +47,8 @@ class CreateModuleExecutions < ActiveRecord::Migration[7.0]
               name: 'idx_module_executions_on_parent_execution_id_not_null'
 
     add_index :module_executions,
-              [:kind, :originating_ui],
-              name: 'idx_module_executions_on_kind_and_originating_ui'
+              [:kind, :originating_interface],
+              name: 'idx_module_executions_on_kind_and_originating_interface'
 
     # Enumerated values are also validated at the AR layer; the DB
     # CHECK constraints provide a fail-loud safety net for non-AR
@@ -63,9 +63,9 @@ class CreateModuleExecutions < ActiveRecord::Migration[7.0]
                          name: 'module_executions_kind_check'
 
     add_check_constraint :module_executions,
-                         "originating_ui IN ('console','rpc','json_rpc','mcp'," \
+                         "originating_interface IN ('console','rpc','json_rpc','mcp'," \
                          "'external','import','plugin','autocheck')",
-                         name: 'module_executions_originating_ui_check'
+                         name: 'module_executions_originating_interface_check'
 
     add_check_constraint :module_executions,
                          "terminal_status IS NULL OR terminal_status IN " \

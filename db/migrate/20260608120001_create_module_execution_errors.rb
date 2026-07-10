@@ -14,7 +14,6 @@ class CreateModuleExecutionErrors < ActiveRecord::Migration[7.0]
       t.text :failure_reason
       t.column :occurred_at, :timestamptz, null: false
       t.column :created_at,  :timestamptz, null: false
-      t.column :updated_at,  :timestamptz, null: false
     end
 
     add_index :module_execution_errors,

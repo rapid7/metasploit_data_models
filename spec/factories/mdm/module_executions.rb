@@ -7,7 +7,7 @@ FactoryBot.define do
     sequence(:module_reference_name) { |n| "auxiliary/scanner/example_#{n}" }
     module_type    { 'auxiliary' }
     kind           { 'run' }
-    originating_ui { 'console' }
+    originating_interface { 'console' }
     started_at     { Time.now.utc }
     terminal_status { 'running' }
     ended_at        { nil }

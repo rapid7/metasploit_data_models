@@ -72,11 +72,6 @@ class Mdm::ModuleExecutionError < ApplicationRecord
   #
   #   @return [DateTime]
 
-  # @!attribute [rw] updated_at
-  #   Last time this error row was updated.
-  #
-  #   @return [DateTime]
-
   #
   # Validations
   #

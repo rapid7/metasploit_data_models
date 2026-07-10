@@ -846,7 +846,6 @@ CREATE TABLE public.module_execution_errors (
     failure_reason text,
     occurred_at timestamp with time zone NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
     CONSTRAINT module_execution_errors_lifecycle_phase_check CHECK ((lifecycle_phase = ANY (ARRAY['setup'::text, 'check'::text, 'exploit'::text, 'cleanup'::text, 'post'::text, 'run'::text])))
 );
 
@@ -880,8 +879,7 @@ CREATE TABLE public.module_execution_events (
     name text NOT NULL,
     payload jsonb,
     occurred_at timestamp with time zone NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp with time zone NOT NULL
 );
 
 
@@ -915,7 +913,7 @@ CREATE TABLE public.module_executions (
     module_type text NOT NULL,
     kind text DEFAULT 'run'::text NOT NULL,
     options_snapshot jsonb,
-    originating_ui text NOT NULL,
+    originating_interface text NOT NULL,
     originating_user_id bigint,
     originating_token_ref text,
     parent_execution_id bigint,
@@ -931,7 +929,7 @@ CREATE TABLE public.module_executions (
     CONSTRAINT module_executions_ended_at_after_started_at_check CHECK (((ended_at IS NULL) OR (ended_at >= started_at))),
     CONSTRAINT module_executions_kind_check CHECK ((kind = ANY (ARRAY['run'::text, 'check'::text, 'import'::text, 'direct_write'::text]))),
     CONSTRAINT module_executions_module_type_check CHECK ((module_type = ANY (ARRAY['exploit'::text, 'auxiliary'::text, 'post'::text, 'payload'::text, 'encoder'::text, 'evasion'::text, 'nop'::text, 'external'::text]))),
-    CONSTRAINT module_executions_originating_ui_check CHECK ((originating_ui = ANY (ARRAY['console'::text, 'rpc'::text, 'json_rpc'::text, 'mcp'::text, 'external'::text, 'import'::text, 'plugin'::text]))),
+    CONSTRAINT module_executions_originating_interface_check CHECK ((originating_interface = ANY (ARRAY['console'::text, 'rpc'::text, 'json_rpc'::text, 'mcp'::text, 'external'::text, 'import'::text, 'plugin'::text, 'autocheck'::text]))),
     CONSTRAINT module_executions_terminal_status_check CHECK (((terminal_status IS NULL) OR (terminal_status = ANY (ARRAY['running'::text, 'success'::text, 'neutral'::text, 'expected_failure'::text, 'unhandled_exception'::text])))),
     CONSTRAINT module_executions_terminal_status_lifecycle_check CHECK ((((ended_at IS NULL) AND ((terminal_status IS NULL) OR (terminal_status = 'running'::text))) OR ((ended_at IS NOT NULL) AND (terminal_status IS NOT NULL) AND (terminal_status <> 'running'::text))))
 );
@@ -3268,10 +3266,10 @@ CREATE INDEX idx_module_execution_events_on_name_and_occurred_at ON public.modul
 
 
 --
--- Name: idx_module_executions_on_kind_and_originating_ui; Type: INDEX; Schema: public; Owner: -
+-- Name: idx_module_executions_on_kind_and_originating_interface; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_module_executions_on_kind_and_originating_ui ON public.module_executions USING btree (kind, originating_ui);
+CREATE INDEX idx_module_executions_on_kind_and_originating_interface ON public.module_executions USING btree (kind, originating_interface);
 
 
 --

@@ -15,10 +15,10 @@ class Mdm::ModuleExecution < ApplicationRecord
   KINDS = %w[run check import direct_write].freeze
 
   # Module types as exposed by Framework.
-  MODULE_TYPES = %w[exploit auxiliary post payload encoder evasion nop external].freeze
+  MODULE_TYPES = %w[exploit auxiliary post payload encoder evasion nop].freeze
 
   # User interface or programmatic surface that initiated this execution.
-  ORIGINATING_UIS = %w[console rpc json_rpc mcp external import plugin autocheck].freeze
+  ORIGINATING_INTERFACES = %w[console rpc json_rpc mcp external import plugin autocheck].freeze
 
   # Terminal lifecycle states. `running` is the only non-terminal value
   # and is permitted while {#ended_at} is `NULL`.
@@ -109,8 +109,8 @@ class Mdm::ModuleExecution < ApplicationRecord
   #   @return [Hash]
   #   @return [nil] when no options were captured.
 
-  # @!attribute [rw] originating_ui
-  #   One of {ORIGINATING_UIS}.
+  # @!attribute [rw] originating_interface
+  #   One of {ORIGINATING_INTERFACES}.
   #
   #   @return [String]
 
@@ -187,7 +187,7 @@ class Mdm::ModuleExecution < ApplicationRecord
   validates :module_reference_name, presence: true
   validates :module_type,    presence: true, inclusion: { in: MODULE_TYPES }
   validates :kind,           presence: true, inclusion: { in: KINDS }
-  validates :originating_ui, presence: true, inclusion: { in: ORIGINATING_UIS }
+  validates :originating_interface, presence: true, inclusion: { in: ORIGINATING_INTERFACES }
   validates :terminal_status, inclusion: { in: TERMINAL_STATUSES, allow_nil: true }
   validates :started_at, presence: true
   validates :single_entity_failure_count,

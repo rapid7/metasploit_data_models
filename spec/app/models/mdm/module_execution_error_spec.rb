@@ -18,7 +18,6 @@ RSpec.describe Mdm::ModuleExecutionError, type: :model do
       it { is_expected.to have_db_column(:failure_reason).of_type(:text) }
       it { is_expected.to have_db_column(:occurred_at).with_options(null: false) }
       it { is_expected.to have_db_column(:created_at).with_options(null: false) }
-      it { is_expected.to have_db_column(:updated_at).with_options(null: false) }
     end
 
     context 'indexes' do

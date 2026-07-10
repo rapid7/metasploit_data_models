@@ -11,7 +11,6 @@ class CreateModuleExecutionEvents < ActiveRecord::Migration[7.0]
       t.jsonb :payload
       t.column :occurred_at, :timestamptz, null: false
       t.column :created_at,  :timestamptz, null: false
-      t.column :updated_at,  :timestamptz, null: false
     end
 
     add_index :module_execution_events,
