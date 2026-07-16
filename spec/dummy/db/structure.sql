@@ -833,6 +833,132 @@ ALTER SEQUENCE public.module_details_id_seq OWNED BY public.module_details.id;
 
 
 --
+-- Name: module_execution_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.module_execution_errors (
+    id bigint NOT NULL,
+    module_execution_id bigint NOT NULL,
+    exception_class text,
+    message text,
+    backtrace text,
+    lifecycle_phase text NOT NULL,
+    failure_reason text,
+    occurred_at timestamp with time zone NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    CONSTRAINT module_execution_errors_lifecycle_phase_check CHECK ((lifecycle_phase = ANY (ARRAY['setup'::text, 'check'::text, 'exploit'::text, 'cleanup'::text, 'post'::text, 'run'::text])))
+);
+
+
+--
+-- Name: module_execution_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.module_execution_errors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_execution_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.module_execution_errors_id_seq OWNED BY public.module_execution_errors.id;
+
+
+--
+-- Name: module_execution_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.module_execution_events (
+    id bigint NOT NULL,
+    module_execution_id bigint NOT NULL,
+    name text NOT NULL,
+    payload jsonb,
+    occurred_at timestamp with time zone NOT NULL,
+    created_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: module_execution_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.module_execution_events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_execution_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.module_execution_events_id_seq OWNED BY public.module_execution_events.id;
+
+
+--
+-- Name: module_executions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.module_executions (
+    id bigint NOT NULL,
+    workspace_id bigint NOT NULL,
+    module_reference_name text NOT NULL,
+    module_type text NOT NULL,
+    kind text DEFAULT 'run'::text NOT NULL,
+    options_snapshot jsonb,
+    originating_interface text NOT NULL,
+    originating_user_id bigint,
+    originating_token_ref text,
+    parent_execution_id bigint,
+    started_at timestamp with time zone NOT NULL,
+    ended_at timestamp with time zone,
+    terminal_status text,
+    failure_reason text,
+    failure_message text,
+    check_code text,
+    check_message text,
+    single_entity_failure_count integer DEFAULT 0 NOT NULL,
+    last_single_entity_errors jsonb,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    CONSTRAINT module_executions_check_code_check CHECK (((check_code IS NULL) OR (check_code = ANY (ARRAY['vulnerable'::text, 'appears'::text, 'detected'::text, 'safe'::text, 'unknown'::text, 'unsupported'::text])))),
+    CONSTRAINT module_executions_check_code_only_on_check_kind CHECK (((kind = 'check'::text) OR ((check_code IS NULL) AND (check_message IS NULL)))),
+    CONSTRAINT module_executions_ended_at_after_started_at_check CHECK (((ended_at IS NULL) OR (ended_at >= started_at))),
+    CONSTRAINT module_executions_kind_check CHECK ((kind = ANY (ARRAY['run'::text, 'check'::text, 'import'::text, 'direct_write'::text]))),
+    CONSTRAINT module_executions_module_type_check CHECK ((module_type = ANY (ARRAY['exploit'::text, 'auxiliary'::text, 'post'::text, 'payload'::text, 'encoder'::text, 'evasion'::text, 'nop'::text, 'external'::text]))),
+    CONSTRAINT module_executions_originating_interface_check CHECK ((originating_interface = ANY (ARRAY['console'::text, 'rpc'::text, 'json_rpc'::text, 'mcp'::text, 'external'::text, 'import'::text, 'plugin'::text, 'autocheck'::text]))),
+    CONSTRAINT module_executions_terminal_status_check CHECK (((terminal_status IS NULL) OR (terminal_status = ANY (ARRAY['running'::text, 'success'::text, 'neutral'::text, 'expected_failure'::text, 'unhandled_exception'::text])))),
+    CONSTRAINT module_executions_terminal_status_lifecycle_check CHECK ((((ended_at IS NULL) AND ((terminal_status IS NULL) OR (terminal_status = 'running'::text))) OR ((ended_at IS NOT NULL) AND (terminal_status IS NOT NULL) AND (terminal_status <> 'running'::text))))
+);
+
+
+--
+-- Name: module_executions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.module_executions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: module_executions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.module_executions_id_seq OWNED BY public.module_executions.id;
+
+
+--
 -- Name: module_mixins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2346,6 +2472,27 @@ ALTER TABLE ONLY public.module_details ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: module_execution_errors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_errors ALTER COLUMN id SET DEFAULT nextval('public.module_execution_errors_id_seq'::regclass);
+
+
+--
+-- Name: module_execution_events id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_events ALTER COLUMN id SET DEFAULT nextval('public.module_execution_events_id_seq'::regclass);
+
+
+--
+-- Name: module_executions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_executions ALTER COLUMN id SET DEFAULT nextval('public.module_executions_id_seq'::regclass);
+
+
+--
 -- Name: module_mixins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2782,6 +2929,30 @@ ALTER TABLE ONLY public.module_details
 
 
 --
+-- Name: module_execution_errors module_execution_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_errors
+    ADD CONSTRAINT module_execution_errors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: module_execution_events module_execution_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_events
+    ADD CONSTRAINT module_execution_events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: module_executions module_executions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_executions
+    ADD CONSTRAINT module_executions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: module_mixins module_mixins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3078,6 +3249,55 @@ ALTER TABLE ONLY public.workspaces
 
 
 --
+-- Name: idx_module_execution_errors_on_execution_and_occurred_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_execution_errors_on_execution_and_occurred_at ON public.module_execution_errors USING btree (module_execution_id, occurred_at);
+
+
+--
+-- Name: idx_module_execution_events_on_execution_and_occurred_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_execution_events_on_execution_and_occurred_at ON public.module_execution_events USING btree (module_execution_id, occurred_at);
+
+
+--
+-- Name: idx_module_execution_events_on_name_and_occurred_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_execution_events_on_name_and_occurred_at ON public.module_execution_events USING btree (name, occurred_at);
+
+
+--
+-- Name: idx_module_executions_on_kind_and_originating_interface; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_executions_on_kind_and_originating_interface ON public.module_executions USING btree (kind, originating_interface);
+
+
+--
+-- Name: idx_module_executions_on_parent_execution_id_not_null; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_executions_on_parent_execution_id_not_null ON public.module_executions USING btree (parent_execution_id) WHERE (parent_execution_id IS NOT NULL);
+
+
+--
+-- Name: idx_module_executions_on_reference_name_and_started_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_executions_on_reference_name_and_started_at ON public.module_executions USING btree (module_reference_name, started_at DESC);
+
+
+--
+-- Name: idx_module_executions_on_workspace_and_started_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_module_executions_on_workspace_and_started_at ON public.module_executions USING btree (workspace_id, started_at DESC);
+
+
+--
 -- Name: index_automatic_exploitation_match_results_on_match_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3236,6 +3456,20 @@ CREATE INDEX index_module_details_on_name ON public.module_details USING btree (
 --
 
 CREATE INDEX index_module_details_on_refname ON public.module_details USING btree (refname);
+
+
+--
+-- Name: index_module_executions_on_originating_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_module_executions_on_originating_user_id ON public.module_executions USING btree (originating_user_id);
+
+
+--
+-- Name: index_module_executions_on_workspace_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_module_executions_on_workspace_id ON public.module_executions USING btree (workspace_id);
 
 
 --
@@ -3464,11 +3698,51 @@ ALTER TABLE ONLY public.service_links
 
 
 --
+-- Name: module_executions fk_rails_2570bf9d24; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_executions
+    ADD CONSTRAINT fk_rails_2570bf9d24 FOREIGN KEY (workspace_id) REFERENCES public.workspaces(id);
+
+
+--
+-- Name: module_executions fk_rails_48fa7ee725; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_executions
+    ADD CONSTRAINT fk_rails_48fa7ee725 FOREIGN KEY (originating_user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: module_execution_errors fk_rails_4bedaea82a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_errors
+    ADD CONSTRAINT fk_rails_4bedaea82a FOREIGN KEY (module_execution_id) REFERENCES public.module_executions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: service_links fk_rails_656cd59e76; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_links
     ADD CONSTRAINT fk_rails_656cd59e76 FOREIGN KEY (parent_id) REFERENCES public.services(id);
+
+
+--
+-- Name: module_execution_events fk_rails_95f78fad9a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_execution_events
+    ADD CONSTRAINT fk_rails_95f78fad9a FOREIGN KEY (module_execution_id) REFERENCES public.module_executions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: module_executions fk_rails_d2125611b4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.module_executions
+    ADD CONSTRAINT fk_rails_d2125611b4 FOREIGN KEY (parent_execution_id) REFERENCES public.module_executions(id);
 
 
 --
@@ -3605,6 +3879,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251231162000'),
 ('20260130124052'),
 ('20260411000000'),
+('20260608120000'),
+('20260608120001'),
+('20260608120002'),
 ('21'),
 ('22'),
 ('23'),

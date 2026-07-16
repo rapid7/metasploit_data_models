@@ -28,6 +28,13 @@ class Mdm::User < ApplicationRecord
            class_name: 'MetasploitDataModels::ModuleRun',
            inverse_of: :user
 
+  # Module executions started by this user (reporting refactor).
+  has_many :module_executions,
+           class_name: 'Mdm::ModuleExecution',
+           foreign_key: :originating_user_id,
+           inverse_of: :originating_user,
+           dependent: :nullify
+
   # Tags created by the user.
   has_many :tags,
            class_name: 'Mdm::Tag',
