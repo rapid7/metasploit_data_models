@@ -24,6 +24,8 @@ class CreateModuleExecutions < ActiveRecord::Migration[7.0]
       t.text :terminal_status
       t.text :failure_reason
       t.text :failure_message
+      t.text :check_code
+      t.text :check_message
       t.integer :single_entity_failure_count, null: false, default: 0
       t.jsonb :last_single_entity_errors
 
@@ -81,5 +83,20 @@ class CreateModuleExecutions < ActiveRecord::Migration[7.0]
     add_check_constraint :module_executions,
                          'ended_at IS NULL OR ended_at >= started_at',
                          name: 'module_executions_ended_at_after_started_at_check'
+
+    # `check_code` / `check_message` are only meaningful for
+    # `kind = 'check'` executions. `check` executions may still leave
+    # them NULL (e.g. when `check` raises before returning a
+    # `CheckCode`), but non-`check` executions must never populate them.
+    add_check_constraint :module_executions,
+                         "kind = 'check' OR (check_code IS NULL AND check_message IS NULL)",
+                         name: 'module_executions_check_code_only_on_check_kind'
+
+    # Constrain `check_code` to the six-value enum published by
+    # `Msf::Exploit::CheckCode`. `NULL` remains permitted.
+    add_check_constraint :module_executions,
+                         "check_code IS NULL OR check_code IN " \
+                         "('vulnerable','appears','detected','safe','unknown','unsupported')",
+                         name: 'module_executions_check_code_check'
   end
 end

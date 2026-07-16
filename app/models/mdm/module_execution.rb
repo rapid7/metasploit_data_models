@@ -24,6 +24,10 @@ class Mdm::ModuleExecution < ApplicationRecord
   # and is permitted while {#ended_at} is `NULL`.
   TERMINAL_STATUSES = %w[running success neutral expected_failure unhandled_exception].freeze
 
+  # Six-value enum published by `Msf::Exploit::CheckCode` for
+  # {#check_code}. Only populated when {#kind} is `'check'`.
+  CHECK_CODES = %w[vulnerable appears detected safe unknown unsupported].freeze
+
   #
   # Associations
   #
@@ -155,6 +159,24 @@ class Mdm::ModuleExecution < ApplicationRecord
   #   @return [String]
   #   @return [nil] when the execution did not fail.
 
+  # @!attribute [rw] check_code
+  #   The {CHECK_CODES} value returned by a `kind = 'check'` execution
+  #   (i.e. `Msf::Exploit::CheckCode#code`). NULL for non-check
+  #   executions, and NULL for check executions that raised before
+  #   returning a `CheckCode`.
+  #
+  #   @return [String]
+  #   @return [nil] when not populated.
+
+  # @!attribute [rw] check_message
+  #   Human-readable message that accompanies {#check_code} (i.e.
+  #   `Msf::Exploit::CheckCode#message`). NULL when {#check_code} is
+  #   NULL, and may be NULL even when {#check_code} is set if the
+  #   check returned no message.
+  #
+  #   @return [String]
+  #   @return [nil] when not populated.
+
   # @!attribute [rw] single_entity_failure_count
   #   How many individually-failed entities (e.g. hosts in a scanner)
   #   the module recorded during this execution. Used to surface
@@ -189,12 +211,14 @@ class Mdm::ModuleExecution < ApplicationRecord
   validates :kind,           presence: true, inclusion: { in: KINDS }
   validates :originating_interface, presence: true, inclusion: { in: ORIGINATING_INTERFACES }
   validates :terminal_status, inclusion: { in: TERMINAL_STATUSES, allow_nil: true }
+  validates :check_code, inclusion: { in: CHECK_CODES, allow_nil: true }
   validates :started_at, presence: true
   validates :single_entity_failure_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   validate :ended_at_not_before_started_at
   validate :terminal_status_consistent_with_ended_at
+  validate :check_code_only_on_check_kind
 
   Metasploit::Concern.run(self)
 
@@ -215,5 +239,13 @@ class Mdm::ModuleExecution < ApplicationRecord
     elsif terminal_status.nil? || terminal_status == 'running'
       errors.add(:terminal_status, 'must be a terminal value once ended_at is set')
     end
+  end
+
+  def check_code_only_on_check_kind
+    return if kind == 'check'
+    return if check_code.nil? && check_message.nil?
+
+    errors.add(:check_code, 'may only be populated when kind is check') unless check_code.nil?
+    errors.add(:check_message, 'may only be populated when kind is check') unless check_message.nil?
   end
 end

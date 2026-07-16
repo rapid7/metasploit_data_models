@@ -24,6 +24,8 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
       it { is_expected.to have_db_column(:terminal_status).of_type(:text) }
       it { is_expected.to have_db_column(:failure_reason).of_type(:text) }
       it { is_expected.to have_db_column(:failure_message).of_type(:text) }
+      it { is_expected.to have_db_column(:check_code).of_type(:text) }
+      it { is_expected.to have_db_column(:check_message).of_type(:text) }
       it { is_expected.to have_db_column(:single_entity_failure_count).of_type(:integer).with_options(null: false, default: 0) }
       it { is_expected.to have_db_column(:last_single_entity_errors) }
     end
@@ -144,6 +146,48 @@ RSpec.describe Mdm::ModuleExecution, type: :model do
     it 'rejects a negative single_entity_failure_count' do
       record = FactoryBot.build(:mdm_module_execution, single_entity_failure_count: -1)
       expect(record).not_to be_valid
+    end
+
+    context 'check_code / check_message' do
+      it 'accepts every documented CHECK_CODES value on a kind=check execution' do
+        Mdm::ModuleExecution::CHECK_CODES.each do |code|
+          record = FactoryBot.build(
+            :mdm_module_execution,
+            kind: 'check',
+            check_code: code,
+            check_message: "check returned #{code}"
+          )
+          expect(record).to be_valid, "expected check_code #{code.inspect} to be valid"
+        end
+      end
+
+      it 'rejects an unknown check_code' do
+        record = FactoryBot.build(:mdm_module_execution, kind: 'check', check_code: 'bogus')
+        expect(record).not_to be_valid
+        expect(record.errors[:check_code]).not_to be_empty
+      end
+
+      it 'accepts a NULL check_code on a kind=check execution' do
+        record = FactoryBot.build(:mdm_module_execution, kind: 'check', check_code: nil)
+        expect(record).to be_valid
+      end
+
+      it 'rejects check_code on a non-check execution' do
+        record = FactoryBot.build(:mdm_module_execution, kind: 'run', check_code: 'safe')
+        expect(record).not_to be_valid
+        expect(record.errors[:check_code]).not_to be_empty
+      end
+
+      it 'rejects check_message on a non-check execution' do
+        record = FactoryBot.build(
+          :mdm_module_execution,
+          kind: 'run',
+          check_code: nil,
+          check_message: 'orphan message'
+        )
+        expect(record).not_to be_valid
+        expect(record.errors[:check_message]).not_to be_empty
+      end
     end
   end
 
