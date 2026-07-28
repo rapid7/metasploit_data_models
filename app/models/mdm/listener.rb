@@ -21,7 +21,16 @@ class Mdm::Listener < ApplicationRecord
   #
 
   # @!attribute address
-  #   The IP address to which the listener is bound.
+  #   The local IP address to which the listener is bound (used as the
+  #   handler's +ReverseListenerBindAddress+).
+  #
+  #   @return [String]
+
+  # @!attribute callback_address
+  #   The IP address or hostname the payload connects back to (used as the
+  #   handler's +LHOST+).  This is the address that must be routable from the
+  #   target and may differ from {#address} when NAT or port forwarding is in
+  #   use.
   #
   #   @return [String]
 
