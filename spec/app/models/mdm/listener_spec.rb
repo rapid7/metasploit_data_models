@@ -20,6 +20,7 @@ RSpec.describe Mdm::Listener, type: :model do
       it { is_expected.to have_db_column(:owner).of_type(:text) }
       it { is_expected.to have_db_column(:payload).of_type(:text) }
       it { is_expected.to have_db_column(:address).of_type(:text) }
+      it { is_expected.to have_db_column(:callback_address).of_type(:text) }
       it { is_expected.to have_db_column(:port).of_type(:integer) }
       it { is_expected.to have_db_column(:options).of_type(:binary) }
       it { is_expected.to have_db_column(:macro).of_type(:text) }
