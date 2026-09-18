@@ -11,8 +11,8 @@ group :development, :test do
   # auto-load factories from spec/factories
   gem 'factory_bot_rails'
 
-  # Allow Rails 7.0 through 8.0 for upgrade compatibility
-  gem 'rails', '>= 7.0', '< 8.1'
+  # Allow Rails 7.0 through 8.1 for upgrade compatibility
+  gem 'rails', '>= 7.0', '< 9.0'
   gem 'net-smtp', require: false
 
   # Used to create fake data
