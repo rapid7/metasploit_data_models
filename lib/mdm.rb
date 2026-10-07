@@ -17,6 +17,9 @@ module Mdm
   autoload :Macro
   autoload :ModRef
   autoload :Module
+  autoload :ModuleExecution
+  autoload :ModuleExecutionError
+  autoload :ModuleExecutionEvent
   autoload :NexposeConsole
   autoload :Note
   autoload :Payload

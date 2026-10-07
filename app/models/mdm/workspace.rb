@@ -28,6 +28,12 @@ class Mdm::Workspace < ApplicationRecord
   # Hosts in this workspace.
   has_many :hosts, :dependent => :destroy, :class_name => 'Mdm::Host'
 
+  # Module executions recorded in this workspace (reporting refactor).
+  has_many :module_executions,
+           class_name: 'Mdm::ModuleExecution',
+           inverse_of: :workspace,
+           dependent: :destroy
+
   # Listeners running for this workspace.
   has_many :listeners, :dependent => :destroy, :class_name => 'Mdm::Listener'
 
