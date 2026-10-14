@@ -561,7 +561,8 @@ CREATE TABLE public.listeners (
     address text,
     port integer,
     options bytea,
-    macro text
+    macro text,
+    callback_address text
 );
 
 
@@ -3605,6 +3606,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251231162000'),
 ('20260130124052'),
 ('20260411000000'),
+('20260728000000'),
 ('21'),
 ('22'),
 ('23'),
