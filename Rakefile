@@ -49,16 +49,6 @@ if gem_specification
   Dir[File.join(gem_specification.gem_dir, 'lib', 'tasks', '**', '*.rake')].each do |rake|
     load rake
   end
-
-  #
-  # Eager load before yard docs so that ApplicationRecord subclasses are loaded for yard-metasploit-erd
-  #
-
-  task 'yard:doc' => :eager_load
-
-  task eager_load: :environment do
-    Rails.application.eager_load!
-  end
 else
   puts "metasploit-yard not in bundle, so can't setup yard tasks. " \
        "To run yard ensure to install the development group."
