@@ -28,7 +28,7 @@ jobs:
   build:
     uses: rapid7/metasploit-framework/.github/workflows/shared_gem_verify_rails.yml@master
     with:
-      dependencies: '["libpcap-dev", "graphviz"]'
+      dependencies: '["libpcap-dev"]'
       test_commands: |
         cp spec/dummy/config/database.yml.github_actions spec/dummy/config/database.yml
         bundle exec rake --version

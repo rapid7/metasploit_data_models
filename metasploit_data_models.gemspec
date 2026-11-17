@@ -23,10 +23,6 @@ Gem::Specification.new do |s|
   # documentation
   s.add_development_dependency 'metasploit-yard'
   s.add_development_dependency 'yard-activerecord'
-  # embed ERDs on index, namespace Module and Class<ApplicationRecord> pages
-  s.add_development_dependency 'yard-metasploit-erd'
-  # required by rails-erd >= 2.1.0 (no longer a transitive dep)
-  s.add_development_dependency 'ruby-graphviz', '~> 1.2'
 
   s.add_development_dependency 'rake'
 
